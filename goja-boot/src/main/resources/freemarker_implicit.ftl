@@ -1,0 +1,16 @@
+[#ftl]
+[#-- @implicitly included --]
+[#-- @ftlvariable name="block" type="goja.mvc.render.ftl.layout.BlockDirective" --]
+[#-- @ftlvariable name="extends" type="goja.mvc.render.ftl.layout.ExtendsDirective" --]
+[#-- @ftlvariable name="override" type="goja.mvc.render.ftl.layout.OverrideDirective" --]
+[#-- @ftlvariable name="super" type="goja.mvc.render.ftl.layout.SuperDirective" --]
+[#-- @ftlvariable name="super" type="goja.mvc.render.ftl.layout.SuperDirective" --]
+[#-- @ftlvariable name="prettytime" type="goja.mvc.render.ftl.PrettyTimeDirective" --]
+[#-- @ftlvariable name="ctx" type="java.lang.String" --]
+
+[#macro block name][/#macro]
+[#macro extends name][/#macro]
+[#macro override name][/#macro]
+[#macro super name][/#macro]
+
+[#macro config key][/#macro]

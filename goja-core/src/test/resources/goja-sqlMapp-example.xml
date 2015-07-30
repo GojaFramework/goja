@@ -1,0 +1,14 @@
+<sqlMap model="">
+    <sql id="" method="">
+        <if test="">
+        </if>
+        <choose>
+            <when test="">
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+        </trim>
+    </sql>
+</sqlMap>
