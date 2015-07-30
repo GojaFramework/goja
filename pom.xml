@@ -208,7 +208,7 @@
                 <version>3.4</version>
             </plugin>
 
-            <plugin>
+      <!--       <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.2.1</version>
@@ -224,7 +224,7 @@
                     <excludeResources>true</excludeResources>
                     <useDefaultExcludes>true</useDefaultExcludes>
                 </configuration>
-            </plugin>
+            </plugin> -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
