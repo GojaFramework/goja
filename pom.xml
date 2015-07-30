@@ -9,7 +9,7 @@
 
     <groupId>com.github.sogyf</groupId>
     <artifactId>goja</artifactId>
-    <version>0.1.8-SNAPSHOT</version>
+    <version>0.1.8</version>
     <packaging>pom</packaging>
 
     <name>goja</name>
@@ -36,7 +36,7 @@
         <url>http://git.oschina.net/poplar1123/goja</url>
         <connection>scm:git:https://git.oschina.net/poplar1123/goja.git</connection>
         <developerConnection>scm:git:https://git.oschina.net/poplar1123/goja.git</developerConnection>
-        <tag>goja-0.1</tag>
+        <tag>goja-0.1.8</tag>
     </scm>
 
     <issueManagement>
