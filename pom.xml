@@ -33,9 +33,9 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/GojaFramework</url>
-        <connection>scm:git:git@github.com:GojaFramework/goja.git</connection>
-        <developerConnection>scm:git:git@github.com:GojaFramework/goja.git</developerConnection>
+        <url>http://git.oschina.net/poplar1123/goja</url>
+        <connection>scm:git:https://git.oschina.net/poplar1123/goja.git</connection>
+        <developerConnection>scm:git:https://git.oschina.net/poplar1123/goja.git</developerConnection>
         <tag>goja-0.1</tag>
     </scm>
 
