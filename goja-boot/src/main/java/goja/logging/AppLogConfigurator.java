@@ -49,7 +49,7 @@ public class AppLogConfigurator {
 
         final RollingFileAppender rfa = new RollingFileAppender();
 
-        final String logger_file = GojaConfig.getProperty("logger.path", "${catalina.home}/logs/" + (Goja.mode.isTest() ? GojaConfig.appName() + "-test" : GojaConfig.appName()) + ".log");
+        final String logger_file = GojaConfig.getProperty("logger.path", "/logs/" + (Goja.mode.isTest() ? GojaConfig.appName() + "-test" : GojaConfig.appName()) + ".log");
         rfa.setFile(logger_file);
 
         final TimeBasedRollingPolicy rollingPolicy = new TimeBasedRollingPolicy();
@@ -67,7 +67,7 @@ public class AppLogConfigurator {
         PatternLayoutEncoder pl = new PatternLayoutEncoder();
         pl.setContext(lc);
         pl.setCharset(Charsets.UTF_8);
-        pl.setPattern("%d{yyyy-MM-dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %msg%n");
+        pl.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
         pl.start();
 
         ca.setEncoder(pl);
