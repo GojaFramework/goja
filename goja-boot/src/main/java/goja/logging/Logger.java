@@ -32,6 +32,8 @@ public class Logger {
      */
     protected static boolean configuredManually = false;
 
+    protected Logger() {
+    }
 
     /**
      * @return true if log4j.debug / jul.fine logging is enabled

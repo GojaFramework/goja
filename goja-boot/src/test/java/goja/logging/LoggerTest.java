@@ -16,15 +16,16 @@ public class LoggerTest {
 
     @Before
     public void setUp() throws Exception {
-        Goja.mode = Goja.Mode.TEST;
+        Goja.mode = Goja.Mode.PROD;
         LoggerInit.init();
     }
 
 
     @Test
     public void testInfo() throws Exception {
-
-        Logger.info("test {}", "abc");
+        for (int i = 0; i < 1000; i++) {
+            Logger.info("test index os ... {}", i);
+        }
 
     }
 }

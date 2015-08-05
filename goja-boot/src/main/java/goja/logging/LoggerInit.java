@@ -1,8 +1,6 @@
 package goja.logging;
 
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.status.OnConsoleStatusListener;
-import ch.qos.logback.core.status.StatusManager;
 import com.jfinal.kit.PathKit;
 import goja.GojaConfig;
 import goja.StringPool;
@@ -26,10 +24,7 @@ public class LoggerInit {
         final String app_version = GojaConfig.appVersion();
         if (slf4jConf == null) {
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-            StatusManager statusManager = lc.getStatusManager();
-            OnConsoleStatusListener onConsoleListener = new OnConsoleStatusListener();
-            statusManager.add(onConsoleListener);
+            lc.reset();
             AppLogConfigurator.configure(lc);
 
             Logger.slf4j = LoggerFactory.getLogger(app_name + StringPool.AT + app_version);

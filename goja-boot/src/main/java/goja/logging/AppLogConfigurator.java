@@ -38,71 +38,89 @@ public class AppLogConfigurator {
     private AppLogConfigurator() {
     }
 
-    public static void configure(final LoggerContext lc) {
+    protected static void configure(final LoggerContext lc) {
         StatusManager sm = lc.getStatusManager();
         if (sm != null) {
             sm.add(new InfoStatus("Setting up default configuration.", lc));
         }
-        ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<ILoggingEvent>();
-        ca.setContext(lc);
-        ca.setName("console");
+        final String loggerLevel = GojaConfig.getProperty("logger.level");
 
-        final RollingFileAppender rfa = new RollingFileAppender();
+        final boolean isDev = GojaConfig.isDev();
 
-        final String logger_file = GojaConfig.getProperty("logger.path", "/logs/" + (Goja.mode.isTest() ? GojaConfig.appName() + "-test" : GojaConfig.appName()) + ".log");
-        rfa.setFile(logger_file);
+        if (isDev) {
 
-        final TimeBasedRollingPolicy rollingPolicy = new TimeBasedRollingPolicy();
-        rollingPolicy.setParent(rfa);
-        rollingPolicy.setMaxHistory(15);
-        rollingPolicy.setFileNamePattern(StringUtils.replace(logger_file, ".log", ".%d{yyyy-MM-dd}.%i.log"));
-        SizeAndTimeBasedFNATP timeBasedTriggering = new SizeAndTimeBasedFNATP();
-        timeBasedTriggering.setMaxFileSize("100MB");
-        rollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(timeBasedTriggering);
-        rollingPolicy.setContext(lc);
-        rfa.setRollingPolicy(rollingPolicy);
-        rfa.setContext(lc);
-        rfa.setName("app_log_file");
 
-        PatternLayoutEncoder pl = new PatternLayoutEncoder();
-        pl.setContext(lc);
-        pl.setCharset(Charsets.UTF_8);
-        pl.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
-        pl.start();
+            ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<ILoggingEvent>();
+            ca.setContext(lc);
+            ca.setName("console");
 
-        ca.setEncoder(pl);
-        ca.start();
+            PatternLayoutEncoder pl = new PatternLayoutEncoder();
+            pl.setContext(lc);
+            pl.setCharset(Charsets.UTF_8);
+            pl.setPattern("%d{yyyy-MM-dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %msg%n");
+            pl.start();
 
-        rfa.setEncoder(pl);
-        rfa.start();
+            ca.setEncoder(pl);
+            ca.start();
 
-        // init async loggin
-        AsyncAppender asyncAppender = new AsyncAppender();
-        asyncAppender.setContext(lc);
-        asyncAppender.addAppender(rfa);
-        asyncAppender.setQueueSize(512);
-        asyncAppender.setDiscardingThreshold(0);
+            Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
+            rootLogger.setLevel(Level.DEBUG);
+            rootLogger.addAppender(ca);
 
-        final Level config_level = Level.toLevel(GojaConfig.getProperty("logger"), Level.INFO);
-        final boolean mode = GojaConfig.isDev();
-        Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
-        rootLogger.setLevel(config_level);
-        rootLogger.addAppender(ca);
-        rootLogger.addAppender(asyncAppender);
+        } else {
 
-        Logger appLogger = lc.getLogger("app");
-        appLogger.setLevel(mode ? Level.DEBUG : config_level);
-        appLogger.addAppender(ca);
-        appLogger.addAppender(asyncAppender);
+            // init async loggin
+            final AsyncAppender asyncAppender = new AsyncAppender();
+            asyncAppender.setContext(lc);
+            asyncAppender.setQueueSize(512);
+            asyncAppender.setDiscardingThreshold(0);
 
-        if (mode) {
-            Logger gojaLogger = lc.getLogger("goja");
-            gojaLogger.setLevel(Level.DEBUG);
-            gojaLogger.addAppender(ca);
-            Logger jfinalLogger = lc.getLogger("com.jfinal");
-            jfinalLogger.setLevel(Level.DEBUG);
-            jfinalLogger.addAppender(ca);
+            final RollingFileAppender rfa = new RollingFileAppender();
+
+            final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + (Goja.mode.isTest() ? GojaConfig.appName() + "-test" : GojaConfig.appName()) + ".log");
+            rfa.setFile(logger_file);
+
+            final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
+            rollingPolicy.setParent(rfa);
+            rollingPolicy.setMaxHistory(15);
+            rollingPolicy.setFileNamePattern(StringUtils.replace(logger_file, ".log", ".%d{yyyy-MM-dd}.%i.log"));
+            SizeAndTimeBasedFNATP<ILoggingEvent> timeBasedTriggering = new SizeAndTimeBasedFNATP<ILoggingEvent>();
+            timeBasedTriggering.setMaxFileSize("100MB");
+            rollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(timeBasedTriggering);
+            rollingPolicy.setContext(lc);
+
+            rfa.setRollingPolicy(rollingPolicy);
+            rfa.setContext(lc);
+            rfa.setName("app_log_file");
+
+
+            PatternLayoutEncoder pl = new PatternLayoutEncoder();
+            pl.setContext(lc);
+            pl.setCharset(Charsets.UTF_8);
+            pl.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
+
+            rfa.setEncoder(pl);
+
+
+            asyncAppender.addAppender(rfa);
+
+
+            pl.start();
+            rollingPolicy.start();
+            rfa.start();
+            asyncAppender.start();
+
+
+            final Level config_level = Level.toLevel(loggerLevel, Level.INFO);
+            Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
+            rootLogger.setLevel(config_level);
+            rootLogger.addAppender(asyncAppender);
+
+            Logger appLogger = lc.getLogger("app");
+            appLogger.setLevel(config_level);
+            appLogger.addAppender(asyncAppender);
         }
+
     }
 
 }
