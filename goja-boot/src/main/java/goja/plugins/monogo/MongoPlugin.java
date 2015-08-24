@@ -18,20 +18,12 @@ public class MongoPlugin implements IPlugin {
     private final  String      database;
     private final  String      morphia_pkgs;
     /**
-     * 是否启用 morphia
+     * enable morphia
      */
     private final  boolean     morphia;
     private static MongoClient client;
 
 
-    /**
-     * 给定地址、端口、数据库名称以及是否启动Morphia参数构建MongoDB插件
-     *
-     * @param host     mongod地址
-     * @param port     mongodb端口
-     * @param database mongodb数据库
-     * @param morphia  是否启用morphia
-     */
     public MongoPlugin(String host, int port, String database, boolean morphia, String morphia_pkgs) {
         this.host = host;
         this.port = port;

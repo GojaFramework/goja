@@ -11,6 +11,7 @@ import goja.exceptions.UnexpectedException;
 import goja.libs.Action;
 import goja.libs.PThreadFactory;
 import goja.libs.Promise;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("UnusedDeclaration")
 public class Invoker {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Invoker.class);
+    private static final Logger logger = LoggerFactory.getLogger(Invoker.class);
     /**
      * Main executor for requests invocations.
      */

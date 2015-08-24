@@ -34,11 +34,13 @@ public final class AjaxMessage<E> implements Serializable {
     /**
      * Returns the message data
      */
-    private final E             data;
+    private final E data;
+
     /**
-     * News clues
+     * Message
      */
-    private final String        message;
+    private final String message;
+
     /**
      * Message State Machine.
      */
