@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * @since JDK 1.6
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Invoker {
+public final class Invoker {
 
     private static final Logger logger = LoggerFactory.getLogger(Invoker.class);
     /**
