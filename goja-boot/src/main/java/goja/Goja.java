@@ -74,6 +74,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Protocol;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
@@ -288,20 +289,26 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void configHandler(Handlers handlers) {
-        //访问路径是/druid/monitor
-
-        final String view_url = GojaConfig.getProperty("db.monitor", "/druid/monitor");
-
-        final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
-            @Override
-            public boolean isPermitted(HttpServletRequest request) {
-                return true;
-            }
-        });
 
         handlers.add(new ContextPathHandler("ctx"));
+        final boolean monitorDB = GojaConfig.getPropertyToBoolean("db.monitor", false);
+        if(monitorDB){
+            final String view_url = GojaConfig.getProperty("db.monitor.url", "/druid/monitor");
 
-        handlers.add(dvh);
+            final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
+                @Override
+                public boolean isPermitted(HttpServletRequest request) {
+                    HttpSession hs = request.getSession(false);
+                    return (hs != null);
+                }
+            });
+
+
+            handlers.add(dvh);
+        }
+
+
+
 
         final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
         if (handler_clses != null && !handler_clses.isEmpty()) {

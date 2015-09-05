@@ -12,10 +12,8 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
-import goja.Goja;
 import goja.kits.base.DateKit;
 import goja.lang.Lang;
 import goja.logging.Logger;
@@ -32,14 +30,12 @@ import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
-import static goja.StringPool.EMPTY;
 import static goja.StringPool.SLASH;
 
 /**
@@ -72,27 +68,6 @@ public class Controller extends com.jfinal.core.Controller {
         new BadRequest().render();
     }
 
-
-
-    /**
-     * Set Attribute, according to the parameters of the class name lowercase as parameters
-     *
-     * @param value value .
-     * @return Controller.
-     */
-    protected com.jfinal.core.Controller setAttr(Object value) {
-        String attr_name = StrKit.firstCharToLowerCase(value.getClass().getSimpleName());
-        return setAttr(attr_name, value);
-    }
-
-    @Override
-    public void render(String view) {
-
-        super.render((view.startsWith(SLASH))
-                ? ( SLASH + Goja.viewPath + File.separator + view.replaceFirst(SLASH, EMPTY))
-                : view);
-
-    }
 
 
     /**
