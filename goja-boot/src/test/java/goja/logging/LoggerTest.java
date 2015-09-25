@@ -1,6 +1,5 @@
 package goja.logging;
 
-import goja.Goja;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +15,6 @@ public class LoggerTest {
 
     @Before
     public void setUp() throws Exception {
-        Goja.mode = Goja.Mode.PROD;
         LoggerInit.init();
     }
 

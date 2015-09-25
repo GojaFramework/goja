@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.IPlugin;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.StringPool;
 import goja.plugins.sqlmap.nodes.SqlMapNode;
 import goja.plugins.sqlmap.nodes.SqlNode;

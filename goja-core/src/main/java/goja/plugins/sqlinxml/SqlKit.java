@@ -13,7 +13,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import com.jfinal.kit.PathKit;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.StringPool;
 import goja.kits.JaxbKit;
 import goja.lang.Lang;
@@ -73,7 +73,7 @@ public class SqlKit {
     static void init() {
         final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
         initScanFiles(resource);
-        if (GojaConfig.isDev()) {
+        if (GojaConfig.applicationMode().isDev()) {
             // 启动文件监控
             runWatch();
         }

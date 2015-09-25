@@ -2,7 +2,7 @@ package goja.logging;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.jfinal.kit.PathKit;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.StringPool;
 import org.slf4j.LoggerFactory;
 

@@ -6,7 +6,7 @@
 
 package goja.plugins.index;
 
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;

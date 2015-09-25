@@ -14,8 +14,8 @@ import com.jfinal.core.JFinal;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
-import goja.Goja;
 import goja.StringPool;
+import goja.config.GojaConfig;
 import goja.mvc.Freemarkers;
 
 import java.io.IOException;
@@ -84,7 +84,7 @@ public class GojaErrorRender extends Render {
     }
 
     public String getErrorHtml() {
-        if (Goja.mode.isDev()) {
+        if (GojaConfig.applicationMode().isDev()) {
             int errorCode = getErrorCode();
             Map<String, Object> pdata = Maps.newHashMap();
             final String requestURI = request.getRequestURI();

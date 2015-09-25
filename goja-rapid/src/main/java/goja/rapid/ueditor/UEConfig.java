@@ -1,7 +1,7 @@
 package goja.rapid.ueditor;
 
 import com.google.common.collect.Lists;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.rapid.storage.StorageService;
 
 import java.util.List;

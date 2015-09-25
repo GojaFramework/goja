@@ -22,7 +22,7 @@ import static goja.StringPool.COMMA;
 import static goja.StringPool.EMPTY;
 import static goja.StringPool.NEWLINE;
 import static goja.StringPool.QUOTE;
-import static goja.date.DateFormatter.DATE_FORMAT_YYYY_MM_DD_HH_MM;
+import static goja.date.DateFormatter.DP_YYYY_MM_DD_HH_MM;
 
 /**
  * 该类是把数据转化成csv字符串做了简要的封装 List headers是显示数据每列的属性，建议使用字符 List data数据，单个元素格式可以为Array，list，map，model，record List columns
@@ -174,9 +174,9 @@ public class CsvUtil {
             } else if (obj instanceof Calendar) {
                 content = obj.toString();
             } else if (obj instanceof Timestamp) {
-                content = DATE_FORMAT_YYYY_MM_DD_HH_MM.format(new Date(((Timestamp) obj).getTime()));
+                content = DP_YYYY_MM_DD_HH_MM.format(new Date(((Timestamp) obj).getTime()));
             } else if (obj instanceof Date) {
-                content = DATE_FORMAT_YYYY_MM_DD_HH_MM.format((Date) obj);
+                content = DP_YYYY_MM_DD_HH_MM.format((Date) obj);
             } else {
                 content = write(String.valueOf(obj));
             }

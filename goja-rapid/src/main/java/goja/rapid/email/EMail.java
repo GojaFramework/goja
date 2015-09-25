@@ -6,7 +6,7 @@
 
 package goja.rapid.email;
 
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.StringPool;
 import goja.exceptions.MailException;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +58,7 @@ public class EMail {
         try {
             email = buildMessage(email);
 
-            if (GojaConfig.getProperty("mail.smtp", StringPool.EMPTY).equals("mock") && GojaConfig.isDev()) {
+            if (GojaConfig.getProperty("mail.smtp", StringPool.EMPTY).equals("mock") && GojaConfig.applicationMode().isDev()) {
                 Mock.send(email);
                 return new Future<Boolean>() {
                     @Override

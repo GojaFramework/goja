@@ -42,6 +42,7 @@ import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
 import goja.cache.Cache;
 import goja.cache.EhCacheImpl;
+import goja.config.GojaConfig;
 import goja.exceptions.DatabaseException;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
@@ -99,8 +100,6 @@ public class Goja extends JFinalConfig {
     public static        boolean          started        = false;
     // the application configuration.
     public static Properties       configuration;
-    // run mode.
-    public static Mode             mode;
     // the application view path.
     public static String           viewPath;
     public static String           domain;
@@ -121,8 +120,6 @@ public class Goja extends JFinalConfig {
         configuration = GojaConfig.getConfigProps();
         initlization = true;
 
-        // dev_mode
-        mode = Mode.TEST;
         LoggerInit.init();
     }
 
@@ -136,8 +133,7 @@ public class Goja extends JFinalConfig {
         initlization = true;
 
         // dev_mode
-        mode = GojaConfig.isDev() ? Mode.DEV : Mode.PROD;
-        constants.setDevMode(mode.isDev());
+        constants.setDevMode( GojaConfig.applicationMode().isDev());
         // fixed: render view has views//xxx.ftl
         viewPath = GojaConfig.getProperty("app.viewpath", File.separator + "WEB-INF" + File.separator + "views");
         constants.setBaseViewPath(viewPath);
@@ -149,7 +145,7 @@ public class Goja extends JFinalConfig {
         final String wx_url = GojaConfig.getProperty("wx.url");
         if (!Strings.isNullOrEmpty(wx_url)) {
             // Config Wx Api
-            ApiConfigKit.setDevMode(mode.isDev());
+            ApiConfigKit.setDevMode( GojaConfig.applicationMode().isDev());
         }
 
         if (GojaConfig.enable_security()) {
@@ -471,7 +467,7 @@ public class Goja extends JFinalConfig {
                     System.err.println("database type is use mysql.");
                 }
             }
-            atbp.setShowSql(mode.isDev());
+            atbp.setShowSql(GojaConfig.applicationMode().isDev());
             plugins.add(atbp);
 
         }
@@ -509,36 +505,4 @@ public class Goja extends JFinalConfig {
         }
     }
 
-    /**
-     * 2 modes
-     */
-    public enum Mode {
-
-        /**
-         * Enable development-specific features.
-         */
-        DEV,
-
-        /**
-         * The Test Features.
-         */
-        TEST,
-        /**
-         * Disable development-specific features.
-         */
-        PROD;
-
-        /**
-         * Determine whether the current operation mode for the development pattern
-         *
-         * @return If returns true then said to development mode, or as an official running environment.
-         */
-        public boolean isDev() {
-            return this == DEV || this == TEST;
-        }
-        public boolean isTest() {
-            return this == TEST;
-        }
-
-    }
 }

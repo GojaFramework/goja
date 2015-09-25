@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
-import java.net.ServerSocket;
 import java.nio.channels.FileLock;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class JVMKit {
 
     static List<FileLock> jvmFile = Lists.newArrayList();
 
-    static List<ServerSocket> jvmSockets = Lists.newArrayList();
+//    static List<ServerSocket> jvmSockets = Lists.newArrayList();
 
     /**
      * 得到当时进程PID,如果没有得到，返回-1

@@ -9,7 +9,7 @@ package goja.rapid.page;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.StringPool;
 import goja.kits.base.Strs;
 import goja.rapid.db.Condition;

@@ -68,7 +68,7 @@ public class PrettyTimeDirective implements TemplateDirectiveModel {
             String time = timeScalar.getAsString();
             String ftime = StringUtils.EMPTY;
             if (!Strings.isNullOrEmpty(time)) {
-                final DateTime p_date = DateTime.parse(time, DateFormatter.DATE_TIME_PATTERN_YYYY_MM_DD_HH_MM_SS);
+                final DateTime p_date = DateTime.parse(time, DateFormatter.DTP_YYYY_MM_DD_HH_MM_SS);
                 final DateTime today = DateTime.now();
                 Days d = Days.daysBetween(p_date, today);
                 int days = d.getDays();

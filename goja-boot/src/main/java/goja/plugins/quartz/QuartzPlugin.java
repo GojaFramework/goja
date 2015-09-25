@@ -6,7 +6,7 @@
 package goja.plugins.quartz;
 
 import com.jfinal.plugin.IPlugin;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.logging.Logger;
 import goja.annotation.On;
 import goja.initialize.ctxbox.ClassBox;

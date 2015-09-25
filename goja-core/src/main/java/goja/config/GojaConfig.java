@@ -1,4 +1,4 @@
-package goja;
+package goja.config;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
@@ -7,6 +7,8 @@ import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.jfinal.plugin.activerecord.DbKit;
+import goja.Func;
+import goja.StringPool;
 import goja.kits.io.ResourceKit;
 import goja.lang.Lang;
 import goja.tuples.Pair;
@@ -35,6 +37,7 @@ public final class GojaConfig {
 
     private static final Properties configProps;
 
+    private static ApplicationMode applicationMode;
 
     static {
         final Properties p = new Properties();
@@ -44,6 +47,7 @@ public final class GojaConfig {
         }
 //        loadDBConfig(p);
         configProps = p;
+        applicationMode = getApplicationModel();
     }
 
     public static Map<String, Properties> loadDBConfig(Properties p) {
@@ -217,8 +221,24 @@ public final class GojaConfig {
     }
 
 
-    public static boolean isDev() {
-        return getPropertyToBoolean("dev.mode", false);
+    public static ApplicationMode applicationMode() {
+        return applicationMode;
+    }
+
+    /**
+     * 取得系统的运行模式
+     *
+     * @return 运行模式
+     */
+    private static ApplicationMode getApplicationModel() {
+        final String mode = getProperty("app.mode", "dev").toUpperCase();
+        if (StringUtils.equals(mode, ApplicationMode.DEV.toString())
+                || StringUtils.equals(mode, ApplicationMode.TEST.toString())
+                || StringUtils.equals(mode, ApplicationMode.PROD.toString())) {
+            return ApplicationMode.DEV;
+        } else {
+            return ApplicationMode.valueOf(mode);
+        }
     }
 
     public static boolean enable_security() {

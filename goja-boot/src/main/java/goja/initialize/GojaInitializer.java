@@ -13,7 +13,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Ordering;
 import com.jfinal.kit.PathKit;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.cache.Cache;
 import goja.castor.Castors;
 import goja.initialize.ctxbox.ClassFinder;
@@ -82,7 +82,7 @@ public class GojaInitializer implements ServletContainerInitializer {
         Castors.me();
 
         System.out.println("initializer " + app_name + " Application ok!");
-        if (GojaConfig.isDev()) {
+        if (GojaConfig.applicationMode().isDev()) {
             runScriptInitDb();
         }
     }

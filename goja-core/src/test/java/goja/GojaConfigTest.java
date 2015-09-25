@@ -1,11 +1,10 @@
 package goja;
 
+import goja.config.GojaConfig;
 import goja.tuples.Pair;
 import org.junit.Test;
 
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class GojaConfigTest {
 

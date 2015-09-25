@@ -10,7 +10,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.annotation.Every;
 import goja.annotation.On;
 import goja.annotation.OnApplicationStart;

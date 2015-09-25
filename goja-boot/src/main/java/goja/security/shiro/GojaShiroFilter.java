@@ -1,6 +1,6 @@
 package goja.security.shiro;
 
-import goja.GojaConfig;
+import goja.config.GojaConfig;
 import goja.StringPool;
 import goja.lang.Lang;
 import goja.tuples.Pair;
