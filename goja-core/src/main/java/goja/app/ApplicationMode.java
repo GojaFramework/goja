@@ -1,4 +1,4 @@
-package goja.config;
+package goja.app;
 
 /**
  * <p>

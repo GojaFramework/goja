@@ -16,9 +16,6 @@
 
 package com.jfinal.plugin.activerecord.tx;
 
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.plugin.activerecord.Config;
@@ -26,42 +23,39 @@ import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.IAtom;
 
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * TxByMethods
  */
 public class TxByMethods implements Interceptor {
-	
-	private Set<String> actionMethodSet = new HashSet<String>();
-	
-	public TxByMethods(String... actionMethods) {
-		if (actionMethods == null || actionMethods.length == 0)
-			throw new IllegalArgumentException("actionMethods can not be blank.");
-		
-		for (String actionMethod : actionMethods)
-			actionMethodSet.add(actionMethod.trim());
-	}
-	
-	public void intercept(final Invocation inv) {
-		Config config = Tx.getConfigWithTxConfig(inv);
-		if (config == null)
-			config = DbKit.getConfig();
-		
-		if (actionMethodSet.contains(inv.getMethodName())) {
-			DbPro.use(config.getName()).tx(new IAtom(){
-				public boolean run() throws SQLException {
-					inv.invoke();
-					return true;
-				}});
-		}
-		else {
-			inv.invoke();
-		}
-	}
+
+    private Set<String> methodSet = new HashSet<String>();
+
+    public TxByMethods(String... methods) {
+        if (methods == null || methods.length == 0)
+            throw new IllegalArgumentException("methods can not be null.");
+
+        for (String method : methods)
+            methodSet.add(method.trim());
+    }
+
+    public void intercept(final Invocation inv) {
+        Config config = Tx.getConfigWithTxConfig(inv);
+        if (config == null)
+            config = DbKit.getConfig();
+
+        if (methodSet.contains(inv.getMethodName())) {
+            DbPro.use(config.getName()).tx(new IAtom(){
+                public boolean run() throws SQLException {
+                    inv.invoke();
+                    return true;
+                }});
+        }
+        else {
+            inv.invoke();
+        }
+    }
 }
-
-
-
-
-
-
-

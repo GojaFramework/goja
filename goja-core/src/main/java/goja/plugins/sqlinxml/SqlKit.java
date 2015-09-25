@@ -13,7 +13,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import com.jfinal.kit.PathKit;
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.StringPool;
 import goja.kits.JaxbKit;
 import goja.lang.Lang;

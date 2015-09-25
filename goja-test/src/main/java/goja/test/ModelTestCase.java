@@ -16,7 +16,7 @@ import com.jfinal.plugin.activerecord.dialect.SqlServerDialect;
 import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import goja.Goja;
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.exceptions.DatabaseException;
 import goja.initialize.ctxbox.ClassFinder;
 import goja.kits.reflect.Reflect;

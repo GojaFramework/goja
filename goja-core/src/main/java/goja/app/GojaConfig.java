@@ -1,4 +1,4 @@
-package goja.config;
+package goja.app;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;

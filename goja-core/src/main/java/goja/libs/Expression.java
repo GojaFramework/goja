@@ -6,7 +6,7 @@
 
 package goja.libs;
 
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -42,7 +42,7 @@ import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
 import goja.cache.Cache;
 import goja.cache.EhCacheImpl;
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.exceptions.DatabaseException;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;

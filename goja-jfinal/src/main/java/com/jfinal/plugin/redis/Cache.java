@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
- * <p/>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,9 +38,9 @@ import java.util.Set;
  */
 public class Cache {
 
-    final String           name;
-    final JedisPool        jedisPool;
-    final ISerializer      serializer;
+    final String name;
+    final JedisPool jedisPool;
+    final ISerializer serializer;
     final IKeyNamingPolicy keyNamingPolicy;
 
     private final ThreadLocal<Jedis> threadLocalJedis = new ThreadLocal<Jedis>();
@@ -61,7 +61,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.set(keyToBytes(key), valueToBytes(value));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -72,7 +73,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.setex(keyToBytes(key), seconds, valueToBytes(value));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -83,8 +85,9 @@ public class Cache {
     public <T> T get(Object key) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.get(keyToBytes(key)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.get(keyToBytes(key)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -95,7 +98,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.del(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -106,7 +110,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.del(keysToBytesArray(keys));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -121,7 +126,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.keys(pattern);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -141,14 +147,15 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             byte[][] kv = new byte[keysValues.length][];
-            for (int i = 0; i < keysValues.length; i++) {
+            for (int i=0; i<keysValues.length; i++) {
                 if (i % 2 == 0)
                     kv[i] = keyToBytes(keysValues[i]);
                 else
                     kv[i] = valueToBytes(keysValues[i]);
             }
             return jedis.mset(kv);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -162,7 +169,8 @@ public class Cache {
             byte[][] keysBytesArray = keysToBytesArray(keys);
             List<byte[]> data = jedis.mget(keysBytesArray);
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -176,7 +184,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.decr(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -190,7 +199,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.decrBy(keyToBytes(key), longValue);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -203,7 +213,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.incr(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -217,7 +228,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.incrBy(keyToBytes(key), longValue);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -227,7 +239,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.exists(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -237,7 +250,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.randomKey();
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -249,7 +263,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.rename(keyToBytes(oldkey), keyToBytes(newkey));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -261,7 +276,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.move(keyToBytes(key), dbIndex);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -271,23 +287,25 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.migrate(valueToBytes(host), port, keyToBytes(key), destinationDb, timeout);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
      * 切换到指定的数据库，数据库索引号 index 用数字值指定，以 0 作为起始索引值。
      * 默认使用 0 号数据库。
-     * 注意：在 Jedis 对象被关闭时，数据库又会重新被设置为 1，所以本方法 select(...)
+     * 注意：在 Jedis 对象被关闭时，数据库又会重新被设置为初始值，所以本方法 select(...)
      * 正常工作需要使用如下方式之一：
      * 1：使用 RedisInterceptor，在本线程内共享同一个 Jedis 对象
      * 2：使用 Redis.call(ICallback) 进行操作
-     * 2：自行获取 Jedis 对象进行操作
+     * 3：自行获取 Jedis 对象进行操作
      */
     public String select(int databaseIndex) {
         Jedis jedis = getJedis();
         try {
             return jedis.select(databaseIndex);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -298,7 +316,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.expire(keyToBytes(key), seconds);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -308,7 +327,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.expireAt(keyToBytes(key), unixTime);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -318,7 +338,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.pexpire(keyToBytes(key), milliseconds);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -328,7 +349,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.pexpireAt(keyToBytes(key), millisecondsTimestamp);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -339,8 +361,9 @@ public class Cache {
     public <T> T getSet(Object key, Object value) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.getSet(keyToBytes(key), valueToBytes(value)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.getSet(keyToBytes(key), valueToBytes(value)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -350,7 +373,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.persist(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -360,7 +384,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.type(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -370,7 +395,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.ttl(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -380,7 +406,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.pttl(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -390,7 +417,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.objectRefcount(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -400,7 +428,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.objectIdletime(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -412,7 +441,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.hset(keyToBytes(key), keyToBytes(field), valueToBytes(value));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -427,7 +457,8 @@ public class Cache {
             for (Entry<Object, Object> e : hash.entrySet())
                 para.put(keyToBytes(e.getKey()), valueToBytes(e.getValue()));
             return jedis.hmset(keyToBytes(key), para);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -437,8 +468,9 @@ public class Cache {
     public <T> T hget(Object key, Object field) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.hget(keyToBytes(key), keyToBytes(field)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.hget(keyToBytes(key), keyToBytes(field)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -452,7 +484,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.hmget(keyToBytes(key), keysToBytesArray(fields));
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -462,7 +495,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.hdel(keyToBytes(key), keysToBytesArray(fields));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -472,7 +506,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.hexists(keyToBytes(key), keyToBytes(field));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -488,7 +523,8 @@ public class Cache {
             for (Entry<byte[], byte[]> e : data.entrySet())
                 result.put(keyFromBytes(e.getKey()), valueFromBytes(e.getValue()));
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -500,7 +536,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.hvals(keyToBytes(key));
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -510,8 +547,9 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             Set<byte[]> keySet = jedis.hkeys(keyToBytes(key));
-            return keySetFromBytesSet(keySet);    // 返回 key 的方法不能使用 valueSetFromBytesSet(...)
-        } finally {close(jedis);}
+            return keySetFromBytesSet(keySet);	// 返回 key 的方法不能使用 valueSetFromBytesSet(...)
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -521,7 +559,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.hlen(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -542,8 +581,9 @@ public class Cache {
     public <T> T lindex(Object key, long index) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.lindex(keyToBytes(key), index));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.lindex(keyToBytes(key), index));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -552,8 +592,9 @@ public class Cache {
     public Long getCounter(Object key) {
         Jedis jedis = getJedis();
         try {
-            return Long.parseLong((String) jedis.get(keyNamingPolicy.getKeyName(key)));
-        } finally {close(jedis);}
+            return Long.parseLong((String)jedis.get(keyNamingPolicy.getKeyName(key)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -565,7 +606,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.llen(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -575,8 +617,9 @@ public class Cache {
     public <T> T lpop(Object key) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.lpop(keyToBytes(key)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.lpop(keyToBytes(key)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -591,7 +634,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.lpush(keyToBytes(key), valuesToBytesArray(values));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -603,7 +647,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.lset(keyToBytes(key), index, valueToBytes(value));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -617,7 +662,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.lrem(keyToBytes(key), count, valueToBytes(value));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -636,7 +682,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.lrange(keyToBytes(key), start, end);
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -650,7 +697,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.ltrim(keyToBytes(key), start, end);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -660,8 +708,9 @@ public class Cache {
     public <T> T rpop(Object key) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.rpop(keyToBytes(key)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.rpop(keyToBytes(key)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -673,8 +722,9 @@ public class Cache {
     public <T> T rpoplpush(Object srcKey, Object dstKey) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.rpoplpush(keyToBytes(srcKey), keyToBytes(dstKey)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.rpoplpush(keyToBytes(srcKey), keyToBytes(dstKey)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -689,7 +739,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.rpush(keyToBytes(key), valuesToBytesArray(values));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -703,7 +754,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.blpop(keysToBytesArray(keys));
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -717,7 +769,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.blpop(timeout, keysToBytesArray(keys));
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -732,7 +785,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.brpop(keysToBytesArray(keys));
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -747,7 +801,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.brpop(timeout, keysToBytesArray(keys));
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -758,7 +813,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.ping();
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -770,7 +826,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.sadd(keyToBytes(key), valuesToBytesArray(members));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -780,7 +837,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.scard(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -791,8 +849,9 @@ public class Cache {
     public <T> T spop(Object key) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.spop(keyToBytes(key)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.spop(keyToBytes(key)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -807,7 +866,8 @@ public class Cache {
             Set<Object> result = new HashSet<Object>();
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -817,7 +877,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.sismember(keyToBytes(key), valueToBytes(member));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -831,7 +892,8 @@ public class Cache {
             Set<Object> result = new HashSet<Object>();
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -841,8 +903,9 @@ public class Cache {
     public <T> T srandmember(Object key) {
         Jedis jedis = getJedis();
         try {
-            return (T) valueFromBytes(jedis.srandmember(keyToBytes(key)));
-        } finally {close(jedis);}
+            return (T)valueFromBytes(jedis.srandmember(keyToBytes(key)));
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -859,7 +922,8 @@ public class Cache {
         try {
             List<byte[]> data = jedis.srandmember(keyToBytes(key), count);
             return valueListFromBytesList(data);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -869,7 +933,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.srem(keyToBytes(key), valuesToBytesArray(members));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -884,7 +949,8 @@ public class Cache {
             Set<Object> result = new HashSet<Object>();
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -899,7 +965,8 @@ public class Cache {
             Set<Object> result = new HashSet<Object>();
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -911,7 +978,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zadd(keyToBytes(key), score, valueToBytes(member));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     public Long zadd(Object key, Map<Object, Double> scoreMembers) {
@@ -919,9 +987,10 @@ public class Cache {
         try {
             Map<byte[], Double> para = new HashMap<byte[], Double>();
             for (Entry<Object, Double> e : scoreMembers.entrySet())
-                para.put(valueToBytes(e.getKey()), e.getValue());    // valueToBytes is important
+                para.put(valueToBytes(e.getKey()), e.getValue());	// valueToBytes is important
             return jedis.zadd(keyToBytes(key), para);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -931,7 +1000,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zcard(keyToBytes(key));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -942,7 +1012,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zcount(keyToBytes(key), min, max);
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -952,7 +1023,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zincrby(keyToBytes(key), score, valueToBytes(member));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -966,10 +1038,11 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             Set<byte[]> data = jedis.zrange(keyToBytes(key), start, end);
-            Set<Object> result = new LinkedHashSet<Object>();    // 有序集合必须 LinkedHashSet
+            Set<Object> result = new LinkedHashSet<Object>();	// 有序集合必须 LinkedHashSet
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -983,10 +1056,11 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             Set<byte[]> data = jedis.zrevrange(keyToBytes(key), start, end);
-            Set<Object> result = new LinkedHashSet<Object>();    // 有序集合必须 LinkedHashSet
+            Set<Object> result = new LinkedHashSet<Object>();	// 有序集合必须 LinkedHashSet
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -998,10 +1072,11 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             Set<byte[]> data = jedis.zrangeByScore(keyToBytes(key), min, max);
-            Set<Object> result = new LinkedHashSet<Object>();    // 有序集合必须 LinkedHashSet
+            Set<Object> result = new LinkedHashSet<Object>();	// 有序集合必须 LinkedHashSet
             valueSetFromBytesSet(data, result);
             return result;
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -1013,7 +1088,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zrank(keyToBytes(key), valueToBytes(member));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -1025,7 +1101,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zrevrank(keyToBytes(key), valueToBytes(member));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -1036,7 +1113,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zrem(keyToBytes(key), valuesToBytesArray(members));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     /**
@@ -1047,7 +1125,8 @@ public class Cache {
         Jedis jedis = getJedis();
         try {
             return jedis.zscore(keyToBytes(key), valueToBytes(member));
-        } finally {close(jedis);}
+        }
+        finally {close(jedis);}
     }
 
     // ---------
@@ -1063,7 +1142,7 @@ public class Cache {
 
     private byte[][] keysToBytesArray(Object... keys) {
         byte[][] result = new byte[keys.length][];
-        for (int i = 0; i < result.length; i++)
+        for (int i=0; i<result.length; i++)
             result[i] = keyToBytes(keys[i]);
         return result;
     }
@@ -1085,7 +1164,7 @@ public class Cache {
 
     private byte[][] valuesToBytesArray(Object... objectArray) {
         byte[][] data = new byte[objectArray.length][];
-        for (int i = 0; i < data.length; i++)
+        for (int i=0; i<data.length; i++)
             data[i] = valueToBytes(objectArray[i]);
         return data;
     }
@@ -1141,9 +1220,3 @@ public class Cache {
         threadLocalJedis.remove();
     }
 }
-
-
-
-
-
-

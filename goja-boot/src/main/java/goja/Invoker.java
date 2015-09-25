@@ -6,8 +6,8 @@
 
 package goja;
 
-import goja.config.ApplicationMode;
-import goja.config.GojaConfig;
+import goja.app.ApplicationMode;
+import goja.app.GojaConfig;
 import goja.exceptions.GojaException;
 import goja.exceptions.UnexpectedException;
 import goja.libs.Action;

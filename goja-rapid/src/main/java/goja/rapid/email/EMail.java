@@ -6,7 +6,7 @@
 
 package goja.rapid.email;
 
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.StringPool;
 import goja.exceptions.MailException;
 import org.apache.commons.lang3.StringUtils;

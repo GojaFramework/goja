@@ -1,6 +1,6 @@
 package goja;
 
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.tuples.Pair;
 import org.junit.Test;
 

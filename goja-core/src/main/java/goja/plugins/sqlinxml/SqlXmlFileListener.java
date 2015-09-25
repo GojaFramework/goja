@@ -8,7 +8,7 @@ package goja.plugins.sqlinxml;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.kits.JaxbKit;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.lang3.StringUtils;

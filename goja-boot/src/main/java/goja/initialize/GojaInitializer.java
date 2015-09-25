@@ -13,7 +13,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Ordering;
 import com.jfinal.kit.PathKit;
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.cache.Cache;
 import goja.castor.Castors;
 import goja.initialize.ctxbox.ClassFinder;

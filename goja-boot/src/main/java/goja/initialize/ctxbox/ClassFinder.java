@@ -12,7 +12,7 @@ import com.jfinal.handler.Handler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.Model;
-import goja.config.GojaConfig;
+import goja.app.GojaConfig;
 import goja.StringPool;
 import goja.job.Job;
 import goja.mvc.AppLoadEvent;
