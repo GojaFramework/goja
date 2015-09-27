@@ -5,6 +5,7 @@
  */
 package goja.plugins.monogo;
 
+import com.google.common.base.Strings;
 import com.jfinal.plugin.IPlugin;
 import com.mongodb.MongoClient;
 
@@ -17,18 +18,13 @@ public class MongoPlugin implements IPlugin {
     private final  int         port;
     private final  String      database;
     private final  String      morphia_pkgs;
-    /**
-     * enable morphia
-     */
-    private final  boolean     morphia;
     private static MongoClient client;
 
 
-    public MongoPlugin(String host, int port, String database, boolean morphia, String morphia_pkgs) {
+    public MongoPlugin(String host, int port, String database, String morphia_pkgs) {
         this.host = host;
         this.port = port;
         this.database = database;
-        this.morphia = morphia;
         this.morphia_pkgs = morphia_pkgs;
     }
 
@@ -38,7 +34,7 @@ public class MongoPlugin implements IPlugin {
         client = new MongoClient(host, port);
 
         MongoKit.init(client, database);
-        if (morphia) {
+        if (!Strings.isNullOrEmpty(morphia_pkgs)) {
             MorphiaKit.create(client, database, morphia_pkgs);
         }
         return true;

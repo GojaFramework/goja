@@ -2,7 +2,6 @@ package goja.app;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
@@ -11,13 +10,11 @@ import goja.Func;
 import goja.StringPool;
 import goja.kits.io.ResourceKit;
 import goja.lang.Lang;
-import goja.tuples.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -79,43 +76,6 @@ public final class GojaConfig {
                     if (db_main_props == null) {
                         db_main_props = new Properties();
                         dbConfigs.put(DbKit.MAIN_CONFIG_NAME, db_main_props);
-                    }
-                    db_main_props.put(_key, value);
-                }
-            }
-        }
-        return  dbConfigs;
-    }
-
-    public static Map<String, Properties> loadRedisConfig(Properties p) {
-        Map<String, Properties> dbConfigs = Maps.newHashMapWithExpectedSize(1);
-        for (Object o : p.keySet()) {
-            String _key = String.valueOf(o);
-            Object value = p.get(o);
-            if (Lang.isEmpty(value)) {
-                continue;
-            }
-            if (StringUtils.startsWithIgnoreCase(_key, "redis")) {
-                int last_idx = _key.lastIndexOf(StringPool.DOT);
-                if (last_idx > 2) {
-                    // like db.second.url
-                    String config_name = _key.substring(_key.indexOf(StringPool.DOT) + 1, last_idx);
-                    if(logger.isDebugEnabled()){
-                        logger.debug("the db config is {}", config_name);
-                    }
-                    Properties db_config_props = dbConfigs.get(config_name);
-                    if (db_config_props == null) {
-                        db_config_props = new Properties();
-                        dbConfigs.put(config_name, db_config_props);
-                    }
-                    _key = _key.replace(StringPool.DOT + config_name, StringPool.EMPTY);
-                    db_config_props.put(_key, value);
-
-                } else {
-                    Properties db_main_props = dbConfigs.get(StringPool.MAIN_REDIS_CACHE);
-                    if (db_main_props == null) {
-                        db_main_props = new Properties();
-                        dbConfigs.put(StringPool.MAIN_REDIS_CACHE, db_main_props);
                     }
                     db_main_props.put(_key, value);
                 }
@@ -242,7 +202,7 @@ public final class GojaConfig {
     }
 
     public static boolean enable_security() {
-        return getPropertyToBoolean("security", true);
+        return getPropertyToBoolean("app.security", true);
     }
 
     public static String appVersion() {
@@ -250,11 +210,11 @@ public final class GojaConfig {
     }
 
     public static String appName(){
-        return getProperty("app", "application");
+        return getProperty("app.name", "application");
     }
 
     public static String domain() {
-        return getProperty("domain", "http://127.0.0.1:8080/" + appName());
+        return getProperty("app.domain", "http://127.0.0.1:8080/" + appName());
     }
 
     public static String dbUrl(){
@@ -281,23 +241,9 @@ public final class GojaConfig {
     }
 
 
-    public static List<Pair<String,String>> chainConfig(){
-        List<Pair<String,String>> chains = Lists.newArrayList();
-        Enumeration<?> enumeration = configProps.propertyNames();
-        while (enumeration.hasMoreElements()) {
-            String key = (String) enumeration.nextElement();
-            if(StringUtils.startsWithIgnoreCase(key,"security.chain.")){
-                chains.add(Pair.with(key.replace("security.chain.", StringPool.EMPTY), getProperty(key)));
-            }
-        }
-        return chains;
-    }
 
     public static Object get(String key) {
         return configProps.get(key);
     }
 
-    public static String getWebEncoding() {
-        return getProperty("app.web_encoding", StringPool.UTF_8);
-    }
 }

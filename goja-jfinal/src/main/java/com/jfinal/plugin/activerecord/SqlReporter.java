@@ -16,6 +16,7 @@
 
 package com.jfinal.plugin.activerecord;
 
+import goja.dao.SqlFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,11 +48,7 @@ public class SqlReporter implements InvocationHandler {
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		try {
 			if (method.getName().equals("prepareStatement")) {
-				if (log.isDebugEnabled()){
-
-					String info = "Sql: " + args[0];
-					log.debug(info);
-				}
+                log.info("Run Sql is {}", SqlFormatter.format(String.valueOf(args[0])));
 			}
 			return method.invoke(conn, args);
 		} catch (InvocationTargetException e) {

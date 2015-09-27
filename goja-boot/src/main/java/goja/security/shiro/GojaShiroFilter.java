@@ -1,9 +1,10 @@
 package goja.security.shiro;
 
-import goja.app.GojaConfig;
+import com.google.common.base.MoreObjects;
+import com.jfinal.kit.Prop;
+import com.jfinal.kit.PropKit;
 import goja.StringPool;
-import goja.lang.Lang;
-import goja.tuples.Pair;
+import goja.app.GojaConfig;
 import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.AuthenticationFilter;
@@ -24,8 +25,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * <p> Goja 扩展的 Shiro 拦截器，主要是为了避免 shiro.ini 的配置</p>
@@ -37,12 +38,17 @@ import java.util.Map;
 public class GojaShiroFilter extends AbstractShiroFilter {
     private static final Logger logger = LoggerFactory.getLogger(GojaShiroFilter.class);
 
+    private static Properties shiroConfig;
 
     @Override
     public void init() throws Exception {
         super.init();
         WebSecurityManager webSecurityManager = initSecurityManager();
         FilterChainManager manager = createFilterChainManager();
+
+        String shiroConfigFile = GojaConfig.getProperty("app.security.config");
+        final Prop configFile = PropKit.use(shiroConfigFile);
+        shiroConfig = configFile.getProperties();
 
         //Expose the constructed FilterChainManager by first wrapping it in a
         // FilterChainResolver implementation. The AbstractShiroFilter implementations
@@ -64,13 +70,15 @@ public class GojaShiroFilter extends AbstractShiroFilter {
         for (Filter filter : defaultFilters.values()) {
             applyGlobalPropertiesIfNecessary(filter);
         }
-        List<Pair<String, String>> chains = GojaConfig.chainConfig();
-        if (!Lang.isEmpty(chains)) {
 
-            for (Pair<String, String> chain : chains) {
-                manager.createChain(chain.getValue0(), chain.getValue1());
+        if(shiroConfig!=null && !shiroConfig.isEmpty()){
+            for (Object urlKey : shiroConfig.keySet()) {
+                String url = String.valueOf(urlKey);
+                //  { "authc", "roles[admin,user]", "perms[file:edit]" }
+                manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url),"none"));
             }
         }
+
 
         return manager;
     }

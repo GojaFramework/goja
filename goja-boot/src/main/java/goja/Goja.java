@@ -22,6 +22,7 @@ import com.jfinal.config.Routes;
 import com.jfinal.core.Const;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
+import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
@@ -40,9 +41,9 @@ import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import freemarker.template.Configuration;
 import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
+import goja.app.GojaConfig;
 import goja.cache.Cache;
 import goja.cache.EhCacheImpl;
-import goja.app.GojaConfig;
 import goja.exceptions.DatabaseException;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
@@ -94,10 +95,9 @@ public class Goja extends JFinalConfig {
 
     public static final String FTL_HTML_PREFIX = ".ftl";
 
-    private static final org.slf4j.Logger logger         = LoggerFactory.getLogger(Goja.class);
-    private static final String           DEFAULT_DOMAIN = "http://127.0.0.1:8080/";
-    public static        boolean          initlization   = false;
-    public static        boolean          started        = false;
+    private static final org.slf4j.Logger logger       = LoggerFactory.getLogger(Goja.class);
+    public static        boolean          initlization = false;
+    public static        boolean          started      = false;
     // the application configuration.
     public static Properties       configuration;
     // the application view path.
@@ -133,7 +133,7 @@ public class Goja extends JFinalConfig {
         initlization = true;
 
         // dev_mode
-        constants.setDevMode( GojaConfig.applicationMode().isDev());
+        constants.setDevMode(GojaConfig.applicationMode().isDev());
         // fixed: render view has views//xxx.ftl
         viewPath = GojaConfig.getProperty("app.viewpath", File.separator + "WEB-INF" + File.separator + "views");
         constants.setBaseViewPath(viewPath);
@@ -142,10 +142,10 @@ public class Goja extends JFinalConfig {
         appVersion = GojaConfig.appVersion();
 
         // init wxchat config
-        final String wx_url = GojaConfig.getProperty("wx.url");
+        final String wx_url = GojaConfig.getProperty("app.wxchat.url");
         if (!Strings.isNullOrEmpty(wx_url)) {
             // Config Wx Api
-            ApiConfigKit.setDevMode( GojaConfig.applicationMode().isDev());
+            ApiConfigKit.setDevMode(GojaConfig.applicationMode().isDev());
         }
 
         if (GojaConfig.enable_security()) {
@@ -161,7 +161,7 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        domain = GojaConfig.getProperty("domain", DEFAULT_DOMAIN + appName);
+        domain = GojaConfig.domain();
         String view_type = GojaConfig.getProperty("app.viewtype");
         if (!StrKit.isBlank(view_type)) {
             setViewType(constants, view_type);
@@ -200,39 +200,50 @@ public class Goja extends JFinalConfig {
             plugins.add(new ShiroPlugin(this._routes));
         }
 
-        if (GojaConfig.getPropertyToBoolean("job", false)) {
+        if (GojaConfig.getPropertyToBoolean("app.job", false)) {
             plugins.add(new QuartzPlugin());
         }
 
 
-        final String index_path = GojaConfig.getProperty("index.path");
+        final String index_path = GojaConfig.getProperty("app.fulltext");
         if (!Strings.isNullOrEmpty(index_path)) {
             plugins.add(new IndexPlugin(index_path));
         }
 
         final String mongo_host = GojaConfig.getProperty("mongo.host", StringUtils.EMPTY);
-        final String mongo_url = GojaConfig.getProperty("mongo.url", StringUtils.EMPTY);
-        if (!Strings.isNullOrEmpty(mongo_host) || !Strings.isNullOrEmpty(mongo_url)) {
+        if (!Strings.isNullOrEmpty(mongo_host)) {
             int mongo_port = GojaConfig.getPropertyToInt("mongo.port", MongoPlugin.DEFAUL_PORT);
             String mongo_db = GojaConfig.getProperty("mongo.db", "test");
-            boolean moriph = GojaConfig.getPropertyToBoolean("mongo.moriph", false);
-            String pkgs = GojaConfig.getProperty("mongo.moriph.entitys", MongoPlugin.DEFAULT_PKGS);
-            final MongoPlugin mongodb = new MongoPlugin(mongo_host, mongo_port, mongo_db, moriph, pkgs);
+            String pkgs = GojaConfig.getProperty("mongo.models", MongoPlugin.DEFAULT_PKGS);
+            final MongoPlugin mongodb = new MongoPlugin(mongo_host, mongo_port, mongo_db, pkgs);
             plugins.add(mongodb);
         }
 
-        final String redis_host = GojaConfig.getProperty("redis.host", StringUtils.EMPTY);
-        if (!Strings.isNullOrEmpty(redis_host)) {
-            final Map<String, Properties> redisConfig = GojaConfig.loadRedisConfig(GojaConfig.getConfigProps());
-            for (String redisCacheName : redisConfig.keySet()) {
-                Properties properties = redisConfig.get(redisCacheName);
-                final String strProt = properties.getProperty("redis.port");
-                int port;
-                port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT : Ints.tryParse(strProt);
-                final RedisPlugin jedis = new RedisPlugin(redisCacheName, redis_host, port);
+        final String redisConfig = GojaConfig.getProperty("redis.config");
+        if (!Strings.isNullOrEmpty(redisConfig)) {
+            final Properties redisConfigProp = PropKit.use(redisConfig).getProperties();
+            String cacheNames = redisConfigProp.getProperty("app.caches");
+            if (!Strings.isNullOrEmpty(cacheNames)) {
+                List<String> cacheNameList = Func.COMMA_SPLITTER.splitToList(cacheNames);
+                for (String cacheName : cacheNameList) {
+                    final String cacheRedistPort = GojaConfig.getProperty(cacheName + ".port");
+                    final String cacheRedistHost = GojaConfig.getProperty(cacheName + ".host", String.valueOf(Protocol.DEFAULT_PORT));
+                    int port = Strings.isNullOrEmpty(cacheRedistPort) ? Protocol.DEFAULT_PORT : Ints.tryParse(cacheRedistPort);
+                    final RedisPlugin jedis = new RedisPlugin(cacheName, cacheRedistHost, port);
+                    plugins.add(jedis);
+                }
+            }
+        } else {
+            final String redis_host = GojaConfig.getProperty("redis.host", StringUtils.EMPTY);
+            if (!Strings.isNullOrEmpty(redis_host)) {
+                final String cacheName = GojaConfig.getProperty("redis.cachename", "goja.redis.cache");
+                final String strProt = GojaConfig.getProperty("redis.port");
+                int port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT : Ints.tryParse(strProt);
+                final RedisPlugin jedis = new RedisPlugin(cacheName, redis_host, port);
                 plugins.add(jedis);
             }
         }
+
 
         final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
         if (plugins_clses != null && !plugins_clses.isEmpty()) {
@@ -288,7 +299,7 @@ public class Goja extends JFinalConfig {
 
         handlers.add(new ContextPathHandler("ctx"));
         final boolean monitorDB = GojaConfig.getPropertyToBoolean("db.monitor", false);
-        if(monitorDB){
+        if (monitorDB) {
             final String view_url = GojaConfig.getProperty("db.monitor.url", "/druid/monitor");
 
             final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
@@ -302,8 +313,6 @@ public class Goja extends JFinalConfig {
 
             handlers.add(dvh);
         }
-
-
 
 
         final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);

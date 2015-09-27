@@ -1,7 +1,17 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2011-2013, kidzhou 周磊 (zhouleib1412@gmail.com)
  *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package goja.plugins.monogo;
 
@@ -25,9 +35,9 @@ public class MongoKit {
 
 
     private static MongoClient client;
-    private static DB          defaultDb;
+    private static DB defaultDb;
 
-    protected static void init(MongoClient client, String database) {
+    public static void init(MongoClient client, String database) {
         MongoKit.client = client;
         MongoKit.defaultDb = client.getDB(database);
 
@@ -96,7 +106,8 @@ public class MongoKit {
         if (totalRow % pageSize != 0) {
             totalPage++;
         }
-        return new Page<Record>(records, pageNumber, pageSize, totalPage, totalRow);
+        Page<Record> page = new Page<Record>(records, pageNumber, pageSize, totalPage, totalRow);
+        return page;
     }
 
     private static void page(int pageNumber, int pageSize, DBCursor dbCursor) {
