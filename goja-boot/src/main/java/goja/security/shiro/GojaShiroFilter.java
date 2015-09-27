@@ -98,7 +98,7 @@ public class GojaShiroFilter extends AbstractShiroFilter {
 
 
     private void applyLoginUrlIfNecessary(Filter filter) {
-        String loginUrl = GojaConfig.getProperty("security.loginUrl", "/login");
+        String loginUrl = shiroConfig.getProperty("login.url", "/login");
         if (StringUtils.hasText(loginUrl) && (filter instanceof AccessControlFilter)) {
             AccessControlFilter acFilter = (AccessControlFilter) filter;
             //only apply the login url if they haven't explicitly configured one already:
@@ -110,7 +110,7 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     }
 
     private void applySuccessUrlIfNecessary(Filter filter) {
-        String successUrl = GojaConfig.getProperty("security.successUrl", "/");
+        String successUrl = shiroConfig.getProperty("success.url", "/");
         if (StringUtils.hasText(successUrl) && (filter instanceof AuthenticationFilter)) {
             AuthenticationFilter authcFilter = (AuthenticationFilter) filter;
             //only apply the successUrl if they haven't explicitly configured one already:
@@ -122,7 +122,7 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     }
 
     private void applyUnauthorizedUrlIfNecessary(Filter filter) {
-        String unauthorizedUrl = GojaConfig.getProperty("shiro.unauthorizedUrl", "/");
+        String unauthorizedUrl = shiroConfig.getProperty("unauthorized.url", "/");
         if (StringUtils.hasText(unauthorizedUrl) && (filter instanceof AuthorizationFilter)) {
             AuthorizationFilter authzFilter = (AuthorizationFilter) filter;
             //only apply the unauthorizedUrl if they haven't explicitly configured one already:

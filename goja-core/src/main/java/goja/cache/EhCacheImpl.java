@@ -76,7 +76,7 @@ public class EhCacheImpl implements CacheImpl {
 
         configuration.setUpdateCheck(false);
         this.cacheManager = CacheManager.create(configuration);
-        String app_cache_name = "goja_" + GojaConfig.appName();
+        String app_cache_name = "Goja-" + GojaConfig.appName();
         this.cacheManager.addCache(app_cache_name);
         this.cache = cacheManager.getCache(app_cache_name);
     }

@@ -1,10 +1,6 @@
 package goja;
 
-import goja.app.GojaConfig;
-import goja.tuples.Pair;
 import org.junit.Test;
-
-import java.util.List;
 
 public class GojaConfigTest {
 
@@ -23,11 +19,4 @@ public class GojaConfigTest {
 
     }
 
-    @Test
-    public void testChainConfig() throws Exception {
-        List<Pair<String, String>> pairs = GojaConfig.chainConfig();
-        for (Pair<String, String> pair : pairs) {
-            System.out.println("pair = " + pair);
-        }
-    }
 }

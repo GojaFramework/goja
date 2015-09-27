@@ -49,7 +49,7 @@ public class JobsPlugin implements IPlugin {
 
     public JobsPlugin() {
 
-        int corePoolSize = GojaConfig.getPropertyToInt("app.jobs.pool", 10);
+        int corePoolSize = GojaConfig.getPropertyToInt("app.job.pool", 10);
         PThreadFactory threadFactory = new PThreadFactory("goja-jobs");
         executor = new ScheduledThreadPoolExecutor(corePoolSize, threadFactory, new ThreadPoolExecutor.AbortPolicy());
 
