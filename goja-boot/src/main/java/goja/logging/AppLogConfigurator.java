@@ -42,13 +42,11 @@ public class AppLogConfigurator {
         if (sm != null) {
             sm.add(new InfoStatus("Setting up default configuration.", lc));
         }
-        final String loggerLevel = GojaConfig.getProperty("logger.level");
+        final String loggerLevel = GojaConfig.getProperty("app.logger");
 
-        final boolean isDev = GojaConfig.applicationMode().isDev();
+        final boolean isDev = GojaConfig.getApplicationMode().isDev();
 
         if (isDev) {
-
-
             ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<ILoggingEvent>();
             ca.setContext(lc);
             ca.setName("console");
@@ -76,7 +74,7 @@ public class AppLogConfigurator {
 
             final RollingFileAppender rfa = new RollingFileAppender();
 
-            final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + (GojaConfig.applicationMode().isDev() ? GojaConfig.appName() + "-dev" : GojaConfig.appName()) + ".log");
+            final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + (GojaConfig.getApplicationMode().isDev() ? GojaConfig.getAppName() + "-dev" : GojaConfig.getAppName()) + ".log");
             rfa.setFile(logger_file);
 
             final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();

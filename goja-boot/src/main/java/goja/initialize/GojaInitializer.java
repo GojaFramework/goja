@@ -7,7 +7,6 @@
 package goja.initialize;
 
 import com.alibaba.druid.util.JdbcUtils;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
@@ -56,8 +55,10 @@ public class GojaInitializer implements ServletContainerInitializer {
         ImageIO.setUseCache(false);
         // 初始化缓存
         Cache.init();
+        // 初始化配置文件
+        GojaConfig.init();
 
-        if (GojaConfig.enable_security()) {
+        if (GojaConfig.isSecurity() ) {
             ctx.addFilter("Goja@shiroFilter", "goja.security.shiro.GojaShiroFilter")
                     .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         }
@@ -69,7 +70,7 @@ public class GojaInitializer implements ServletContainerInitializer {
         //Before starting JFinal, lookup class file on the classpath.
         ClassFinder.find();
 
-        String app_name = GojaConfig.appName();
+        String app_name = GojaConfig.getAppName();
 
         FilterRegistration.Dynamic jfinalFilter = ctx.addFilter("goja@jfinal", "com.jfinal.core.JFinalFilter");
 
@@ -82,7 +83,7 @@ public class GojaInitializer implements ServletContainerInitializer {
         Castors.me();
 
         System.out.println("initializer " + app_name + " Application ok!");
-        if (GojaConfig.applicationMode().isDev()) {
+        if (GojaConfig.getApplicationMode().isDev()) {
             runScriptInitDb();
         }
     }
@@ -97,7 +98,7 @@ public class GojaInitializer implements ServletContainerInitializer {
             final String real_script_path = PathKit.getRootClassPath() + File.separator + script_path;
             final File script_dir = new File(real_script_path);
             if (script_dir.exists() && script_dir.isDirectory()) {
-                final String db_url = GojaConfig.dbUrl();
+                final String db_url = GojaConfig.getDefaultDBUrl();
                 Preconditions.checkNotNull(db_url, "The DataBase connection url is must!");
 
                 if (logger.isDebugEnabled()) {
@@ -113,8 +114,8 @@ public class GojaInitializer implements ServletContainerInitializer {
                     final String driverClassName = JdbcUtils.getDriverClassName(db_url);
                     sql_exec.setDriver(driverClassName);
                     sql_exec.setUrl(db_url);
-                    final String db_username = MoreObjects.firstNonNull(GojaConfig.dbUsername(), "root");
-                    final String db_password = MoreObjects.firstNonNull(GojaConfig.dbPwd(), "123456");
+                    final String db_username = GojaConfig.getDefaultDBUsername();
+                    final String db_password = GojaConfig.getDefaultDBPassword();
                     sql_exec.setUserid(db_username);
                     sql_exec.setPassword(db_password);
 

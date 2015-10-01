@@ -20,8 +20,8 @@ public class LoggerInit {
 
     public static void init(){
         URL slf4jConf = LoggerInit.class.getResource(slf4jPath);
-        final String app_name = GojaConfig.appName();
-        final String app_version = GojaConfig.appVersion();
+        final String app_name = GojaConfig.getAppName();
+        final String app_version = GojaConfig.getVersion();
         if (slf4jConf == null) {
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
             lc.reset();

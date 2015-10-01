@@ -35,7 +35,7 @@ public class EhCacheImpl implements CacheImpl {
     private EhCacheImpl() {
         Configuration configuration = new Configuration();
         DiskStoreConfiguration diskStore = new DiskStoreConfiguration();
-        diskStore.setPath("java.io.tmpdir/" + GojaConfig.appName());
+        diskStore.setPath("java.io.tmpdir/" + GojaConfig.getAppName());
         configuration.diskStore(diskStore);
 
         CacheConfiguration defaultCacheConfiguration = new CacheConfiguration();
@@ -76,7 +76,7 @@ public class EhCacheImpl implements CacheImpl {
 
         configuration.setUpdateCheck(false);
         this.cacheManager = CacheManager.create(configuration);
-        String app_cache_name = "Goja-" + GojaConfig.appName();
+        String app_cache_name = "Goja-" + GojaConfig.getAppName();
         this.cacheManager.addCache(app_cache_name);
         this.cache = cacheManager.getCache(app_cache_name);
     }

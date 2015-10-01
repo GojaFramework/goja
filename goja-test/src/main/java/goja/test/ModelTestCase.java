@@ -47,6 +47,7 @@ public abstract class ModelTestCase {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
+        GojaConfig.init();
 
         GojaConfig.getConfigProps();
         ClassFinder.findWithTest();

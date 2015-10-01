@@ -84,7 +84,7 @@ public class GojaErrorRender extends Render {
     }
 
     public String getErrorHtml() {
-        if (GojaConfig.applicationMode().isDev()) {
+        if (GojaConfig.getApplicationMode().isDev()) {
             int errorCode = getErrorCode();
             Map<String, Object> pdata = Maps.newHashMap();
             final String requestURI = request.getRequestURI();

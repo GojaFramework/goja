@@ -203,7 +203,7 @@ public final class Invoker {
         public boolean init() {
             Thread.currentThread().setContextClassLoader(Goja.class.getClassLoader());
             if (!Goja.started) {
-                if ( GojaConfig.applicationMode() == ApplicationMode.PROD) {
+                if ( GojaConfig.getApplicationMode() == ApplicationMode.PROD) {
                     throw new UnexpectedException("Application is not started");
                 }
             }
@@ -316,7 +316,7 @@ public final class Invoker {
      * Init executor at load time.
      */
     static {
-        int core = GojaConfig.getPropertyToInt("goja.pool",  GojaConfig.applicationMode().isDev() ? 1 : (Runtime.getRuntime().availableProcessors() + 1));
+        int core = GojaConfig.getPropertyToInt("goja.pool",  GojaConfig.getApplicationMode().isDev() ? 1 : (Runtime.getRuntime().availableProcessors() + 1));
         executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("goja"), new ThreadPoolExecutor.AbortPolicy());
     }
 

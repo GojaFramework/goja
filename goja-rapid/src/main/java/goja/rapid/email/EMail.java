@@ -58,7 +58,7 @@ public class EMail {
         try {
             email = buildMessage(email);
 
-            if (GojaConfig.getProperty("mail.smtp", StringPool.EMPTY).equals("mock") && GojaConfig.applicationMode().isDev()) {
+            if (GojaConfig.getProperty("mail.smtp", StringPool.EMPTY).equals("mock") && GojaConfig.getApplicationMode().isDev()) {
                 Mock.send(email);
                 return new Future<Boolean>() {
                     @Override

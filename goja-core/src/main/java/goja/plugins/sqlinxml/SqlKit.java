@@ -73,7 +73,7 @@ public class SqlKit {
     static void init() {
         final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
         initScanFiles(resource);
-        if (GojaConfig.applicationMode().isDev()) {
+        if (GojaConfig.getApplicationMode().isDev()) {
             // 启动文件监控
             runWatch();
         }

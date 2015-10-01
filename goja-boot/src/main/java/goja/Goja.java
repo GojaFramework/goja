@@ -42,6 +42,7 @@ import freemarker.template.Configuration;
 import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
 import goja.app.GojaConfig;
+import goja.app.GojaPropConst;
 import goja.cache.Cache;
 import goja.cache.EhCacheImpl;
 import goja.exceptions.DatabaseException;
@@ -71,6 +72,7 @@ import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
 import goja.rapid.upload.OreillyCosExt;
 import goja.security.shiro.SecurityUserData;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Protocol;
@@ -133,22 +135,22 @@ public class Goja extends JFinalConfig {
         initlization = true;
 
         // dev_mode
-        constants.setDevMode(GojaConfig.applicationMode().isDev());
+        constants.setDevMode(GojaConfig.getApplicationMode().isDev());
         // fixed: render view has views//xxx.ftl
-        viewPath = GojaConfig.getProperty("app.viewpath", File.separator + "WEB-INF" + File.separator + "views");
+        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, File.separator + "WEB-INF" + File.separator + "views");
         constants.setBaseViewPath(viewPath);
 
-        appName = GojaConfig.appName();
-        appVersion = GojaConfig.appVersion();
+        appName = GojaConfig.getAppName();
+        appVersion = GojaConfig.getVersion();
 
         // init wxchat config
-        final String wx_url = GojaConfig.getProperty("app.wxchat.url");
+        final String wx_url = GojaConfig.getProperty(GojaPropConst.APP_WXCHAT_URL);
         if (!Strings.isNullOrEmpty(wx_url)) {
             // Config Wx Api
-            ApiConfigKit.setDevMode(GojaConfig.applicationMode().isDev());
+            ApiConfigKit.setDevMode(GojaConfig.getApplicationMode().isDev());
         }
 
-        if (GojaConfig.enable_security()) {
+        if (GojaConfig.isSecurity()) {
             final List<Class> security_user = ClassBox.getInstance().getClasses(ClassType.SECURITY_DATA);
             if (security_user != null && security_user.size() == 1) {
                 try {
@@ -161,8 +163,8 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        domain = GojaConfig.domain();
-        String view_type = GojaConfig.getProperty("app.viewtype");
+        domain = GojaConfig.getAppDomain();
+        String view_type = GojaConfig.getProperty(GojaPropConst.APP_VIEWTYPE);
         if (!StrKit.isBlank(view_type)) {
             setViewType(constants, view_type);
         } else {
@@ -171,7 +173,7 @@ public class Goja extends JFinalConfig {
         }
         constants.setErrorRenderFactory(new GojaErrorRenderFactory());
 
-        constants.setMaxPostSize(GojaConfig.getPropertyToInt("app.maxfilesize", Const.DEFAULT_MAX_POST_SIZE));
+        constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
         OreillyCosExt.init(constants.getUploadedFileSaveDirectory(),
                            constants.getMaxPostSize(), constants.getEncoding());
     }
@@ -196,48 +198,50 @@ public class Goja extends JFinalConfig {
 
         initDataSource(plugins);
 
-        if (GojaConfig.enable_security()) {
+        if (GojaConfig.isSecurity()) {
             plugins.add(new ShiroPlugin(this._routes));
         }
 
-        if (GojaConfig.getPropertyToBoolean("app.job", false)) {
+        if (GojaConfig.getPropertyToBoolean(GojaPropConst.APPJOB, false)) {
             plugins.add(new QuartzPlugin());
         }
 
 
-        final String index_path = GojaConfig.getProperty("app.fulltext");
+        final String index_path = GojaConfig.getProperty(GojaPropConst.APPFULLTEXT);
         if (!Strings.isNullOrEmpty(index_path)) {
             plugins.add(new IndexPlugin(index_path));
         }
 
-        final String mongo_host = GojaConfig.getProperty("mongo.host", StringUtils.EMPTY);
+        final String mongo_host = GojaConfig.getProperty(GojaPropConst.MONGO_HOST, StringUtils.EMPTY);
         if (!Strings.isNullOrEmpty(mongo_host)) {
-            int mongo_port = GojaConfig.getPropertyToInt("mongo.port", MongoPlugin.DEFAUL_PORT);
-            String mongo_db = GojaConfig.getProperty("mongo.db", "test");
-            String pkgs = GojaConfig.getProperty("mongo.models", MongoPlugin.DEFAULT_PKGS);
+            int mongo_port = GojaConfig.getPropertyToInt(GojaPropConst.MONGO_PORT, MongoPlugin.DEFAUL_PORT);
+            String mongo_db = GojaConfig.getProperty(GojaPropConst.MONGO_DB, "test");
+            String pkgs = GojaConfig.getProperty(GojaPropConst.MONGO_MODELS, MongoPlugin.DEFAULT_PKGS);
             final MongoPlugin mongodb = new MongoPlugin(mongo_host, mongo_port, mongo_db, pkgs);
             plugins.add(mongodb);
         }
 
-        final String redisConfig = GojaConfig.getProperty("redis.config");
+        final String redisConfig = GojaConfig.getProperty(GojaPropConst.REDIS_CONFIG);
         if (!Strings.isNullOrEmpty(redisConfig)) {
-            final Properties redisConfigProp = PropKit.use(redisConfig).getProperties();
-            String cacheNames = redisConfigProp.getProperty("app.caches");
+            final Properties redisConfigProp;
+            final File configFolderFile = GojaConfig.getConfigFolderFile();
+            redisConfigProp = configFolderFile == null ? PropKit.use(redisConfig).getProperties() : PropKit.use(FileUtils.getFile(configFolderFile, redisConfig)).getProperties();
+            String cacheNames = redisConfigProp.getProperty(GojaPropConst.REDIS_CACHES);
             if (!Strings.isNullOrEmpty(cacheNames)) {
                 List<String> cacheNameList = Func.COMMA_SPLITTER.splitToList(cacheNames);
                 for (String cacheName : cacheNameList) {
-                    final String cacheRedistPort = GojaConfig.getProperty(cacheName + ".port");
-                    final String cacheRedistHost = GojaConfig.getProperty(cacheName + ".host", String.valueOf(Protocol.DEFAULT_PORT));
+                    final String cacheRedistPort = redisConfigProp.getProperty(cacheName + ".port");
+                    final String cacheRedistHost = redisConfigProp.getProperty(cacheName + ".host", String.valueOf(Protocol.DEFAULT_PORT));
                     int port = Strings.isNullOrEmpty(cacheRedistPort) ? Protocol.DEFAULT_PORT : Ints.tryParse(cacheRedistPort);
                     final RedisPlugin jedis = new RedisPlugin(cacheName, cacheRedistHost, port);
                     plugins.add(jedis);
                 }
             }
         } else {
-            final String redis_host = GojaConfig.getProperty("redis.host", StringUtils.EMPTY);
+            final String redis_host = GojaConfig.getProperty(GojaPropConst.REDIS_HOST, StringUtils.EMPTY);
             if (!Strings.isNullOrEmpty(redis_host)) {
-                final String cacheName = GojaConfig.getProperty("redis.cachename", "goja.redis.cache");
-                final String strProt = GojaConfig.getProperty("redis.port");
+                final String cacheName = GojaConfig.getProperty(GojaPropConst.REDIS_CACHENAME, "goja.redis.cache");
+                final String strProt = GojaConfig.getProperty(GojaPropConst.REDIS_PORT);
                 int port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT : Ints.tryParse(strProt);
                 final RedisPlugin jedis = new RedisPlugin(cacheName, redis_host, port);
                 plugins.add(jedis);
@@ -298,9 +302,9 @@ public class Goja extends JFinalConfig {
     public void configHandler(Handlers handlers) {
 
         handlers.add(new ContextPathHandler("ctx"));
-        final boolean monitorDB = GojaConfig.getPropertyToBoolean("db.monitor", false);
+        final boolean monitorDB = GojaConfig.getPropertyToBoolean(GojaPropConst.DB_MONITOR, false);
         if (monitorDB) {
-            final String view_url = GojaConfig.getProperty("db.monitor.url", "/druid/monitor");
+            final String view_url = GojaConfig.getProperty(GojaPropConst.DB_MONITOR_URL, "/druid/monitor");
 
             final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
                 @Override
@@ -371,17 +375,14 @@ public class Goja extends JFinalConfig {
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
             if (db_props != null && !db_props.isEmpty()) {
-                configDatabasePlugins(db_config, plugins,
-                                      db_props.getProperty("db.url"),
-                                      db_props.getProperty("db.username"),
-                                      db_props.getProperty("db.password"));
+                configDatabasePlugins(db_config, plugins, db_props);
             }
         }
 
-        if (GojaConfig.getPropertyToBoolean("db.sqlinxml", true)) {
+        if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLINXML, true)) {
             plugins.add(new SqlInXmlPlugin());
         }
-        if (GojaConfig.getPropertyToBoolean("db.sqlmap", true)) {
+        if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLMAP, true)) {
             plugins.add(new SqlMapPlugin());
         }
 
@@ -392,20 +393,23 @@ public class Goja extends JFinalConfig {
      *
      * @param configName the database config name.
      * @param plugins    the jfinal plugins.
-     * @param db_url     the database connection url.
-     * @param username   the login username.
-     * @param password   the login password.
+     * @param dbProp     数据库配置
      */
-    private void configDatabasePlugins(String configName, final Plugins plugins, String db_url, String username, String password) {
-        if (!Strings.isNullOrEmpty(db_url)) {
-            String dbtype = JdbcUtils.getDbType(db_url, StringUtils.EMPTY);
+    private void configDatabasePlugins(String configName, final Plugins plugins, Properties dbProp) {
+
+
+        String dbUrl = dbProp.getProperty(GojaPropConst.DBURL),
+                username = dbProp.getProperty(GojaPropConst.DBUSERNAME),
+                password = dbProp.getProperty(GojaPropConst.DBPASSWORD);
+        if (!Strings.isNullOrEmpty(dbUrl)) {
+            String dbtype = JdbcUtils.getDbType(dbUrl, StringUtils.EMPTY);
             String driverClassName;
             try {
-                driverClassName = JdbcUtils.getDriverClassName(db_url);
+                driverClassName = JdbcUtils.getDriverClassName(dbUrl);
             } catch (SQLException e) {
                 throw new DatabaseException(e.getMessage(), e);
             }
-            final DruidPlugin druidPlugin = new DruidPlugin(db_url, username, password, driverClassName);
+            final DruidPlugin druidPlugin = new DruidPlugin(dbUrl, username, password, driverClassName);
 
             // set validator
             if (!StringUtils.equals(JdbcConstants.MYSQL, dbtype)) {
@@ -421,28 +425,28 @@ public class Goja extends JFinalConfig {
             }
             druidPlugin.addFilter(new StatFilter());
 
-            final String initialSize = GojaConfig.getProperty("db.initial.size");
+            final String initialSize = dbProp.getProperty(GojaPropConst.DB_INITIAL_SIZE);
             if (!Strings.isNullOrEmpty(initialSize)) {
                 druidPlugin.setInitialSize(Ints.tryParse(initialSize));
             }
-            final String initial_minidle = GojaConfig.getProperty("db.initial.minidle");
+            final String initial_minidle = dbProp.getProperty(GojaPropConst.DB_INITIAL_MINIDLE);
             if (!Strings.isNullOrEmpty(initial_minidle)) {
                 druidPlugin.setMinIdle(Ints.tryParse(initial_minidle));
             }
 
-            final String initial_maxwait = GojaConfig.getProperty("db.initial.maxwait");
+            final String initial_maxwait = dbProp.getProperty(GojaPropConst.DB_INITIAL_MAXWAIT);
             if (!Strings.isNullOrEmpty(initial_maxwait)) {
                 druidPlugin.setMaxWait(Ints.tryParse(initial_maxwait));
             }
-            final String initial_active = GojaConfig.getProperty("db.initial.active");
+            final String initial_active = dbProp.getProperty(GojaPropConst.DB_INITIAL_ACTIVE);
             if (!Strings.isNullOrEmpty(initial_active)) {
                 druidPlugin.setMaxActive(Ints.tryParse(initial_active));
             }
-            final String timeBetweenEvictionRunsMillis = GojaConfig.getProperty("db.timeBetweenEvictionRunsMillis");
+            final String timeBetweenEvictionRunsMillis = dbProp.getProperty(GojaPropConst.DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
             if (!Strings.isNullOrEmpty(timeBetweenEvictionRunsMillis)) {
                 druidPlugin.setTimeBetweenEvictionRunsMillis(Ints.tryParse(timeBetweenEvictionRunsMillis));
             }
-            final String minEvictableIdleTimeMillis = GojaConfig.getProperty("db.minEvictableIdleTimeMillis");
+            final String minEvictableIdleTimeMillis = dbProp.getProperty(GojaPropConst.DB_MIN_EVICTABLE_IDLE_TIME_MILLIS);
             if (!Strings.isNullOrEmpty(minEvictableIdleTimeMillis)) {
                 druidPlugin.setMinEvictableIdleTimeMillis(Ints.tryParse(minEvictableIdleTimeMillis));
             }
@@ -476,7 +480,7 @@ public class Goja extends JFinalConfig {
                     System.err.println("database type is use mysql.");
                 }
             }
-            atbp.setShowSql(GojaConfig.applicationMode().isDev());
+            atbp.setShowSql(GojaConfig.getApplicationMode().isDev());
             plugins.add(atbp);
 
         }
@@ -509,7 +513,7 @@ public class Goja extends JFinalConfig {
         config.setSharedVariable("super", new SuperDirective());
         // 增加日期美化指令（类似 几分钟前）
         config.setSharedVariable("prettytime", new PrettyTimeDirective());
-        if (GojaConfig.enable_security()) {
+        if (GojaConfig.isSecurity()) {
             config.setSharedVariable("shiro", new ShiroTags(config.getObjectWrapper()));
         }
     }

@@ -16,13 +16,14 @@
 
 package com.jfinal.kit;
 
+import com.jfinal.core.Const;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
-import com.jfinal.core.Const;
 
 /**
  * Prop. Prop can load properties file from CLASSPATH or File object.
@@ -89,7 +90,7 @@ public class Prop {
 	public Prop(File file, String encoding) {
 		if (file == null)
 			throw new IllegalArgumentException("File can not be null.");
-		if (file.isFile() == false)
+		if (!file.isFile())
 			throw new IllegalArgumentException("File not found : " + file.getName());
 		
 		InputStream inputStream = null;

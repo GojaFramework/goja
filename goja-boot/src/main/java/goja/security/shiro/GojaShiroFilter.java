@@ -1,10 +1,10 @@
 package goja.security.shiro;
 
 import com.google.common.base.MoreObjects;
-import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import goja.StringPool;
 import goja.app.GojaConfig;
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.AuthenticationFilter;
@@ -24,6 +24,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
@@ -46,9 +47,10 @@ public class GojaShiroFilter extends AbstractShiroFilter {
         WebSecurityManager webSecurityManager = initSecurityManager();
         FilterChainManager manager = createFilterChainManager();
 
-        String shiroConfigFile = GojaConfig.getProperty("app.security.config");
-        final Prop configFile = PropKit.use(shiroConfigFile);
-        shiroConfig = configFile.getProperties();
+        final File configFolderFile = GojaConfig.getConfigFolderFile();
+        String shiroConfigFile = GojaConfig.getAppSecurityConfig();
+
+        shiroConfig = configFolderFile == null ? PropKit.use(shiroConfigFile).getProperties() : PropKit.use(FileUtils.getFile(configFolderFile, shiroConfigFile)).getProperties();
 
         //Expose the constructed FilterChainManager by first wrapping it in a
         // FilterChainResolver implementation. The AbstractShiroFilter implementations

@@ -4,16 +4,18 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.DbKit;
 import goja.Func;
 import goja.StringPool;
 import goja.kits.io.ResourceKit;
 import goja.lang.Lang;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,21 +32,152 @@ public final class GojaConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(GojaConfig.class);
 
+    /**
+     * 默认的属性文件
+     */
     private static final String APPLICATION_PROP = "application.conf";
 
-    private static final Properties configProps;
+    private static Properties configProps;
 
+    /**
+     * 运行模式
+     */
     private static ApplicationMode applicationMode;
 
-    static {
+    /**
+     * 是否启动身份验证
+     */
+    private static boolean security;
+    /**
+     * 身份验证配置文件
+     */
+    private static String  appSecurityConfig;
+
+    /**
+     * 系统版本
+     */
+    private static String version;
+    /**
+     * 系统名称
+     */
+    private static String appName;
+
+    /**
+     * 应用domain
+     */
+    private static String appDomain;
+
+    /**
+     * 默认数据库连接
+     */
+    private static String defaultDBUrl;
+    /**
+     * 默认数据库用户名
+     */
+    private static String defaultDBUsername;
+    /**
+     * 默认数据库用户密码
+     */
+    private static String defaultDBPassword;
+
+    /**
+     * 配置文件夹
+     */
+    private static File configFolderFile;
+
+    private GojaConfig() {
+    }
+
+    public static void init() {
         final Properties p = new Properties();
         ResourceKit.loadFileInProperties(APPLICATION_PROP, p);
         if (checkNullOrEmpty(p)) {
             throw new IllegalArgumentException("Properties file can not be empty. " + APPLICATION_PROP);
         }
-//        loadDBConfig(p);
-        configProps = p;
+
+        final String configFolder = p.getProperty(GojaPropConst.APPCONFIGFOLDER);
+        if (!Strings.isNullOrEmpty(configFolder)) {
+            configFolderFile = new File(configFolder);
+            if (!configFolderFile.exists()) {
+                throw new RuntimeException("The application config folder " + configFolder + " is not found!");
+            }
+            configProps = PropKit.use(configFolderFile).getProperties();
+        } else {
+            configProps = p;
+        }
         applicationMode = getApplicationModel();
+        security = getPropertyToBoolean(GojaPropConst.APPSECURITY, true);
+        appSecurityConfig = getProperty(GojaPropConst.APPSECURITYCONFIG, "security.conf");
+        if (security) {
+            // 如果启用了身份验证，如果配置文件不存在，系统无法启动
+            if (!Strings.isNullOrEmpty(configFolder)) {
+                final File securityFile = FileUtils.getFile(configFolderFile, appSecurityConfig);
+                if (!securityFile.exists()) {
+                    throw new RuntimeException("The app security config file [ " + appSecurityConfig + "] not found in [" + configFolder + "]!");
+                }
+            }
+        }
+        version = getProperty(GojaPropConst.APPVERSION, "V0.0.1");
+        appName = getProperty(GojaPropConst.APPNAME, "application");
+        appDomain = getProperty(GojaPropConst.APPDOMAIN, "http://127.0.0.1:8080/" + appName);
+        defaultDBUrl = getProperty(GojaPropConst.DBURL);
+        defaultDBUsername = getProperty(GojaPropConst.DBUSERNAME, "root");
+        defaultDBPassword = getProperty(GojaPropConst.DBPASSWORD, "123456");
+    }
+
+    /**
+     * @return 系统版本
+     */
+    public static String getVersion() {
+        return version;
+    }
+
+    /**
+     * @return 应用名称
+     */
+    public static String getAppName() {
+        return appName;
+    }
+
+    /**
+     * @return 是否启动身份验证
+     */
+    public static boolean isSecurity() {
+        return security;
+    }
+
+    public static String getAppSecurityConfig() {
+        return appSecurityConfig;
+    }
+
+    /**
+     * 取得系统的运行模式
+     *
+     * @return 系统运行模式
+     */
+    public static ApplicationMode getApplicationMode() {
+        return applicationMode;
+    }
+
+    public static String getAppDomain() {
+        return appDomain;
+    }
+
+    public static String getDefaultDBUrl() {
+        return defaultDBUrl;
+    }
+
+    public static String getDefaultDBUsername() {
+        return defaultDBUsername;
+    }
+
+    public static String getDefaultDBPassword() {
+        return defaultDBPassword;
+    }
+
+
+    public static File getConfigFolderFile() {
+        return configFolderFile;
     }
 
     public static Map<String, Properties> loadDBConfig(Properties p) {
@@ -141,23 +274,8 @@ public final class GojaConfig {
         return resultInt;
     }
 
-    public static Long getPropertyToLong(String key) {
-        Long resultInt = null;
-        if (checkNullOrEmpty(configProps)) {
-            return null;
-        }
-        String resultStr = configProps.getProperty(key);
-        if (resultStr != null)
-            resultInt = Longs.tryParse(resultStr);
-        return resultInt;
-    }
-
     public static int getPropertyToInt(String key, int defaultValue) {
         return MoreObjects.firstNonNull(getPropertyToInt(key), defaultValue);
-    }
-
-    public static long getPropertyToLong(String key, long defaultValue) {
-        return MoreObjects.firstNonNull(getPropertyToLong(key), defaultValue);
     }
 
     public static Boolean getPropertyToBoolean(String key) {
@@ -181,17 +299,13 @@ public final class GojaConfig {
     }
 
 
-    public static ApplicationMode applicationMode() {
-        return applicationMode;
-    }
-
     /**
      * 取得系统的运行模式
      *
      * @return 运行模式
      */
     private static ApplicationMode getApplicationModel() {
-        final String mode = getProperty("app.mode", "dev").toUpperCase();
+        final String mode = getProperty(GojaPropConst.APPMODE, "dev").toUpperCase();
         if (StringUtils.equals(mode, ApplicationMode.DEV.toString())
                 || StringUtils.equals(mode, ApplicationMode.TEST.toString())
                 || StringUtils.equals(mode, ApplicationMode.PROD.toString())) {
@@ -201,31 +315,6 @@ public final class GojaConfig {
         }
     }
 
-    public static boolean enable_security() {
-        return getPropertyToBoolean("app.security", true);
-    }
-
-    public static String appVersion() {
-        return getProperty("app.version", "0.0.1");
-    }
-
-    public static String appName(){
-        return getProperty("app.name", "application");
-    }
-
-    public static String domain() {
-        return getProperty("app.domain", "http://127.0.0.1:8080/" + appName());
-    }
-
-    public static String dbUrl(){
-        return getProperty("db.url");
-    }
-    public static String dbUsername(){
-        return getProperty("db.username");
-    }
-    public static String dbPwd(){
-        return getProperty("db.password");
-    }
 
     public static List<String> getAppJars() {
         String appJarsConfigStr = getProperty("app.jars");
