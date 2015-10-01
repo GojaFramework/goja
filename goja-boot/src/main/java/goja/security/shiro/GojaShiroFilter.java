@@ -1,6 +1,7 @@
 package goja.security.shiro;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.primitives.Ints;
 import com.jfinal.kit.PropKit;
 import goja.StringPool;
 import goja.app.GojaConfig;
@@ -80,8 +81,6 @@ public class GojaShiroFilter extends AbstractShiroFilter {
                 manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url),"none"));
             }
         }
-
-
         return manager;
     }
 
@@ -92,8 +91,8 @@ public class GojaShiroFilter extends AbstractShiroFilter {
         securityManager.setCacheManager(new ShiroEhCacheManager());
         final DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setSessionIdCookieEnabled(true);
-        // 一年过期时间
-        defaultWebSessionManager.setGlobalSessionTimeout(10800000);
+        // 默认一年过期时间
+        defaultWebSessionManager.setGlobalSessionTimeout(Ints.tryParse(shiroConfig.getProperty("session.expired","10800000")));
         securityManager.setSessionManager(defaultWebSessionManager);
         return securityManager;
     }
