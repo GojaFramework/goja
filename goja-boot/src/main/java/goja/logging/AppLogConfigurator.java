@@ -20,6 +20,7 @@ import ch.qos.logback.core.status.InfoStatus;
 import ch.qos.logback.core.status.StatusManager;
 import com.google.common.base.Charsets;
 import goja.app.GojaConfig;
+import goja.app.GojaPropConst;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -42,7 +43,7 @@ public class AppLogConfigurator {
         if (sm != null) {
             sm.add(new InfoStatus("Setting up default configuration.", lc));
         }
-        final String loggerLevel = GojaConfig.getProperty("app.logger");
+        final String loggerLevel = GojaConfig.getProperty(GojaPropConst.APP_LOGGER);
 
         final boolean isDev = GojaConfig.getApplicationMode().isDev();
 

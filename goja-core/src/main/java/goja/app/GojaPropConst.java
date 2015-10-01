@@ -70,6 +70,15 @@ public interface GojaPropConst {
      * 视图存储路径，默认 WEB-INF/views/
      */
     String APP_VIEWPATH      = "app.viewpath";
+    /**
+     * 框架内部异步处理的线程数，默认10
+     */
+    String APP_JOB_POOL      = "app.job.pool";
+    /**
+     * 应用的日志级别
+     */
+    String APP_LOGGER        = "app.logger";
+
 
     /**
      * 数据库连接地址
@@ -167,5 +176,4 @@ public interface GojaPropConst {
      * 默认的redis连接端口
      */
     String REDIS_PORT      = "redis.port";
-
 }

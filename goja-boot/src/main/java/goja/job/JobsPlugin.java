@@ -15,6 +15,7 @@ import goja.annotation.Every;
 import goja.annotation.On;
 import goja.annotation.OnApplicationStart;
 import goja.annotation.OnApplicationStop;
+import goja.app.GojaPropConst;
 import goja.exceptions.GojaException;
 import goja.exceptions.UnexpectedException;
 import goja.initialize.ctxbox.ClassBox;
@@ -49,7 +50,7 @@ public class JobsPlugin implements IPlugin {
 
     public JobsPlugin() {
 
-        int corePoolSize = GojaConfig.getPropertyToInt("app.job.pool", 10);
+        int corePoolSize = GojaConfig.getPropertyToInt(GojaPropConst.APP_JOB_POOL, 10);
         PThreadFactory threadFactory = new PThreadFactory("goja-jobs");
         executor = new ScheduledThreadPoolExecutor(corePoolSize, threadFactory, new ThreadPoolExecutor.AbortPolicy());
 
