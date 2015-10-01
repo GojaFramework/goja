@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.*;
 import goja.StringPool;
 import goja.lang.Lang;
-import goja.plugins.sqlinxml.SqlKit;
 import goja.rapid.db.Condition;
 import goja.tuples.Triplet;
 import org.apache.commons.lang3.StringUtils;
@@ -22,41 +21,7 @@ import static goja.StringPool.SPACE;
  * @version 1.0
  * @since JDK 1.6
  */
-final class DTDao {
-
-    public static final String SQL_PIRFIX_WHERE   = ".where";
-    public static final String SQL_PIRFIX_COLUMNS = ".column";
-
-
-    /**
-     * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
-     *
-     * @param model_name sql-conf sqlgroup name.
-     * @param criterias  required parameter
-     * @return Paging data.
-     */
-    public static Page<Record> paginate(String model_name,
-                                        DTCriterias criterias) {
-        return paginate(model_name, criterias, Lists.newArrayListWithCapacity(1));
-    }
-
-
-
-    /**
-     * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
-     *
-     * @param model_name sql-conf sqlgroup name.
-     * @param criterias  required parameter
-     * @return Paging data.
-     */
-    public static Page<Record> paginate(String model_name,
-                                        DTCriterias criterias,
-                                        List<Object> params) {
-        return paginate(SqlKit.sql(model_name + SQL_PIRFIX_WHERE)
-                , SqlKit.sql(model_name + SQL_PIRFIX_COLUMNS)
-                , criterias, params);
-    }
-
+public final class DTDao {
 
 
     /**

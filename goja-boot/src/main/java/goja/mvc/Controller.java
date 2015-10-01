@@ -14,6 +14,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+import goja.dao.Dao;
 import goja.kits.base.DateKit;
 import goja.lang.Lang;
 import goja.logging.Logger;
@@ -316,7 +318,8 @@ public class Controller extends com.jfinal.core.Controller {
      */
     protected void renderDataTables(DTCriterias criterias, String model_name) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
-        DTResponse response = criterias.response(model_name);
+        final Page<Record> datas = Dao.paginate(model_name, criterias);
+        DTResponse response = DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
         renderJson(response);
     }
 
@@ -333,7 +336,9 @@ public class Controller extends com.jfinal.core.Controller {
      */
     protected void renderDataTables(DTCriterias criterias, String sqlGroupName, List<Object> params) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
-        renderJson(criterias.response(sqlGroupName, params));
+        final Page<Record> datas = Dao.paginate(sqlGroupName, criterias, params);
+        DTResponse response = DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
+        renderJson(response);
     }
 
     /**

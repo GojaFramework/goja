@@ -2,12 +2,16 @@ package goja.dao;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import goja.StringPool;
 import goja.castor.Castors;
+import goja.plugins.sqlinxml.SqlKit;
+import goja.rapid.datatables.DTCriterias;
+import goja.rapid.datatables.DTDao;
 import goja.rapid.db.FindBy;
 import goja.rapid.db.RequestParam;
 import goja.rapid.db.SqlSelect;
@@ -24,6 +28,9 @@ import java.util.List;
  * @since JDK 1.6
  */
 public abstract class Dao {
+
+    public static final String SQL_PIRFIX_WHERE   = ".where";
+    public static final String SQL_PIRFIX_COLUMNS = ".column";
 
 
     /**
@@ -94,6 +101,32 @@ public abstract class Dao {
         return number == null || number.intValue() <= 0;
     }
 
+    /**
+     * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
+     *
+     * @param model_name sql-conf sqlgroup name.
+     * @param criterias  required parameter
+     * @return Paging data.
+     */
+    public static Page<Record> paginate(String model_name,
+                                        DTCriterias criterias) {
+        return paginate(model_name, criterias, Lists.newArrayListWithCapacity(1));
+    }
+
+    /**
+     * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
+     *
+     * @param model_name sql-conf sqlgroup name.
+     * @param criterias  required parameter
+     * @return Paging data.
+     */
+    public static Page<Record> paginate(String model_name,
+                                        DTCriterias criterias,
+                                        List<Object> params) {
+        return DTDao.paginate(SqlKit.sql(model_name + SQL_PIRFIX_WHERE)
+                , SqlKit.sql(model_name + SQL_PIRFIX_COLUMNS)
+                , criterias, params);
+    }
 
     /**
      * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.

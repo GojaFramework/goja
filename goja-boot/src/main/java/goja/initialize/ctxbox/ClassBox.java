@@ -13,8 +13,8 @@ import com.jfinal.core.Controller;
 import com.jfinal.handler.Handler;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.Model;
-import goja.mvc.AppLoadEvent;
 import goja.job.Job;
+import goja.mvc.AppLoadEvent;
 import goja.rapid.syslog.LogProcessor;
 import goja.security.shiro.SecurityUserData;
 

@@ -114,7 +114,6 @@
 
     <modules>
         <module>goja-jfinal</module>
-        <module>goja-jfinal-ext</module>
         <module>goja-core</module>
         <module>goja-lucene</module>
         <module>goja-wxchat</module>

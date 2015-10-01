@@ -234,13 +234,6 @@ public final class DTCriterias implements Serializable {
         return params;
     }
 
-    public DTResponse response(String model_name) {
-
-        Preconditions.checkNotNull(this, "datatable criterias is must be not null.");
-        final Page<Record> datas = DTDao.paginate(model_name, this);
-        return DTResponse.build(this, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
-    }
-
     /**
      * Support for a single entity with the integration of Datatables plugin。
      *
@@ -256,12 +249,6 @@ public final class DTCriterias implements Serializable {
     }
 
 
-    public DTResponse response(String model_name, List<Object> params) {
-
-        Preconditions.checkNotNull(this, "datatable criterias is must be not null.");
-        final Page<Record> datas = DTDao.paginate(model_name, this, params);
-        return DTResponse.build(this, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
-    }
 
     public DTResponse response(String whereSql, String columns, List<Object> params) {
 
