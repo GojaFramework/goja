@@ -3,6 +3,7 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
+import com.jfinal.kit.HashKit;
 import com.jfinal.kit.StrKit;
 import goja.kits.base.Strs;
 import org.joda.time.DateTime;
@@ -28,7 +29,7 @@ public class DateRandomFileRenamePolicy extends FileRenamePolicyWrapper {
 
 	@Override
 	public File nameProcess(File f, String name, String ext) {
-		String rename = Strs.randomMD5Str();
+		String rename = HashKit.md5(Strs.randomStr());;
 		String fileName = rename + ext;
 		// add "/" postfix
 		StringBuilder path = new StringBuilder(this.appendFileSeparator(f.getParent()));

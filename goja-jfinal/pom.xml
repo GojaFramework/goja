@@ -39,13 +39,12 @@
     </developers>
     <dependencies>
 
-
-        <!-- view template -->
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${freemarker.version}</version>
+            <groupId>com.github.sogyf</groupId>
+            <artifactId>goja-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
+
 
         <!--db pools-->
         <dependency>
@@ -80,22 +79,12 @@
             <artifactId>jul-to-slf4j</artifactId>
             <version>${slf4j-api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
 
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>${ehcache-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>cglib</groupId>
@@ -105,7 +94,7 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>2.7.2</version>
+            <version>${jedis.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

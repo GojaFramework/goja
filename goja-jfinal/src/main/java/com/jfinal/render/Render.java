@@ -16,9 +16,10 @@
 
 package com.jfinal.render;
 
+import com.jfinal.core.Const;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.jfinal.core.Const;
 
 /**
  * Render.

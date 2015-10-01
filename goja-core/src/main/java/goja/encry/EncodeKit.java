@@ -6,8 +6,8 @@
 
 package goja.encry;
 
+import goja.StringPool;
 import goja.kits.base.ExceptionKit;
-import com.jfinal.core.Const;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
@@ -104,7 +104,7 @@ public class EncodeKit {
     /** URL 编码, Encode默认为UTF-8. */
     public static String urlEncode(String part) {
         try {
-            return URLEncoder.encode(part, Const.DEFAULT_ENCODING);
+            return URLEncoder.encode(part, StringPool.UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw ExceptionKit.unchecked(e);
         }
@@ -114,7 +114,7 @@ public class EncodeKit {
     public static String urlDecode(String part) {
 
         try {
-            return URLDecoder.decode(part, Const.DEFAULT_ENCODING);
+            return URLDecoder.decode(part, StringPool.UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw ExceptionKit.unchecked(e);
         }

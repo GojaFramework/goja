@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import goja.StringPool;
-import goja.jxls.transformer.XLSTransformer;
+import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.http.HttpServletRequest;

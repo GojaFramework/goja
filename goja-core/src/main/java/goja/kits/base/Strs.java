@@ -8,7 +8,6 @@ package goja.kits.base;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
-import com.jfinal.kit.HashKit;
 import goja.StringPool;
 import goja.Validator;
 import goja.kits.ObjectKit;
@@ -1207,10 +1206,6 @@ public class Strs {
 
     public static String randomStr(){
         return UUID.randomUUID().toString().replace("-", "");
-    }
-
-    public static String randomMD5Str(){
-        return HashKit.md5(randomStr());
     }
 
 

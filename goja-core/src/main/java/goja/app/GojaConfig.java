@@ -4,10 +4,9 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
-import com.jfinal.kit.PropKit;
-import com.jfinal.plugin.activerecord.DbKit;
 import goja.Func;
 import goja.StringPool;
+import goja.kits.io.PropKit;
 import goja.kits.io.ResourceKit;
 import goja.lang.Lang;
 import org.apache.commons.io.FileUtils;
@@ -85,6 +84,11 @@ public final class GojaConfig {
      */
     private static File configFolderFile;
 
+    /**
+     * 默认的视图存放文件夹
+     */
+    private static String defaultViewPath;
+
     private GojaConfig() {
     }
 
@@ -123,6 +127,12 @@ public final class GojaConfig {
         defaultDBUrl = getProperty(GojaPropConst.DBURL);
         defaultDBUsername = getProperty(GojaPropConst.DBUSERNAME, "root");
         defaultDBPassword = getProperty(GojaPropConst.DBPASSWORD, "123456");
+        defaultViewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, File.separator + "WEB-INF" + File.separator + "views");
+    }
+
+
+    public static String getDefaultViewPath() {
+        return defaultViewPath;
     }
 
     /**
@@ -205,10 +215,10 @@ public final class GojaConfig {
                     db_config_props.put(_key, value);
 
                 } else {
-                    Properties db_main_props = dbConfigs.get(DbKit.MAIN_CONFIG_NAME);
+                    Properties db_main_props = dbConfigs.get("main");
                     if (db_main_props == null) {
                         db_main_props = new Properties();
-                        dbConfigs.put(DbKit.MAIN_CONFIG_NAME, db_main_props);
+                        dbConfigs.put("main", db_main_props);
                     }
                     db_main_props.put(_key, value);
                 }

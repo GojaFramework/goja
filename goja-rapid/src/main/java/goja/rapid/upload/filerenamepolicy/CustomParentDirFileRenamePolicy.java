@@ -3,6 +3,7 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
+import com.jfinal.kit.HashKit;
 import goja.kits.base.Strs;
 
 import java.io.File;
@@ -42,7 +43,7 @@ public class CustomParentDirFileRenamePolicy extends
 		this.setSaveDirectory(_path);
 		
 		if (this.namepolicy == NamePolicy.RANDOM_NAME) {
-			name = Strs.randomMD5Str();
+			name = HashKit.md5(Strs.randomStr());
 		} 
 		return (new File(_path,name+ext));
 	}

@@ -16,18 +16,20 @@
 
 package com.jfinal.render;
 
+import freemarker.ext.beans.BeansWrapperBuilder;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
+import goja.app.GojaConfig;
+
+import javax.servlet.ServletContext;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import javax.servlet.ServletContext;
-import freemarker.template.Configuration;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
 
 /**
  * FreeMarkerRender.
@@ -36,11 +38,11 @@ public class FreeMarkerRender extends Render {
 	
 	private static final String encoding = getEncoding();
 	private static final String contentType = "text/html; charset=" + encoding;
-	private static final Configuration config = new Configuration();
-	
-	public FreeMarkerRender(String view) {
-		this.view = view;
-	}
+    private static final Configuration config = new Configuration(Configuration.VERSION_2_3_23);
+
+    public FreeMarkerRender(String view) {
+        this.view = view;
+    }
 	
 	/**
 	 * freemarker can not load freemarker.properies automatically
@@ -69,21 +71,21 @@ public class FreeMarkerRender extends Render {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
     static void init(ServletContext servletContext, Locale locale, int template_update_delay) {
         // Initialize the FreeMarker configuration;
         // - Create a configuration instance
         // config = new Configuration();
         // - Templates are stoted in the WEB-INF/templates directory of the Web app.
-        config.setServletContextForTemplateLoading(servletContext, "/");	// "WEB-INF/templates"
+        config.setServletContextForTemplateLoading(servletContext, GojaConfig.getDefaultViewPath());    // "WEB-INF/templates"
         // - Set update dealy to 0 for now, to ease debugging and testing.
         //   Higher value should be used in production environment.
         
         if (getDevMode()) {
-        	config.setTemplateUpdateDelay(0);
-       	}
+            config.setTemplateUpdateDelayMilliseconds(0);
+        }
         else {
-        	config.setTemplateUpdateDelay(template_update_delay);
+            config.setTemplateUpdateDelayMilliseconds(template_update_delay * 1000L);
         }
         
         // - Set an error handler that prints errors so they are readable with
@@ -92,7 +94,11 @@ public class FreeMarkerRender extends Render {
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         
         // - Use beans wrapper (recommmended for most applications)
-        config.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
+        BeansWrapperBuilder builder = new BeansWrapperBuilder(Configuration.VERSION_2_3_23);
+        builder.setUseModelCache(true);
+        builder.setExposeFields(true);
+
+        config.setObjectWrapper(builder.build());
         // - Set the default charset of the template files
         config.setDefaultEncoding(encoding);		// config.setDefaultEncoding("ISO-8859-1");
         // - Set the charset of the output. This is actually just a hint, that

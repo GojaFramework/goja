@@ -45,13 +45,13 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     @Override
     public void init() throws Exception {
         super.init();
+        String shiroConfigFile = GojaConfig.getAppSecurityConfig();
+        final File configFolderFile = GojaConfig.getConfigFolderFile();
         shiroConfig = configFolderFile == null ? PropKit.use(shiroConfigFile).getProperties() : PropKit.use(FileUtils.getFile(configFolderFile, shiroConfigFile)).getProperties();
 
         WebSecurityManager webSecurityManager = initSecurityManager();
         FilterChainManager manager = createFilterChainManager();
 
-        final File configFolderFile = GojaConfig.getConfigFolderFile();
-        String shiroConfigFile = GojaConfig.getAppSecurityConfig();
 
 
         //Expose the constructed FilterChainManager by first wrapping it in a
@@ -78,6 +78,13 @@ public class GojaShiroFilter extends AbstractShiroFilter {
         if(shiroConfig!=null && !shiroConfig.isEmpty()){
             for (Object urlKey : shiroConfig.keySet()) {
                 String url = String.valueOf(urlKey);
+                if(org.apache.commons.lang3.StringUtils.equals("login.url", url)
+                        ||org.apache.commons.lang3.StringUtils.equals("success.url", url)
+                        ||org.apache.commons.lang3.StringUtils.equals("unauthorized.url", url)
+                        ||org.apache.commons.lang3.StringUtils.equals("session.expired", url)
+                        ){
+                    continue;
+                }
                 //  { "authc", "roles[admin,user]", "perms[file:edit]" }
                 manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url),"none"));
             }
