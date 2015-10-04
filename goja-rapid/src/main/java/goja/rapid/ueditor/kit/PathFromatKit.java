@@ -1,5 +1,7 @@
 package goja.rapid.ueditor.kit;
 
+import goja.StringPool;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -14,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class PathFromatKit {
 
-    private static final String TIME      = "time";
+    private static final String TIME = "time";
     private static final String FULL_YEAR = "yyyy";
     private static final String YEAR      = "yy";
     private static final String MONTH     = "mm";
@@ -26,14 +28,15 @@ public class PathFromatKit {
 
     private static Date currentDate = null;
 
+    private static final Pattern PARSE_PATTERN = Pattern.compile("\\{([^\\}]+)\\}", Pattern.CASE_INSENSITIVE);
+
     public static String parse(String input) {
 
-        Pattern pattern = Pattern.compile("\\{([^\\}]+)\\}", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
+        Matcher matcher = PARSE_PATTERN.matcher(input);
 
         PathFromatKit.currentDate = new Date();
 
-            StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
             while ( matcher.find() ) {
 
@@ -59,8 +62,7 @@ public class PathFromatKit {
 
         public static String parse ( String input, String filename ) {
 
-            Pattern pattern = Pattern.compile( "\\{([^\\}]+)\\}", Pattern.CASE_INSENSITIVE  );
-            Matcher matcher = pattern.matcher(input);
+            Matcher matcher = PARSE_PATTERN.matcher(input);
             String matchStr;
 
             PathFromatKit.currentDate = new Date();
@@ -114,15 +116,15 @@ public class PathFromatKit {
         }
 
         private static String getTimestamp () {
-            return System.currentTimeMillis() + "";
+            return System.currentTimeMillis() + StringPool.EMPTY;
         }
 
         private static String getFullYear () {
-            return new SimpleDateFormat( "yyyy" ).format( PathFromatKit.currentDate );
+            return new SimpleDateFormat(FULL_YEAR).format(PathFromatKit.currentDate);
         }
 
         private static String getYear () {
-            return new SimpleDateFormat( "yy" ).format( PathFromatKit.currentDate );
+            return new SimpleDateFormat(YEAR).format(PathFromatKit.currentDate);
         }
 
         private static String getMonth () {
@@ -130,7 +132,7 @@ public class PathFromatKit {
         }
 
         private static String getDay () {
-            return new SimpleDateFormat( "dd" ).format( PathFromatKit.currentDate );
+            return new SimpleDateFormat(DAY).format(PathFromatKit.currentDate);
         }
 
         private static String getHour () {
@@ -142,7 +144,7 @@ public class PathFromatKit {
         }
 
         private static String getSecond () {
-            return new SimpleDateFormat( "ss" ).format( PathFromatKit.currentDate );
+            return new SimpleDateFormat(SECOND).format(PathFromatKit.currentDate);
         }
 
         private static String getRandom ( String pattern ) {
