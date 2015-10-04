@@ -2,10 +2,8 @@ package goja.rapid.ueditor.kit;
 
 
 import com.jfinal.kit.PathKit;
-import goja.rapid.storage.PathFormat;
 import goja.rapid.ueditor.UEConfig;
 import goja.rapid.ueditor.UEConst;
-import goja.rapid.ueditor.UEHandler;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.MIMEType;
@@ -93,7 +91,7 @@ public class ImageHunter {
             State state = StorageManager.saveFileByInputStream(connection.getInputStream(), physicalPath);
 
             if (state.isSuccess()) {
-                state.putInfo(UEConst.URL, PathFormat.format(savePath));
+                state.putInfo(UEConst.URL, PathFromatKit.format(savePath));
                 state.putInfo(UEConst.SOURCE, urlStr);
             }
 
@@ -107,7 +105,7 @@ public class ImageHunter {
 
     private String getPath(String savePath, String filename, String suffix) {
 
-        return PathFormat.parse(savePath + suffix, filename);
+        return PathFromatKit.parse(savePath + suffix, filename);
 
     }
 

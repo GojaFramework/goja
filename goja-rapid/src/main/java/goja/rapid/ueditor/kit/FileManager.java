@@ -2,7 +2,6 @@ package goja.rapid.ueditor.kit;
 
 import com.jfinal.kit.PathKit;
 import goja.StringPool;
-import goja.rapid.storage.PathFormat;
 import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
@@ -77,7 +76,7 @@ public class FileManager {
             }
             file = (File) obj;
             fileState = new BaseState(true);
-            fileState.putInfo(UEConst.URL, PathFormat.format(this.getPath(file)));
+            fileState.putInfo(UEConst.URL, PathFromatKit.format(this.getPath(file)));
             state.addState(fileState);
         }
 
@@ -87,7 +86,7 @@ public class FileManager {
 
     private String getPath(File file) {
 
-        String path = PathFormat.format(file.getAbsolutePath());
+        String path = PathFromatKit.format(file.getAbsolutePath());
 
         return path.replace(PathKit.getWebRootPath(), StringPool.SLASH);
 

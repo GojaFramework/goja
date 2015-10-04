@@ -10,7 +10,7 @@ import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.State;
-import goja.rapid.storage.PathFormat;
+import goja.rapid.ueditor.kit.PathFromatKit;
 import goja.rapid.ueditor.kit.StorageManager;
 import org.apache.commons.io.FileUtils;
 
@@ -43,7 +43,7 @@ public class BinaryUploader {
 
                 originFileName = Files.getNameWithoutExtension(originFileName);
                 String savePath = config_savePath + suffix;
-                savePath = PathFormat.parse(savePath, originFileName);
+                savePath = PathFromatKit.parse(savePath, originFileName);
                 String physicalPath = PathKit.getWebRootPath() + separator + savePath;
 
                 final FileInputStream fileInputStream;
@@ -52,7 +52,7 @@ public class BinaryUploader {
                 State storageState = StorageManager.saveFileByInputStream(fileInputStream,
                         physicalPath, config_max_size);
                 if (storageState.isSuccess()) {
-                    storageState.putInfo(UEConst.URL, PathFormat.format(savePath));
+                    storageState.putInfo(UEConst.URL, PathFromatKit.format(savePath));
                     storageState.putInfo(UEConst.TYPE, suffix);
                     storageState.putInfo(UEConst.ORIGINAL, originFileName + suffix);
                 }

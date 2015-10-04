@@ -2,8 +2,9 @@ package goja.rapid.ueditor;
 
 import com.google.common.collect.Lists;
 import goja.app.GojaConfig;
-import goja.rapid.storage.StorageService;
+import goja.app.GojaPropConst;
 
+import java.io.File;
 import java.util.List;
 
 import static java.io.File.separator;
@@ -257,8 +258,11 @@ public final class UEConfig {
     public static UEConfig me = config();
 
     private static UEConfig config() {
+        String saveFoloder = GojaConfig.getProperty(GojaPropConst.APP_SAVEFILE_PATH, "upload");
+        String ue_foloder = saveFoloder.endsWith(File.separator)
+                ? saveFoloder + "ue" + separator
+                : saveFoloder + File.separator + "ue" + separator;
 
-        String ue_foloder = StorageService.FS_DIR + separator + "ue" + separator;
 
         final UEConfig config = new UEConfig();
         final String url_prefix = GojaConfig.getAppDomain() ;
