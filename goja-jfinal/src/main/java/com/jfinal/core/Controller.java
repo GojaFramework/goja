@@ -663,7 +663,7 @@ public abstract class Controller {
 	 * Get upload file from multipart request.
 	 */
 	public List<UploadFile> getFiles(String saveDirectory, Integer maxPostSize, String encoding) {
-		if (request instanceof MultipartRequest == false)
+		if (!(request instanceof MultipartRequest))
 			request = new MultipartRequest(request, saveDirectory, maxPostSize, encoding);
 		return ((MultipartRequest)request).getFiles();
 	}
@@ -674,7 +674,7 @@ public abstract class Controller {
 	}
 	
 	public List<UploadFile> getFiles(String saveDirectory, int maxPostSize) {
-		if (request instanceof MultipartRequest == false)
+		if (!(request instanceof MultipartRequest))
 			request = new MultipartRequest(request, saveDirectory, maxPostSize);
 		return ((MultipartRequest)request).getFiles();
 	}
@@ -685,7 +685,7 @@ public abstract class Controller {
 	}
 	
 	public List<UploadFile> getFiles(String saveDirectory) {
-		if (request instanceof MultipartRequest == false)
+		if (!(request instanceof MultipartRequest))
 			request = new MultipartRequest(request, saveDirectory);
 		return ((MultipartRequest)request).getFiles();
 	}
@@ -696,7 +696,7 @@ public abstract class Controller {
 	}
 	
 	public List<UploadFile> getFiles() {
-		if (request instanceof MultipartRequest == false)
+		if (!(request instanceof MultipartRequest))
 			request = new MultipartRequest(request);
 		return ((MultipartRequest)request).getFiles();
 	}
@@ -754,7 +754,7 @@ public abstract class Controller {
 		String[] values = request.getParameterValues(name);
 		if (values != null) {
 			if (values.length == 1)
-				try {request.setAttribute(name, TypeConverter.convert(type, values[0]));} catch (ParseException e) {}
+				try {request.setAttribute(name, TypeConverter.convert(type, values[0]));} catch (ParseException ignored) {}
 			else
 				request.setAttribute(name, values);
 		}

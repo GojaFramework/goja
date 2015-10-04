@@ -3,12 +3,13 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
-import java.io.File;
-
-import com.jfinal.ext2.config.JFinalConfigExt;
-import com.jfinal.ext2.kit.DateTimeKit;
-import com.jfinal.ext2.kit.RandomKit;
+import com.jfinal.kit.HashKit;
 import com.jfinal.kit.StrKit;
+import goja.app.GojaConfig;
+import goja.kits.base.Strs;
+import org.joda.time.DateTime;
+
+import java.io.File;
 
 /**
  * @author BruceZCQ
@@ -40,11 +41,11 @@ public class DateRandomFileRenamePolicy extends FileRenamePolicyWrapper {
 
 	@Override
 	public File nameProcess(File f, String name, String ext) {
-		String rename = null; 
+		String rename;
 		if (StrKit.notBlank(this.customName)) {
 			rename = this.customName;
 		}else{
-			rename = RandomKit.randomMD5Str();
+			rename = HashKit.md5(Strs.randomStr());
 		}
 		// add "/" postfix
 		StringBuilder path = new StringBuilder(f.getParent());
@@ -55,13 +56,13 @@ public class DateRandomFileRenamePolicy extends FileRenamePolicyWrapper {
 		}
 		
 		//append year month day
-		String ymdSubDir = DateTimeKit.formatNowToStyle("yyyy"+File.separator+"M"+File.separator+"d");
+		String ymdSubDir = DateTime.now().toString("yyyy"+File.separator+"M"+File.separator+"d");
 		path.append(ymdSubDir);
 		
 		String parentDateDir = this.parentDir+ymdSubDir+File.separator;
 		this.setParentDateDir(parentDateDir);
 
-		this.setAppParentDateDir(File.separator+JFinalConfigExt.WEB_APP_NAME+parentDateDir);
+		this.setAppParentDateDir(GojaConfig.getAppName() + parentDateDir);
 		
 		String _path = path.toString();
 		this.setSaveDirectory(_path);
@@ -70,7 +71,10 @@ public class DateRandomFileRenamePolicy extends FileRenamePolicyWrapper {
 		
 		File file = new File(_path);
 		if (!file.exists()) {
-			file.mkdirs();
+			boolean mk = file.mkdirs();
+            if(!mk){
+
+            }
 		}
 
 		return (new File(_path, fileName));

@@ -14,6 +14,10 @@ import com.google.common.collect.Maps;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.upload.OreillyCos;
+import com.jfinal.upload.UploadFile;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.multipart.FileRenamePolicy;
 import goja.Func;
 import goja.dao.Dao;
 import goja.kits.base.DateKit;
@@ -50,6 +54,10 @@ import static goja.StringPool.SLASH;
  * @since JDK 1.6
  */
 public class Controller extends com.jfinal.core.Controller {
+    /**
+     * 上传时的文件命名方案
+     */
+    private static final FileRenamePolicy fileRenamePolicy = new DefaultFileRenamePolicy();
 
     /**
      * Send a 304 Not Modified response
@@ -64,7 +72,6 @@ public class Controller extends com.jfinal.core.Controller {
     protected static void badRequest() {
         new BadRequest().render();
     }
-
 
 
     /**
@@ -488,5 +495,112 @@ public class Controller extends com.jfinal.core.Controller {
         if (Strings.isNullOrEmpty(value))
             return defaultValue;
         return DateKit.parseDashYMDHMSDateTime(value);
+    }
+
+
+    public List<UploadFile> getFiles(String saveDirectory, Integer maxPostSize,
+                                     String encoding, FileRenamePolicy fileRenamePolicy) {
+        OreillyCos.setFileRenamePolicy(fileRenamePolicy);
+        return super.getFiles(saveDirectory, maxPostSize, encoding);
+    }
+
+    public List<UploadFile> getFiles(String saveDirectory, int maxPostSize,
+                                     FileRenamePolicy fileRenamePolicy) {
+        OreillyCos.setFileRenamePolicy(fileRenamePolicy);
+        return super.getFiles(saveDirectory, maxPostSize);
+    }
+
+    public List<UploadFile> getFiles(String saveDirectory,
+                                     FileRenamePolicy fileRenamePolicy) {
+        OreillyCos.setFileRenamePolicy(fileRenamePolicy);
+        return super.getFiles(saveDirectory);
+    }
+
+    public List<UploadFile> getFiles(FileRenamePolicy fileRenamePolicy) {
+        OreillyCos.setFileRenamePolicy(fileRenamePolicy);
+        return super.getFiles();
+    }
+
+    /**
+     * call self
+     */
+
+    /**
+     * File
+     */
+    public UploadFile getFile(String parameterName, String saveDirectory,
+                              Integer maxPostSize, String encoding) {
+        return this.getFile(parameterName, saveDirectory, maxPostSize, encoding,
+                            fileRenamePolicy);
+    }
+
+    public UploadFile getFile(String parameterName, String saveDirectory,
+                              Integer maxPostSize, String encoding,
+                              FileRenamePolicy fileRenamePolicy) {
+        this.getFiles(saveDirectory, maxPostSize, encoding, fileRenamePolicy);
+        return this.getFile(parameterName, fileRenamePolicy);
+    }
+
+    public UploadFile getFile(String parameterName, String saveDirectory,
+                              int maxPostSize) {
+        return this.getFile(parameterName, saveDirectory, maxPostSize,
+                            fileRenamePolicy);
+    }
+
+    public UploadFile getFile(String parameterName, String saveDirectory,
+                              int maxPostSize, FileRenamePolicy fileRenamePolicy) {
+        this.getFiles(saveDirectory, maxPostSize, fileRenamePolicy);
+        return this.getFile(parameterName, fileRenamePolicy);
+    }
+
+    public UploadFile getFile(String parameterName, String saveDirectory) {
+        return this.getFile(parameterName, saveDirectory, fileRenamePolicy);
+    }
+
+    public UploadFile getFile(String parameterName, String saveDirectory,
+                              FileRenamePolicy fileRenamePolicy) {
+        this.getFiles(saveDirectory, fileRenamePolicy);
+        return this.getFile(parameterName, fileRenamePolicy);
+    }
+
+    public UploadFile getFile() {
+        return this.getFile(fileRenamePolicy);
+    }
+
+    public UploadFile getFile(FileRenamePolicy fileRenamePolicy) {
+        List<UploadFile> uploadFiles = this.getFiles(fileRenamePolicy);
+        return uploadFiles.size() > 0 ? uploadFiles.get(0) : null;
+    }
+
+    public UploadFile getFile(String parameterName) {
+        return this.getFile(parameterName, fileRenamePolicy);
+    }
+
+    public UploadFile getFile(String parameterName,
+                              FileRenamePolicy fileRenamePolicy) {
+        List<UploadFile> uploadFiles = this.getFiles(fileRenamePolicy);
+        for (UploadFile uploadFile : uploadFiles) {
+            if (uploadFile.getParameterName().equals(parameterName)) {
+                return uploadFile;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Files
+     */
+    public List<UploadFile> getFiles(String saveDirectory, Integer maxPostSize,
+                                     String encoding) {
+        return this.getFiles(saveDirectory, maxPostSize, encoding, fileRenamePolicy);
+    }
+
+    public List<UploadFile> getFiles(String saveDirectory, int maxPostSize) {
+        return this.getFiles(saveDirectory, maxPostSize, fileRenamePolicy);
+    }
+
+    public List<UploadFile> getFiles(String saveDirectory) {
+        return this.getFiles(saveDirectory, fileRenamePolicy);
     }
 }

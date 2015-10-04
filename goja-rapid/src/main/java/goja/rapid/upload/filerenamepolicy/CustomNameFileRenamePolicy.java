@@ -24,8 +24,7 @@ public class CustomNameFileRenamePolicy extends FileRenamePolicyWrapper {
 		}
 
 		// add "/" postfix
-		StringBuilder path = new StringBuilder(f.getParent());
-		String _path = path.toString();
+        String _path = f.getParent();
 		this.setSaveDirectory(_path);
 		
 		String fileName = this.customName + ext;

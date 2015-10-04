@@ -70,7 +70,6 @@ import goja.plugins.sqlmap.SqlMapPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
-import goja.rapid.upload.OreillyCosExt;
 import goja.security.shiro.SecurityUserData;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -175,8 +174,6 @@ public class Goja extends JFinalConfig {
 
         constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
         constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_SAVEFILE_PATH,"upload"));
-        OreillyCosExt.init(constants.getUploadedFileSaveDirectory(),
-                           constants.getMaxPostSize(), constants.getEncoding());
     }
 
     @Override

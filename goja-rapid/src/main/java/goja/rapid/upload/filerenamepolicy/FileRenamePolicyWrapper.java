@@ -3,9 +3,10 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
-import java.io.File;
-
 import com.oreilly.servlet.multipart.FileRenamePolicy;
+import goja.StringPool;
+
+import java.io.File;
 
 /**
  * @author BruceZCQ
@@ -57,12 +58,12 @@ public abstract class FileRenamePolicyWrapper implements FileRenamePolicy {
 			return File.separator;
 		}
 		// add "/" prefix
-		if (!path.startsWith("/") && !path.startsWith("\\")) {
+		if (!path.startsWith(StringPool.SLASH) && !path.startsWith(StringPool.BACK_SLASH)) {
 			path = File.separator + path;
 		}
 				
 		// add "/" postfix
-		if (!path.endsWith("/") && !path.endsWith("\\")) {
+		if (!path.endsWith(StringPool.SLASH) && !path.endsWith(StringPool.BACK_SLASH)) {
 			path = path + File.separator;
 		}
 		return path;
