@@ -22,10 +22,15 @@ public class CustomNameFileRenamePolicy extends FileRenamePolicyWrapper {
 		if (null == this.customName) {
 			throw new IllegalArgumentException("Please Set Custom File Name!");
 		}
+
+		// add "/" postfix
+		StringBuilder path = new StringBuilder(f.getParent());
+		String _path = path.toString();
+		this.setSaveDirectory(_path);
 		
-		String path = f.getParent();
-		this.setSaveDirectory(path);
-		return (new File(path,this.customName+ext));
+		String fileName = this.customName + ext;
+		
+		return (new File(_path, fileName));
 	}
 
 }

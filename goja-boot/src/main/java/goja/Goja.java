@@ -174,6 +174,7 @@ public class Goja extends JFinalConfig {
         constants.setErrorRenderFactory(new GojaErrorRenderFactory());
 
         constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
+        constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_SAVEFILE_PATH,"upload"));
         OreillyCosExt.init(constants.getUploadedFileSaveDirectory(),
                            constants.getMaxPostSize(), constants.getEncoding());
     }

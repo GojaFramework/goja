@@ -3,10 +3,9 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
-import com.jfinal.kit.HashKit;
-import goja.kits.base.Strs;
-
 import java.io.File;
+
+import com.jfinal.ext2.kit.RandomKit;
 
 
 /**
@@ -20,6 +19,9 @@ public class RandomFileRenamePolicy extends FileRenamePolicyWrapper {
 	public File nameProcess(File f, String name, String ext) {
 		String path = f.getParent();
 		this.setSaveDirectory(path);
-        return (new File(path,HashKit.md5(Strs.randomStr())+ ext));
-    }
+		
+		String fileName = RandomKit.randomMD5Str() + ext;
+		
+		return (new File(path, fileName));
+	}
 }

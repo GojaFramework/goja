@@ -3,10 +3,9 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
-import com.jfinal.kit.HashKit;
-import goja.kits.base.Strs;
-
 import java.io.File;
+
+import com.jfinal.ext2.kit.RandomKit;
 
 /**
  * @author BruceZCQ
@@ -20,7 +19,7 @@ public class CustomParentDirFileRenamePolicy extends
 	private NamePolicy namepolicy = NamePolicy.ORIGINAL_NAME;
 	
 	public CustomParentDirFileRenamePolicy(String parentDir, NamePolicy namepolicy) {
-		this.parentDir = parentDir;
+		this.parentDir = this.appendFileSeparator(parentDir);
 		this.namepolicy = namepolicy;
 	}
 	
@@ -31,21 +30,24 @@ public class CustomParentDirFileRenamePolicy extends
 		}
 		
 		// add "/" postfix
-		StringBuilder path = new StringBuilder(this.appendFileSeparator(f.getParent()));
+		StringBuilder path = new StringBuilder(f.getParent());
 		
 		path.append(this.parentDir);
 		
 		String _path = path.toString();
+		this.setSaveDirectory(_path);
+
+		if (this.namepolicy == NamePolicy.RANDOM_NAME) {
+			name = RandomKit.randomMD5Str();
+		} 
+		
+		String fileName = name + ext;
+		
 		File file = new File(_path);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
-		this.setSaveDirectory(_path);
 		
-		if (this.namepolicy == NamePolicy.RANDOM_NAME) {
-			name = HashKit.md5(Strs.randomStr());
-		} 
-		return (new File(_path,name+ext));
+		return (new File(_path, fileName));
 	}
-
 }

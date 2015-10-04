@@ -7,7 +7,6 @@
 package goja.mvc;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -15,6 +14,7 @@ import com.google.common.collect.Maps;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import goja.Func;
 import goja.dao.Dao;
 import goja.kits.base.DateKit;
 import goja.lang.Lang;
@@ -50,11 +50,6 @@ import static goja.StringPool.SLASH;
  * @since JDK 1.6
  */
 public class Controller extends com.jfinal.core.Controller {
-
-    /**
-     * Map Type reference.
-     */
-    public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {};
 
     /**
      * Send a 304 Not Modified response
@@ -377,7 +372,7 @@ public class Controller extends com.jfinal.core.Controller {
             if (Strings.isNullOrEmpty(jsonData)) {
                 return Optional.absent();
             }
-            final Map<String, Object> data_map = JSON.parseObject(jsonData, MAP_TYPE_REFERENCE);
+            final Map<String, Object> data_map = JSON.parseObject(jsonData, Func.MAP_TYPE_REFERENCE);
             if (data_map == null) {
                 return Optional.absent();
             }

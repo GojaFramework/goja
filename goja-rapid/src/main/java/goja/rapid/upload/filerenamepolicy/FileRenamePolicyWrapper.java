@@ -3,9 +3,9 @@
  */
 package goja.rapid.upload.filerenamepolicy;
 
-import com.oreilly.servlet.multipart.FileRenamePolicy;
-
 import java.io.File;
+
+import com.oreilly.servlet.multipart.FileRenamePolicy;
 
 /**
  * @author BruceZCQ
@@ -47,7 +47,7 @@ public abstract class FileRenamePolicyWrapper implements FileRenamePolicy {
 	protected void setSaveDirectory(String saveDirectory) {
 		this.saveDirectory = saveDirectory;
 	}
-	
+
 	/**
 	 * Add File Separator
 	 * @param path
