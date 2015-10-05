@@ -21,7 +21,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import goja.app.GojaConfig;
+import goja.StringPool;
 
 import javax.servlet.ServletContext;
 import java.io.PrintWriter;
@@ -77,7 +77,7 @@ public class FreeMarkerRender extends Render {
         // - Create a configuration instance
         // config = new Configuration();
         // - Templates are stoted in the WEB-INF/templates directory of the Web app.
-        config.setServletContextForTemplateLoading(servletContext, GojaConfig.getDefaultViewPath());    // "WEB-INF/templates"
+        config.setServletContextForTemplateLoading(servletContext, StringPool.SLASH);    // "WEB-INF/templates"
         // - Set update dealy to 0 for now, to ease debugging and testing.
         //   Higher value should be used in production environment.
         
