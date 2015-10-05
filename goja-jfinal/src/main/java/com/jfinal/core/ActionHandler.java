@@ -99,6 +99,11 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
 			}
+            // sogyf:增加异常错误堆栈显示
+            if(devMode){
+                request.setAttribute("goja_error", e.getCause());
+                renderFactory.getErrorRender(500).setContext(request, response).render();
+            }
 		}
 		catch (ActionException e) {
 			int errorCode = e.getErrorCode();
@@ -118,6 +123,10 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
 			}
+            // sogyf:增加异常错误堆栈显示
+            if(devMode){
+                request.setAttribute("goja_error", e.getCause());
+            }
 			e.getErrorRender().setContext(request, response, action.getViewPath()).render();
 		}
 		catch (Throwable t) {
@@ -125,6 +134,10 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, t);
 			}
+            // sogyf:增加异常错误堆栈显示
+            if(devMode){
+                request.setAttribute("goja_error", t);
+            }
 			renderFactory.getErrorRender(500).setContext(request, response, action.getViewPath()).render();
 		}
 	}

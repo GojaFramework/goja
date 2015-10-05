@@ -47,7 +47,6 @@ public class GojaErrorRender extends Render {
     protected static final String html401 = "<html><head><title>401 Unauthorized</title></head><body bgcolor='white'><center><h1>401 Unauthorized</h1></center><hr>" + version + "</body></html>";
     protected static final String html403 = "<html><head><title>403 Forbidden</title></head><body bgcolor='white'><center><h1>403 Forbidden</h1></center><hr>" + version + "</body></html>";
 
-    public static final String GOJA_ERROR = "goja_error";
 
     protected int errorCode;
 
@@ -91,7 +90,7 @@ public class GojaErrorRender extends Render {
             pdata.put("requestURI", requestURI);
             switch (errorCode) {
                 case SC_INTERNAL_SERVER_ERROR:
-                    Throwable te = (Throwable) request.getAttribute(GOJA_ERROR);
+                    Throwable te = (Throwable) request.getAttribute("goja_error");
                     String error_msg = Throwables.getStackTraceAsString(te);
                     List<String> error_lines = Splitter.on(StringPool.NEWLINE).splitToList(error_msg);
                     pdata.put("title", error_lines.get(0));
