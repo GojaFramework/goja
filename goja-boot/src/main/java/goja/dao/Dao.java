@@ -7,6 +7,8 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.Table;
+import com.jfinal.plugin.activerecord.TableMapping;
 import goja.StringPool;
 import goja.castor.Castors;
 import goja.plugins.sqlinxml.SqlKit;
@@ -18,6 +20,7 @@ import goja.rapid.db.SqlSelect;
 import goja.rapid.page.PageDto;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -57,7 +60,9 @@ public abstract class Dao {
      * @return If for the new form of return true.
      */
     public static <M extends Model> boolean isNew(M m) {
-        return isNew(m, StringPool.PK_COLUMN);
+        final Table table = TableMapping.me().getTable(m.getClass());
+        final String[] pks = table.getPrimaryKey();
+        return isNew(m, pks[0]);
     }
 
     /**
@@ -87,6 +92,25 @@ public abstract class Dao {
     }
 
 
+    /**
+     * 根据多个数据通过主键批量删除数据
+     *
+     * @param ids   要删除的数据值数组
+     * @param model 对应的Model
+     * @return 是否删除成功
+     */
+    public static <M extends Model> boolean deleteByIds(Serializable[] ids, M model) {
+        final Table table = TableMapping.me().getTable(model.getClass());
+        final String[] primaryKey = table.getPrimaryKey();
+        if (primaryKey == null || primaryKey.length < 1 || ids == null) {
+            throw new IllegalArgumentException("需要删除的表数据主键不存在，无法删除!");
+        }
+        // 暂时支持单主键的，多主键的后续在说吧。
+        final String question_mark = StringUtils.repeat(StringPool.QUESTION_MARK, StringPool.COMMA, ids.length);
+        String deleteSql = "DELETE FROM " + table.getName() + " WHERE " + primaryKey[0] + " IN (" + question_mark + ")";
+        return Db.update(deleteSql, ids) >= 0;
+    }
+
 
     /**
      * According to the primary key and entity determine whether for the new entity.
@@ -97,8 +121,8 @@ public abstract class Dao {
      * @return If for the new form of return true.
      */
     public static <M extends Model> boolean isNew(M m, String pk_column) {
-        final Number number = m.getNumber(pk_column);
-        return number == null || number.intValue() <= 0;
+        final Object val = m.get(pk_column);
+        return val == null || val instanceof Number && ((Number) val).intValue() <= 0;
     }
 
     /**

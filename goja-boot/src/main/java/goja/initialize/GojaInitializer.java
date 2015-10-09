@@ -59,8 +59,16 @@ public class GojaInitializer implements ServletContainerInitializer {
         GojaConfig.init();
 
         if (GojaConfig.isSecurity() ) {
-            ctx.addFilter("Goja@shiroFilter", "goja.security.shiro.GojaShiroFilter")
-                    .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+            File shiroIniFile = new File(PathKit.getRootClassPath() + File.separator + "shiro.ini");
+            if(shiroIniFile.exists()){
+                ctx.addFilter("Goja@shiroFilter", "org.apache.shiro.web.servlet.ShiroFilter")
+                        .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+            } else {
+                ctx.addFilter("Goja@shiroFilter", "goja.security.shiro.GojaShiroFilter")
+                        .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+            }
+            ctx.addListener("org.apache.shiro.web.env.EnvironmentLoaderListener");
+
         }
         // init logger
         LoggerInit.init();

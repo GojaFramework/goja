@@ -60,10 +60,18 @@ public class AppLogConfigurator {
 
             ca.setEncoder(pl);
             ca.start();
-
+ 
             Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
-            rootLogger.setLevel(Level.DEBUG);
+            rootLogger.setLevel(Level.INFO);
             rootLogger.addAppender(ca);
+
+            Logger jfinalLogger = lc.getLogger("com.jfinal");
+            jfinalLogger.setLevel(Level.DEBUG);
+            jfinalLogger.addAppender(ca);
+
+            Logger appLogger = lc.getLogger("app");
+            appLogger.setLevel(Level.DEBUG);
+            appLogger.addAppender(ca);
 
         } else {
 

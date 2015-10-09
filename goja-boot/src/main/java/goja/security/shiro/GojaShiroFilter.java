@@ -86,7 +86,7 @@ public class GojaShiroFilter extends AbstractShiroFilter {
                     continue;
                 }
                 //  { "authc", "roles[admin,user]", "perms[file:edit]" }
-                manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url),"none"));
+                manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url),"anon"));
             }
         }
         return manager;
@@ -131,7 +131,7 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     }
 
     private void applyUnauthorizedUrlIfNecessary(Filter filter) {
-        String unauthorizedUrl = shiroConfig.getProperty("unauthorized.url", "/");
+        String unauthorizedUrl = shiroConfig.getProperty("unauthorized.url", "/auth");
         if (StringUtils.hasText(unauthorizedUrl) && (filter instanceof AuthorizationFilter)) {
             AuthorizationFilter authzFilter = (AuthorizationFilter) filter;
             //only apply the unauthorizedUrl if they haven't explicitly configured one already:
