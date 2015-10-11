@@ -265,7 +265,7 @@ public final class UEConfig {
         if(Strings.isNullOrEmpty(urlPrefix)){
 
             final String appDomain = GojaConfig.getAppDomain();
-            urlPrefix = appDomain + (StringUtils.endsWith(appDomain, StringPool.SLASH) ? StringPool.EMPTY : StringPool.SLASH) ;
+            urlPrefix = appDomain + (StringUtils.endsWith(appDomain, StringPool.SLASH) ? StringPool.EMPTY : StringPool.SLASH) + "upload/" ;
         }
         config.imageActionName = "uploadimage";
         config.imageFieldName = "upfile";

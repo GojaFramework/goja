@@ -1,34 +1,34 @@
 package goja.rapid.ueditor.define;
 
 
+import com.google.common.collect.Maps;
 import goja.rapid.ueditor.kit.UEKit;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 
 public class BaseState implements State {
 
-	private boolean state = false;
-	private String info = null;
-	
-	private Map<String, String> infoMap = new HashMap<String, String>();
-	
-	public BaseState () {
-		this.state = true;
-	}
-	
-	public BaseState ( boolean state ) {
-		this.setState( state );
-	}
-	
-	public BaseState ( boolean state, String info ) {
-		this.setState( state );
-		this.info = info;
-	}
-	
-	public BaseState ( boolean state, int infoCode ) {
+    private boolean state = false;
+    private String  info  = null;
+
+    private Map<String, String> infoMap = Maps.newHashMap();
+
+    public BaseState() {
+        this.state = true;
+    }
+
+    public BaseState(boolean state) {
+        this.setState(state);
+    }
+
+    public BaseState(boolean state, String info) {
+        this.setState(state);
+        this.info = info;
+    }
+
+    public BaseState ( boolean state, int infoCode ) {
 		this.setState( state );
 		this.info = AppInfo.getStateInfo( infoCode );
 	}
@@ -56,7 +56,7 @@ public class BaseState implements State {
 	
 	public String toString () {
 		
-		String key = null;
+		String key;
 		String stateVal = this.isSuccess() ? AppInfo.getStateInfo( AppInfo.SUCCESS ) : this.info;
 		
 		StringBuilder builder = new StringBuilder();

@@ -89,7 +89,7 @@ public class FileManager {
 
     private String getPath(File file) {
         String path = file.getAbsolutePath();
-        return PathFormatKit.format(StringUtils.substring(path, StringUtils.indexOf(path, this.dir)));
+        return PathFormatKit.format(StringUtils.substring(path, StringUtils.indexOf(path, UEConst.UE_FOLDER)));
     }
 
 
