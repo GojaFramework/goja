@@ -49,13 +49,10 @@ enum UEAction {
 
                 @Override
                 public String invoke(Controller controller) {
-                    UEConfig config = UEConfig.me;
-                    String fieldName = config.getImageFieldName();
+                    final UEConfig config = UEConfig.me;
+                    String imageFieldName = config.getImageFieldName();
                     return BinaryUploader
-                            .save(controller, fieldName,
-                                    config.getImagePathFormat(),
-                                    config.getImageMaxSize(),
-                                    config.getImageAllowFiles())
+                            .storageUploadFile(controller, config, true)
                             .toJSONString();
                 }
             },
@@ -73,10 +70,7 @@ enum UEAction {
                     UEConfig config = UEConfig.me;
                     String fieldName = config.getFileFieldName();
                     return BinaryUploader
-                            .save(controller, fieldName,
-                                    config.getFilePathFormat(),
-                                    config.getFileMaxSize(),
-                                    config.getFileAllowFiles())
+                            .storageUploadFile(controller, config, false)
                             .toJSONString();
                 }
             },
@@ -94,10 +88,7 @@ enum UEAction {
                     UEConfig config = UEConfig.me;
                     String fieldName = config.getVideoFieldName();
                     return BinaryUploader
-                            .save(controller, fieldName,
-                                    config.getVideoPathFormat(),
-                                    config.getVideoMaxSize(),
-                                    config.getVideoAllowFiles())
+                            .storageUploadFile(controller, config, false)
                             .toJSONString();
                 }
             },

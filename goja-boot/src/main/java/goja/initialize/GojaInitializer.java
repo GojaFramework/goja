@@ -53,21 +53,21 @@ public class GojaInitializer implements ServletContainerInitializer {
     public void onStartup(Set<Class<?>> classSet, ServletContext ctx)
             throws ServletException {
         ImageIO.setUseCache(false);
-        // 初始化缓存
-        Cache.init();
         // 初始化配置文件
         GojaConfig.init();
+        // 初始化缓存
+        Cache.init();
 
         if (GojaConfig.isSecurity() ) {
             File shiroIniFile = new File(PathKit.getRootClassPath() + File.separator + "shiro.ini");
             if(shiroIniFile.exists()){
+                ctx.addListener("org.apache.shiro.web.env.EnvironmentLoaderListener");
                 ctx.addFilter("Goja@shiroFilter", "org.apache.shiro.web.servlet.ShiroFilter")
                         .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
             } else {
                 ctx.addFilter("Goja@shiroFilter", "goja.security.shiro.GojaShiroFilter")
                         .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
             }
-            ctx.addListener("org.apache.shiro.web.env.EnvironmentLoaderListener");
 
         }
         // init logger

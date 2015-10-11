@@ -1,13 +1,13 @@
 package goja.rapid.ueditor;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import goja.StringPool;
 import goja.app.GojaConfig;
 import goja.app.GojaPropConst;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
 import java.util.List;
-
-import static java.io.File.separator;
 
 /**
  * <p> 富文本配置 上传图片配置项 DTO</p>
@@ -255,18 +255,18 @@ public final class UEConfig {
      */
     private List<String> fileManagerAllowFiles;
 
-    public static UEConfig me = config();
+    public static  final UEConfig me = config();
 
     private static UEConfig config() {
-        String saveFoloder = GojaConfig.getProperty(GojaPropConst.APP_SAVEFILE_PATH, "upload");
-        String ue_foloder = saveFoloder.endsWith(File.separator)
-                ? saveFoloder + "ue" + separator
-                : saveFoloder + File.separator + "ue" + separator;
-
 
         final UEConfig config = new UEConfig();
-        final String url_prefix = GojaConfig.getAppDomain() ;
 
+        String urlPrefix = GojaConfig.getProperty(GojaPropConst.UE_URLPREFIX);
+        if(Strings.isNullOrEmpty(urlPrefix)){
+
+            final String appDomain = GojaConfig.getAppDomain();
+            urlPrefix = appDomain + (StringUtils.endsWith(appDomain, StringPool.SLASH) ? StringPool.EMPTY : StringPool.SLASH) ;
+        }
         config.imageActionName = "uploadimage";
         config.imageFieldName = "upfile";
         config.imageMaxSize = 2048000;
@@ -274,41 +274,41 @@ public final class UEConfig {
         config.imageCompressEnable = true;
         config.imageCompressBorder = 1600;
         config.imageInsertAlign = "none";
-        config.imageUrlPrefix = url_prefix;
-        config.imagePathFormat = ue_foloder + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.imageUrlPrefix = urlPrefix;
+        config.imagePathFormat = UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
 
         config.scrawlActionName = "uploadscrawl";
         config.scrawlFieldName = "upfile";
-        config.scrawlPathFormat = ue_foloder + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.scrawlPathFormat =  UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
         config.scrawlMaxSize = 2048000;
-        config.scrawlUrlPrefix = url_prefix;
+        config.scrawlUrlPrefix = urlPrefix;
         config.scrawlInsertAlign = "none";
 
         config.snapscreenActionName = "uploadimage";
-        config.snapscreenPathFormat = ue_foloder + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
-        config.snapscreenUrlPrefix = url_prefix;
+        config.snapscreenPathFormat =  UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.snapscreenUrlPrefix = urlPrefix;
         config.snapscreenInsertAlign = "none";
 
         config.catcherLocalDomain = Lists.newArrayList("127.0.0.1", "localhost");
         config.catcherActionName = "catchimage";
         config.catcherFieldName = "source";
-        config.catcherPathFormat = ue_foloder + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
-        config.catcherUrlPrefix = url_prefix;
+        config.catcherPathFormat =  UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.catcherUrlPrefix = urlPrefix;
         config.catcherMaxSize = 2048000;
         config.catcherAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp");
 
         config.videoActionName = "uploadvideo";
         config.videoFieldName = "upfile";
-        config.videoPathFormat = ue_foloder + "video/{yyyy}{mm}{dd}/{time}{rand:6}";
-        config.videoUrlPrefix = url_prefix;
+        config.videoPathFormat =  UEConst.UE_FOLDER + "video/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.videoUrlPrefix = urlPrefix;
         config.videoMaxSize = 102400000;
         config.videoAllowFiles = Lists.newArrayList(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg"
                 , ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid");
 
         config.fileActionName = "uploadfile";
         config.fileFieldName = "upfile";
-        config.filePathFormat = ue_foloder + "file/{yyyy}{mm}{dd}/{time}{rand:6}";
-        config.fileUrlPrefix = url_prefix;
+        config.filePathFormat =  UEConst.UE_FOLDER + "file/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.fileUrlPrefix = urlPrefix;
         config.fileMaxSize = 51200000;
         config.fileAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".flv", ".swf", ".mkv"
                 , ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3"
@@ -316,15 +316,15 @@ public final class UEConfig {
                 , ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml");
 
         config.imageManagerActionName = "listimage";
-        config.imageManagerListPath = ue_foloder + "image/";
-        config.imageManagerUrlPrefix = url_prefix;
+        config.imageManagerListPath =  UEConst.UE_FOLDER + "image/";
+        config.imageManagerUrlPrefix = urlPrefix;
         config.imageManagerInsertAlign = "none";
         config.imageManagerListSize = 20;
         config.imageManagerAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp");
 
         config.fileManagerActionName = "listfile";
-        config.fileManagerListPath = ue_foloder + "file/";
-        config.fileManagerUrlPrefix = url_prefix;
+        config.fileManagerListPath =  UEConst.UE_FOLDER + "file/";
+        config.fileManagerUrlPrefix = urlPrefix;
         config.fileManagerListSize = 20;
         config.fileManagerAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".flv", ".swf"
                 , ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm"
@@ -393,6 +393,22 @@ public final class UEConfig {
         this.imageUrlPrefix = imageUrlPrefix;
     }
 
+    /**
+     * @return 上传保存路径, 可以自定义保存路径和文件名格式
+     * <p/>
+     * {filename} 会替换成原文件名,配置这项需要注意中文乱码问题
+     * {rand:6} 会替换成随机数,后面的数字是随机数的位数
+     * {time} 会替换成时间戳
+     * {yyyy} 会替换成四位年份
+     * {yy} 会替换成两位年份
+     * {mm} 会替换成两位月份
+     * {dd} 会替换成两位日期
+     * {hh} 会替换成两位小时
+     * {ii} 会替换成两位分钟
+     * {ss} 会替换成两位秒
+     * 非法字符 \ : * ? " < > |
+     * 具请体看线上文档: fex.baidu.com/ueditor/#use-format_upload_filename
+     */
     public String getImagePathFormat() {
         return imagePathFormat;
     }

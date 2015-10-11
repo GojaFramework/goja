@@ -91,7 +91,7 @@ public class ImageHunter {
             State state = StorageManager.saveFileByInputStream(connection.getInputStream(), physicalPath);
 
             if (state.isSuccess()) {
-                state.putInfo(UEConst.URL, PathFromatKit.format(savePath));
+                state.putInfo(UEConst.URL, PathFormatKit.format(savePath));
                 state.putInfo(UEConst.SOURCE, urlStr);
             }
 
@@ -105,7 +105,7 @@ public class ImageHunter {
 
     private String getPath(String savePath, String filename, String suffix) {
 
-        return PathFromatKit.parse(savePath + suffix, filename);
+        return PathFormatKit.parse(savePath + suffix, filename);
 
     }
 

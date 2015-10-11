@@ -1,6 +1,5 @@
 package goja.rapid.ueditor.kit;
 
-import com.jfinal.kit.PathKit;
 import goja.StringPool;
 import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
@@ -8,6 +7,7 @@ import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.MultiState;
 import goja.rapid.ueditor.define.State;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -16,14 +16,17 @@ import java.util.List;
 
 
 public class FileManager {
+    private final String   dir;
+    private final String[] allowFiles;
+    private final int      count;
 
-    private String   dir        = null;
-    private String[] allowFiles = null;
-    private int      count      = 0;
-
+    /**
+     * @param dir         文件目录
+     * @param allow_files 合法的文件后缀名
+     * @param count       总共获取多少个文件
+     */
     public FileManager(String dir, List<String> allow_files, int count) {
-
-        this.dir = PathKit.getWebRootPath() + File.separator + dir;
+        this.dir = StorageManager.getUeFolder() + dir;
         final int size = allow_files.size();
         this.allowFiles = new String[size];
         for (int i = 0; i < size; i++) {
@@ -76,7 +79,7 @@ public class FileManager {
             }
             file = (File) obj;
             fileState = new BaseState(true);
-            fileState.putInfo(UEConst.URL, PathFromatKit.format(this.getPath(file)));
+            fileState.putInfo(UEConst.URL, this.getPath(file));
             state.addState(fileState);
         }
 
@@ -85,11 +88,8 @@ public class FileManager {
     }
 
     private String getPath(File file) {
-
-        String path = PathFromatKit.format(file.getAbsolutePath());
-
-        return path.replace(PathKit.getWebRootPath(), StringPool.SLASH);
-
+        String path = file.getAbsolutePath();
+        return PathFormatKit.format(StringUtils.substring(path, StringUtils.indexOf(path, this.dir)));
     }
 
 

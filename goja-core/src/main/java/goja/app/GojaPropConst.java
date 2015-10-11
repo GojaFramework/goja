@@ -180,4 +180,13 @@ public interface GojaPropConst {
      * 默认的redis连接端口
      */
     String REDIS_PORT      = "redis.port";
+
+    /**
+     * UE控件上传的目录
+     */
+    String UE_UPLOAD_PATH = "ue.upload";
+    /**
+     * UE控件访问文件（上传的图片、文件）获取的地址前缀
+     */
+    String UE_URLPREFIX   = "ue.urlprefix";
 }

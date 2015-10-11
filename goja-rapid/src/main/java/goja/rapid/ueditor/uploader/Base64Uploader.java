@@ -7,7 +7,7 @@ import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.State;
-import goja.rapid.ueditor.kit.PathFromatKit;
+import goja.rapid.ueditor.kit.PathFormatKit;
 import goja.rapid.ueditor.kit.StorageManager;
 import org.apache.commons.codec.binary.Base64;
 
@@ -29,7 +29,7 @@ public final class Base64Uploader {
 
         String suffix = ".jpg";
 
-        String savePath = PathFromatKit.parse(config.getScrawlPathFormat(), config.getScrawlFieldName());
+        String savePath = PathFormatKit.parse(config.getScrawlPathFormat(), config.getScrawlFieldName());
 
         savePath = savePath + suffix;
         String physicalPath = PathKit.getWebRootPath() + separator + savePath;
@@ -37,7 +37,7 @@ public final class Base64Uploader {
         State storageState = StorageManager.saveBinaryFile(data, physicalPath);
 
         if (storageState.isSuccess()) {
-            storageState.putInfo(UEConst.URL, PathFromatKit.format(savePath));
+            storageState.putInfo(UEConst.URL, PathFormatKit.format(savePath));
             storageState.putInfo(UEConst.TYPE, suffix);
             storageState.putInfo(UEConst.ORIGINAL, StringPool.EMPTY);
         }
