@@ -112,7 +112,7 @@ public final class GojaConfig {
             if (!configFolderFile.exists()) {
                 throw new RuntimeException("The application config folder " + configFolder + " is not found!");
             }
-            configProps = PropKit.use(configFolderFile).getProperties();
+            configProps = PropKit.use(FileUtils.getFile(configFolderFile, "application.conf")).getProperties();
         } else {
             configProps = p;
         }
