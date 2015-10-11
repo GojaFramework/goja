@@ -9,7 +9,7 @@
 
     <groupId>com.github.sogyf</groupId>
     <artifactId>goja</artifactId>
-    <version>0.1.9-SNAPSHOT</version>
+    <version>0.1.9</version>
     <packaging>pom</packaging>
 
     <name>goja</name>
@@ -36,7 +36,8 @@
         <url>https://github.com/GojaFramework/goja</url>
         <connection>scm:git:git@github.com:GojaFramework/goja.git</connection>
         <developerConnection>scm:git:git@github.com:GojaFramework/goja.git</developerConnection>
-    </scm>
+      <tag>goja-0.1.9</tag>
+  </scm>
 
     <issueManagement>
         <system>Github</system>
