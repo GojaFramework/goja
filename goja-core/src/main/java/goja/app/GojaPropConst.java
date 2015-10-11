@@ -56,7 +56,7 @@ public interface GojaPropConst {
     /**
      * 最大支持的上传文件大小
      */
-    String APP_MAXFILESIZE   = "app.maxfilesize";
+    String APP_MAXFILESIZE   = "app.upload.maxfilesize";
     /**
      * JSP视图类型,默认为Freemwrker
      */
