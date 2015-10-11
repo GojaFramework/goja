@@ -96,11 +96,11 @@ public abstract class Dao {
      * 根据多个数据通过主键批量删除数据
      *
      * @param ids   要删除的数据值数组
-     * @param model 对应的Model
+     * @param modelClass 对应的Model的Class
      * @return 是否删除成功
      */
-    public static <M extends Model> boolean deleteByIds(Serializable[] ids, M model) {
-        final Table table = TableMapping.me().getTable(model.getClass());
+    public static <M extends Model> boolean deleteByIds(Serializable[] ids, Class<M> modelClass) {
+        final Table table = TableMapping.me().getTable(modelClass);
         final String[] primaryKey = table.getPrimaryKey();
         if (primaryKey == null || primaryKey.length < 1 || ids == null) {
             throw new IllegalArgumentException("需要删除的表数据主键不存在，无法删除!");
