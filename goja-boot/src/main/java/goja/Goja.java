@@ -23,7 +23,6 @@ import com.jfinal.core.Const;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
 import com.jfinal.plugin.activerecord.dialect.OracleDialect;
@@ -94,7 +93,6 @@ import java.util.Properties;
  */
 public class Goja extends JFinalConfig {
 
-    public static final String FTL_HTML_PREFIX = ".ftl";
 
     private static final org.slf4j.Logger logger       = LoggerFactory.getLogger(Goja.class);
     public static        boolean          initlization = false;
@@ -163,17 +161,17 @@ public class Goja extends JFinalConfig {
         }
 
         domain = GojaConfig.getAppDomain();
-        String view_type = GojaConfig.getProperty(GojaPropConst.APP_VIEWTYPE);
-        if (!StrKit.isBlank(view_type)) {
-            setViewType(constants, view_type);
-        } else {
-            constants.setFreeMarkerViewExtension(FTL_HTML_PREFIX);
+        final boolean jspViewType = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_VIEW_JSP, false);
+        if(jspViewType){
+            constants.setViewType(ViewType.JSP);
+        } else{
+            constants.setFreeMarkerViewExtension(".ftl");
             setFtlSharedVariable();
         }
         constants.setErrorRenderFactory(new GojaErrorRenderFactory());
 
         constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
-        constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_SAVEFILE_PATH,"upload"));
+        constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH,"upload"));
     }
 
     @Override
@@ -484,20 +482,6 @@ public class Goja extends JFinalConfig {
         }
     }
 
-    /**
-     * set view type.
-     *
-     * @param constants jfinal constant.
-     * @param view_type view type.
-     */
-    private void setViewType(Constants constants, String view_type) {
-        final ViewType viewType = ViewType.valueOf(view_type.toUpperCase());
-        if (viewType == ViewType.FREE_MARKER) {
-            constants.setFreeMarkerViewExtension(FTL_HTML_PREFIX);
-            setFtlSharedVariable();
-        }
-        constants.setViewType(viewType);
-    }
 
     /**
      * set freemarker variable.
