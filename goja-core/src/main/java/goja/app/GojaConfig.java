@@ -89,10 +89,17 @@ public final class GojaConfig {
      */
     private static String defaultViewPath;
 
+    private static boolean initialize = false;
+
     private GojaConfig() {
     }
 
     public static void init() {
+        if (initialize) {
+            logger.warn("配置文件已经加载，不需要在调用init()方法！");
+            return;
+        }
+
         final Properties p = new Properties();
         ResourceKit.loadFileInProperties(APPLICATION_PROP, p);
         if (checkNullOrEmpty(p)) {
@@ -128,6 +135,7 @@ public final class GojaConfig {
         defaultDBUsername = getProperty(GojaPropConst.DBUSERNAME, "root");
         defaultDBPassword = getProperty(GojaPropConst.DBPASSWORD, "123456");
         defaultViewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, File.separator + "WEB-INF" + File.separator + "views");
+        initialize = true;
     }
 
 

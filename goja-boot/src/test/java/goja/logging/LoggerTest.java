@@ -1,5 +1,6 @@
 package goja.logging;
 
+import goja.app.GojaConfig;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ public class LoggerTest {
 
     @Before
     public void setUp() throws Exception {
+        GojaConfig.init();
         LoggerInit.init();
     }
 
