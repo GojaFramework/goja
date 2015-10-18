@@ -63,6 +63,7 @@ import goja.mvc.render.ftl.shiro.ShiroTags;
 import goja.plugins.index.IndexPlugin;
 import goja.plugins.monogo.MongoPlugin;
 import goja.plugins.quartz.QuartzPlugin;
+import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.sqlinxml.SqlInXmlPlugin;
 import goja.plugins.sqlmap.SqlMapPlugin;
@@ -292,6 +293,9 @@ public class Goja extends JFinalConfig {
         }
 
         new AutoOnLoadInterceptor(interceptors).load();
+        if (GojaConfig.isSecurity()) {
+            interceptors.add(new ShiroInterceptor());
+        }
     }
 
     @Override
