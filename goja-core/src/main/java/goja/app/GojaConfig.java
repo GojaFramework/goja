@@ -324,13 +324,7 @@ public final class GojaConfig {
      */
     private static ApplicationMode getApplicationModel() {
         final String mode = getProperty(GojaPropConst.APPMODE, "dev").toUpperCase();
-        if (StringUtils.equals(mode, ApplicationMode.DEV.toString())
-                || StringUtils.equals(mode, ApplicationMode.TEST.toString())
-                || StringUtils.equals(mode, ApplicationMode.PROD.toString())) {
-            return ApplicationMode.DEV;
-        } else {
-            return ApplicationMode.valueOf(mode);
-        }
+        return ApplicationMode.valueOf(mode);
     }
 
 
