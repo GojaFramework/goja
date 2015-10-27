@@ -6,6 +6,8 @@
 
 package goja.core;
 
+import com.jfinal.core.Const;
+
 /**
  * Pool of <code>String</code> constants to prevent repeating of hard-coded <code>String</code> literals in the code.
  * Due to fact that these are <code>public static final</code> they will be inlined by java compiler and reference to
@@ -70,7 +72,7 @@ public interface StringPool {
     String RIGHT_SQ_BRACKET  = "]";
     String TRUE              = "true";
     String UNDERSCORE        = "_";
-    String UTF_8             = "UTF-8";
+    String UTF_8 = Const.DEFAULT_ENCODING;
     String US_ASCII          = "US-ASCII";
     String ISO_8859_1        = "ISO-8859-1";
     String Y                 = "y";

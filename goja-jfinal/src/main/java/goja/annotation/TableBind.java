@@ -6,7 +6,6 @@
 package goja.annotation;
 
 import com.jfinal.plugin.activerecord.DbKit;
-import goja.core.StringPool;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -37,7 +36,7 @@ public @interface TableBind {
      *
      * @return pks
      */
-    String[] pks() default StringPool.PK_COLUMN;
+    String[] pks() default "id";
 
     /**
      * ignore flag

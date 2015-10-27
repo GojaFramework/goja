@@ -16,9 +16,9 @@
 
 package com.jfinal.plugin.activerecord.dialect;
 
+import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
-import goja.core.app.GojaConfig;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,7 +221,7 @@ public class OracleDialect extends Dialect {
 	public void fillStatement(PreparedStatement pst, List<Object> paras) throws SQLException {
 		 /* # edit by sogyf. */
         /* @description:  when dev model print sql parm*/
-        boolean show_param = GojaConfig.getApplicationMode().isDev();
+        boolean show_param = DbKit.getConfig().isShowSql();
 		final int param_size = paras.size();
 		if (show_param) {
 			logger.info("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
@@ -259,7 +259,7 @@ public class OracleDialect extends Dialect {
 	public void fillStatement(PreparedStatement pst, Object... paras) throws SQLException {
 		 /* # edit by sogyf. */
         /* @description:  when dev model print sql parm*/
-        boolean show_param = GojaConfig.getApplicationMode().isDev();
+        boolean show_param =DbKit.getConfig().isShowSql();
 		final int param_size = paras.length;
 		if (show_param) {
 			logger.info("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
