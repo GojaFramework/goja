@@ -13,10 +13,9 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import com.jfinal.kit.PathKit;
-import goja.app.GojaConfig;
 import goja.StringPool;
+import goja.app.GojaConfig;
 import goja.kits.JaxbKit;
-import goja.lang.Lang;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
@@ -101,7 +100,7 @@ public class SqlKit {
         }
         // Search Jar file xml config.
         List<String> jarlist = GojaConfig.getAppJars();
-        if (!Lang.isEmpty(jarlist)) {
+        if (!(jarlist == null || jarlist.isEmpty())) {
             String lib_path = PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib" + File.separator;
 
             JarFile jarFile;
@@ -190,7 +189,7 @@ public class SqlKit {
         // Monitoring the jar file
 
         List<String> jarlist = GojaConfig.getAppJars();
-        if (!Lang.isEmpty(jarlist)) {
+        if (!(jarlist == null || jarlist.isEmpty())) {
             String jar_path = PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib" + File.separator;
             final FileAlterationObserver observer = new FileAlterationObserver(jar_path);
             observer.addListener(SqlXmlFileListener.me);

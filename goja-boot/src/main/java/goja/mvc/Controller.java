@@ -21,7 +21,6 @@ import com.oreilly.servlet.multipart.FileRenamePolicy;
 import goja.Func;
 import goja.dao.Dao;
 import goja.kits.base.DateKit;
-import goja.lang.Lang;
 import goja.logging.Logger;
 import goja.mvc.kit.Requests;
 import goja.mvc.render.BadRequest;
@@ -174,7 +173,7 @@ public class Controller extends com.jfinal.core.Controller {
 
 
     protected <T> void renderAjaxSuccess(List<T> list){
-        if (Lang.isEmpty(list)) {
+        if (list == null || list.isEmpty()) {
             renderJson(AjaxMessage.nodata());
         } else {
             renderJson(AjaxMessage.ok(list));

@@ -7,20 +7,20 @@
 package goja.job;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
-import goja.app.GojaConfig;
 import goja.annotation.Every;
 import goja.annotation.On;
 import goja.annotation.OnApplicationStart;
 import goja.annotation.OnApplicationStop;
+import goja.app.GojaConfig;
 import goja.app.GojaPropConst;
 import goja.exceptions.GojaException;
 import goja.exceptions.UnexpectedException;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
-import goja.lang.Lang;
 import goja.libs.Expression;
 import goja.libs.PThreadFactory;
 import goja.libs.Time;
@@ -65,12 +65,12 @@ public class JobsPlugin implements IPlugin {
             cron = GojaConfig.getProperty(cron);
         }
         final Object eval = Expression.evaluate(cron, cron);
-        if (Lang.isEmpty(eval)) {
+        if (eval == null) {
             logger.error("the jon cron is null.");
             return;
         }
         cron = eval.toString();
-        if (Lang.isEmpty(cron) || "never".equalsIgnoreCase(cron)) {
+        if (Strings.isNullOrEmpty(cron) || "never".equalsIgnoreCase(cron)) {
             logger.info("Skipping job %s, cron expression is not defined", job.getClass().getName());
             return;
         }
@@ -101,7 +101,7 @@ public class JobsPlugin implements IPlugin {
     public boolean start() {
         // fixed: If the configuration to start the JOB, but there is no JOB class, not to start.
         final List<Class> job_classes = ClassBox.getInstance().getClasses(ClassType.JOB);
-        if (Lang.isEmpty(job_classes)) {
+        if (job_classes == null || job_classes.isEmpty()) {
             return true;
         } else {
             List<Class> jobClasses = Lists.newArrayList(Collections2.filter(job_classes, JOB_CLASS_PREDICATE));
@@ -194,7 +194,7 @@ public class JobsPlugin implements IPlugin {
     @Override
     public boolean stop() {
 
-        if (!Lang.isEmpty(applicationStopJobs)) {
+        if (!(applicationStopJobs== null || applicationStopJobs.isEmpty())) {
             for (Class clazz : applicationStopJobs) {
                 try {
                     Job<?> job = ((Job<?>) clazz.newInstance());

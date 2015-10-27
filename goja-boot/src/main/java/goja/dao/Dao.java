@@ -10,7 +10,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import goja.StringPool;
-import goja.castor.Castors;
 import goja.plugins.sqlinxml.SqlKit;
 import goja.rapid.datatables.DTCriterias;
 import goja.rapid.datatables.DTDao;
@@ -35,21 +34,6 @@ public abstract class Dao {
     public static final String SQL_PIRFIX_WHERE   = ".where";
     public static final String SQL_PIRFIX_COLUMNS = ".column";
 
-
-    /**
-     * Gets the data values by specifying the data type, and automatically convert types
-     *
-     * @param m    Model
-     * @param attr database table field.
-     * @param cls  data type.
-     * @param <T>  specifying the data type.
-     * @param <M>  model type.
-     * @return data value.
-     */
-    public static <T, M extends Model> T getData(M m, String attr, Class<T> cls) {
-        Object value = m.get(attr);
-        return Castors.me().castTo(value, cls);
-    }
 
 
     /**

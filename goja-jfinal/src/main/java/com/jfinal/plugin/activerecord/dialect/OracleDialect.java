@@ -224,7 +224,7 @@ public class OracleDialect extends Dialect {
         boolean show_param = GojaConfig.getApplicationMode().isDev();
 		final int param_size = paras.size();
 		if (show_param) {
-			logger.debug("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
+			logger.info("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
 
 			for (int i = 0; i < param_size; i++) {
 				final Object value = paras.get(i);
@@ -236,9 +236,9 @@ public class OracleDialect extends Dialect {
 					pst.setTimestamp(i + 1, new Timestamp(((Date)value).getTime()));
 				else
 					pst.setObject(i + 1, value);
-				logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (value == null ? "null" : value.getClass().getSimpleName()), value);
+				logger.info("   param index: {}, param type: {}, param value: {}. ", i + 1, (value == null ? "null" : value.getClass().getSimpleName()), value);
 			}
-			logger.debug("Sql param end!");
+			logger.info("Sql param end!");
 		} else {
 			for (int i = 0; i < param_size; i++) {
 				Object value = paras.get(i);
@@ -254,14 +254,15 @@ public class OracleDialect extends Dialect {
 		}
         /* # end edited. */
 	}
-	
+
+    @Override
 	public void fillStatement(PreparedStatement pst, Object... paras) throws SQLException {
 		 /* # edit by sogyf. */
         /* @description:  when dev model print sql parm*/
         boolean show_param = GojaConfig.getApplicationMode().isDev();
 		final int param_size = paras.length;
 		if (show_param) {
-			logger.debug("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
+			logger.info("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
 
 			for (int i = 0; i < param_size; i++) {
 				final Object value = paras[i];
@@ -275,9 +276,9 @@ public class OracleDialect extends Dialect {
 					pst.setTimestamp(i + 1, new Timestamp(((Date)value).getTime()));
 				else
 					pst.setObject(i + 1, value);
-				logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (value == null ? "null" : value.getClass().getSimpleName()), value);
+				logger.info("   param index: {}, param type: {}, param value: {}. ", i + 1, (value == null ? "null" : value.getClass().getSimpleName()), value);
 			}
-			logger.debug("Sql param end!");
+			logger.info("Sql param end!");
 		} else {
 			for (int i = 0; i < param_size; i++) {
 				Object value = paras[i];

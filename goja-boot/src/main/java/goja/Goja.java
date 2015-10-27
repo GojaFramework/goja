@@ -66,7 +66,6 @@ import goja.plugins.quartz.QuartzPlugin;
 import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.sqlinxml.SqlInXmlPlugin;
-import goja.plugins.sqlmap.SqlMapPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
@@ -381,9 +380,6 @@ public class Goja extends JFinalConfig {
 
         if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLINXML, true)) {
             plugins.add(new SqlInXmlPlugin());
-        }
-        if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLMAP, true)) {
-            plugins.add(new SqlMapPlugin());
         }
 
     }

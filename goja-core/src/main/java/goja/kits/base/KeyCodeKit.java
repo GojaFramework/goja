@@ -6,9 +6,10 @@
 
 package goja.kits.base;
 
+import goja.StringPool;
 import goja.encry.EncodeKit;
-import goja.lang.Lang;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import sun.misc.BASE64Encoder;
 
@@ -33,8 +34,8 @@ public class KeyCodeKit {
      * @return 授权码
      */
     public static String generateKeyCode(String productSerialNo, String codeKey) {
-        return digestPassword(Lang.limitLenStr(productSerialNo, 10)
-                + Lang.limitLenStr(codeKey, 5)
+        return digestPassword(StringUtils.leftPad(productSerialNo, 10, StringPool.ZERO)
+                                      + StringUtils.leftPad(codeKey, 5, StringPool.ZERO)
                 + RandomStringUtils.randomAlphanumeric(5)
                 + DateTime.now().getMillis());
     }

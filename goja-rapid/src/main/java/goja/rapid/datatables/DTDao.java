@@ -2,9 +2,13 @@ package goja.rapid.datatables;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.jfinal.plugin.activerecord.*;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.Table;
+import com.jfinal.plugin.activerecord.TableMapping;
 import goja.StringPool;
-import goja.lang.Lang;
 import goja.rapid.db.Condition;
 import goja.tuples.Triplet;
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +73,7 @@ public final class DTDao {
         }
 
         final List<DTOrder> order = criterias.getOrder();
-        if (!Lang.isEmpty(order)) {
+        if (order != null && !order.isEmpty()) {
             StringBuilder orderBy = new StringBuilder();
             for (DTOrder _order : order)
                 orderBy.append(_order.getColumn()).append(StringPool.SPACE).append(_order.getDir());
@@ -79,7 +83,7 @@ public final class DTDao {
             }
         }
 
-        if (Lang.isEmpty(params)) {
+        if (params == null || params.isEmpty()) {
             return Db.paginate(start, pageSize, sql_columns, where_sql.toString());
         } else {
 
@@ -104,7 +108,7 @@ public final class DTDao {
         final List<DTColumn> columns = criterias.getColumns();
 
         String sql_columns = null;
-        if (!Lang.isEmpty(columns)) {
+        if (!(columns == null || columns.isEmpty())) {
             StringBuilder sql_builder = new StringBuilder("SELECT ");
             boolean first = false;
             for (DTColumn column : columns) {
@@ -153,7 +157,7 @@ public final class DTDao {
 
 
         final List<DTOrder> order = criterias.getOrder();
-        if (!Lang.isEmpty(order)) {
+        if (!(order == null || order.isEmpty())) {
             StringBuilder orderBy = new StringBuilder();
             for (DTOrder _order : order)
                 orderBy.append(_order.getColumn()).append(SPACE).append(_order.getDir());

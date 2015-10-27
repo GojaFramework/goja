@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.UUID;
 
 /**
  * <p>
@@ -118,9 +117,5 @@ public class EncodeKit {
         } catch (UnsupportedEncodingException e) {
             throw ExceptionKit.unchecked(e);
         }
-    }
-
-    public static String toUUID() {
-        return UUID.randomUUID().toString();
     }
 }

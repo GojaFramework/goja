@@ -14,7 +14,6 @@ import com.google.common.collect.Ordering;
 import com.jfinal.kit.PathKit;
 import goja.app.GojaConfig;
 import goja.cache.Cache;
-import goja.castor.Castors;
 import goja.initialize.ctxbox.ClassFinder;
 import goja.logging.LoggerInit;
 import org.apache.commons.io.FileUtils;
@@ -87,8 +86,6 @@ public class GojaInitializer implements ServletContainerInitializer {
         // 支持异步请求处理
         jfinalFilter.setAsyncSupported(true);
 
-        // 初始化几个需要常用的工具包
-        Castors.me();
 
         System.out.println("initializer " + app_name + " Application ok!");
         if (GojaConfig.getApplicationMode().isDev()) {

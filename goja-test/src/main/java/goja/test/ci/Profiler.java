@@ -2,7 +2,6 @@ package goja.test.ci;
 
 import com.google.common.collect.Lists;
 import goja.StringPool;
-import goja.lang.Lang;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -199,20 +198,6 @@ public final class Profiler {
         return 0;
     }
 
-    /**
-     * 结束最近的一个step，记录结束时间。
-     *
-     * @param loopCount        循环变量,用于计算TPS(每秒事务处理量Transaction Per Second)
-     * @param e                异常，得到方法执行的异常
-     * @param resultSizeObject 用于得到resultSize的object对象
-     */
-    public static void release(Throwable e, long loopCount, Object resultSizeObject) {
-        Step currentStep = getCurrentStep();
-
-        if (currentStep != null) {
-            currentStep.release(e, loopCount, Lang.length(resultSizeObject));
-        }
-    }
 
     /**
      * 取得耗费的总时间。

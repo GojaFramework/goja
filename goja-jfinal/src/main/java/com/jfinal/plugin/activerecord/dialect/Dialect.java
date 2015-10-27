@@ -87,7 +87,7 @@ public abstract class Dialect {
 		final int param_size = paras.size();
 		boolean show_param = GojaConfig.getApplicationMode().isDev();
 		if (show_param) {
-			logger.debug("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
+			logger.info("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
 
 			for (int i = 0; i < param_size; i++) {
 				final Object param = paras.get(i);
@@ -97,7 +97,7 @@ public abstract class Dialect {
 				    pst.setObject(i + 1, param);
 				logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
 			}
-			logger.debug("Sql param end!");
+			logger.info("Sql param end!");
 		} else {
 			for (int i = 0; i < param_size; i++) {
                 final Object param = paras.get(i);
@@ -116,7 +116,7 @@ public abstract class Dialect {
         boolean show_param = GojaConfig.getApplicationMode().isDev();
 		final int param_size = paras.length;
 		if (show_param) {
-			logger.debug("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
+			logger.info("Sql param size : {}", param_size == 0 ? " Empty" : param_size);
 
 			for (int i = 0; i < param_size; i++) {
 				final Object param = paras[i];
@@ -124,9 +124,9 @@ public abstract class Dialect {
                     pst.setTimestamp(i + 1, new Timestamp(((DateTime) param).getMillis()));
                 else
                     pst.setObject(i + 1, param);
-				logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
+				logger.info("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
 			}
-			logger.debug("Sql param end!\n");
+			logger.info("Sql param end!\n");
 		} else {
 			for (int i = 0; i < param_size; i++) {
                 final Object param = paras[i];

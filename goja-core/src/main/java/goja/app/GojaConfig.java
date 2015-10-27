@@ -8,7 +8,6 @@ import goja.Func;
 import goja.StringPool;
 import goja.kits.io.PropKit;
 import goja.kits.io.ResourceKit;
-import goja.lang.Lang;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -202,10 +201,8 @@ public final class GojaConfig {
         Map<String, Properties> dbConfigs = Maps.newHashMapWithExpectedSize(1);
         for (Object o : p.keySet()) {
             String _key = String.valueOf(o);
-            Object value = p.get(o);
-            if (Lang.isEmpty(value)) {
-                continue;
-            }
+            String value = p.getProperty(_key);
+
             if (StringUtils.startsWithIgnoreCase(_key, "db")) {
                 int last_idx = _key.lastIndexOf(StringPool.DOT);
                 if (last_idx > 2) {
