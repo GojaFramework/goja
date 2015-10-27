@@ -4,7 +4,7 @@
 package goja.rapid.upload.filerenamepolicy;
 
 import com.jfinal.kit.HashKit;
-import goja.kits.base.Strs;
+import goja.core.kits.base.Strs;
 
 import java.io.File;
 

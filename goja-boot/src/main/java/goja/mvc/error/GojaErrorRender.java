@@ -14,8 +14,8 @@ import com.jfinal.core.JFinal;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
-import goja.StringPool;
-import goja.app.GojaConfig;
+import goja.core.StringPool;
+import goja.core.app.GojaConfig;
 import goja.mvc.Freemarkers;
 
 import java.io.IOException;

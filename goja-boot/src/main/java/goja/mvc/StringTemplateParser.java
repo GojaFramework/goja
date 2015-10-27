@@ -3,7 +3,7 @@
 package goja.mvc;
 
 
-import goja.StringPool;
+import goja.core.StringPool;
 
 import java.util.Map;
 

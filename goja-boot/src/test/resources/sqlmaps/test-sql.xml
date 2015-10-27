@@ -9,4 +9,10 @@
     <sql id="slqinxml">
       SELECT * FROM table_abc
     </sql>
+
+    <sql id="xxx">
+
+
+
+    </sql>
 </sqlGroup>

@@ -1,8 +1,8 @@
 package goja.rapid.db;
 
-import static goja.StringPool.EMPTY;
-import static goja.StringPool.LEFT_BRACKET;
-import static goja.StringPool.RIGHT_BRACKET;
+import static goja.core.StringPool.EMPTY;
+import static goja.core.StringPool.LEFT_BRACKET;
+import static goja.core.StringPool.RIGHT_BRACKET;
 
 /**
  * <p> </p>

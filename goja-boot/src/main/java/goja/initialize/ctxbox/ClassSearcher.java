@@ -17,8 +17,8 @@ package goja.initialize.ctxbox;
 
 import com.google.common.collect.Lists;
 import com.jfinal.kit.PathKit;
-import goja.StringPool;
-import goja.kits.reflect.Reflect;
+import goja.core.StringPool;
+import goja.core.kits.reflect.Reflect;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

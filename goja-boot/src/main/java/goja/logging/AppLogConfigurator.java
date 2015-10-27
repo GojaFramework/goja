@@ -19,8 +19,8 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.status.InfoStatus;
 import ch.qos.logback.core.status.StatusManager;
 import com.google.common.base.Charsets;
-import goja.app.GojaConfig;
-import goja.app.GojaPropConst;
+import goja.core.app.GojaConfig;
+import goja.core.app.GojaPropConst;
 import org.apache.commons.lang3.StringUtils;
 
 /**

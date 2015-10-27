@@ -26,7 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import static goja.StringPool.SLASH;
+import static goja.core.StringPool.SLASH;
 
 /**
  * Shiro插件，启动时加载所有Shiro访问控制注解。

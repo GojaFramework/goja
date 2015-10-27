@@ -6,13 +6,13 @@
 
 package goja;
 
-import goja.app.ApplicationMode;
-import goja.app.GojaConfig;
-import goja.exceptions.GojaException;
-import goja.exceptions.UnexpectedException;
-import goja.libs.Action;
-import goja.libs.PThreadFactory;
-import goja.libs.Promise;
+import goja.core.app.ApplicationMode;
+import goja.core.app.GojaConfig;
+import goja.core.exceptions.GojaException;
+import goja.core.exceptions.UnexpectedException;
+import goja.core.libs.Action;
+import goja.core.libs.PThreadFactory;
+import goja.core.libs.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

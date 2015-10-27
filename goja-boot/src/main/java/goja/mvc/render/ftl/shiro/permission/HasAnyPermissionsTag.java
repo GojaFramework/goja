@@ -1,6 +1,6 @@
 package goja.mvc.render.ftl.shiro.permission;
 
-import goja.StringPool;
+import goja.core.StringPool;
 import org.apache.shiro.subject.Subject;
 
 /**

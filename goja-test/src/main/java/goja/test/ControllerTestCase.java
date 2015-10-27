@@ -10,7 +10,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.handler.Handler;
 import goja.Goja;
 import goja.initialize.ctxbox.ClassFinder;
-import goja.kits.reflect.Reflect;
+import goja.core.kits.reflect.Reflect;
 import goja.test.mock.MockHttpRequest;
 import goja.test.mock.MockHttpResponse;
 import goja.test.mock.MockServletContext;

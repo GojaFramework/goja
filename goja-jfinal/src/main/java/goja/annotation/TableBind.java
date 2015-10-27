@@ -6,7 +6,7 @@
 package goja.annotation;
 
 import com.jfinal.plugin.activerecord.DbKit;
-import goja.StringPool;
+import goja.core.StringPool;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

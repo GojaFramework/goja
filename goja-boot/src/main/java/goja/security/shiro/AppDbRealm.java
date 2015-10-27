@@ -7,7 +7,7 @@
 package goja.security.shiro;
 
 import goja.Goja;
-import goja.encry.EncodeKit;
+import goja.core.encry.EncodeKit;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

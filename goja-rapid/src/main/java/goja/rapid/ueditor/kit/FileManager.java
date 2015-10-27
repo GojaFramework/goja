@@ -1,6 +1,6 @@
 package goja.rapid.ueditor.kit;
 
-import goja.StringPool;
+import goja.core.StringPool;
 import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;

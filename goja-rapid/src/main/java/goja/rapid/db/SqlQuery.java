@@ -5,11 +5,11 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 
-import static goja.StringPool.EQUALS;
-import static goja.StringPool.LEFT_BRACKET;
-import static goja.StringPool.QUESTION_MARK;
-import static goja.StringPool.RIGHT_BRACKET;
-import static goja.StringPool.SINGLE_QUOTE;
+import static goja.core.StringPool.EQUALS;
+import static goja.core.StringPool.LEFT_BRACKET;
+import static goja.core.StringPool.QUESTION_MARK;
+import static goja.core.StringPool.RIGHT_BRACKET;
+import static goja.core.StringPool.SINGLE_QUOTE;
 
 /**
  * <p> </p>

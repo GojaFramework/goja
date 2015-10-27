@@ -21,7 +21,7 @@ import static org.apache.shiro.SecurityUtils.getSubject;
  * @version 1.0 2013-10-29 11:05 PM
  * @since JDK 1.5
  */
-public class Securitys {
+public final class Securitys {
     /**
      * Get login user.
      *

@@ -10,7 +10,7 @@ import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
-import goja.StringPool;
+import goja.core.StringPool;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

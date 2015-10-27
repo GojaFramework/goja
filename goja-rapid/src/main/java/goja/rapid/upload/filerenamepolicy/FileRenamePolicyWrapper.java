@@ -4,7 +4,7 @@
 package goja.rapid.upload.filerenamepolicy;
 
 import com.oreilly.servlet.multipart.FileRenamePolicy;
-import goja.StringPool;
+import goja.core.StringPool;
 
 import java.io.File;
 

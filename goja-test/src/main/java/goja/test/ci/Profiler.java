@@ -1,13 +1,13 @@
 package goja.test.ci;
 
 import com.google.common.collect.Lists;
-import goja.StringPool;
+import goja.core.StringPool;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
-import static goja.StringPool.EMPTY;
+import static goja.core.StringPool.EMPTY;
 
 
 /**

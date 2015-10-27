@@ -6,7 +6,6 @@
 
 package goja.mvc;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -18,30 +17,28 @@ import com.jfinal.upload.OreillyCos;
 import com.jfinal.upload.UploadFile;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
-import goja.Func;
+import goja.core.kits.base.DateKit;
 import goja.dao.Dao;
-import goja.kits.base.DateKit;
-import goja.logging.Logger;
 import goja.mvc.kit.Requests;
 import goja.mvc.render.BadRequest;
 import goja.mvc.render.NotModified;
 import goja.rapid.datatables.DTCriterias;
 import goja.rapid.datatables.DTResponse;
+import goja.rapid.easyui.EuiDataGrid;
+import goja.rapid.easyui.req.DataGridReq;
 import goja.rapid.page.PageDto;
 import goja.security.goja.SecurityKit;
 import goja.security.shiro.AppUser;
 import goja.security.shiro.Securitys;
-import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
-import static goja.StringPool.SLASH;
+import static goja.core.StringPool.SLASH;
 
 /**
  * <p>
@@ -365,36 +362,48 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(response);
     }
 
+
     /**
-     * Converting the JSON data Modal.
-     *
-     * @param modelClass model class.
-     * @param <M>        Generic parameter.
-     * @return Modal.
+     * 渲染DataGrid的表格展示，支持排序和搜索
+     * @param modelClass 指定类
      */
-    protected <M extends Model> Optional<M> getModelByJson(Class<? extends M> modelClass) {
-        try {
-            String jsonData = IOUtils.toString(getRequest().getInputStream());
-            if (Strings.isNullOrEmpty(jsonData)) {
-                return Optional.absent();
-            }
-            final Map<String, Object> data_map = JSON.parseObject(jsonData, Func.MAP_TYPE_REFERENCE);
-            if (data_map == null) {
-                return Optional.absent();
-            }
-            M model = modelClass.newInstance();
-            for (String key : data_map.keySet()) {
-                model.set(key, data_map.get(key));
-            }
-            return Optional.of(model);
-        } catch (IOException e) {
-            Logger.error("parse request json has error!", e);
-        } catch (InstantiationException e) {
-            Logger.error("parse request json has error!", e);
-        } catch (IllegalAccessException e) {
-            Logger.error("parse request json has error!", e);
+    protected void renderEasyUIDataGrid(Class<? extends Model> modelClass) {
+        final Optional<DataGridReq> reqOptional = EuiDataGrid.req(getRequest());
+        if (reqOptional.isPresent()) {
+            renderJson(EuiDataGrid.rsp(reqOptional.get(), modelClass));
+        } else {
+            renderJson(EuiDataGrid.EMPTY_DATAGRID);
         }
-        return Optional.absent();
+    }
+
+
+    /**
+     * 渲染DataGrid的表格展示，支持排序和搜索
+     *
+     * @param sqlGroupName 指定SQL管理的GroupName
+     */
+    protected void renderEasyUIDataGrid(String sqlGroupName) {
+        final Optional<DataGridReq> reqOptional = EuiDataGrid.req(getRequest());
+        if (reqOptional.isPresent()) {
+            renderJson(EuiDataGrid.rsp(reqOptional.get(), sqlGroupName));
+        } else {
+            renderJson(EuiDataGrid.EMPTY_DATAGRID);
+        }
+    }
+
+
+    /**
+     * 渲染DataGrid的表格展示，支持排序和搜索
+     *
+     * @param sqlGroupName 指定SQL管理的GroupName
+     */
+    protected void renderEasyUIDataGrid(String sqlGroupName, List<Object> params) {
+        final Optional<DataGridReq> reqOptional = EuiDataGrid.req(getRequest());
+        if (reqOptional.isPresent()) {
+            renderJson(EuiDataGrid.rsp(reqOptional.get(), sqlGroupName, params));
+        } else {
+            renderJson(EuiDataGrid.EMPTY_DATAGRID);
+        }
     }
 
 

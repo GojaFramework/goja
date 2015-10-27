@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.io.Files;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
-import goja.StringPool;
+import goja.core.StringPool;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.State;

@@ -1,6 +1,6 @@
 package goja.rapid.ueditor.kit;
 
-import goja.StringPool;
+import goja.core.StringPool;
 import org.joda.time.DateTime;
 
 import java.util.regex.Matcher;

@@ -7,11 +7,11 @@ import com.google.common.primitives.Ints;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import goja.StringPool;
-import goja.kits.base.Strs;
+import goja.core.StringPool;
+import goja.core.kits.base.Strs;
 import goja.rapid.db.Condition;
-import goja.tuples.Pair;
-import goja.tuples.Triplet;
+import goja.core.tuples.Pair;
+import goja.core.tuples.Triplet;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 

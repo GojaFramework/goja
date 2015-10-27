@@ -7,7 +7,7 @@
 package goja;
 
 import com.google.common.collect.Lists;
-import goja.Func;
+import goja.core.Func;
 import org.junit.Assert;
 import org.junit.Test;
 

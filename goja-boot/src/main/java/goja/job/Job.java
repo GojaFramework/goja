@@ -7,8 +7,8 @@
 package goja.job;
 
 import goja.Invoker;
-import goja.libs.Promise;
-import goja.libs.Time;
+import goja.core.libs.Promise;
+import goja.core.libs.Time;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;

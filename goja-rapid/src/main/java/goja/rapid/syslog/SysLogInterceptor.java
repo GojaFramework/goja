@@ -13,7 +13,7 @@ import com.google.common.io.Files;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
-import goja.StringPool;
+import goja.core.StringPool;
 import goja.rapid.syslog.config.LogPathConfig;
 import org.apache.commons.lang3.StringUtils;
 

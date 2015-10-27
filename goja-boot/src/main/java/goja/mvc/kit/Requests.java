@@ -7,7 +7,7 @@
 package goja.mvc.kit;
 
 import com.google.common.base.Strings;
-import goja.StringPool;
+import goja.core.StringPool;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

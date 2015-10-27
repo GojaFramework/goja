@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
-import static goja.StringPool.EMPTY;
+import static goja.core.StringPool.EMPTY;
 
 /**
  * <p> ajax请求返回信息 </p>

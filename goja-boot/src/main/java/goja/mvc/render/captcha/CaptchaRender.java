@@ -10,7 +10,7 @@ import com.jfinal.core.Const;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StrKit;
 import com.jfinal.render.Render;
-import goja.StringPool;
+import goja.core.StringPool;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;

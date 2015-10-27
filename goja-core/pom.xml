@@ -15,6 +15,13 @@
     <dependencies>
         <!-- view template -->
         <dependency>
+            <groupId>com.github.sogyf</groupId>
+            <artifactId>goja-jfinal</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- view template -->
+        <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>

@@ -8,7 +8,7 @@ package goja.mvc.auto;
 import com.google.common.base.Preconditions;
 import com.jfinal.config.Routes;
 import com.jfinal.kit.StrKit;
-import goja.StringPool;
+import goja.core.StringPool;
 import goja.annotation.ControllerBind;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;

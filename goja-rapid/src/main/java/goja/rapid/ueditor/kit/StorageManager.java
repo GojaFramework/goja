@@ -3,9 +3,9 @@ package goja.rapid.ueditor.kit;
 
 import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
-import goja.StringPool;
-import goja.app.GojaConfig;
-import goja.app.GojaPropConst;
+import goja.core.StringPool;
+import goja.core.app.GojaConfig;
+import goja.core.app.GojaPropConst;
 import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;

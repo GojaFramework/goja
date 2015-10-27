@@ -8,15 +8,15 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
-import goja.StringPool;
+import goja.core.StringPool;
 import goja.rapid.db.Condition;
-import goja.tuples.Triplet;
+import goja.core.tuples.Triplet;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import static goja.StringPool.COMMA;
-import static goja.StringPool.SPACE;
+import static goja.core.StringPool.COMMA;
+import static goja.core.StringPool.SPACE;
 
 /**
  * <p> Jquery datatables database query retrieval </p>

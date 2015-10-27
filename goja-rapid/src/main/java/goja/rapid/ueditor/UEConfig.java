@@ -2,9 +2,9 @@ package goja.rapid.ueditor;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import goja.StringPool;
-import goja.app.GojaConfig;
-import goja.app.GojaPropConst;
+import goja.core.StringPool;
+import goja.core.app.GojaConfig;
+import goja.core.app.GojaPropConst;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

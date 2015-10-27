@@ -5,8 +5,8 @@ package goja.rapid.upload.filerenamepolicy;
 
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.StrKit;
-import goja.app.GojaConfig;
-import goja.kits.base.Strs;
+import goja.core.app.GojaConfig;
+import goja.core.kits.base.Strs;
 import org.joda.time.DateTime;
 
 import java.io.File;

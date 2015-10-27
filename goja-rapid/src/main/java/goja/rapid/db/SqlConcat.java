@@ -1,6 +1,6 @@
 package goja.rapid.db;
 
-import static goja.StringPool.EMPTY;
+import static goja.core.StringPool.EMPTY;
 
 /**
  * <p> </p>

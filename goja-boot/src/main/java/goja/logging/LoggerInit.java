@@ -2,8 +2,8 @@ package goja.logging;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.jfinal.kit.PathKit;
-import goja.app.GojaConfig;
-import goja.StringPool;
+import goja.core.app.GojaConfig;
+import goja.core.StringPool;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;

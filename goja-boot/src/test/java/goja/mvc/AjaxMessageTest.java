@@ -6,8 +6,8 @@
 
 package goja.mvc;
 
-import goja.StringPool;
-import goja.tuples.Pair;
+import goja.core.StringPool;
+import goja.core.tuples.Pair;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

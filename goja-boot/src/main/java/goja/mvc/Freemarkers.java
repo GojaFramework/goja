@@ -16,7 +16,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import goja.Goja;
 import goja.logging.Logger;
-import goja.StringPool;
+import goja.core.StringPool;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;

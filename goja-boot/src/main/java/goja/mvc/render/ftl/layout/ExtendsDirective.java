@@ -15,7 +15,7 @@ import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
-import goja.StringPool;
+import goja.core.StringPool;
 import goja.mvc.render.ftl.kit.DirectiveKit;
 
 import java.io.IOException;

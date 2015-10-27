@@ -6,7 +6,7 @@
 
 package goja.mvc.render.ftl.shiro.role;
 
-import goja.StringPool;
+import goja.core.StringPool;
 import org.apache.shiro.subject.Subject;
 
 /**

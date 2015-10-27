@@ -1,9 +1,9 @@
 package goja.test;
 
 import goja.Goja;
-import goja.app.GojaConfig;
+import goja.core.app.GojaConfig;
 import goja.initialize.ctxbox.ClassFinder;
-import goja.kits.reflect.Reflect;
+import goja.core.kits.reflect.Reflect;
 import org.junit.BeforeClass;
 
 /**
