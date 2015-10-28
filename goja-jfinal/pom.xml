@@ -41,7 +41,7 @@
 
 
         <dependency>
-            <groupId>com.google.guava</groupId>
+            <groupId>com.goshogle.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
@@ -108,13 +108,17 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>${jedis.version}</version>
-            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-pool2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.ruedigermoeller</groupId>
             <artifactId>fst</artifactId>
             <version>2.29</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
