@@ -16,9 +16,9 @@ public class DataGridRsp implements Serializable {
 
     private static final long serialVersionUID = -6577065924384706107L;
 
-    public final int total;
+    private final int total;
 
-    public final List<Record> rows;
+    private final List<Record> rows;
 
     private DataGridRsp(int total, List<Record> rows) {
         this.total = total;
@@ -46,4 +46,11 @@ public class DataGridRsp implements Serializable {
         }
     }
 
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Record> getRows() {
+        return rows;
+    }
 }
