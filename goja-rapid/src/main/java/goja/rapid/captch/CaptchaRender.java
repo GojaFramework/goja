@@ -21,6 +21,7 @@ import com.jfinal.render.Render;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,6 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * <p> </p>
@@ -44,49 +44,37 @@ public class CaptchaRender extends Render {
     private static final Logger logger = LoggerFactory.getLogger(CaptchaRender.class);
 
 
-    private String code          = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
-    private int    font_min_num  = 4;
-    private int    font_max_num  = 4;
-    private int    font_min_size = 20;
-    private int    font_max_size = 20;
-    private double x_amplitude   = 1.6;
-    private double y_amplitude   = 0.8;
-    private int    top_margin    = 1;
-    private int    bottom_margin = 1;
-    private int    width         = 118;
-    private int    height        = 41;
-
-    private        ConfigurableCaptchaService configurableCaptchaService = new ConfigurableCaptchaService();
-    private        BackgroundFactory          backgroundFactory          = null;
-    //滤镜特效
-    private        FilterFactory              filter                     = null;
-    private static Random                     random                     = new Random();
-    /**
-     * 背景色
-     */
-    private        Color                      bgColor                    = null;
-
-    /**
-     * 验证码字符颜色
-     */
-    private Color drawColor   = new Color(0, 0, 0);
-    /**
-     * 背景元素的颜色
-     */
-    private Color drawBgColor = new Color(102, 102, 102);
-
-    private boolean randomColor = false;
-    /**
-     * 噪点数量
-     */
-    private int     artifactNum = 50;
-
-    private int lineNum = 0;
+    private final ConfigurableCaptchaService configurableCaptchaService = new ConfigurableCaptchaService();
 
 
     public static String captchStore = GojaConfig.getProperty("app.captch.store", "cookie");
 
-    private void initCaptchService() {
+
+    /**
+     * @param backgroundFactory 背景颜色工厂
+     * @param filter 滤镜特效
+     * @param bgColor 背景色
+     * @param drawColor 验证码字符颜色
+     * @param drawBgColor 背景元素的颜色
+     * @param randomColor 随机颜色
+     * @param artifactNum 噪点数量
+     * @param lineNum 线条数量
+     * @param fontMinNum 最小字数
+     * @param fontMaxNum 自大字数
+     * @param fontMinSize 最小字体大小
+     * @param fontMaxSize 最大字体大小
+     * @param width 宽
+     * @param height 高
+     * @param topMargin 顶部边距
+     * @param bottomMargin 底步边距
+     * @param code 字符
+     */
+    private CaptchaRender(BackgroundFactory backgroundFactory, FilterFactory filter,
+                          Color bgColor, final Color drawColor, Color drawBgColor,
+                          boolean randomColor, int artifactNum, int lineNum,
+                          int fontMinNum, int fontMaxNum, int fontMinSize, int fontMaxSize,
+                          int width, int height, int topMargin, int bottomMargin, String code) {
+
 
         // 颜色创建工厂,使用一定范围内的随机色
 
@@ -105,15 +93,15 @@ public class CaptchaRender extends Render {
 
         // 随机字体生成器
         RandomFontFactory fontFactory = new RandomFontFactory();
-        fontFactory.setMaxSize(font_max_size);
-        fontFactory.setMinSize(font_min_size);
+        fontFactory.setMaxSize(fontMaxSize);
+        fontFactory.setMinSize(fontMinSize);
         configurableCaptchaService.setFontFactory(fontFactory);
 
         // 随机字符生成器,去除掉容易混淆的字母和数字,如o和0等
         RandomWordFactory wordFactory = new RandomWordFactory();
         wordFactory.setCharacters(code);
-        wordFactory.setMaxLength(font_max_num);
-        wordFactory.setMinLength(font_min_num);
+        wordFactory.setMaxLength(fontMaxNum);
+        wordFactory.setMinLength(fontMinNum);
         configurableCaptchaService.setWordFactory(wordFactory);
 
         // 自定义验证码图片背景
@@ -123,11 +111,7 @@ public class CaptchaRender extends Render {
         configurableCaptchaService.setBackgroundFactory(backgroundFactory);
 
         // 图片滤镜设置
-        int filterNum;
-        if (filter == null) {
-            filterNum = random.nextInt(4);
-        } else
-            filterNum = filter.value();
+        int filterNum = filter == null ? RandomUtils.nextInt(4) : filter.value();
 
         switch (filterNum) {
             case 0:
@@ -153,13 +137,14 @@ public class CaptchaRender extends Render {
 
         // 文字渲染器设置
         TextRenderer textRenderer = new BestFitTextRenderer();
-        textRenderer.setBottomMargin(bottom_margin);
-        textRenderer.setTopMargin(top_margin);
+        textRenderer.setBottomMargin(bottomMargin);
+        textRenderer.setTopMargin(topMargin);
         configurableCaptchaService.setTextRenderer(textRenderer);
 
         // 验证码图片的大小
         configurableCaptchaService.setWidth(width);
         configurableCaptchaService.setHeight(height);
+
     }
 
     /**
@@ -172,7 +157,6 @@ public class CaptchaRender extends Render {
         response.setDateHeader("Expires", 0);
         response.setContentType("image/jpeg");
         //初始化
-        initCaptchService();
         ServletOutputStream outputStream = null;
 
         // 得到验证码对象,有验证码图片和验证码字符串
@@ -241,78 +225,131 @@ public class CaptchaRender extends Render {
     }
 
 
-    public BackgroundFactory getBackgroundFactory() {
-        return backgroundFactory;
-    }
+    public static class Builder {
+        private BackgroundFactory backgroundFactory;
 
-    public void setBackgroundFactory(BackgroundFactory backgroundFactory) {
-        this.backgroundFactory = backgroundFactory;
-    }
-
-    public Color getDrawColor() {
-        return drawColor;
-    }
-
-    public void setDrawColor(Color drawColor) {
-        this.drawColor = drawColor;
-    }
-
-    public Color getDrawBgColor() {
-        return drawBgColor;
-    }
-
-    public void setDrawBgColor(Color drawBgColor) {
-        this.drawBgColor = drawBgColor;
-    }
-
-    public Color getBgColor() {
-        return bgColor;
-    }
-
-    public void setBgColor(Color bgColor) {
-        this.bgColor = bgColor;
-    }
-
-    public void setFontNum(int font_min_num, int font_max_num) {
-        this.font_min_num = font_min_num;
-        this.font_max_num = font_max_num;
-    }
+        private Color drawColor   = new Color(0, 0, 0);
+        private Color drawBgColor = new Color(102, 102, 102);
+        private Color bgColor;
 
 
-    public void setFontSize(int font_min_size, int font_max_size) {
-        this.font_min_size = font_min_size;
-        this.font_max_size = font_max_size;
+        private String code         = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
+        private int    fontMinNum   = 4;
+        private int    fontMaxNum   = 4;
+        private int    fontMinSize  = 20;
+        private int    fontMaxSize  = 20;
+        private int    topMargin    = 1;
+        private int    bottomMargin = 1;
+        private int    width        = 118;
+        private int    height       = 41;
+
+        private int artifactNum = 50;
+        private int lineNum     = 0;
+
+
+        private FilterFactory filter;
+
+        private boolean randomColor = false;
+
+        public Builder backgroundFactory(BackgroundFactory backgroundFactory) {
+            this.backgroundFactory = backgroundFactory;
+            return this;
+        }
+
+        public Builder drawColor(Color drawColor) {
+            this.drawColor = drawColor;
+            return this;
+        }
+
+        public Builder drawBgColor(Color drawBgColor) {
+            this.drawBgColor = drawBgColor;
+            return this;
+        }
+
+        public Builder bgColor(Color bgColor) {
+            this.bgColor = bgColor;
+            return this;
+        }
+
+        public Builder fontMinNum(int fontMinNum) {
+            this.fontMinNum = fontMinNum;
+            return this;
+        }
+
+        public Builder fontMaxNum(int fontMaxNum) {
+            this.fontMaxNum = fontMaxNum;
+            return this;
+        }
+
+        public Builder fontMinSize(int fontMinSize) {
+            this.fontMinSize = fontMinSize;
+            return this;
+        }
+
+        public Builder fontMaxSize(int fontMaxSize) {
+            this.fontMaxSize = fontMaxSize;
+            return this;
+        }
+
+        public Builder topMargin(int topMargin) {
+            this.topMargin = topMargin;
+            return this;
+        }
+
+        public Builder bottomMargin(int bottomMargin) {
+            this.bottomMargin = bottomMargin;
+            return this;
+        }
+
+        public Builder width(int width) {
+            this.width = width;
+            return this;
+        }
+
+        public Builder height(int height) {
+            this.height = height;
+            return this;
+        }
+
+        /**
+         * @param artifactNum 噪点数量
+         * @return 噪点数量
+         */
+        public Builder artifactNum(int artifactNum) {
+            this.artifactNum = artifactNum;
+            return this;
+        }
+
+        public Builder lineNum(int lineNum) {
+            this.lineNum = lineNum;
+            return this;
+        }
+
+        public Builder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public Builder filter(FilterFactory filter) {
+            this.filter = filter;
+            return this;
+        }
+
+        public Builder randomColor(boolean randomColor) {
+            this.randomColor = randomColor;
+            return this;
+        }
+
+        public CaptchaRender build() {
+            return new CaptchaRender(backgroundFactory, filter, bgColor, drawColor, drawBgColor, randomColor,
+                                     artifactNum, lineNum,
+                                     fontMinNum, fontMaxNum, fontMinSize, fontMaxSize,
+                                     width, height, topMargin, bottomMargin, code);
+        }
+
+
     }
 
-    public void setFontMargin(int top_margin, int bottom_margin) {
-        this.top_margin = top_margin;
-        this.bottom_margin = bottom_margin;
-    }
-
-    public void setImgSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    public void setArtifactNum(int artifactNum) {
-        this.artifactNum = artifactNum;
-    }
-
-    public void setLineNum(int lineNum) {
-        this.lineNum = lineNum;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setFilter(FilterFactory filter) {
-        this.filter = filter;
-    }
-
-    public void setRandomColor(boolean randomColor) {
-        this.randomColor = randomColor;
-    }
 
     public enum FilterFactory {
         //曲面
