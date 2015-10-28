@@ -24,6 +24,7 @@ import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
+import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
 import com.jfinal.plugin.activerecord.dialect.OracleDialect;
 import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
@@ -46,6 +47,7 @@ import goja.core.app.GojaPropConst;
 import goja.core.cache.Cache;
 import goja.core.cache.EhCacheImpl;
 import goja.core.exceptions.DatabaseException;
+import goja.core.sqlinxml.SqlInXmlPlugin;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
 import goja.job.JobsPlugin;
@@ -66,7 +68,6 @@ import goja.plugins.monogo.MongoPlugin;
 import goja.plugins.quartz.QuartzPlugin;
 import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
-import goja.core.sqlinxml.SqlInXmlPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
@@ -74,6 +75,7 @@ import goja.security.shiro.SecurityUserData;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
+import org.snaker.jfinal.plugin.SnakerPlugin;
 import redis.clients.jedis.Protocol;
 
 import javax.servlet.http.HttpServletRequest;
@@ -186,14 +188,14 @@ public class Goja extends JFinalConfig {
         // fixed: https://github.com/GojaFramework/goja/issues/4
         started = true;
 
+        initDataSource(plugins);
+
+
         if (new File(PathKit.getRootClassPath() + File.separator + "ehcache.xml").exists()) {
             plugins.add(new EhCachePlugin());
         } else {
             plugins.add(new EhCachePlugin(EhCacheImpl.getInstance().getCacheManager()));
         }
-
-
-        initDataSource(plugins);
 
         if (GojaConfig.isSecurity()) {
             plugins.add(new ShiroPlugin(this._routes));
@@ -371,11 +373,21 @@ public class Goja extends JFinalConfig {
      */
     private void initDataSource(final Plugins plugins) {
 
+
+        final boolean snakerFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_SNAKER, false);
+        final String snalkerDb = GojaConfig.getProperty(GojaPropConst.APP_SNAKER + ".db", DbKit.MAIN_CONFIG_NAME);
+
         final Map<String, Properties> dbConfig = GojaConfig.loadDBConfig(GojaConfig.getConfigProps());
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
             if (db_props != null && !db_props.isEmpty()) {
-                configDatabasePlugins(db_config, plugins, db_props);
+
+
+                final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
+                // 如果配置启动了工作流引擎
+                if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
+                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin.getDataSource());
+                }
             }
         }
 
@@ -392,7 +404,7 @@ public class Goja extends JFinalConfig {
      * @param plugins    the jfinal plugins.
      * @param dbProp     数据库配置
      */
-    private void configDatabasePlugins(String configName, final Plugins plugins, Properties dbProp) {
+    private DruidPlugin configDatabasePlugins(String configName, final Plugins plugins, Properties dbProp) {
 
 
         String dbUrl = dbProp.getProperty(GojaPropConst.DBURL),
@@ -480,7 +492,9 @@ public class Goja extends JFinalConfig {
             atbp.setShowSql(GojaConfig.getApplicationMode().isDev());
             plugins.add(atbp);
 
+            return druidPlugin;
         }
+        return null;
     }
 
 

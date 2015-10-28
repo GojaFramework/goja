@@ -81,6 +81,10 @@ public interface GojaPropConst {
      * 默认的文件上传路径
      */
     String APP_UPLOAD_PATH   = "app.upload.path";
+    /**
+     * snaker工作流的配置，默认为false
+     */
+    String APP_SNAKER   = "app.snaker";
 
 
     /**

@@ -75,6 +75,7 @@
         <jsoup.version>1.8.3</jsoup.version>
 
         <zxing.version>3.2.0</zxing.version>
+        <snaker.version>2.5.1</snaker.version>
         <xstream.version>1.4.8</xstream.version>
 
         <!-- the common service -->

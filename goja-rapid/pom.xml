@@ -28,7 +28,23 @@
             <version>${zxing.version}</version>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.snakerflow</groupId>
+            <artifactId>snaker-core</artifactId>
+            <version>${snaker.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.github.snakerflow</groupId>
+            <artifactId>snaker-jfinal</artifactId>
+            <version>${snaker.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.jfinal</groupId>
+                    <artifactId>jfinal</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.jhlabs</groupId>
             <artifactId>filters</artifactId>
