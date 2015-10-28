@@ -66,8 +66,11 @@
         <httpcore.version>4.4.1</httpcore.version>
         <!--the core util. -->
         <guava.version>18.0</guava.version>
-        <fastjson.version>1.2.6</fastjson.version>
-        <jackson.version>2.5.3</jackson.version>
+        <fst.version>2.40</fst.version>
+        <fastjson.version>1.2.7</fastjson.version>
+        <jackson.version>2.6.3</jackson.version>
+        <objenesis.version>2.1</objenesis.version>
+        <javassist.version>3.19.0-GA</javassist.version>
         <!-- the date time util. -->
         <joda-time.version>2.8.2</joda-time.version>
         <dom4j.version>1.6.1</dom4j.version>
@@ -75,7 +78,7 @@
 
         <jsoup.version>1.8.3</jsoup.version>
 
-        <zxing.version>3.2.0</zxing.version>
+        <zxing.version>3.2.1</zxing.version>
         <snaker.version>2.5.1</snaker.version>
         <xstream.version>1.4.8</xstream.version>
 
@@ -89,9 +92,9 @@
         <!-- the cache and database -->
         <ehcache-core.version>2.6.11</ehcache-core.version>
         <!-- The database connection poll util. -->
-        <druid.version>1.0.15</druid.version>
+        <druid.version>1.0.16</druid.version>
         <!-- the database jdbc driver. -->
-        <mysql-connector-java.version>5.1.36</mysql-connector-java.version>
+        <mysql-connector-java.version>5.1.37</mysql-connector-java.version>
         <postgresql.version>9.4-1201-jdbc41</postgresql.version>
         <h2.version>1.4.185</h2.version>
         <!-- test -->
