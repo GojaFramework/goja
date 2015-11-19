@@ -10,7 +10,7 @@ import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.ParaMap;
 
 /**
- * 网页授权获取用户基本信息 API
+ * 网页授权获取 access_token API
  */
 public class SnsApi
 {
@@ -27,4 +27,5 @@ public class SnsApi
         ParaMap pm = ParaMap.create("access_token", accessToken).put("openid", openId).put("lang", "zh_CN");
         return new ApiResult(HttpKit.get(getUserInfo, pm.getData()));
     }
+    
 }

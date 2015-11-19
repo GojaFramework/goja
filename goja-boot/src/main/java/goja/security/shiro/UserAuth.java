@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0
  * @since JDK 1.6
  */
-class UserAuth {
+public class UserAuth {
 
     /**
      * 用户角色

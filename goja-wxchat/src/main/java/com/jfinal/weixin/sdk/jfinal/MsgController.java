@@ -15,22 +15,8 @@ import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.kit.MsgEncryptKit;
 import com.jfinal.weixin.sdk.msg.InMsgParser;
 import com.jfinal.weixin.sdk.msg.OutMsgXmlBuilder;
-import com.jfinal.weixin.sdk.msg.in.InImageMsg;
-import com.jfinal.weixin.sdk.msg.in.InLinkMsg;
-import com.jfinal.weixin.sdk.msg.in.InLocationMsg;
-import com.jfinal.weixin.sdk.msg.in.InMsg;
-import com.jfinal.weixin.sdk.msg.in.InShortVideoMsg;
-import com.jfinal.weixin.sdk.msg.in.InTextMsg;
-import com.jfinal.weixin.sdk.msg.in.InVideoMsg;
-import com.jfinal.weixin.sdk.msg.in.InVoiceMsg;
-import com.jfinal.weixin.sdk.msg.in.event.InCustomEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InFollowEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InLocationEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMassEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMenuEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InQrCodeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InTemplateMsgEvent;
+import com.jfinal.weixin.sdk.msg.in.*;
+import com.jfinal.weixin.sdk.msg.in.event.*;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 import com.jfinal.weixin.sdk.msg.out.OutMsg;
 import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
@@ -41,40 +27,40 @@ import org.slf4j.LoggerFactory;
  * 接收微信服务器消息，自动解析成 InMsg 并分发到相应的处理方法
  */
 public abstract class MsgController extends Controller {
-
-    private static final Logger log      = LoggerFactory.getLogger(MsgController.class);
-    private              String inMsgXml = null;        // 本次请求 xml数据
-    private              InMsg  inMsg    = null;            // 本次请求 xml 解析后的 InMsg 对象
-
-    public abstract ApiConfig getApiConfig();
-
-    /**
-     * weixin 公众号服务器调用唯一入口，即在开发者中心输入的 URL 必须要指向此 action
-     */
-    @Before(MsgInterceptor.class)
-    public void index() {
-        // 开发模式输出微信服务发送过来的  xml 消息
-        if (ApiConfigKit.isDevMode()) {
-            System.out.println("接收消息:");
-            System.out.println(getInMsgXml());
-        }
-
-        // 解析消息并根据消息类型分发到相应的处理方法
-        InMsg msg = getInMsg();
-        if (msg instanceof InTextMsg)
-            processInTextMsg((InTextMsg) msg);
-        else if (msg instanceof InImageMsg)
-            processInImageMsg((InImageMsg) msg);
-        else if (msg instanceof InVoiceMsg)
-            processInVoiceMsg((InVoiceMsg) msg);
-        else if (msg instanceof InVideoMsg)
-            processInVideoMsg((InVideoMsg) msg);
-        else if (msg instanceof InShortVideoMsg)   //支持小视频
-            processInShortVideoMsg((InShortVideoMsg) msg);
-        else if (msg instanceof InLocationMsg)
-            processInLocationMsg((InLocationMsg) msg);
-        else if (msg instanceof InLinkMsg)
-            processInLinkMsg((InLinkMsg) msg);
+	
+	private static final Logger log =  LoggerFactory.getLogger(MsgController.class);
+	private String inMsgXml = null;		// 本次请求 xml数据
+	private InMsg inMsg = null;			// 本次请求 xml 解析后的 InMsg 对象
+	
+	public abstract ApiConfig getApiConfig();
+	
+	/**
+	 * weixin 公众号服务器调用唯一入口，即在开发者中心输入的 URL 必须要指向此 action
+	 */
+	@Before(MsgInterceptor.class)
+	public void index() {
+		// 开发模式输出微信服务发送过来的  xml 消息
+		if (ApiConfigKit.isDevMode()) {
+			System.out.println("接收消息:");
+			System.out.println(getInMsgXml());
+		}
+		
+		// 解析消息并根据消息类型分发到相应的处理方法
+		InMsg msg = getInMsg();
+		if (msg instanceof InTextMsg)
+			processInTextMsg((InTextMsg) msg);
+		else if (msg instanceof InImageMsg)
+			processInImageMsg((InImageMsg) msg);
+		else if (msg instanceof InVoiceMsg)
+			processInVoiceMsg((InVoiceMsg) msg);
+		else if (msg instanceof InVideoMsg)
+			processInVideoMsg((InVideoMsg) msg);
+		else if (msg instanceof InShortVideoMsg)   //支持小视频
+			processInShortVideoMsg((InShortVideoMsg) msg);
+		else if (msg instanceof InLocationMsg)
+			processInLocationMsg((InLocationMsg) msg);
+		else if (msg instanceof InLinkMsg)
+			processInLinkMsg((InLinkMsg) msg);
         else if (msg instanceof InCustomEvent)
             processInCustomEvent((InCustomEvent) msg);
 		else if (msg instanceof InFollowEvent)
@@ -190,6 +176,12 @@ public abstract class MsgController extends Controller {
 
 	// 处理微信摇一摇事件
 	protected abstract void processInShakearoundUserShakeEvent(InShakearoundUserShakeEvent inShakearoundUserShakeEvent);
+
+	// 资质认证成功 || 名称认证成功 || 年审通知 || 认证过期失效通知
+	protected abstract void processInVerifySuccessEvent(InVerifySuccessEvent inVerifySuccessEvent);
+
+	// 资质认证失败 || 名称认证失败
+	protected abstract void processInVerifyFailEvent(InVerifyFailEvent inVerifyFailEvent);
 }
 
 

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.jfinal.weixin.sdk.msg.in.event.InVerifyFailEvent;
+import com.jfinal.weixin.sdk.msg.in.event.InVerifySuccessEvent;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -33,6 +35,7 @@ import com.jfinal.weixin.sdk.msg.in.event.InQrCodeEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent.AroundBeacon;
 import com.jfinal.weixin.sdk.msg.in.event.InTemplateMsgEvent;
+import com.jfinal.weixin.sdk.msg.in.event.ScanCodeInfo;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 
 public class InMsgParser {
@@ -157,6 +160,7 @@ public class InMsgParser {
 	}
 
 	// 解析各种事件
+	@SuppressWarnings("rawtypes")
 	private static InMsg parseInEvent(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		String event = root.elementText("Event");
 		String eventKey = root.elementText("EventKey");
@@ -165,7 +169,6 @@ public class InMsgParser {
 		if (("subscribe".equals(event) || "unsubscribe".equals(event)) && StrKit.isBlank(eventKey)) {
 			return new InFollowEvent(toUserName, fromUserName, createTime, msgType, event);
 		}
-		
 		// 扫描带参数二维码事件之一		1: 用户未关注时，进行关注后的事件推送
 		String ticket = root.elementText("Ticket");
 		if ("subscribe".equals(event) && StrKit.notBlank(eventKey) && eventKey.startsWith("qrscene_")) {
@@ -181,7 +184,6 @@ public class InMsgParser {
 			e.setTicket(ticket);
 			return e;
 		}
-		
 		// 上报地理位置事件
 		if ("LOCATION".equals(event)) {
 			InLocationEvent e = new InLocationEvent(toUserName, fromUserName, createTime, msgType, event);
@@ -190,7 +192,6 @@ public class InMsgParser {
 			e.setPrecision(root.elementText("Precision"));
 			return e;
 		}
-		
 		// 自定义菜单事件之一			1：点击菜单拉取消息时的事件推送
 		if ("CLICK".equals(event)) {
 			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
@@ -199,6 +200,62 @@ public class InMsgParser {
 		}
 		// 自定义菜单事件之二			2：点击菜单跳转链接时的事件推送
 		if ("VIEW".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			return e;
+		}
+		// 扫码推事件
+		if ("scancode_push".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			Element scanCodeInfo = root.element("ScanCodeInfo");
+			String scanType = scanCodeInfo.elementText("ScanType");
+			String scanResult = scanCodeInfo.elementText("ScanResult");
+			e.setScanCodeInfo(new ScanCodeInfo(scanType, scanResult));
+			return e;
+		}
+		// 扫码推事件且弹出“消息接收中”提示框
+		if ("scancode_waitmsg".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			Element scanCodeInfo = root.element("ScanCodeInfo");
+			String scanType = scanCodeInfo.elementText("ScanType");
+			String scanResult = scanCodeInfo.elementText("ScanResult");
+			e.setScanCodeInfo(new ScanCodeInfo(scanType, scanResult));
+			return e;
+		}
+		// 5. pic_sysphoto：弹出系统拍照发图，这个后台其实收不到该菜单的消息，点击它后，调用的是手机里面的照相机功能，而照相以后再发过来时，就收到的是一个图片消息了
+		if ("pic_sysphoto".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			return e;
+		}
+		// pic_photo_or_album：弹出拍照或者相册发图
+		if ("pic_photo_or_album".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			return e;
+		}
+		// pic_weixin：弹出微信相册发图器
+		if ("pic_weixin".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			return e;
+		}
+		// location_select：弹出地理位置选择器
+		if ("location_select".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			return e;
+		}
+		// media_id：下发消息（除文本消息）
+		if ("media_id".equals(event)) {
+			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			return e;
+		}
+		// view_limited：跳转图文消息URL
+		if ("view_limited".equals(event)) {
 			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
 			e.setEventKey(eventKey);
 			return e;
@@ -267,6 +324,21 @@ public class InMsgParser {
 			}
 			return e;
 		 }
+
+		// 资质认证成功 || 名称认证成功 || 年审通知 || 认证过期失效通知
+		if ("qualification_verify_success".equals(event) || "naming_verify_success".equals(event)
+				 || "annual_renew".equals(event) || "verify_expired".equals(event)) {
+			InVerifySuccessEvent e = new InVerifySuccessEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setExpiredTime(root.elementText("expiredTime"));
+			return e;
+		}
+		// 资质认证失败 || 名称认证失败
+		if ("qualification_verify_fail".equals(event) || "naming_verify_fail".equals(event)) {
+			InVerifyFailEvent e = new InVerifyFailEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setFailTime(root.elementText("failTime"));
+			e.setFailReason(root.elementText("failReason"));
+			return e;
+		}
 
 		throw new RuntimeException("无法识别的事件类型" + event + "，请查阅微信公众平台开发文档");
 	}
