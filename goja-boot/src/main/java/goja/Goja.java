@@ -63,7 +63,6 @@ import goja.mvc.render.ftl.layout.ExtendsDirective;
 import goja.mvc.render.ftl.layout.OverrideDirective;
 import goja.mvc.render.ftl.layout.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
-import goja.plugins.index.IndexPlugin;
 import goja.plugins.monogo.MongoPlugin;
 import goja.plugins.quartz.QuartzPlugin;
 import goja.plugins.shiro.ShiroInterceptor;
@@ -206,10 +205,7 @@ public class Goja extends JFinalConfig {
         }
 
 
-        final String index_path = GojaConfig.getProperty(GojaPropConst.APPFULLTEXT);
-        if (!Strings.isNullOrEmpty(index_path)) {
-            plugins.add(new IndexPlugin(index_path));
-        }
+
 
         final String mongo_host = GojaConfig.getProperty(GojaPropConst.MONGO_HOST, StringUtils.EMPTY);
         if (!Strings.isNullOrEmpty(mongo_host)) {

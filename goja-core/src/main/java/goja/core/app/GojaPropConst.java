@@ -52,7 +52,7 @@ public interface GojaPropConst {
     /**
      * 是否启用全文检索，配置为一个存在的路径地址
      */
-    String APPFULLTEXT       = "app.fulltext";
+//    String APPFULLTEXT       = "app.fulltext";
     /**
      * 最大支持的上传文件大小
      */
