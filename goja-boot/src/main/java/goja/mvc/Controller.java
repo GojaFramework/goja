@@ -169,7 +169,7 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
 
-    protected <T> void renderAjaxSuccess(List<T> list){
+    protected <T> void renderAjaxSuccess(List<T> list) {
         if (list == null || list.isEmpty()) {
             renderJson(AjaxMessage.nodata());
         } else {
@@ -276,7 +276,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     /**
      * According to the request information of jquery.Datatables, the results of the query and returns the JSON data to the client.
-     *
+     * <p/>
      * The specified query set the data.
      *
      * @param datas     The data.
@@ -292,7 +292,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     /**
      * According to the request information of jquery.Datatables, the results of the query and returns the JSON data to the client.
-     *
+     * <p/>
      * Automatically according to the request to create the query SQL and encapsulating the results back to the client.
      *
      * @param m_cls     The Model class.
@@ -328,9 +328,9 @@ public class Controller extends com.jfinal.core.Controller {
      * According to the SQL configuration file, in accordance with the Convention model_name.coloumns\model_name.where\model_name.order
      * configured SQL to query and specify the parameters and return results to the client.
      *
-     * @param criterias  datatable criterias.
+     * @param criterias    datatable criterias.
      * @param sqlGroupName The Model name.
-     * @param params     Query parameters
+     * @param params       Query parameters
      */
     protected void renderDataTables(DTCriterias criterias, String sqlGroupName, List<Object> params) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
@@ -365,6 +365,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
+     *
      * @param modelClass 指定类
      */
     protected void renderEasyUIDataGrid(Class<? extends Model> modelClass) {
@@ -539,7 +540,7 @@ public class Controller extends com.jfinal.core.Controller {
     public UploadFile getFile(String parameterName, String saveDirectory,
                               Integer maxPostSize, String encoding) {
         return this.getFile(parameterName, saveDirectory, maxPostSize, encoding,
-                            fileRenamePolicy);
+                fileRenamePolicy);
     }
 
     public UploadFile getFile(String parameterName, String saveDirectory,
@@ -552,7 +553,7 @@ public class Controller extends com.jfinal.core.Controller {
     public UploadFile getFile(String parameterName, String saveDirectory,
                               int maxPostSize) {
         return this.getFile(parameterName, saveDirectory, maxPostSize,
-                            fileRenamePolicy);
+                fileRenamePolicy);
     }
 
     public UploadFile getFile(String parameterName, String saveDirectory,
@@ -610,5 +611,14 @@ public class Controller extends com.jfinal.core.Controller {
 
     public List<UploadFile> getFiles(String saveDirectory) {
         return this.getFiles(saveDirectory, fileRenamePolicy);
+    }
+
+
+    protected void renderAjaxSimpleSuccess(String msg) {
+        renderJson(new SimpleAjaxMessage(true, msg));
+    }
+
+    protected void renderAjaxSimpleError(String msg) {
+        renderJson(new SimpleAjaxMessage(false, msg));
     }
 }

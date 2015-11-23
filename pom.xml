@@ -86,8 +86,6 @@
         <mail.version>1.4.7</mail.version>
         <quartz.version>2.2.1</quartz.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
-        <!--Lucene-->
-        <lucene.version>4.9.0</lucene.version>
 
         <!-- the cache and database -->
         <ehcache-core.version>2.6.11</ehcache-core.version>
