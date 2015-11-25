@@ -45,6 +45,7 @@ import static goja.core.StringPool.SPACE;
 public class EuiDataGrid {
 
     public static final DataGridRsp EMPTY_DATAGRID = new DataGridRsp.Builder().rows(Collections.EMPTY_LIST).total(0).build();
+    public static final String WHERESPLIT = "--where--";
 
     private EuiDataGrid() {
     }
@@ -225,14 +226,14 @@ public class EuiDataGrid {
             return EMPTY_DATAGRID;
         }
 
-        if (StringUtils.contains(sql, "--where--")) {
+        if (!StringUtils.containsIgnoreCase(sql, WHERESPLIT)) {
             logger.error("约定的分页SQL 切割标志符 [--where--] 不存在，请检查 SQLID为{} 的sql语句", sqlId);
             return EMPTY_DATAGRID;
         }
 
 
-        String sql_columns = StringUtils.substringBefore(sql, "--where--");
-        StringBuilder where = new StringBuilder(StringUtils.substringAfter(sql, "--where--"));
+        String sql_columns = StringUtils.substringBefore(sql, WHERESPLIT);
+        StringBuilder where = new StringBuilder(StringUtils.substringAfter(sql, WHERESPLIT));
 
 
         final List<Triplet<String, Condition, Object>> custom_params = req.params;
