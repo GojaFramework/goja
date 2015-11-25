@@ -192,4 +192,10 @@ public interface GojaPropConst {
      * UE控件访问文件（上传的图片、文件）获取的地址前缀
      */
     String UE_URLPREFIX   = "ue.urlprefix";
+
+
+    /**
+     * 分页Sql 分割标记
+     */
+    String WHERESPLIT = "--where--";
 }

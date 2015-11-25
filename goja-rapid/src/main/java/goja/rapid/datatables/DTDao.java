@@ -51,25 +51,7 @@ public final class DTDao {
             if (!append_and) {
                 where_sql.append(" WHERE ");
             }
-            for (Triplet<String, Condition, Object> custom_param : custom_params) {
-                if (append_and) {
-                    where_sql.append(" AND ");
-                }
-                where_sql.append(custom_param.getValue0());
-                final Condition con = custom_param.getValue1();
-                where_sql.append(con.condition);
-                switch (con) {
-                    case BETWEEN:
-                        final Object[] value2 = (Object[]) custom_param.getValue2();
-                        params.add(value2[0]);
-                        params.add(value2[1]);
-                        break;
-                    default:
-                        params.add(custom_param.getValue2());
-                        break;
-                }
-                append_and = true;
-            }
+            itemCustomParamSql(params, where_sql, custom_params, append_and);
         }
 
         final List<DTOrder> order = criterias.getOrder();
@@ -91,6 +73,28 @@ public final class DTDao {
         }
     }
 
+    private static void itemCustomParamSql(List<Object> params, StringBuilder where_sql, List<Triplet<String, Condition, Object>> custom_params, boolean append_and) {
+        for (Triplet<String, Condition, Object> custom_param : custom_params) {
+            if (append_and) {
+                where_sql.append(" AND ");
+            }
+            where_sql.append(custom_param.getValue0());
+            final Condition con = custom_param.getValue1();
+            where_sql.append(con.condition);
+            switch (con) {
+                case BETWEEN:
+                    final Object[] value2 = (Object[]) custom_param.getValue2();
+                    params.add(value2[0]);
+                    params.add(value2[1]);
+                    break;
+                default:
+                    params.add(custom_param.getValue2());
+                    break;
+            }
+            append_and = true;
+        }
+    }
+
     /**
      * 分页检索，默认按照id进行排序，需要指定datatables的请求参数。
      *
@@ -100,7 +104,7 @@ public final class DTDao {
      */
     public static Page<Record> paginate(Class<? extends Model> model, DTCriterias criterias) {
         int pageSize = criterias.getLength();
-        int start = criterias.getStart()/ pageSize + 1;
+        int start = criterias.getStart() / pageSize + 1;
 
         final Table table = TableMapping.me().getTable(model);
         final String tableName = table.getName();
@@ -131,29 +135,7 @@ public final class DTDao {
 
         final List<Triplet<String, Condition, Object>> custom_params = criterias.getParams();
         final List<Object> params = Lists.newArrayList();
-        if (!custom_params.isEmpty()) {
-            where.append(" WHERE ");
-            boolean append_and = false;
-            for (Triplet<String, Condition, Object> custom_param : custom_params) {
-                if(append_and) {
-                    where.append(" AND ");
-                }
-                where.append(custom_param.getValue0());
-                final Condition con = custom_param.getValue1();
-                where.append(con.condition);
-                switch (con) {
-                    case BETWEEN:
-                        final Object[] value2 = (Object[]) custom_param.getValue2();
-                        params.add(value2[0]);
-                        params.add(value2[1]);
-                        break;
-                    default:
-                        params.add(custom_param.getValue2());
-                        break;
-                }
-                append_and = true;
-            }
-        }
+        appendWhereSql(params, where, custom_params);
 
 
         final List<DTOrder> order = criterias.getOrder();
@@ -168,5 +150,13 @@ public final class DTDao {
         }
 
         return Db.paginate(start, pageSize, sql_columns, where.toString(), params.toArray());
+    }
+
+
+    public static void appendWhereSql(List<Object> params, StringBuilder where, List<Triplet<String, Condition, Object>> custom_params) {
+        if (!custom_params.isEmpty()) {
+            where.append(" WHERE ");
+            itemCustomParamSql(params, where, custom_params, false);
+        }
     }
 }

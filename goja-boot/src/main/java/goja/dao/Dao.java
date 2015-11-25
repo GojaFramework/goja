@@ -10,6 +10,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import goja.core.StringPool;
+import goja.core.app.GojaPropConst;
 import goja.core.sqlinxml.SqlKit;
 import goja.rapid.datatables.DTCriterias;
 import goja.rapid.datatables.DTDao;
@@ -30,10 +31,6 @@ import java.util.List;
  * @since JDK 1.6
  */
 public abstract class Dao {
-
-    public static final String SQL_PIRFIX_WHERE   = ".where";
-    public static final String SQL_PIRFIX_COLUMNS = ".column";
-
 
 
     /**
@@ -79,7 +76,7 @@ public abstract class Dao {
     /**
      * 根据多个数据通过主键批量删除数据
      *
-     * @param ids   要删除的数据值数组
+     * @param ids        要删除的数据值数组
      * @param modelClass 对应的Model的Class
      * @return 是否删除成功
      */
@@ -124,16 +121,20 @@ public abstract class Dao {
     /**
      * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
      *
-     * @param model_name sql-conf sqlgroup name.
-     * @param criterias  required parameter
+     * @param sqlGroupName sql-conf sqlgroup name.
+     * @param criterias    required parameter
      * @return Paging data.
      */
-    public static Page<Record> paginate(String model_name,
+    public static Page<Record> paginate(String sqlGroupName,
                                         DTCriterias criterias,
                                         List<Object> params) {
-        return DTDao.paginate(SqlKit.sql(model_name + SQL_PIRFIX_WHERE)
-                , SqlKit.sql(model_name + SQL_PIRFIX_COLUMNS)
-                , criterias, params);
+        final String paginateSql = SqlKit.sql(sqlGroupName + ".paginate");
+        Preconditions.checkNotNull(paginateSql, "分页Sql不存在,无法执行分页");
+
+
+        String sql_columns = StringUtils.substringBefore(paginateSql, GojaPropConst.WHERESPLIT);
+        String where = StringUtils.substringAfter(paginateSql, GojaPropConst.WHERESPLIT);
+        return DTDao.paginate(where, sql_columns, criterias, params);
     }
 
     /**
@@ -153,7 +154,7 @@ public abstract class Dao {
         int start = ((p - 1) * pageSize) + 1;
         final List<RequestParam> params = pageDto.params;
         final List<Object> query_params = pageDto.query_params;
-        if ((params == null || params.isEmpty()) && (query_params == null || query_params.isEmpty())) {
+        if ((params.isEmpty()) && (query_params.isEmpty())) {
             return Db.paginate(start, pageSize, sql_columns, where);
         } else {
             if (!StringUtils.containsIgnoreCase(where, "WHERE")) {

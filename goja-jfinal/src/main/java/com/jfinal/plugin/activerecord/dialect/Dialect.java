@@ -95,7 +95,7 @@ public abstract class Dialect {
                     pst.setTimestamp(i + 1, new Timestamp(((DateTime) param).getMillis()));
                 else
 				    pst.setObject(i + 1, param);
-				logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
+				logger.info("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
 			}
 			logger.info("Sql param end!");
 		} else {

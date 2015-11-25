@@ -15,13 +15,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.net.UnknownHostException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -245,33 +243,36 @@ public abstract class Requests {
      * @return 客户端ip，如果获取失败，则返回 127.0.0.1
      */
     public static String remoteAddr(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+        String ipAddress = null;
+        ipAddress = request.getHeader("x-forwarded-for");
+        if ((ipAddress == null) || (ipAddress.length() == 0)
+                || ("unknown".equalsIgnoreCase(ipAddress))) {
+            ipAddress = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
+        if ((ipAddress == null) || (ipAddress.length() == 0)
+                || ("unknown".equalsIgnoreCase(ipAddress))) {
+            ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (StringUtils.isNotBlank(ip)) {
-            String[] ips = StringUtils.split(ip, ',');
-            if (ips != null) {
-                for (String tmpip : ips) {
-                    if (StringUtils.isBlank(tmpip))
-                        continue;
-                    tmpip = tmpip.trim();
-                    if (isIPAddr(tmpip) && !tmpip.startsWith("10.") && !tmpip.startsWith("192.168.") && !"127.0.0.1".equals(tmpip)) {
-                        return tmpip.trim();
-                    }
+        if ((ipAddress == null) || (ipAddress.length() == 0)
+                || ("unknown".equalsIgnoreCase(ipAddress))) {
+            ipAddress = request.getRemoteAddr();
+            if (ipAddress.equals("127.0.0.1")) {
+                InetAddress inet;
+                try {
+                    inet = InetAddress.getLocalHost();
+                    ipAddress = inet.getHostAddress();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
                 }
             }
+
         }
-        ip = request.getHeader("x-real-ip");
-        if (isIPAddr(ip))
-            return ip;
-        ip = request.getRemoteAddr();
-        if (ip.indexOf('.') == -1)
-            ip = "127.0.0.1";
-        return ip;
+        if ((ipAddress != null) && (ipAddress.length() > 15)) {
+            if (ipAddress.indexOf(",") > 0) {
+                ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+            }
+        }
+        return ipAddress;
     }
 
     /**
@@ -485,5 +486,16 @@ public abstract class Requests {
     public static boolean ajax(HttpServletRequest request) {
         String x_requested = request.getHeader("x-requested-with");
         return !Strings.isNullOrEmpty(x_requested) && "XMLHttpRequest".equals(x_requested);
+    }
+
+    /**
+     * 去html
+     *
+     * @param src HTMl
+     * @return 去掉HTML后的字符串
+     */
+    public static String replaceTagHTML(String src) {
+        String regex = "\\<(.+?)\\>";
+        return org.apache.commons.lang.StringUtils.isNotEmpty(src) ? src.replaceAll(regex, "") : "";
     }
 }

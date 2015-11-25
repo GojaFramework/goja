@@ -12,10 +12,12 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import goja.core.StringPool;
+import goja.core.app.GojaPropConst;
 import goja.core.date.DateFormatter;
 import goja.core.kits.base.Strs;
 import goja.core.sqlinxml.SqlKit;
 import goja.core.tuples.Triplet;
+import goja.rapid.datatables.DTDao;
 import goja.rapid.db.Condition;
 import goja.rapid.easyui.req.DataGridReq;
 import goja.rapid.easyui.rsp.DataGridRsp;
@@ -45,7 +47,7 @@ import static goja.core.StringPool.SPACE;
 public class EuiDataGrid {
 
     public static final DataGridRsp EMPTY_DATAGRID = new DataGridRsp.Builder().rows(Collections.EMPTY_LIST).total(0).build();
-    public static final String WHERESPLIT = "--where--";
+
 
     private EuiDataGrid() {
     }
@@ -165,29 +167,7 @@ public class EuiDataGrid {
 
         final List<Triplet<String, Condition, Object>> custom_params = req.params;
         final List<Object> params = Lists.newArrayList();
-        if (!custom_params.isEmpty()) {
-            where.append(" WHERE ");
-            boolean append_and = false;
-            for (Triplet<String, Condition, Object> custom_param : custom_params) {
-                if (append_and) {
-                    where.append(" AND ");
-                }
-                where.append(custom_param.getValue0());
-                final Condition con = custom_param.getValue1();
-                where.append(con.condition);
-                switch (con) {
-                    case BETWEEN:
-                        final Object[] value2 = (Object[]) custom_param.getValue2();
-                        params.add(value2[0]);
-                        params.add(value2[1]);
-                        break;
-                    default:
-                        params.add(custom_param.getValue2());
-                        break;
-                }
-                append_and = true;
-            }
-        }
+        DTDao.appendWhereSql(params, where, custom_params);
 
 
         if (!Strings.isNullOrEmpty(req.sortField)) {
@@ -226,40 +206,17 @@ public class EuiDataGrid {
             return EMPTY_DATAGRID;
         }
 
-        if (!StringUtils.containsIgnoreCase(sql, WHERESPLIT)) {
+        if (!StringUtils.containsIgnoreCase(sql, GojaPropConst.WHERESPLIT)) {
             logger.error("约定的分页SQL 切割标志符 [--where--] 不存在，请检查 SQLID为{} 的sql语句", sqlId);
             return EMPTY_DATAGRID;
         }
 
 
-        String sql_columns = StringUtils.substringBefore(sql, WHERESPLIT);
-        StringBuilder where = new StringBuilder(StringUtils.substringAfter(sql, WHERESPLIT));
-
+        String sql_columns = StringUtils.substringBefore(sql, GojaPropConst.WHERESPLIT);
+        StringBuilder where = new StringBuilder(StringUtils.substringAfter(sql, GojaPropConst.WHERESPLIT));
 
         final List<Triplet<String, Condition, Object>> custom_params = req.params;
-        if (!custom_params.isEmpty()) {
-            where.append(" WHERE ");
-            boolean append_and = false;
-            for (Triplet<String, Condition, Object> custom_param : custom_params) {
-                if (append_and) {
-                    where.append(" AND ");
-                }
-                where.append(custom_param.getValue0());
-                final Condition con = custom_param.getValue1();
-                where.append(con.condition);
-                switch (con) {
-                    case BETWEEN:
-                        final Object[] value2 = (Object[]) custom_param.getValue2();
-                        params.add(value2[0]);
-                        params.add(value2[1]);
-                        break;
-                    default:
-                        params.add(custom_param.getValue2());
-                        break;
-                }
-                append_and = true;
-            }
-        }
+        DTDao.appendWhereSql(params, where, custom_params);
 
 
         if (!Strings.isNullOrEmpty(req.sortField)) {
@@ -274,4 +231,5 @@ public class EuiDataGrid {
 
 
     }
+
 }

@@ -55,7 +55,7 @@ public class AppLogConfigurator {
             PatternLayoutEncoder pl = new PatternLayoutEncoder();
             pl.setContext(lc);
             pl.setCharset(Charsets.UTF_8);
-            pl.setPattern("%d{yyyy-MM-dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %msg%n");
+            pl.setPattern("%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
             pl.start();
 
             ca.setEncoder(pl);
@@ -83,7 +83,8 @@ public class AppLogConfigurator {
 
             final RollingFileAppender rfa = new RollingFileAppender();
 
-            final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + (GojaConfig.getApplicationMode().isDev() ? GojaConfig.getAppName() + "-dev" : GojaConfig.getAppName()) + ".log");
+            final String logFileName = GojaConfig.getApplicationMode().isTest() ? GojaConfig.getAppName() + "-test" : GojaConfig.getAppName();
+            final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + logFileName + ".log");
             rfa.setFile(logger_file);
 
             final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
