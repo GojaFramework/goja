@@ -6,6 +6,7 @@
 
 package goja.initialize.ctxbox;
 
+import com.google.common.collect.Lists;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
@@ -39,6 +40,7 @@ public class ClassFinder {
         ClassSearcher searcher = ClassSearcher.of(Model.class, Controller.class, Interceptor.class,
                 Job.class, org.quartz.Job.class, AppLoadEvent.class, /*IPlugin.class, Handler.class,*/
                 LogProcessor.class, SecurityUserData.class)
+                .scanPackages(Lists.newArrayList(GojaConfig.getAppPackPrefix()))
                 .inJars(GojaConfig.getAppJars());
         List<Class<?>> classFileList = searcher.search();
         for (Class cls : classFileList) {
@@ -57,6 +59,7 @@ public class ClassFinder {
         ClassSearcher test_searcher = ClassSearcher.of(Model.class, Controller.class, Interceptor.class,
                 Job.class, org.quartz.Job.class, AppLoadEvent.class, /*IPlugin.class, Handler.class,*/
                 LogProcessor.class, SecurityUserData.class).classpath(test_classpath)
+                .scanPackages(Lists.newArrayList(GojaConfig.getAppPackPrefix()))
                 .inJars(GojaConfig.getAppJars());
 
         for (Class cls : test_searcher.search()) {

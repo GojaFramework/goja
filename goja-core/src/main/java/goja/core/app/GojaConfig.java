@@ -64,6 +64,10 @@ public final class GojaConfig {
      * 应用domain
      */
     private static String appDomain;
+    /**
+     * 应用包前缀
+     */
+    private static String appPackPrefix;
 
     /**
      * 默认数据库连接
@@ -134,6 +138,8 @@ public final class GojaConfig {
         defaultDBUsername = getProperty(GojaPropConst.DBUSERNAME, "root");
         defaultDBPassword = getProperty(GojaPropConst.DBPASSWORD, "123456");
         defaultViewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, File.separator + "WEB-INF" + File.separator + "views");
+
+        appPackPrefix = GojaConfig.getProperty(GojaPropConst.APP_PACKAGE_PREFIX, "app");
         initialize = true;
     }
 
@@ -165,6 +171,10 @@ public final class GojaConfig {
 
     public static String getAppSecurityConfig() {
         return appSecurityConfig;
+    }
+
+    public static String getAppPackPrefix() {
+        return appPackPrefix;
     }
 
     /**

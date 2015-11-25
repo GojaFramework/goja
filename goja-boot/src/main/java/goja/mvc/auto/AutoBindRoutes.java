@@ -9,10 +9,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.jfinal.config.Routes;
 import com.jfinal.kit.StrKit;
-import goja.core.StringPool;
 import goja.annotation.ControllerBind;
+import goja.core.StringPool;
 import goja.core.app.GojaConfig;
-import goja.core.app.GojaPropConst;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
 import org.apache.commons.lang3.StringUtils;
@@ -64,10 +63,10 @@ public class AutoBindRoutes extends Routes {
         // controller   com.mo008.controllers
         // controller   com.mo008.sys.controllers
         // controller2  com.mo008.member.controllers
-        final String packPrefix = GojaConfig.getProperty(GojaPropConst.APP_PACKAGE_PREFIX, "app");
-        if (StringUtils.startsWith(packName, packPrefix)) {
+        final String appPackPrefix = GojaConfig.getAppPackPrefix();
+        if (StringUtils.startsWith(packName, appPackPrefix)) {
             // 如果是配置的包,则进行路由生成
-            if (StringUtils.startsWith(packName, packPrefix + StringPool.DOT + "controllers")) { // 包名正好为 com.mo008.controllers 开头
+            if (StringUtils.startsWith(packName, appPackPrefix + StringPool.DOT + "controllers")) { // 包名正好为 com.mo008.controllers 开头
                 if (StringUtils.endsWith(packName, "controllers")) {
                     return controllerKey;
                 } else {
@@ -79,7 +78,7 @@ public class AutoBindRoutes extends Routes {
                 }
             } else {
                 // 取得中间的信息
-                String moduleRoute = StringUtils.replace(packName.replace(packName, packPrefix + StringPool.DOT)
+                String moduleRoute = StringUtils.replace(packName.replace(appPackPrefix + StringPool.DOT, StringPool.EMPTY)
                         .replace(".controllers", StringPool.EMPTY), StringPool.DOT, StringPool.SLASH); //得到中间区域的配置
                 // sys/user
                 if (StringUtils.endsWith(packName, "controllers")) {

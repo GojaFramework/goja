@@ -43,7 +43,6 @@ public class AppLogConfigurator {
         if (sm != null) {
             sm.add(new InfoStatus("Setting up default configuration.", lc));
         }
-        final String loggerLevel = GojaConfig.getProperty(GojaPropConst.APP_LOGGER);
 
         final boolean isDev = GojaConfig.getApplicationMode().isDev();
 
@@ -60,18 +59,26 @@ public class AppLogConfigurator {
 
             ca.setEncoder(pl);
             ca.start();
- 
-            Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
-            rootLogger.setLevel(Level.INFO);
-            rootLogger.addAppender(ca);
 
             Logger jfinalLogger = lc.getLogger("com.jfinal");
             jfinalLogger.setLevel(Level.DEBUG);
             jfinalLogger.addAppender(ca);
-
-            Logger appLogger = lc.getLogger("app");
+            jfinalLogger.setAdditive(false);
+            Logger gojaLogger = lc.getLogger("goja");
+            gojaLogger.setLevel(Level.DEBUG);
+            gojaLogger.addAppender(ca);
+            gojaLogger.setAdditive(false);
+            Logger appLogger = lc.getLogger(GojaConfig.getAppPackPrefix());
             appLogger.setLevel(Level.DEBUG);
             appLogger.addAppender(ca);
+            appLogger.setAdditive(false);
+
+            Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
+            rootLogger.setLevel(Level.ERROR);
+            rootLogger.addAppender(ca);
+            // 这个配置告诉root日志不追加上述按照包名的日志记录
+            rootLogger.setAdditive(false);
+
 
         } else {
 
@@ -118,14 +125,19 @@ public class AppLogConfigurator {
             asyncAppender.start();
 
 
+            final String loggerLevel = GojaConfig.getProperty(GojaPropConst.APP_LOGGER);
             final Level config_level = Level.toLevel(loggerLevel, Level.INFO);
+
+            Logger appLogger = lc.getLogger(GojaConfig.getAppPackPrefix());
+            appLogger.setLevel(config_level);
+            appLogger.addAppender(asyncAppender);
+            appLogger.setAdditive(false);
+
             Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
             rootLogger.setLevel(config_level);
             rootLogger.addAppender(asyncAppender);
+            rootLogger.setAdditive(false);
 
-            Logger appLogger = lc.getLogger("app");
-            appLogger.setLevel(config_level);
-            appLogger.addAppender(asyncAppender);
         }
 
     }
