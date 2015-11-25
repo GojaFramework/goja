@@ -13,23 +13,14 @@ import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
-import com.jfinal.config.Constants;
-import com.jfinal.config.Handlers;
-import com.jfinal.config.Interceptors;
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.config.Plugins;
-import com.jfinal.config.Routes;
+import com.jfinal.config.*;
 import com.jfinal.core.Const;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.DbKit;
-import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.OracleDialect;
-import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.SqlServerDialect;
-import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
+import com.jfinal.plugin.activerecord.dialect.*;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.druid.IDruidStatViewAuth;
@@ -39,8 +30,6 @@ import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import freemarker.template.Configuration;
-import goja.annotation.HandlerBind;
-import goja.annotation.PluginBind;
 import goja.core.Func;
 import goja.core.app.GojaConfig;
 import goja.core.app.GojaPropConst;
@@ -51,7 +40,6 @@ import goja.core.sqlinxml.SqlInXmlPlugin;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
 import goja.job.JobsPlugin;
-import goja.logging.Logger;
 import goja.logging.LoggerInit;
 import goja.mvc.AppLoadEvent;
 import goja.mvc.auto.AutoBindRoutes;
@@ -85,6 +73,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+//import goja.annotation.HandlerBind;
 
 /**
  * <p> The core of goja. </p>
@@ -204,9 +194,6 @@ public class Goja extends JFinalConfig {
             plugins.add(new QuartzPlugin());
         }
 
-
-
-
         final String mongo_host = GojaConfig.getProperty(GojaPropConst.MONGO_HOST, StringUtils.EMPTY);
         if (!Strings.isNullOrEmpty(mongo_host)) {
             int mongo_port = GojaConfig.getPropertyToInt(GojaPropConst.MONGO_PORT, MongoPlugin.DEFAUL_PORT);
@@ -244,22 +231,22 @@ public class Goja extends JFinalConfig {
         }
 
 
-        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
-        if (plugins_clses != null && !plugins_clses.isEmpty()) {
-            PluginBind pluginBind;
-            for (Class plugin : plugins_clses) {
-                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
-                if (pluginBind != null) {
-                    try {
-                        plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
-                    } catch (InstantiationException e) {
-                        Logger.error("The plugin instance is error!", e);
-                    } catch (IllegalAccessException e) {
-                        Logger.error("The plugin instance is error!", e);
-                    }
-                }
-            }
-        }
+//        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
+//        if (plugins_clses != null && !plugins_clses.isEmpty()) {
+//            PluginBind pluginBind;
+//            for (Class plugin : plugins_clses) {
+//                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
+//                if (pluginBind != null) {
+//                    try {
+//                        plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
+//                    } catch (InstantiationException e) {
+//                        Logger.error("The plugin instance is error!", e);
+//                    } catch (IllegalAccessException e) {
+//                        Logger.error("The plugin instance is error!", e);
+//                    }
+//                }
+//            }
+//        }
 
         // Because the system itself the task of startup tasks, so the system task plugin must be the last to join the list
         plugins.add(new JobsPlugin());
@@ -317,22 +304,22 @@ public class Goja extends JFinalConfig {
         }
 
 
-        final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
-        if (handler_clses != null && !handler_clses.isEmpty()) {
-            HandlerBind handlerBind;
-            for (Class handler : handler_clses) {
-                handlerBind = (HandlerBind) handler.getAnnotation(HandlerBind.class);
-                if (handlerBind != null) {
-                    try {
-                        handlers.add((com.jfinal.handler.Handler) handler.newInstance());
-                    } catch (InstantiationException e) {
-                        logger.error("The Handler instance is error!", e);
-                    } catch (IllegalAccessException e) {
-                        logger.error("The Handler instance is error!", e);
-                    }
-                }
-            }
-        }
+//        final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
+//        if (handler_clses != null && !handler_clses.isEmpty()) {
+//            HandlerBind handlerBind;
+//            for (Class handler : handler_clses) {
+//                handlerBind = (HandlerBind) handler.getAnnotation(HandlerBind.class);
+//                if (handlerBind != null) {
+//                    try {
+//                        handlers.add((com.jfinal.handler.Handler) handler.newInstance());
+//                    } catch (InstantiationException e) {
+//                        logger.error("The Handler instance is error!", e);
+//                    } catch (IllegalAccessException e) {
+//                        logger.error("The Handler instance is error!", e);
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -377,7 +364,6 @@ public class Goja extends JFinalConfig {
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
             if (db_props != null && !db_props.isEmpty()) {
-
 
                 final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
                 // 如果配置启动了工作流引擎
@@ -460,8 +446,10 @@ public class Goja extends JFinalConfig {
             final WallFilter wall = new WallFilter();
             wall.setDbType(dbtype);
             druidPlugin.addFilter(wall);
-            // 增加 LogFilter 输出JDBC执行的日志
-            druidPlugin.addFilter(new Slf4jLogFilter());
+            if(GojaConfig.getPropertyToBoolean(GojaPropConst.DBLOGFILE, false)){
+                // 增加 LogFilter 输出JDBC执行的日志
+                druidPlugin.addFilter(new Slf4jLogFilter());
+            }
             plugins.add(druidPlugin);
 
             //  setting db table name like 'dev_info'
