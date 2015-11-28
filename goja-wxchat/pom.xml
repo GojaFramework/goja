@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.github.sogyf</groupId>
         <artifactId>goja</artifactId>
-        <version>0.1.13-SNAPSHOT</version>
+        <version>0.1.12-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>goja-wxchat</artifactId>
