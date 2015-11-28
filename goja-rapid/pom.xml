@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.sogyf</groupId>
         <artifactId>goja</artifactId>
-        <version>0.1.12-SNAPSHOT</version>
+        <version>0.1.12</version>
     </parent>
 
     <artifactId>goja-rapid</artifactId>
