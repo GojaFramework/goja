@@ -1,16 +1,10 @@
 package goja.dao;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.Table;
-import com.jfinal.plugin.activerecord.TableMapping;
+import com.jfinal.plugin.activerecord.*;
 import goja.core.StringPool;
-import goja.core.app.GojaPropConst;
+import goja.core.sqlinxml.Sql;
 import goja.core.sqlinxml.SqlKit;
 import goja.rapid.datatables.DTCriterias;
 import goja.rapid.datatables.DTDao;
@@ -121,50 +115,46 @@ public abstract class Dao {
     /**
      * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
      *
-     * @param sqlGroupName sql-conf sqlgroup name.
-     * @param criterias    required parameter
+     * @param sqlPaginatePrefix 分页搜索前缀
+     * @param criterias         required parameter
      * @return Paging data.
      */
-    public static Page<Record> paginate(String sqlGroupName,
+    public static Page<Record> paginate(String sqlPaginatePrefix,
                                         DTCriterias criterias,
                                         List<Object> params) {
-        final String paginateSql = SqlKit.sql(sqlGroupName + ".paginate");
-        Preconditions.checkNotNull(paginateSql, "分页Sql不存在,无法执行分页");
-
-
-        String sql_columns = StringUtils.substringBefore(paginateSql, GojaPropConst.WHERESPLIT);
-        String where = StringUtils.substringAfter(paginateSql, GojaPropConst.WHERESPLIT);
-        return DTDao.paginate(where, sql_columns, criterias, params);
+        Sql sql = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
+        Preconditions.checkNotNull(sql, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
+        return DTDao.paginate(sql, criterias, params);
     }
 
     /**
      * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
      *
-     * @param where       FROM WHERE SQL.
-     * @param sql_columns SELECT column sql.
-     * @param pageDto     required parameter.
+     * @param sqlPaginatePrefix 分页搜索前缀
+     * @param pageDto           required parameter.
      * @return Paging data.
      */
-    public static Page<Record> paginate(String where,
-                                        String sql_columns,
+    public static Page<Record> paginate(String sqlPaginatePrefix,
                                         PageDto pageDto) {
-        where = Strings.nullToEmpty(where);
+        Sql sql = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
+        Preconditions.checkNotNull(sql, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
+        String where = sql.whereSql;
         int pageSize = pageDto.pageSize;
         int p = pageDto.page;
         int start = ((p - 1) * pageSize) + 1;
         final List<RequestParam> params = pageDto.params;
         final List<Object> query_params = pageDto.query_params;
         if ((params.isEmpty()) && (query_params.isEmpty())) {
-            return Db.paginate(start, pageSize, sql_columns, where);
+            return Db.paginate(start, pageSize, sql.selectSql, where);
         } else {
-            if (!StringUtils.containsIgnoreCase(where, "WHERE")) {
-                where = where + " WHERE 1=1 ";
+
+            if (!params.isEmpty()) {
+                where += (sql.conditions ? StringPool.SPACE : " WHERE 1=1 ");
             }
             for (RequestParam param : pageDto.params) {
                 where += param.toSql();
             }
-
-            return Db.paginate(start, pageSize, sql_columns, where, query_params.toArray());
+            return Db.paginate(start, pageSize, sql.selectSql, where, query_params.toArray());
         }
     }
 

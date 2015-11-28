@@ -1,6 +1,7 @@
 package goja.core.sqlinxml;
 
 import com.google.common.base.MoreObjects;
+import goja.core.StringPool;
 import goja.core.app.GojaPropConst;
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,10 +41,11 @@ public class Sql {
         this.sql = sql;
 
         this.selectSql = StringUtils.substringBefore(sql, GojaPropConst.WHERESPLIT);
-        this.whereSql= StringUtils.substringAfter(sql, GojaPropConst.WHERESPLIT);
+        String whereSql = StringUtils.substringAfter(sql, GojaPropConst.WHERESPLIT);
 
         this.where = StringUtils.containsIgnoreCase(sql, GojaPropConst.WHERESPLIT);
         this.conditions = StringUtils.containsIgnoreCase(whereSql, GojaPropConst.CONDITIONSSPLIT);
+        this.whereSql = StringUtils.replace(whereSql, GojaPropConst.CONDITIONSSPLIT, StringPool.SPACE);
     }
 
     @Override

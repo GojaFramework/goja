@@ -28,6 +28,14 @@ import static goja.core.StringPool.SPACE;
  */
 public final class DTDao {
 
+    public static Page<Record> paginate(Sql sql,
+                                        DTCriterias criterias,
+                                        List<Object> params) {
+        // sql语句类似这样
+        // FROM table_name --conditions-- where field_name =?
+        return paginate(sql.whereSql + (sql.conditions ? StringPool.SPACE : " WHERE 1=1 "), sql.selectSql, criterias, params);
+
+    }
 
     /**
      * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
@@ -74,7 +82,9 @@ public final class DTDao {
         }
     }
 
-    private static void itemCustomParamSql(List<Object> params, StringBuilder where_sql, List<Triplet<String, Condition, Object>> custom_params, boolean append_and) {
+    private static void itemCustomParamSql(List<Object> params, StringBuilder where_sql,
+                                           List<Triplet<String, Condition, Object>> custom_params,
+                                           boolean append_and) {
         for (Triplet<String, Condition, Object> custom_param : custom_params) {
             if (append_and) {
                 where_sql.append(" AND ");
@@ -162,15 +172,13 @@ public final class DTDao {
     }
 
     public static StringBuilder appendWhereSql(List<Object> params,
-                                      Sql sql,
-                                      List<Triplet<String, Condition, Object>> custom_params) {
+                                               Sql sql,
+                                               List<Triplet<String, Condition, Object>> custom_params) {
         StringBuilder where = new StringBuilder(sql.whereSql);
         if (!custom_params.isEmpty()) {
             // sql语句类似这样
             // FROM table_name --conditions-- where field_name =?
-            if (!sql.conditions) {
-                where.append(" WHERE ");
-            }
+            where.append(sql.conditions ? " AND " : " WHERE ");
             itemCustomParamSql(params, where, custom_params, false);
         }
         return where;
