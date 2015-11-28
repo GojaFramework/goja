@@ -5,16 +5,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.Table;
-import com.jfinal.plugin.activerecord.TableMapping;
+import com.jfinal.plugin.activerecord.*;
 import goja.core.StringPool;
-import goja.core.app.GojaPropConst;
 import goja.core.date.DateFormatter;
 import goja.core.kits.base.Strs;
+import goja.core.sqlinxml.Sql;
 import goja.core.sqlinxml.SqlKit;
 import goja.core.tuples.Triplet;
 import goja.rapid.datatables.DTDao;
@@ -28,11 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static goja.core.StringPool.COMMA;
 import static goja.core.StringPool.SPACE;
@@ -47,6 +38,7 @@ import static goja.core.StringPool.SPACE;
 public class EuiDataGrid {
 
     public static final DataGridRsp EMPTY_DATAGRID = new DataGridRsp.Builder().rows(Collections.EMPTY_LIST).total(0).build();
+    public static final String EASYUI_DATAGRID = ".easyui.datagrid";
 
 
     private EuiDataGrid() {
@@ -192,6 +184,7 @@ public class EuiDataGrid {
         return rsp(req, sqlGroupName, params);
 
     }
+
     public static DataGridRsp rsp(DataGridReq req, String sqlGroupName, List<Object> params) {
 
         Preconditions.checkNotNull(req);
@@ -199,24 +192,21 @@ public class EuiDataGrid {
         int pageSize = req.rows;
         int page = req.page;
 
-        String sqlId = sqlGroupName + ".easyui.datagrid";
-        String sql = SqlKit.sql(sqlId);
-        if (Strings.isNullOrEmpty(sql)) {
+        String sqlId = sqlGroupName + EASYUI_DATAGRID;
+        Sql sql = SqlKit.sqlO(sqlId);
+        if (sql == null) {
             logger.error("约定的配置sql 不存在，约定sql名称为 {}", sqlId);
             return EMPTY_DATAGRID;
         }
 
-        if (!StringUtils.containsIgnoreCase(sql, GojaPropConst.WHERESPLIT)) {
+        if (!sql.where) {
             logger.error("约定的分页SQL 切割标志符 [--where--] 不存在，请检查 SQLID为{} 的sql语句", sqlId);
             return EMPTY_DATAGRID;
         }
 
 
-        String sql_columns = StringUtils.substringBefore(sql, GojaPropConst.WHERESPLIT);
-        StringBuilder where = new StringBuilder(StringUtils.substringAfter(sql, GojaPropConst.WHERESPLIT));
-
         final List<Triplet<String, Condition, Object>> custom_params = req.params;
-        DTDao.appendWhereSql(params, where, custom_params);
+        StringBuilder where = DTDao.appendWhereSql(params, sql, custom_params);
 
 
         if (!Strings.isNullOrEmpty(req.sortField)) {
@@ -224,7 +214,7 @@ public class EuiDataGrid {
         }
 
 
-        final Page<Record> paginate = Db.paginate(page, pageSize, sql_columns, where.toString(), params.toArray());
+        final Page<Record> paginate = Db.paginate(page, pageSize, sql.selectSql, where.toString(), params.toArray());
         DataGridRsp.Builder builder = new DataGridRsp.Builder();
         builder.rows(paginate.getList()).total(paginate.getTotalRow());
         return builder.build();

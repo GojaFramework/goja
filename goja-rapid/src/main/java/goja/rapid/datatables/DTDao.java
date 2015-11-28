@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import goja.core.StringPool;
+import goja.core.sqlinxml.Sql;
 import goja.rapid.db.Condition;
 import goja.core.tuples.Triplet;
 import org.apache.commons.lang3.StringUtils;
@@ -158,5 +159,20 @@ public final class DTDao {
             where.append(" WHERE ");
             itemCustomParamSql(params, where, custom_params, false);
         }
+    }
+
+    public static StringBuilder appendWhereSql(List<Object> params,
+                                      Sql sql,
+                                      List<Triplet<String, Condition, Object>> custom_params) {
+        StringBuilder where = new StringBuilder(sql.whereSql);
+        if (!custom_params.isEmpty()) {
+            // sql语句类似这样
+            // FROM table_name --conditions-- where field_name =?
+            if (!sql.conditions) {
+                where.append(" WHERE ");
+            }
+            itemCustomParamSql(params, where, custom_params, false);
+        }
+        return where;
     }
 }

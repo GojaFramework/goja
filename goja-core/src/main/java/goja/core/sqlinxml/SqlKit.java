@@ -44,7 +44,7 @@ public class SqlKit {
     /**
      * Management of SQL set
      */
-    private static final Map<String, String> SQL_MAP = Maps.newHashMap();
+    private static final Map<String, Sql> SQL_MAP = Maps.newHashMap();
 
     private SqlKit() {
     }
@@ -57,6 +57,12 @@ public class SqlKit {
      */
     public static String sql(String groupNameAndsqlId) {
 
+        final Sql sql = SQL_MAP.get(groupNameAndsqlId);
+        return sql == null ? StringPool.EMPTY : sql.sql;
+    }
+
+    public static Sql sqlO(String groupNameAndsqlId) {
+
         return SQL_MAP.get(groupNameAndsqlId);
     }
 
@@ -64,7 +70,7 @@ public class SqlKit {
         SQL_MAP.clear();
     }
 
-    static void putOver(String name, String value) {
+    static void putOver(String name, Sql value) {
         SQL_MAP.put(name, value);
     }
 
@@ -148,7 +154,8 @@ public class SqlKit {
                 logger.warn("In file {} SQL id in XML for {} is empty", file_name, sql_name);
                 continue;
             }
-            SQL_MAP.put(sql_name, _val.replace('\r', ' ').replace('\n', ' ').replaceAll(" {2,}", " "));
+            final String clearSql = _val.replace('\r', ' ').replace('\n', ' ').replaceAll(" {2,}", " ");
+            SQL_MAP.put(sql_name, new Sql(clearSql));
         }
     }
 

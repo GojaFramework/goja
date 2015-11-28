@@ -84,7 +84,7 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
                                         name = change_file.getName();
                                     }
                                     for (SqlItem sqlItem : group.sqlItems) {
-                                        SqlKit.putOver(name + DOT + sqlItem.id, sqlItem.value);
+                                        SqlKit.putOver(name + DOT + sqlItem.id, new Sql(sqlItem.value));
                                     }
                                 } catch (IOException e) {
                                     logger.error("reade jar xml config has error!");
@@ -102,7 +102,8 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
                     name = change_file.getName();
                 }
                 for (SqlItem sqlItem : group.sqlItems) {
-                    SqlKit.putOver(name + DOT + sqlItem.id, sqlItem.value);
+
+                    SqlKit.putOver(name + DOT + sqlItem.id, new Sql(sqlItem.value));
                 }
                 if (logger.isDebugEnabled()) {
                     logger.debug("reload file:" + absolutePath);
