@@ -368,7 +368,7 @@ public class Goja extends JFinalConfig {
                 final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
                 // 如果配置启动了工作流引擎
                 if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
-                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin.getDataSource());
+                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin);
                     plugins.add(snakerPlugin);
                 }
             }
