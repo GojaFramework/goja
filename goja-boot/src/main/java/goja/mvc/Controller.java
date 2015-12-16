@@ -362,6 +362,15 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(response);
     }
 
+    /**
+     * 获取EasyUI Datagrid 的表格参数
+     *
+     * @return 表格请求参数
+     */
+    protected Optional<DataGridReq> getEuiDGReq() {
+        return EuiDataGrid.req(getRequest());
+    }
+
 
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
@@ -381,9 +390,22 @@ public class Controller extends com.jfinal.core.Controller {
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
      *
+     * @param gridReq      请求参数
+     * @param sqlGroupName 指定SQL管理的GroupName
+     */
+    protected void renderEasyUIDataGrid(DataGridReq gridReq, String sqlGroupName) {
+        Preconditions.checkNotNull(gridReq, "参数不能为空");
+        renderJson(EuiDataGrid.rsp(gridReq, sqlGroupName));
+    }
+
+
+    /**
+     * 渲染DataGrid的表格展示，支持排序和搜索
+     *
      * @param sqlGroupName 指定SQL管理的GroupName
      */
     protected void renderEasyUIDataGrid(String sqlGroupName) {
+        Preconditions.checkNotNull(sqlGroupName, "sql Group Name 不能为空");
         final Optional<DataGridReq> reqOptional = EuiDataGrid.req(getRequest());
         if (reqOptional.isPresent()) {
             renderJson(EuiDataGrid.rsp(reqOptional.get(), sqlGroupName));
@@ -399,6 +421,7 @@ public class Controller extends com.jfinal.core.Controller {
      * @param sqlGroupName 指定SQL管理的GroupName
      */
     protected void renderEasyUIDataGrid(String sqlGroupName, List<Object> params) {
+        Preconditions.checkNotNull(sqlGroupName, "sql Group Name 不能为空");
         final Optional<DataGridReq> reqOptional = EuiDataGrid.req(getRequest());
         if (reqOptional.isPresent()) {
             renderJson(EuiDataGrid.rsp(reqOptional.get(), sqlGroupName, params));
