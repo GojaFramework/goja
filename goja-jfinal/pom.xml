@@ -145,13 +145,6 @@
             <version>${javassist.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>8.1.8</version>
-            <scope>provided</scope>
-        </dependency>
-
 
         <dependency>
             <groupId>junit</groupId>

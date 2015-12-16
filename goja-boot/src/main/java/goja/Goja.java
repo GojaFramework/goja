@@ -86,16 +86,16 @@ import java.util.Properties;
 public class Goja extends JFinalConfig {
 
 
-    private static final org.slf4j.Logger logger       = LoggerFactory.getLogger(Goja.class);
-    public static        boolean          initlization = false;
-    public static        boolean          started      = false;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Goja.class);
+    public static boolean initlization = false;
+    public static boolean started = false;
     // the application configuration.
-    public static Properties       configuration;
+    public static Properties configuration;
     // the application view path.
-    public static String           viewPath;
-    public static String           domain;
-    public static String           appName;
-    public static String           appVersion;
+    public static String viewPath;
+    public static String domain;
+    public static String appName;
+    public static String appVersion;
     public static SecurityUserData securityUserData;
     public static File applicationPath = null;
     private Routes _routes;
@@ -154,16 +154,16 @@ public class Goja extends JFinalConfig {
 
         domain = GojaConfig.getAppDomain();
         final boolean jspViewType = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_VIEW_JSP, false);
-        if(jspViewType){
+        if (jspViewType) {
             constants.setViewType(ViewType.JSP);
-        } else{
+        } else {
             constants.setFreeMarkerViewExtension(".ftl");
             setFtlSharedVariable();
         }
         constants.setErrorRenderFactory(new GojaErrorRenderFactory());
 
         constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
-        constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH,"upload"));
+        constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "upload"));
     }
 
     @Override
@@ -369,6 +369,7 @@ public class Goja extends JFinalConfig {
                 // 如果配置启动了工作流引擎
                 if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
                     SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin.getDataSource());
+                    plugins.add(snakerPlugin);
                 }
             }
         }
@@ -446,7 +447,7 @@ public class Goja extends JFinalConfig {
             final WallFilter wall = new WallFilter();
             wall.setDbType(dbtype);
             druidPlugin.addFilter(wall);
-            if(GojaConfig.getPropertyToBoolean(GojaPropConst.DBLOGFILE, false)){
+            if (GojaConfig.getPropertyToBoolean(GojaPropConst.DBLOGFILE, false)) {
                 // 增加 LogFilter 输出JDBC执行的日志
                 druidPlugin.addFilter(new Slf4jLogFilter());
             }

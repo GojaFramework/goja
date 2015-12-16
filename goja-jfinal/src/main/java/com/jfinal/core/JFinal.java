@@ -16,8 +16,6 @@
 
 package com.jfinal.core;
 
-import java.util.List;
-import javax.servlet.ServletContext;
 import com.jfinal.config.Constants;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.handler.Handler;
@@ -25,11 +23,15 @@ import com.jfinal.handler.HandlerFactory;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.render.RenderFactory;
-import com.jfinal.server.IServer;
-import com.jfinal.server.ServerFactory;
 import com.jfinal.token.ITokenCache;
 import com.jfinal.token.TokenManager;
 import com.jfinal.upload.OreillyCos;
+
+import javax.servlet.ServletContext;
+import java.util.List;
+
+//import com.jfinal.server.IServer;
+//import com.jfinal.server.ServerFactory;
 
 /**
  * JFinal
@@ -40,7 +42,7 @@ public final class JFinal {
 	private ActionMapping actionMapping;
 	private Handler handler;
 	private ServletContext servletContext;
-	private static IServer server;
+//	private static IServer server;
 	private String contextPath = "";
 	
 	Handler getHandler() {
@@ -108,7 +110,7 @@ public final class JFinal {
 		List<IPlugin> plugins = Config.getPlugins().getPluginList();
 		if (plugins != null) {
 			for (int i=plugins.size()-1; i >= 0; i--) {		// stop plugins
-				boolean success = false;
+				boolean success;
 				try {
 					success = plugins.get(i).stop();
 				} 
@@ -127,38 +129,38 @@ public final class JFinal {
 		return this.servletContext;
 	}
 	
-	public static void start() {
-		server = ServerFactory.getServer();
-		server.start();
-	}
+//	public static void start() {
+//		server = ServerFactory.getServer();
+//		server.start();
+//	}
 	
-	public static void start(String webAppDir, int port, String context, int scanIntervalSeconds) {
-		server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
-		server.start();
-	}
+//	public static void start(String webAppDir, int port, String context, int scanIntervalSeconds) {
+//		server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
+//		server.start();
+//	}
 	
-	public static void stop() {
-		server.stop();
-	}
+//	public static void stop() {
+//		server.stop();
+//	}
 	
-	/**
-	 * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE
-	 * args example: WebRoot 80 / 5
-	 */
-	public static void main(String[] args) {
-		if (args == null || args.length == 0) {
-			server = ServerFactory.getServer();
-			server.start();
-		}
-		else {
-			String webAppDir = args[0];
-			int port = Integer.parseInt(args[1]);
-			String context = args[2];
-			int scanIntervalSeconds = Integer.parseInt(args[3]);
-			server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
-			server.start();
-		}
-	}
+//	/**
+//	 * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE
+//	 * args example: WebRoot 80 / 5
+//	 */
+//	public static void main(String[] args) {
+//		if (args == null || args.length == 0) {
+//			server = ServerFactory.getServer();
+//			server.start();
+//		}
+//		else {
+//			String webAppDir = args[0];
+//			int port = Integer.parseInt(args[1]);
+//			String context = args[2];
+//			int scanIntervalSeconds = Integer.parseInt(args[3]);
+//			server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
+//			server.start();
+//		}
+//	}
 	
 	public List<String> getAllActionKeys() {
 		return actionMapping.getAllActionKeys();

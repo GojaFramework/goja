@@ -496,6 +496,6 @@ public abstract class Requests {
      */
     public static String replaceTagHTML(String src) {
         String regex = "\\<(.+?)\\>";
-        return org.apache.commons.lang.StringUtils.isNotEmpty(src) ? src.replaceAll(regex, "") : "";
+        return StringUtils.isNotEmpty(src) ? src.replaceAll(regex, "") : "";
     }
 }

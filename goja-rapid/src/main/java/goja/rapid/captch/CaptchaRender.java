@@ -21,7 +21,7 @@ import com.jfinal.render.Render;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import org.apache.commons.codec.binary.StringUtils;
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +111,7 @@ public class CaptchaRender extends Render {
         configurableCaptchaService.setBackgroundFactory(backgroundFactory);
 
         // 图片滤镜设置
-        int filterNum = filter == null ? RandomUtils.nextInt(4) : filter.value();
+        int filterNum = filter == null ? RandomUtils.nextInt(0,4) : filter.value();
 
         switch (filterNum) {
             case 0:

@@ -39,6 +39,14 @@
             <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.sogyf</groupId>
+            <artifactId>goja-snaker</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.jeecg</groupId>
             <artifactId>easypoi-base</artifactId>

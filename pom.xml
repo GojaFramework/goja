@@ -65,7 +65,7 @@
         <httpclient.version>4.5.1</httpclient.version>
         <httpcore.version>4.4.3</httpcore.version>
         <!--the core util. -->
-        <guava.version>18.0</guava.version>
+        <guava.version>19.0</guava.version>
         <fst.version>2.40</fst.version>
         <fastjson.version>1.2.7</fastjson.version>
         <jackson.version>2.6.3</jackson.version>
@@ -79,7 +79,6 @@
         <jsoup.version>1.8.3</jsoup.version>
 
         <zxing.version>3.2.1</zxing.version>
-        <snaker.version>2.5.1</snaker.version>
         <xstream.version>1.4.8</xstream.version>
 
         <!-- the common service -->
@@ -111,7 +110,6 @@
         <ant.version>1.9.6</ant.version>
         <!--the office -->
         <poi.version>3.11</poi.version>
-        <jetty.version>9.2.5.v20141112</jetty.version>
     </properties>
 
 
@@ -120,6 +118,7 @@
         <module>goja-core</module>
         <module>goja-wxchat</module>
         <module>goja-rapid</module>
+        <module>goja-snaker</module>
         <module>goja-boot</module>
         <module>goja-test</module>
     </modules>
