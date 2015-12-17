@@ -110,6 +110,9 @@
         <ant.version>1.9.6</ant.version>
         <!--the office -->
         <poi.version>3.11</poi.version>
+
+        <!--报表工具-->
+        <jasperreports.version>6.2.0</jasperreports.version>
     </properties>
 
 
