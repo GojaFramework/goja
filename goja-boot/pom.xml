@@ -32,6 +32,7 @@
             <groupId>com.github.sogyf</groupId>
             <artifactId>goja-rapid</artifactId>
             <version>${project.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.github.sogyf</groupId>
@@ -40,12 +41,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-snaker</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-        </dependency>
 
         <dependency>
             <groupId>org.jeecg</groupId>

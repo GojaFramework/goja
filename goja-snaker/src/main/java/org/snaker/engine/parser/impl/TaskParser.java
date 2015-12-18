@@ -31,6 +31,7 @@ import java.util.List;
  * @since 1.0
  */
 public class TaskParser extends AbstractNodeParser {
+	private static final String ATTR_ASSIGNEEDISPLAY = "assigneeDisplay";
 	/**
 	 * 由于任务节点需要解析form、assignee属性，这里覆盖抽象类方法实现
 	 */

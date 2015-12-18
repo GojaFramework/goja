@@ -14,6 +14,7 @@
  */
 package org.snaker.engine.model;
 
+import com.google.common.collect.Lists;
 import org.snaker.engine.AssignmentHandler;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.handlers.impl.MergeActorHandler;
@@ -22,7 +23,6 @@ import org.snaker.engine.helper.ClassHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.scheduling.JobCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -247,8 +247,8 @@ public class TaskModel extends WorkModel {
      * @deprecated
      */
     public List<TaskModel> getNextTaskModels() {
-        List<TaskModel> models = new ArrayList<TaskModel>();
-        for(TransitionModel tm : this.getOutputs()) {
+        List<TaskModel> models = Lists.newArrayList();
+		for(TransitionModel tm : this.getOutputs()) {
             addNextModels(models, tm, TaskModel.class);
         }
         return models;
