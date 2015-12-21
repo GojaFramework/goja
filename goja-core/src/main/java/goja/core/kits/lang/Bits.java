@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.core.kits.base;
+package goja.core.kits.lang;
 
 /**
  * Part a copy of <code>java.io.Bits</code>, which is for unknown reason package local.

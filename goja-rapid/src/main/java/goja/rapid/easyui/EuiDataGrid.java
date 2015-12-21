@@ -8,7 +8,7 @@ import com.google.common.primitives.Ints;
 import com.jfinal.plugin.activerecord.*;
 import goja.core.StringPool;
 import goja.core.date.DateFormatter;
-import goja.core.kits.base.Strs;
+import goja.core.kits.lang.Strs;
 import goja.core.sqlinxml.Sql;
 import goja.core.sqlinxml.SqlKit;
 import goja.core.tuples.Triplet;

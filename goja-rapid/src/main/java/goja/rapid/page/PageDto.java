@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import goja.core.app.GojaConfig;
 import goja.core.StringPool;
-import goja.core.kits.base.Strs;
+import goja.core.kits.lang.Strs;
 import goja.rapid.db.Condition;
 import goja.rapid.db.RequestParam;
 import goja.rapid.db.RequestParam.Direction;

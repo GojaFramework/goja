@@ -8,7 +8,7 @@ import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import goja.core.StringPool;
-import goja.core.kits.base.Strs;
+import goja.core.kits.lang.Strs;
 import goja.rapid.db.Condition;
 import goja.core.tuples.Pair;
 import goja.core.tuples.Triplet;

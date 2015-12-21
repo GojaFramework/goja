@@ -7,7 +7,7 @@
 package goja.core.encry;
 
 import goja.core.StringPool;
-import goja.core.kits.base.ExceptionKit;
+import goja.core.kits.lang.ExceptionKit;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;

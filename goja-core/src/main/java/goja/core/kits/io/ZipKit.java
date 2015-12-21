@@ -7,8 +7,8 @@
 package goja.core.kits.io;
 
 import goja.core.StringPool;
-import goja.core.kits.base.CharKit;
-import goja.core.kits.base.Wildcard;
+import goja.core.kits.lang.CharKit;
+import goja.core.kits.lang.Wildcard;
 import goja.core.kits.stream.StreamUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
