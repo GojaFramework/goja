@@ -1,4 +1,4 @@
-package goja.core.kits;
+package goja.core.lambda;
 
 /**
  * <p> </p>

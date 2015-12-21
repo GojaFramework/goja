@@ -1,7 +1,7 @@
 package goja.core.concurrent;
 
 
-import goja.core.kits.Mapper;
+import goja.core.lambda.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
