@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import goja.core.kits.Is;
 import goja.core.lambda.Dynamic;
 import goja.core.lambda.Mapper;
@@ -14,8 +15,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p> </p>
@@ -118,74 +117,6 @@ public class G {
         return String.format(format, args);
     }
 
-    public static String replace(String s, String[][] repls) {
-        for (String[] repl : repls) {
-            s = s.replaceAll(Pattern.quote(repl[0]), repl[1]);
-        }
-        return s;
-    }
-
-    public static String replace(String s, String regex, Mapper<String[], String> replacer) {
-        StringBuffer output = new StringBuffer();
-        Pattern p = Pattern.compile(regex);
-        Matcher matcher = p.matcher(s);
-
-        while (matcher.find()) {
-            int len = matcher.groupCount() + 1;
-            String[] groups = new String[len];
-
-            for (int i = 0; i < groups.length; i++) {
-                groups[i] = matcher.group(i);
-            }
-
-            Object value;
-            try {
-                value = replacer.map(groups);
-            } catch (Exception e) {
-                throw rte(e);
-            }
-
-            matcher.appendReplacement(output, str(value));
-        }
-
-        matcher.appendTail(output);
-        return output.toString();
-    }
-
-    public static void print(Object... values) {
-        String text;
-
-        if (values != null) {
-            text = values.length == 1 ? str(values[0]) : str(values);
-        } else {
-            text = "null";
-        }
-
-        System.out.println(text);
-    }
-
-    @SafeVarargs
-    @SuppressWarnings({ "varargs" })
-    public static <T> String join(String sep, T... items) {
-        return render(items, "%s", sep);
-    }
-
-    public static String join(String sep, Iterable<?> items) {
-        return render(items, "%s", sep);
-    }
-
-    public static String join(String sep, char[][] items) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < items.length; i++) {
-            if (i > 0) {
-                sb.append(sep);
-            }
-            sb.append(items[i]);
-        }
-
-        return sb.toString();
-    }
 
     public static String render(Object[] items, String itemFormat, String sep) {
         StringBuilder sb = new StringBuilder();
@@ -218,19 +149,7 @@ public class G {
         return sb.toString();
     }
 
-    public static <T> Iterator<T> iterator(T[] arr) {
-        return Arrays.asList(arr).iterator();
-    }
 
-    @SafeVarargs
-    @SuppressWarnings({ "varargs" })
-    public static <T> T[] array(T... items) {
-        return items;
-    }
-
-    public static Object[] array(Iterable<?> items) {
-        return (items instanceof Collection) ? ((Collection<?>) items).toArray() : list(items).toArray();
-    }
 
     @SuppressWarnings("unchecked")
     public static <T> Set<T> synchronizedSet() {
@@ -238,7 +157,7 @@ public class G {
     }
 
     public static <T> Set<T> set() {
-        return new LinkedHashSet<T>();
+        return Sets.newLinkedHashSet();
     }
 
     public static <T> Set<T> set(Iterable<? extends T> values) {
@@ -483,7 +402,7 @@ public class G {
     }
 
     public static String safe(String s) {
-        return or(s, "");
+        return or(s, StringPool.EMPTY);
     }
 
     public static boolean safe(Boolean b) {
@@ -653,7 +572,7 @@ public class G {
     }
 
     public static boolean isEmpty(String value) {
-        return value == null || value.isEmpty();
+        return Strings.isNullOrEmpty(value);
     }
 
     public static boolean isEmpty(Object[] arr) {
@@ -738,7 +657,7 @@ public class G {
     }
 
     public static String mul(String s, int n) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < n; i++) {
             sb.append(s);
@@ -811,7 +730,6 @@ public class G {
     }
 
     public static <T> List<T> range(Iterable<T> items, int fromIndex, int toIndex) {
-        // TODO more efficient implementation
         List<T> list = list(items);
 
         fromIndex = bounded(0, fromIndex, list.size());
@@ -1071,17 +989,6 @@ public class G {
             destination.clear();
             destination.putAll(source);
         }
-    }
-
-    public static <K, V> V get(Map<K, V> map, K key) {
-        V value = map.get(key);
-        notNull(value, "map[%s]", key);
-        return value;
-    }
-
-    public static <K, V> V get(Map<K, V> map, K key, V defaultValue) {
-        V value = map.get(key);
-        return value != null ? value : defaultValue;
     }
 
 }

@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import goja.rapid.wf.ext.ExtTaskModel;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.model.*;
