@@ -16,15 +16,17 @@
 
 package com.jfinal.core;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import com.jfinal.config.Constants;
 import com.jfinal.aop.Invocation;
+import com.jfinal.config.Constants;
 import com.jfinal.handler.Handler;
-import com.jfinal.log.Log;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * ActionHandler
@@ -34,7 +36,7 @@ final class ActionHandler extends Handler {
 	private final boolean devMode;
 	private final ActionMapping actionMapping;
 	private static final RenderFactory renderFactory = RenderFactory.me();
-	private static final Log log = Log.getLog(ActionHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ActionHandler.class);
 	
 	public ActionHandler(ActionMapping actionMapping, Constants constants) {
 		this.actionMapping = actionMapping;

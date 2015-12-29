@@ -16,19 +16,18 @@
 
 package com.jfinal.kit;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Properties;
 import com.jfinal.core.Const;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.Properties;
 
 /**
  * Prop. Prop can load properties file from CLASSPATH or File object.
  */
 public class Prop {
-	
+	private static final Logger log = LoggerFactory.getLogger(Prop.class);
 	private Properties properties = null;
 	
 	/**
@@ -64,7 +63,7 @@ public class Prop {
 			throw new RuntimeException("Error loading properties file.", e);
 		}
 		finally {
-			if (inputStream != null) try {inputStream.close();} catch (IOException e) {LogKit.error(e.getMessage(), e);}
+			if (inputStream != null) try {inputStream.close();} catch (IOException e) {log.error(e.getMessage(), e);}
 		}
 	}
 	
@@ -101,7 +100,7 @@ public class Prop {
 			throw new RuntimeException("Error loading properties file.", e);
 		}
 		finally {
-			if (inputStream != null) try {inputStream.close();} catch (IOException e) {LogKit.error(e.getMessage(), e);}
+			if (inputStream != null) try {inputStream.close();} catch (IOException e) {log.error(e.getMessage(), e);}
 		}
 	}
 	

@@ -16,16 +16,12 @@
 
 package com.jfinal.core;
 
-import java.util.List;
-import com.jfinal.config.Constants;
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.config.Routes;
-import com.jfinal.config.Plugins;
-import com.jfinal.config.Handlers;
-import com.jfinal.config.Interceptors;
-import com.jfinal.log.Log;
-import com.jfinal.log.LogManager;
+import com.jfinal.config.*;
 import com.jfinal.plugin.IPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 class Config {
 	
@@ -34,7 +30,9 @@ class Config {
 	private static final Plugins plugins = new Plugins();
 	private static final Interceptors interceptors = new Interceptors();
 	private static final Handlers handlers = new Handlers();
-	private static Log log;
+//	private static Log log;
+
+	private static final Logger log = LoggerFactory.getLogger(Config.class);
 	
 	// prevent new Config();
 	private Config() {
@@ -44,7 +42,8 @@ class Config {
 	 * Config order: constant, route, plugin, interceptor, handler
 	 */
 	static void configJFinal(JFinalConfig jfinalConfig) {
-		jfinalConfig.configConstant(constants);				initLogFactory();
+		jfinalConfig.configConstant(constants);
+//		initLogFactory();
 		jfinalConfig.configRoute(routes);
 		jfinalConfig.configPlugin(plugins);					startPlugins();	// very important!!!
 		jfinalConfig.configInterceptor(interceptors);
@@ -99,9 +98,5 @@ class Config {
 		}
 	}
 	
-	private static void initLogFactory() {
-		LogManager.me().init();
-		log = Log.getLog(Config.class);
-		JFinalFilter.initLog();
-	}
+
 }

@@ -50,11 +50,6 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>com.github.bingoohuang</groupId>
-            <artifactId>patchca</artifactId>
-            <version>0.0.1</version>
-        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>

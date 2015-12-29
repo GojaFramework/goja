@@ -16,31 +16,29 @@
 
 package com.jfinal.core;
 
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.jfinal.config.Constants;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.handler.Handler;
-import com.jfinal.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * JFinal framework filter
  */
 public final class JFinalFilter implements Filter {
+
+	private static final Logger log = LoggerFactory.getLogger(JFinalFilter.class);
 	
 	private Handler handler;
 	private String encoding;
 	private JFinalConfig jfinalConfig;
 	private Constants constants;
 	private static final JFinal jfinal = JFinal.me();
-	private static Log log;
 	private int contextPathLength;
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -102,9 +100,5 @@ public final class JFinalFilter implements Filter {
 			jfinalConfig = (JFinalConfig)temp;
 		else
 			throw new RuntimeException("Can not create instance of class: " + configClass + ". Please check the config in web.xml");
-	}
-	
-	static void initLog() {
-		log = Log.getLog(JFinalFilter.class);
 	}
 }

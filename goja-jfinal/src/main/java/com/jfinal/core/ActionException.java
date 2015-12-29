@@ -16,12 +16,14 @@
 
 package com.jfinal.core;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.jfinal.kit.StrKit;
-import com.jfinal.log.Log;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * ActionException.
@@ -29,7 +31,7 @@ import com.jfinal.render.RenderFactory;
 public class ActionException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1998063243843477017L;
-	private static final Log log = Log.getLog(ActionException.class);
+	private static final Logger log = LoggerFactory.getLogger(ActionException.class);
 	private int errorCode;
 	private Render errorRender;
 	

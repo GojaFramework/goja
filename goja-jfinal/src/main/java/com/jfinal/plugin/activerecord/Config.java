@@ -16,20 +16,24 @@
 
 package com.jfinal.plugin.activerecord;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.sql.DataSource;
-import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.cache.EhCache;
 import com.jfinal.plugin.activerecord.cache.ICache;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Config {
 	private final ThreadLocal<Connection> threadLocal = new ThreadLocal<Connection>();
+
+	private static final Logger log = LoggerFactory.getLogger(Config.class);
 	
 	String name;
 	DataSource dataSource;
@@ -181,8 +185,8 @@ public class Config {
 	 * ThreadLocal support declare transaction.
 	 */
 	public final void close(ResultSet rs, Statement st, Connection conn) {
-		if (rs != null) {try {rs.close();} catch (SQLException e) {LogKit.error(e.getMessage(), e);}}
-		if (st != null) {try {st.close();} catch (SQLException e) {LogKit.error(e.getMessage(), e);}}
+		if (rs != null) {try {rs.close();} catch (SQLException e) {log.error(e.getMessage(), e);}}
+		if (st != null) {try {st.close();} catch (SQLException e) {log.error(e.getMessage(), e);}}
 		
 		if (threadLocal.get() == null) {	// in transaction if conn in threadlocal
 			if (conn != null) {try {conn.close();}
@@ -191,7 +195,7 @@ public class Config {
 	}
 	
 	public final void close(Statement st, Connection conn) {
-		if (st != null) {try {st.close();} catch (SQLException e) {LogKit.error(e.getMessage(), e);}}
+		if (st != null) {try {st.close();} catch (SQLException e) {log.error(e.getMessage(), e);}}
 		
 		if (threadLocal.get() == null) {	// in transaction if conn in threadlocal
 			if (conn != null) {try {conn.close();}

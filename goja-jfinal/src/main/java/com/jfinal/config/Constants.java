@@ -22,8 +22,6 @@ import com.jfinal.i18n.I18n;
 import com.jfinal.json.IJsonFactory;
 import com.jfinal.json.JsonManager;
 import com.jfinal.kit.StrKit;
-import com.jfinal.log.ILogFactory;
-import com.jfinal.log.LogManager;
 import com.jfinal.render.*;
 import com.jfinal.token.ITokenCache;
 
@@ -303,12 +301,7 @@ final public class Constants {
 		RenderFactory.me().setMainRenderFactory(mainRenderFactory);
 	}
 	
-	public void setLogFactory(ILogFactory logFactory) {
-		if (logFactory == null) {
-			throw new IllegalArgumentException("logFactory can not be null.");
-		}
-		LogManager.me().setDefaultLogFactory(logFactory);
-	}
+
 	
 	public void setErrorRenderFactory(IErrorRenderFactory errorRenderFactory) {
 		if (errorRenderFactory == null) {
