@@ -16,11 +16,15 @@
 
 package com.jfinal.aop;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.jfinal.core.Controller;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import com.jfinal.core.Controller;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * InterceptorManager.
@@ -43,10 +47,10 @@ public class InterceptorManager {
 	private Interceptor[] globalServiceInters = NULL_INTERS;
 	
 	// 单例拦截器
-	private final ConcurrentHashMap<Class<? extends Interceptor>, Interceptor> singletonMap = new ConcurrentHashMap<Class<? extends Interceptor>, Interceptor>();
+	private final ConcurrentMap<Class<? extends Interceptor>, Interceptor> singletonMap = Maps.newConcurrentMap();
 	
 	// 业务层 Class 级别拦截器缓存
-	private final ConcurrentHashMap<Class<?>, Interceptor[]> serviceClassInters = new ConcurrentHashMap<Class<?>, Interceptor[]>();
+	private final ConcurrentMap<Class<?>, Interceptor[]> serviceClassInters = Maps.newConcurrentMap();
 	
 	private static final InterceptorManager me = new InterceptorManager();
 	
@@ -105,25 +109,17 @@ public class InterceptorManager {
 			clearIntersOnClass = null;
 		}
 		
-		ArrayList<Interceptor> result = new ArrayList<Interceptor>(globalInters.length + injectInters.length + classInters.length + methodInters.length);
-		for (Interceptor inter : globalInters) {
-			result.add(inter);
-		}
-		for (Interceptor inter : injectInters) {
-			result.add(inter);
-		}
+		ArrayList<Interceptor> result = Lists.newArrayListWithCapacity(globalInters.length + injectInters.length + classInters.length + methodInters.length);
+		Collections.addAll(result, globalInters);
+		Collections.addAll(result, injectInters);
 		if (clearIntersOnClass != null && clearIntersOnClass.length > 0) {
 			removeInterceptor(result, clearIntersOnClass);
 		}
-		for (Interceptor inter : classInters) {
-			result.add(inter);
-		}
+		Collections.addAll(result, classInters);
 		if (clearIntersOnMethod != null && clearIntersOnMethod.length > 0) {
 			removeInterceptor(result, clearIntersOnMethod);
 		}
-		for (Interceptor inter : methodInters) {
-			result.add(inter);
-		}
+		Collections.addAll(result, methodInters);
 		return result.toArray(new Interceptor[result.size()]);
 	}
 	
@@ -161,7 +157,7 @@ public class InterceptorManager {
 			for (int i=0; i<result.length; i++) {
 				result[i] = singletonMap.get(interceptorClasses[i]);
 				if (result[i] == null) {
-					result[i] = (Interceptor)interceptorClasses[i].newInstance();
+					result[i] = interceptorClasses[i].newInstance();
 					singletonMap.put(interceptorClasses[i], result[i]);
 				}
 			}

@@ -17,6 +17,7 @@
 package com.jfinal.aop;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,9 +45,8 @@ public abstract class InterceptorStack implements Interceptor {
 		
 		if (interList == null)
 			interList = new ArrayList<Interceptor>();
-		
-		for (Interceptor ref : interceptors)
-			interList.add(ref);
+
+		Collections.addAll(interList, interceptors);
 		
 		return this;
 	}
