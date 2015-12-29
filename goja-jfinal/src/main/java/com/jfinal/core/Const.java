@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,18 @@ package com.jfinal.core;
 
 import com.jfinal.render.ViewType;
 
-import java.io.File;
-
 /**
  * Global constants definition
  */
 public interface Const {
 	
-	String JFINAL_VERSION = "2.0";
+	String JFINAL_VERSION = "2.1";
 	
 	ViewType DEFAULT_VIEW_TYPE = ViewType.FREE_MARKER;
+	
+	String DEFAULT_BASE_UPLOAD_PATH = "upload";
+	
+	String DEFAULT_BASE_DOWNLOAD_PATH = "download";
 	
 	String DEFAULT_ENCODING = "UTF-8";
 	
@@ -39,10 +41,7 @@ public interface Const {
 	
 	String DEFAULT_FREE_MARKER_EXTENSION = ".html";			// The original is ".ftl", Recommend ".html"
 	
-//	String DEFAULT_VELOCITY_EXTENSION = ".vm";
-	
-	// "WEB-INF/download" + File.separator maybe better otherwise it can be downloaded by browser directly
-	String DEFAULT_FILE_RENDER_BASE_PATH = File.separator + "download" + File.separator;
+	String DEFAULT_VELOCITY_EXTENSION = ".vm";
 	
 	int DEFAULT_MAX_POST_SIZE = 1024 * 1024 * 10;  			// Default max post size of multipart request: 10 Meg
 	
@@ -50,7 +49,7 @@ public interface Const {
 	
 	int DEFAULT_FREEMARKER_TEMPLATE_UPDATE_DELAY = 3600;	// For not devMode only
 	
-	String DEFAULT_TOKEN_NAME = "jfinal_token";
+	String DEFAULT_TOKEN_NAME = "_jfinal_token";
 	
 	int DEFAULT_SECONDS_OF_TOKEN_TIME_OUT = 900;			// 900 seconds ---> 15 minutes
 	

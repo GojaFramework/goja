@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,31 @@
 
 package com.jfinal.core;
 
-import com.jfinal.aop.Invocation;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import com.jfinal.config.Constants;
+import com.jfinal.aop.Invocation;
 import com.jfinal.handler.Handler;
+import com.jfinal.log.Log;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * ActionHandler
  */
 final class ActionHandler extends Handler {
-
-	private final boolean       devMode;
+	
+	private final boolean devMode;
 	private final ActionMapping actionMapping;
 	private static final RenderFactory renderFactory = RenderFactory.me();
-	private static final Logger log = LoggerFactory.getLogger(ActionHandler.class);
-
+	private static final Log log = Log.getLog(ActionHandler.class);
+	
 	public ActionHandler(ActionMapping actionMapping, Constants constants) {
 		this.actionMapping = actionMapping;
 		this.devMode = constants.getDevMode();
 	}
-
+	
 	/**
 	 * handle
 	 * 1: Action action = actionMapping.getAction(target)
@@ -51,30 +49,34 @@ final class ActionHandler extends Handler {
 	 */
 	public final void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
 		if (target.indexOf('.') != -1) {
-			return;
+			return ;
 		}
-
+		
 		isHandled[0] = true;
 		String[] urlPara = {null};
 		Action action = actionMapping.getAction(target, urlPara);
-
+		
 		if (action == null) {
 			if (log.isWarnEnabled()) {
 				String qs = request.getQueryString();
 				log.warn("404 Action Not Found: " + (qs == null ? target : target + "?" + qs));
 			}
 			renderFactory.getErrorRender(404).setContext(request, response).render();
-			return;
+			return ;
 		}
-
+		
 		try {
 			Controller controller = action.getControllerClass().newInstance();
 			controller.init(request, response, urlPara[0]);
-
+			
 			if (devMode) {
-				boolean isMultipartRequest = ActionReporter.reportCommonRequest(controller, action);
-				new Invocation(action, controller).invoke();
-				if (isMultipartRequest) ActionReporter.reportMultipartRequest(controller, action);
+				if (ActionReporter.isReportAfterInvocation(request)) {
+					new Invocation(action, controller).invoke();
+					ActionReporter.report(controller, action);
+				} else {
+					ActionReporter.report(controller, action);
+					new Invocation(action, controller).invoke();
+				}
 			}
 			else {
 				new Invocation(action, controller).invoke();
@@ -99,11 +101,6 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
 			}
-            // sogyf:增加异常错误堆栈显示
-            if(devMode){
-                request.setAttribute("goja_error", e.getCause());
-                renderFactory.getErrorRender(500).setContext(request, response).render();
-            }
 		}
 		catch (ActionException e) {
 			int errorCode = e.getErrorCode();
@@ -123,10 +120,6 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
 			}
-            // sogyf:增加异常错误堆栈显示
-            if(devMode){
-                request.setAttribute("goja_error", e.getCause());
-            }
 			e.getErrorRender().setContext(request, response, action.getViewPath()).render();
 		}
 		catch (Throwable t) {
@@ -134,10 +127,6 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, t);
 			}
-            // sogyf:增加异常错误堆栈显示
-            if(devMode){
-                request.setAttribute("goja_error", t);
-            }
 			renderFactory.getErrorRender(500).setContext(request, response, action.getViewPath()).render();
 		}
 	}

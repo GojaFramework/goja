@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,7 @@
 
 package com.jfinal.plugin.ehcache;
 
-import com.jfinal.render.FreeMarkerRender;
-import com.jfinal.render.JsonRender;
-import com.jfinal.render.JspRender;
-import com.jfinal.render.Render;
-import com.jfinal.render.XmlRender;
+import com.jfinal.render.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,12 +38,12 @@ public class RenderInfo implements Serializable {
 			throw new IllegalArgumentException("Render can not be null.");
 		
 		view = render.getView();
-		// sogyf modify
-		if(render instanceof XmlRender)
-			renderType = RenderType.XML_RENDER;
-        // end sofyg modify.
-		else if (render instanceof FreeMarkerRender)
+		if (render instanceof FreeMarkerRender)
 			renderType = RenderType.FREE_MARKER_RENDER;
+		else if (render instanceof JspRender)
+			renderType = RenderType.JSP_RENDER;
+		else if (render instanceof XmlRender)
+			renderType = RenderType.XML_RENDER;
 		else if(render instanceof JsonRender) {
 			JsonRender jr = (JsonRender)render;
 			renderType = RenderType.JSON_RENDER;
@@ -56,38 +52,31 @@ public class RenderInfo implements Serializable {
 			otherPara.put("attrs", jr.getAttrs());
 			otherPara.put("forIE", jr.getForIE());
 		}
-        else if (render instanceof JspRender)
-            renderType = RenderType.JSP_RENDER;
-//		else if (render instanceof VelocityRender)
-//			renderType = RenderType.VELOCITY_RENDER;
 		else
 			throw new IllegalArgumentException("CacheInterceptor can not support the render of the type : " + render.getClass().getName());
 	}
 	
 	public Render createRender() {
-        switch (renderType) {
-            case RenderType.FREE_MARKER_RENDER:
-                return new FreeMarkerRender(view);
-            case RenderType.JSP_RENDER:
-                return new JspRender(view);
-//		else if (renderType == RenderType.VELOCITY_RENDER)
-//			return new VelocityRender(view);
-            case RenderType.XML_RENDER:
-                return new XmlRender(view);
-            case RenderType.JSON_RENDER:
-                JsonRender jr;
-                if (otherPara.get("jsonText") != null)
-                    jr = new JsonRender((String) otherPara.get("jsonText"));
-                else if (otherPara.get("attrs") != null)
-                    jr = new JsonRender((String[]) otherPara.get("attrs"));
-                else
-                    jr = new JsonRender();
-
-                if (Boolean.TRUE.equals(otherPara.get("forIE")))
-                    jr.forIE();
-
-                return jr;
-        }
+		if (renderType == RenderType.FREE_MARKER_RENDER)
+			return new FreeMarkerRender(view);
+		else if (renderType == RenderType.JSP_RENDER)
+			return new JspRender(view);
+		else if (renderType == RenderType.XML_RENDER)
+			return new XmlRender(view);
+		else if (renderType == RenderType.JSON_RENDER) {
+			JsonRender jr;
+			if (otherPara.get("jsonText") != null)
+				jr = new JsonRender((String)otherPara.get("jsonText"));
+			else if (otherPara.get("attrs") != null)
+				jr = new JsonRender((String[])otherPara.get("attrs"));
+			else
+				jr = new JsonRender();
+			
+			if (Boolean.TRUE.equals(otherPara.get("forIE")))
+				jr.forIE();
+			
+			return jr;
+		}
 		throw new IllegalArgumentException("CacheInterceptor can not support the renderType of the value : " + renderType);
 	}
 }

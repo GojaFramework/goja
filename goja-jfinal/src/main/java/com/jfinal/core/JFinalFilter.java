@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,7 @@
 
 package com.jfinal.core;
 
-import com.jfinal.config.Constants;
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.handler.Handler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -30,49 +25,53 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.jfinal.config.Constants;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.handler.Handler;
+import com.jfinal.log.Log;
 
 /**
  * JFinal framework filter
  */
 public final class JFinalFilter implements Filter {
-
-	private Handler      handler;
-	private String       encoding;
+	
+	private Handler handler;
+	private String encoding;
 	private JFinalConfig jfinalConfig;
-	private Constants    constants;
+	private Constants constants;
 	private static final JFinal jfinal = JFinal.me();
-	private static       Logger log    = LoggerFactory.getLogger(JFinalFilter.class);
+	private static Log log;
 	private int contextPathLength;
-
+	
 	public void init(FilterConfig filterConfig) throws ServletException {
 		createJFinalConfig(filterConfig.getInitParameter("configClass"));
-
-		if (!jfinal.init(jfinalConfig, filterConfig.getServletContext()))
+		
+		if (jfinal.init(jfinalConfig, filterConfig.getServletContext()) == false)
 			throw new RuntimeException("JFinal init error!");
-
+		
 		handler = jfinal.getHandler();
 		constants = Config.getConstants();
 		encoding = constants.getEncoding();
 		jfinalConfig.afterJFinalStart();
-
+		
 		String contextPath = filterConfig.getServletContext().getContextPath();
 		contextPathLength = (contextPath == null || "/".equals(contextPath) ? 0 : contextPath.length());
 	}
-
+	
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
+		HttpServletRequest request = (HttpServletRequest)req;
+		HttpServletResponse response = (HttpServletResponse)res;
 		request.setCharacterEncoding(encoding);
-
+		
 		String target = request.getRequestURI();
 		if (contextPathLength != 0)
 			target = target.substring(contextPathLength);
-
+		
 		boolean[] isHandled = {false};
 		try {
 			handler.handle(target, request, response, isHandled);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			if (log.isErrorEnabled()) {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
@@ -105,7 +104,7 @@ public final class JFinalFilter implements Filter {
 			throw new RuntimeException("Can not create instance of class: " + configClass + ". Please check the config in web.xml");
 	}
 	
-//	static void initLogger() {
-//		log = Logger.getLogger(JFinalFilter.class);
-//	}
+	static void initLog() {
+		log = Log.getLog(JFinalFilter.class);
+	}
 }

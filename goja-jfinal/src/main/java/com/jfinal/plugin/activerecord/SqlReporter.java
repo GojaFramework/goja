@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,39 +16,44 @@
 
 package com.jfinal.plugin.activerecord;
 
-import goja.dao.SqlFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
+import com.jfinal.log.Log;
 
 /**
  * SqlReporter.
  */
 public class SqlReporter implements InvocationHandler {
-
+	
 	private Connection conn;
-	private static final Logger  log      = LoggerFactory.getLogger(SqlReporter.class);
-
+	private static boolean logOn = false;
+	private static final Log log = Log.getLog(SqlReporter.class);
+	
 	SqlReporter(Connection conn) {
 		this.conn = conn;
 	}
-
-
+	
+	public static void setLog(boolean on) {
+		SqlReporter.logOn = on;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	Connection getConnection() {
 		Class clazz = conn.getClass();
-		return (Connection) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{Connection.class}, this);
+		return (Connection)Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{Connection.class}, this);
 	}
-
+	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		try {
 			if (method.getName().equals("prepareStatement")) {
-                log.info("Run Sql is {}", SqlFormatter.format(String.valueOf(args[0])));
+				String info = "Sql: " + args[0];
+				if (logOn)
+					log.info(info);
+				else
+					System.out.println(info);
 			}
 			return method.invoke(conn, args);
 		} catch (InvocationTargetException e) {

@@ -163,7 +163,10 @@ public class Goja extends JFinalConfig {
         constants.setErrorRenderFactory(new GojaErrorRenderFactory());
 
         constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
-        constants.setUploadedFileSaveDirectory(GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "upload"));
+
+        final String attachmentPath = GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "attachment");
+        constants.setBaseUploadPath(attachmentPath);
+        constants.setBaseDownloadPath(attachmentPath);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,31 @@
 
 package com.jfinal.render;
 
-import freemarker.ext.beans.BeansWrapperBuilder;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-
-import javax.servlet.ServletContext;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import javax.servlet.ServletContext;
+import com.jfinal.core.JFinal;
+import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 /**
  * FreeMarkerRender.
  */
 public class FreeMarkerRender extends Render {
 	
-	private static final String encoding = getEncoding();
-	private static final String contentType = "text/html; charset=" + encoding;
-    private static final Configuration config = new Configuration(Configuration.VERSION_2_3_23);
-
-    public FreeMarkerRender(String view) {
-        this.view = view;
-    }
+	private static final String contentType = "text/html; charset=" + getEncoding();
+	private static final Configuration config = new Configuration();
+	
+	public FreeMarkerRender(String view) {
+		this.view = view;
+	}
 	
 	/**
 	 * freemarker can not load freemarker.properies automatically
@@ -70,21 +69,30 @@ public class FreeMarkerRender extends Render {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	/**
+	 * Create public void afterJFinalStart() in YourJFinalConfig and 
+	 * use this method in MyJFinalConfig.afterJFinalStart() to set
+	 * ServletContext for template loading
+	 */
+	public static void setTemplateLoadingPath(String path) {
+		config.setServletContextForTemplateLoading(JFinal.me().getServletContext(), path);
+	}
+	
     static void init(ServletContext servletContext, Locale locale, int template_update_delay) {
         // Initialize the FreeMarker configuration;
         // - Create a configuration instance
         // config = new Configuration();
         // - Templates are stoted in the WEB-INF/templates directory of the Web app.
-        config.setServletContextForTemplateLoading(servletContext, "/");    // "WEB-INF/templates"
+        config.setServletContextForTemplateLoading(servletContext, "/");	// "WEB-INF/templates"
         // - Set update dealy to 0 for now, to ease debugging and testing.
         //   Higher value should be used in production environment.
         
         if (getDevMode()) {
-            config.setTemplateUpdateDelayMilliseconds(0);
-        }
+        	config.setTemplateUpdateDelay(0);
+       	}
         else {
-            config.setTemplateUpdateDelayMilliseconds(template_update_delay * 1000L);
+        	config.setTemplateUpdateDelay(template_update_delay);
         }
         
         // - Set an error handler that prints errors so they are readable with
@@ -93,17 +101,13 @@ public class FreeMarkerRender extends Render {
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         
         // - Use beans wrapper (recommmended for most applications)
-        BeansWrapperBuilder builder = new BeansWrapperBuilder(Configuration.VERSION_2_3_23);
-        builder.setUseModelCache(true);
-        builder.setExposeFields(true);
-
-        config.setObjectWrapper(builder.build());
+        config.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
         // - Set the default charset of the template files
-        config.setDefaultEncoding(encoding);		// config.setDefaultEncoding("ISO-8859-1");
+        config.setDefaultEncoding(getEncoding());		// config.setDefaultEncoding("ISO-8859-1");
         // - Set the charset of the output. This is actually just a hint, that
         //   templates may require for URL encoding and for generating META element
         //   that uses http-equiv="Content-type".
-        config.setOutputEncoding(encoding);			// config.setOutputEncoding("UTF-8");
+        config.setOutputEncoding(getEncoding());			// config.setOutputEncoding("UTF-8");
         // - Set the default locale
         config.setLocale(locale /* Locale.CHINA */ );		// config.setLocale(Locale.US);
         config.setLocalizedLookup(false);
@@ -116,21 +120,29 @@ public class FreeMarkerRender extends Render {
         config.setDateTimeFormat("yyyy-MM-dd HH:mm:ss");
     }
     
+	/**
+	 * 继承类可通过覆盖此方法改变 contentType，从而重用 freemarker 模板功能
+	 * 例如利用 freemarker 实现 FreeMarkerXmlRender 生成 Xml 内容
+	 */
+    public String getContentType() {
+    	return contentType;
+    }
+    
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void render() {
-		response.setContentType(contentType);
+		response.setContentType(getContentType());
         
-		Map root = new HashMap();
+		Map data = new HashMap();
 		for (Enumeration<String> attrs=request.getAttributeNames(); attrs.hasMoreElements();) {
 			String attrName = attrs.nextElement();
-			root.put(attrName, request.getAttribute(attrName));
+			data.put(attrName, request.getAttribute(attrName));
 		}
 		
 		PrintWriter writer = null;
         try {
 			Template template = config.getTemplate(view);
 			writer = response.getWriter();
-			template.process(root, writer);		// Merge the data-model and the template
+			template.process(data, writer);		// Merge the data-model and the template
 		} catch (Exception e) {
 			throw new RenderException(e);
 		}
