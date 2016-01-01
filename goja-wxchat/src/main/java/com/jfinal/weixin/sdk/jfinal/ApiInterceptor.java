@@ -13,7 +13,7 @@ public class ApiInterceptor implements Interceptor {
 	
 	public void intercept(Invocation inv) {
 		Controller controller = inv.getController();
-		if (!(controller instanceof ApiController))
+		if (controller instanceof ApiController == false)
 			throw new RuntimeException("控制器需要继承 ApiController");
 		
 		try {

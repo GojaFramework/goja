@@ -6,7 +6,7 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 
 /**
  * 模板消息 API
@@ -20,7 +20,7 @@ public class TemplateMsgApi {
 	 * 发送模板消息
 	 */
 	public static ApiResult send(String jsonStr) {
-		String jsonResult = HttpKit.post(sendApiUrl + AccessTokenApi.getAccessToken().getAccessToken(), jsonStr);
+		String jsonResult = HttpUtils.post(sendApiUrl + AccessTokenApi.getAccessToken().getAccessToken(), jsonStr);
 		return new ApiResult(jsonResult);
 	}
 }

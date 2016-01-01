@@ -11,7 +11,7 @@ import java.io.OutputStream;
  * IOUtils
  * @author L.cm
  */
-public class IOUtils {
+public abstract class IOUtils {
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 	
 	/**

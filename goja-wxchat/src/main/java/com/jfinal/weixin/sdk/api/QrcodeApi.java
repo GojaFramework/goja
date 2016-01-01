@@ -9,7 +9,7 @@ package com.jfinal.weixin.sdk.api;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.JsonUtils;
 
 /**
@@ -21,7 +21,7 @@ public class QrcodeApi
 	private static String apiUrl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=";
 	
 	public static ApiResult create(String jsonStr) {
-		String jsonResult = HttpKit.post(apiUrl + AccessTokenApi.getAccessTokenStr(), jsonStr);
+		String jsonResult = HttpUtils.post(apiUrl + AccessTokenApi.getAccessTokenStr(), jsonStr);
 		return new ApiResult(jsonResult);
 	}
 	

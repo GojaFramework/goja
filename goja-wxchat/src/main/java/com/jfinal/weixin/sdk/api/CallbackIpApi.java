@@ -6,7 +6,7 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 
 /**
  * 获取微信服务器IP地址</br>
@@ -20,7 +20,7 @@ public class CallbackIpApi
 	 * 获取微信服务器IP地址
 	 */
 	public static ApiResult getCallbackIp() {
-		String jsonResult = HttpKit.get(apiUrl + AccessTokenApi.getAccessTokenStr());
+		String jsonResult = HttpUtils.get(apiUrl + AccessTokenApi.getAccessTokenStr());
 		return new ApiResult(jsonResult);
 	}
 }

@@ -29,7 +29,7 @@ public class MsgInterceptor implements Interceptor {
 	
 	public void intercept(Invocation inv) {
 		Controller controller = inv.getController();
-		if (controller instanceof MsgController == false)
+		if (!(controller instanceof MsgController))
 			throw new RuntimeException("控制器需要继承 MsgController");
 		
 		try {

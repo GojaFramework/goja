@@ -6,9 +6,12 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
+import java.util.concurrent.Callable;
+
 import com.jfinal.weixin.sdk.cache.IAccessTokenCache;
 import com.jfinal.weixin.sdk.kit.ParaMap;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
+import com.jfinal.weixin.sdk.utils.RetryUtils;
 
 /**
  * 
@@ -47,11 +50,20 @@ public class JsTicketApi {
 		String access_token = AccessTokenApi.getAccessTokenStr();
 		String appId = ApiConfigKit.getApiConfig().getAppId();
 		String key = appId + ':' + jsApiType.name();
+		final ParaMap pm = ParaMap.create("access_token", access_token).put("type", jsApiType.name());
 		
 		JsTicket jsTicket = accessTokenCache.get(key);
 		if (null == jsTicket || !jsTicket.isAvailable()) {
-			ParaMap pm = ParaMap.create("access_token", access_token).put("type", jsApiType.name());
-			jsTicket = new JsTicket(HttpKit.get(apiUrl, pm.getData()));
+			// 最多三次请求
+			jsTicket = RetryUtils.retryOnException(3, new Callable<JsTicket>() {
+				
+				@Override
+				public JsTicket call() throws Exception {
+					return new JsTicket(HttpUtils.get(apiUrl, pm.getData()));
+				}
+				
+			});
+			
 			accessTokenCache.set(key, jsTicket);
 		}
 		return jsTicket;

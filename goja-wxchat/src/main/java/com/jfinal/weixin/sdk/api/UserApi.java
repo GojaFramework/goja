@@ -6,14 +6,14 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
-import com.jfinal.weixin.sdk.kit.ParaMap;
-import com.jfinal.weixin.sdk.utils.JsonUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.kit.ParaMap;
+import com.jfinal.weixin.sdk.utils.JsonUtils;
 
 /**
  * 用户管理 API
@@ -75,9 +75,10 @@ public class UserApi {
 		
 		List<Map<String, Object>> userList = new ArrayList<Map<String,Object>>();
 		for (String openId : openIdList) {
-			Map<String, String> mapData = new HashMap<String, String>();
+			Map<String, Object> mapData = new HashMap<String, Object>();
 			mapData.put("openid", openId);
-			mapData.put("lang", "zh-CN");
+			mapData.put("lang", "zh_CN");
+			userList.add(mapData);
 		}
 		userListMap.put("user_list", userList);
 		

@@ -65,5 +65,12 @@
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

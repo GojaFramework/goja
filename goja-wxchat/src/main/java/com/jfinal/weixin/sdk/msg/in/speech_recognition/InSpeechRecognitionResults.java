@@ -6,7 +6,7 @@
 
 package com.jfinal.weixin.sdk.msg.in.speech_recognition;
 
-import com.jfinal.weixin.sdk.msg.in.InMsg;
+import com.jfinal.weixin.sdk.msg.in.InVoiceMsg;
 
 
 /**
@@ -22,31 +22,12 @@ import com.jfinal.weixin.sdk.msg.in.InMsg;
 			<MsgId>1234567890123456</MsgId>
 	</xml>
  */
-public class InSpeechRecognitionResults extends InMsg {
+public class InSpeechRecognitionResults extends InVoiceMsg {
 	
-	private String mediaId;
-	private String format;
 	private String recognition;
-	private String msgId;
 	
 	public InSpeechRecognitionResults(String toUserName, String fromUserName, Integer createTime, String msgType) {
 		super(toUserName, fromUserName, createTime, msgType);
-	}
-	
-	public String getMediaId() {
-		return mediaId;
-	}
-	
-	public void setMediaId(String mediaId) {
-		this.mediaId = mediaId;
-	}
-	
-	public String getFormat() {
-		return format;
-	}
-	
-	public void setFormat(String format) {
-		this.format = format;
 	}
 	
 	public String getRecognition() {
@@ -57,13 +38,4 @@ public class InSpeechRecognitionResults extends InMsg {
 		this.recognition = recognition;
 	}
 	
-	public String getMsgId() {
-		return msgId;
-	}
-	
-	public void setMsgId(String msgId) {
-		this.msgId = msgId;
-	}
 }
-
-

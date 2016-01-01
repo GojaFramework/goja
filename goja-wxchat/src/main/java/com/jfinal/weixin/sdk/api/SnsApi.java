@@ -6,8 +6,8 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.ParaMap;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 
 /**
  * 网页授权获取 access_token API
@@ -15,7 +15,7 @@ import com.jfinal.weixin.sdk.kit.ParaMap;
 public class SnsApi
 {
     private static String getUserInfo = "https://api.weixin.qq.com/sns/userinfo";
-
+    
     /**
      * 获取用户个人信
      * @param accessToken 调用凭证access_token
@@ -25,7 +25,7 @@ public class SnsApi
     public static ApiResult getUserInfo(String accessToken, String openId)
     {
         ParaMap pm = ParaMap.create("access_token", accessToken).put("openid", openId).put("lang", "zh_CN");
-        return new ApiResult(HttpKit.get(getUserInfo, pm.getData()));
+        return new ApiResult(HttpUtils.get(getUserInfo, pm.getData()));
     }
     
 }

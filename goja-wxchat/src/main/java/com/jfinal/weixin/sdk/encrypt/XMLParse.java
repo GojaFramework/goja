@@ -8,15 +8,10 @@
 
 package com.jfinal.weixin.sdk.encrypt;
 
-import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+
+import com.jfinal.weixin.sdk.kit.XmlKit;
 
 /**
  * XMLParse class
@@ -31,21 +26,15 @@ class XMLParse {
 	 * @return 提取出的加密消息字符串
 	 * @throws AesException 
 	 */
-	public static Object[] extract(String xmltext) throws AesException     {
+	public static Object[] extract(String xmlStr) throws AesException     {
 		Object[] result = new Object[3];
 		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			StringReader sr = new StringReader(xmltext);
-			InputSource is = new InputSource(sr);
-			Document document = db.parse(is);
-
+			Document document = XmlKit.parse(xmlStr);
 			Element root = document.getDocumentElement();
-			NodeList nodelist1 = root.getElementsByTagName("Encrypt");
-			NodeList nodelist2 = root.getElementsByTagName("ToUserName");
+			
 			result[0] = 0;
-			result[1] = nodelist1.item(0).getTextContent();
-			result[2] = nodelist2.item(0).getTextContent();
+			result[1] = XmlKit.elementText(root, "Encrypt");
+			result[2] = XmlKit.elementText(root, "ToUserName");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

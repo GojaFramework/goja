@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.JsonUtils;
 
 /**
@@ -29,7 +29,7 @@ public class GroupsApi {
 		mapData.put("name", name);
 		groupData.put("group", mapData);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(groupData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(groupData));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -42,7 +42,7 @@ public class GroupsApi {
 	public static ApiResult get() {
 		String url = getUrl + AccessTokenApi.getAccessTokenStr();
 		
-		String jsonResult = HttpKit.get(url);
+		String jsonResult = HttpUtils.get(url);
 		return new ApiResult(jsonResult);
 	}
 	
@@ -59,7 +59,7 @@ public class GroupsApi {
 		Map<String, String> mapData = new HashMap<String, String>();
 		mapData.put("openid", openid);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(mapData));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -80,7 +80,7 @@ public class GroupsApi {
 		mapData.put("name", name);
 		groupData.put("group", mapData);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(groupData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(groupData));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -99,7 +99,7 @@ public class GroupsApi {
 		mapData.put("openid", openid);
 		mapData.put("to_groupid", to_groupid);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(mapData));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -118,7 +118,7 @@ public class GroupsApi {
 		mapData.put("openid_list", openidList);
 		mapData.put("to_groupid", to_groupid);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(mapData));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -137,7 +137,7 @@ public class GroupsApi {
 		mapData.put("id", id);
 		groupData.put("group", mapData);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(groupData));
 		return new ApiResult(jsonResult);
 	}
 	

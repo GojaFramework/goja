@@ -1,10 +1,24 @@
 package com.jfinal.weixin.sdk.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 异常重试工具类
  * @author L.cm
  */
 public class RetryUtils {
+
+	private static Logger log =  LoggerFactory.getLogger(RetryUtils.class);
+	
+	/**
+	 * 回调结果检查
+	 */
+	public interface ResultCheck {
+		boolean matching();
+		
+		String getJson();
+	}
 	
 	/**
 	 * 在遇到异常时尝试重试
@@ -12,17 +26,20 @@ public class RetryUtils {
 	 * @param retryCallable 重试回调
 	 * @return V
 	 */
-	public static <V> V retryOnException(int retryLimit,
+	public static <V extends ResultCheck> V retryOnException(int retryLimit,
 			java.util.concurrent.Callable<V> retryCallable) {
 
 		V v = null;
 		for (int i = 0; i < retryLimit; i++) {
 			try {
 				v = retryCallable.call();
-				break;
 			} catch (Exception e) {
-				// ignore
+				if (log.isWarnEnabled()) {
+					log.warn("retry on " + (i + 1) + " times v = " + (v == null ? null : v.getJson()) , e);
+				}
 			}
+			if (v.matching()) break;
+			log.error("retry on " + (i + 1) + " times but not matching v = " + (v == null ? null : v.getJson()));
 		}
 		return v;
 	}
@@ -35,17 +52,20 @@ public class RetryUtils {
 	 * @return V
 	 * @throws java.lang.InterruptedException
 	 */
-	public static <V> V retryOnException(int retryLimit, long sleepMillis,
+	public static <V extends ResultCheck> V retryOnException(int retryLimit, long sleepMillis,
 			java.util.concurrent.Callable<V> retryCallable) throws java.lang.InterruptedException {
 
 		V v = null;
 		for (int i = 0; i < retryLimit; i++) {
 			try {
 				v = retryCallable.call();
-				break;
 			} catch (Exception e) {
-				Thread.sleep(sleepMillis);
+				if (log.isWarnEnabled()) {
+					log.warn("retry on " + (i + 1) + " times v = " + (v == null ? null : v.getJson()) , e);
+				}
 			}
+			if (v.matching()) break;
+			log.error("retry on " + (i + 1) + " times but not matching v = " + (v == null ? null : v.getJson()));
 		}
 		return v;
 	}

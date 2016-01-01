@@ -7,10 +7,12 @@
 package com.jfinal.weixin.sdk.api;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 
-import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.cache.IAccessTokenCache;
 import com.jfinal.weixin.sdk.kit.ParaMap;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
+import com.jfinal.weixin.sdk.utils.RetryUtils;
 
 /**
  * 认证并获取 access_token API
@@ -57,17 +59,19 @@ public class AccessTokenApi {
 	 */
 	public static synchronized void refreshAccessToken() {
 		ApiConfig ac = ApiConfigKit.getApiConfig();
-		AccessToken result = null;
-		for (int i=0; i<3; i++) {	// 最多三次请求
-			String appId = ac.getAppId();
-			String appSecret = ac.getAppSecret();
-			Map<String, String> queryParas = ParaMap.create("appid", appId).put("secret", appSecret).getData();
-			String json = HttpKit.get(url, queryParas);
-			result = new AccessToken(json);
+		String appId = ac.getAppId();
+		String appSecret = ac.getAppSecret();
+		final Map<String, String> queryParas = ParaMap.create("appid", appId).put("secret", appSecret).getData();
+		
+		// 最多三次请求
+		AccessToken result = RetryUtils.retryOnException(3, new Callable<AccessToken>() {
 			
-			if (result.isAvailable())
-				break;
-		}
+			@Override
+			public AccessToken call() throws Exception {
+				String json = HttpUtils.get(url, queryParas);
+				return new AccessToken(json);
+			}
+		});
 		
 		// 三次请求如果仍然返回了不可用的 access token 仍然 put 进去，便于上层通过 AccessToken 中的属性判断底层的情况
 		accessTokenCache.set(ac.getAppId(), result);

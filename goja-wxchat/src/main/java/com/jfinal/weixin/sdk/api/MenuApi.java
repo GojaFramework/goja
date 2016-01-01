@@ -6,7 +6,7 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 
 /**
  * menu api
@@ -20,7 +20,7 @@ public class MenuApi {
 	 * 查询菜单
 	 */
 	public static ApiResult getMenu() {
-		String jsonResult = HttpKit.get(getMenu + AccessTokenApi.getAccessTokenStr());
+		String jsonResult = HttpUtils.get(getMenu + AccessTokenApi.getAccessTokenStr());
 		return new ApiResult(jsonResult);
 	}
 	
@@ -28,7 +28,7 @@ public class MenuApi {
 	 * 创建菜单
 	 */
 	public static ApiResult createMenu(String jsonStr) {
-		String jsonResult = HttpKit.post(createMenu + AccessTokenApi.getAccessTokenStr(), jsonStr);
+		String jsonResult = HttpUtils.post(createMenu + AccessTokenApi.getAccessTokenStr(), jsonStr);
 		return new ApiResult(jsonResult);
 	}
 }

@@ -7,17 +7,14 @@
 package com.jfinal.weixin.sdk.msg;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.jfinal.weixin.sdk.msg.in.event.InVerifyFailEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifySuccessEvent;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.jfinal.kit.StrKit;
+import com.jfinal.weixin.sdk.kit.XmlKit;
 import com.jfinal.weixin.sdk.msg.in.InImageMsg;
 import com.jfinal.weixin.sdk.msg.in.InLinkMsg;
 import com.jfinal.weixin.sdk.msg.in.InLocationMsg;
@@ -31,10 +28,13 @@ import com.jfinal.weixin.sdk.msg.in.event.InFollowEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InLocationEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InMassEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InMenuEvent;
+import com.jfinal.weixin.sdk.msg.in.event.InPoiCheckNotifyEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InQrCodeEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent.AroundBeacon;
 import com.jfinal.weixin.sdk.msg.in.event.InTemplateMsgEvent;
+import com.jfinal.weixin.sdk.msg.in.event.InVerifyFailEvent;
+import com.jfinal.weixin.sdk.msg.in.event.InVerifySuccessEvent;
 import com.jfinal.weixin.sdk.msg.in.event.ScanCodeInfo;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 
@@ -46,11 +46,8 @@ public class InMsgParser {
 	 * 从 xml 中解析出各类消息与事件
 	 */
 	public static InMsg parse(String xml) {
-		try {
-			return doParse(xml);
-		} catch (DocumentException e) {
-			throw new RuntimeException(e);
-		}
+		Document doc = XmlKit.parse(xml);
+		return doParse(doc);
 	}
 	
 	/**
@@ -64,13 +61,13 @@ public class InMsgParser {
 	 * 6：link 链接消息
 	 * 7：event 事件
 	 */
-	private static InMsg doParse(String xml) throws DocumentException {
-		Document doc = DocumentHelper.parseText(xml);
-		Element root = doc.getRootElement();
-		String toUserName = root.elementText("ToUserName");
-		String fromUserName = root.elementText("FromUserName");
-		Integer createTime = Integer.parseInt(root.elementText("CreateTime"));
-		String msgType = root.elementText("MsgType");
+	private static InMsg doParse(Document doc) {
+		Element root = doc.getDocumentElement();
+		
+		String toUserName = XmlKit.elementText(root, "ToUserName");
+		String fromUserName = XmlKit.elementText(root, "FromUserName");
+		Integer createTime = Integer.parseInt(XmlKit.elementText(root, "CreateTime"));
+		String msgType = XmlKit.elementText(root, "MsgType");
 		if ("text".equals(msgType))
 			return parseInTextMsg(root, toUserName, fromUserName, createTime, msgType);
 		if ("image".equals(msgType))
@@ -92,33 +89,33 @@ public class InMsgParser {
 	
 	private static InMsg parseInTextMsg(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		InTextMsg msg = new InTextMsg(toUserName, fromUserName, createTime, msgType);
-		msg.setContent(root.elementText("Content"));
-		msg.setMsgId(root.elementText("MsgId"));
+		msg.setContent(XmlKit.elementText(root, "Content"));
+		msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 		return msg;
 	}
 	
 	private static InMsg parseInImageMsg(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		InImageMsg msg = new InImageMsg(toUserName, fromUserName, createTime, msgType);
-		msg.setPicUrl(root.elementText("PicUrl"));
-		msg.setMediaId(root.elementText("MediaId"));
-		msg.setMsgId(root.elementText("MsgId"));
+		msg.setPicUrl(XmlKit.elementText(root, "PicUrl"));
+		msg.setMediaId(XmlKit.elementText(root, "MediaId"));
+		msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 		return msg;
 	}
 	
 	private static InMsg parseInVoiceMsgAndInSpeechRecognitionResults(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
-		String recognition = root.elementText("Recognition");
+		String recognition = XmlKit.elementText(root, "Recognition");
 		if (StrKit.isBlank(recognition)) {
 			InVoiceMsg msg = new InVoiceMsg(toUserName, fromUserName, createTime, msgType);
-			msg.setMediaId(root.elementText("MediaId"));
-			msg.setFormat(root.elementText("Format"));
-			msg.setMsgId(root.elementText("MsgId"));
+			msg.setMediaId(XmlKit.elementText(root, "MediaId"));
+			msg.setFormat(XmlKit.elementText(root, "Format"));
+			msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 			return msg;
 		}
 		else {
 			InSpeechRecognitionResults msg = new InSpeechRecognitionResults(toUserName, fromUserName, createTime, msgType);
-			msg.setMediaId(root.elementText("MediaId"));
-			msg.setFormat(root.elementText("Format"));
-			msg.setMsgId(root.elementText("MsgId"));
+			msg.setMediaId(XmlKit.elementText(root, "MediaId"));
+			msg.setFormat(XmlKit.elementText(root, "Format"));
+			msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 			msg.setRecognition(recognition);			// 与 InVoiceMsg 唯一的不同之处
 			return msg;
 		}
@@ -126,51 +123,50 @@ public class InMsgParser {
 	
 	private static InMsg parseInVideoMsg(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		InVideoMsg msg = new InVideoMsg(toUserName, fromUserName, createTime, msgType);
-		msg.setMediaId(root.elementText("MediaId"));
-		msg.setThumbMediaId(root.elementText("ThumbMediaId"));
-		msg.setMsgId(root.elementText("MsgId"));
+		msg.setMediaId(XmlKit.elementText(root, "MediaId"));
+		msg.setThumbMediaId(XmlKit.elementText(root, "ThumbMediaId"));
+		msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 		return msg;
 	}
 
 	private static InMsg parseInShortVideoMsg(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		InShortVideoMsg msg = new InShortVideoMsg(toUserName, fromUserName, createTime, msgType);
-		msg.setMediaId(root.elementText("MediaId"));
-		msg.setThumbMediaId(root.elementText("ThumbMediaId"));
-		msg.setMsgId(root.elementText("MsgId"));
+		msg.setMediaId(XmlKit.elementText(root, "MediaId"));
+		msg.setThumbMediaId(XmlKit.elementText(root, "ThumbMediaId"));
+		msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 		return msg;
 	}
 
 	private static InMsg parseInLocationMsg(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		InLocationMsg msg = new InLocationMsg(toUserName, fromUserName, createTime, msgType);
-		msg.setLocation_X(root.elementText("Location_X"));
-		msg.setLocation_Y(root.elementText("Location_Y"));
-		msg.setScale(root.elementText("Scale"));
-		msg.setLabel(root.elementText("Label"));
-		msg.setMsgId(root.elementText("MsgId"));
+		msg.setLocation_X(XmlKit.elementText(root, "Location_X"));
+		msg.setLocation_Y(XmlKit.elementText(root, "Location_Y"));
+		msg.setScale(XmlKit.elementText(root, "Scale"));
+		msg.setLabel(XmlKit.elementText(root, "Label"));
+		msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 		return msg;
 	}
 	
 	private static InMsg parseInLinkMsg(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
 		InLinkMsg msg = new InLinkMsg(toUserName, fromUserName, createTime, msgType);
-		msg.setTitle(root.elementText("Title"));
-		msg.setDescription(root.elementText("Description"));
-		msg.setUrl(root.elementText("Url"));
-		msg.setMsgId(root.elementText("MsgId"));
+		msg.setTitle(XmlKit.elementText(root, "Title"));
+		msg.setDescription(XmlKit.elementText(root, "Description"));
+		msg.setUrl(XmlKit.elementText(root, "Url"));
+		msg.setMsgId(XmlKit.elementText(root, "MsgId"));
 		return msg;
 	}
 
 	// 解析各种事件
-	@SuppressWarnings("rawtypes")
 	private static InMsg parseInEvent(Element root, String toUserName, String fromUserName, Integer createTime, String msgType) {
-		String event = root.elementText("Event");
-		String eventKey = root.elementText("EventKey");
+		String event = XmlKit.elementText(root, "Event");
+		String eventKey = XmlKit.elementText(root, "EventKey");
 		
 		// 关注/取消关注事件（包括二维码扫描关注，二维码扫描关注事件与扫描带参数二维码事件是两回事）
 		if (("subscribe".equals(event) || "unsubscribe".equals(event)) && StrKit.isBlank(eventKey)) {
 			return new InFollowEvent(toUserName, fromUserName, createTime, msgType, event);
 		}
 		// 扫描带参数二维码事件之一		1: 用户未关注时，进行关注后的事件推送
-		String ticket = root.elementText("Ticket");
+		String ticket = XmlKit.elementText(root, "Ticket");
 		if ("subscribe".equals(event) && StrKit.notBlank(eventKey) && eventKey.startsWith("qrscene_")) {
 			InQrCodeEvent e = new InQrCodeEvent(toUserName, fromUserName, createTime, msgType, event);
 			e.setEventKey(eventKey);
@@ -187,9 +183,9 @@ public class InMsgParser {
 		// 上报地理位置事件
 		if ("LOCATION".equals(event)) {
 			InLocationEvent e = new InLocationEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setLatitude(root.elementText("Latitude"));
-			e.setLongitude(root.elementText("Longitude"));
-			e.setPrecision(root.elementText("Precision"));
+			e.setLatitude(XmlKit.elementText(root, "Latitude"));
+			e.setLongitude(XmlKit.elementText(root, "Longitude"));
+			e.setPrecision(XmlKit.elementText(root, "Precision"));
 			return e;
 		}
 		// 自定义菜单事件之一			1：点击菜单拉取消息时的事件推送
@@ -208,9 +204,9 @@ public class InMsgParser {
 		if ("scancode_push".equals(event)) {
 			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
 			e.setEventKey(eventKey);
-			Element scanCodeInfo = root.element("ScanCodeInfo");
-			String scanType = scanCodeInfo.elementText("ScanType");
-			String scanResult = scanCodeInfo.elementText("ScanResult");
+			Document scanCodeInfo = XmlKit.element(root, "ScanCodeInfo");
+			String scanType = XmlKit.documentText(scanCodeInfo, "ScanType");
+			String scanResult = XmlKit.documentText(scanCodeInfo, "ScanResult");
 			e.setScanCodeInfo(new ScanCodeInfo(scanType, scanResult));
 			return e;
 		}
@@ -218,9 +214,9 @@ public class InMsgParser {
 		if ("scancode_waitmsg".equals(event)) {
 			InMenuEvent e = new InMenuEvent(toUserName, fromUserName, createTime, msgType, event);
 			e.setEventKey(eventKey);
-			Element scanCodeInfo = root.element("ScanCodeInfo");
-			String scanType = scanCodeInfo.elementText("ScanType");
-			String scanResult = scanCodeInfo.elementText("ScanResult");
+			Document scanCodeInfo = XmlKit.element(root, "ScanCodeInfo");
+			String scanType = XmlKit.documentText(scanCodeInfo, "ScanType");
+			String scanResult = XmlKit.documentText(scanCodeInfo, "ScanResult");
 			e.setScanCodeInfo(new ScanCodeInfo(scanType, scanResult));
 			return e;
 		}
@@ -263,61 +259,62 @@ public class InMsgParser {
 		// 模板消息是否送达成功通知事件
 		if ("TEMPLATESENDJOBFINISH".equals(event)) {
 			InTemplateMsgEvent e = new InTemplateMsgEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setMsgId(root.elementText("MsgID"));
-			e.setStatus(root.elementText("Status"));
+			e.setMsgId(XmlKit.elementText(root, "MsgID"));
+			e.setStatus(XmlKit.elementText(root, "Status"));
 			return e;
 		}
 		// 群发任务结束时是否送达成功通知事件
 		if ("MASSSENDJOBFINISH".equals(event)) {
 			InMassEvent e = new InMassEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setMsgId(root.elementText("MsgID"));
-			e.setStatus(root.elementText("Status"));
-			e.setTotalCount(root.elementText("TotalCount"));
-			e.setFilterCount(root.elementText("FilterCount"));
-			e.setSentCount(root.elementText("SentCount"));
-			e.setErrorCount(root.elementText("ErrorCount"));
+			e.setMsgId(XmlKit.elementText(root, "MsgID"));
+			e.setStatus(XmlKit.elementText(root, "Status"));
+			e.setTotalCount(XmlKit.elementText(root, "TotalCount"));
+			e.setFilterCount(XmlKit.elementText(root, "FilterCount"));
+			e.setSentCount(XmlKit.elementText(root, "SentCount"));
+			e.setErrorCount(XmlKit.elementText(root, "ErrorCount"));
 			return e;
 		}
 		// 多客服接入会话事件
 		if ("kf_create_session".equals(event)) {
 			InCustomEvent e = new InCustomEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setKfAccount(root.elementText("KfAccount"));
+			e.setKfAccount(XmlKit.elementText(root, "KfAccount"));
 			return e;
 		}
 		// 多客服关闭会话事件
 		if ("kf_close_session".equals(event)) {
 			InCustomEvent e = new InCustomEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setKfAccount(root.elementText("KfAccount"));
+			e.setKfAccount(XmlKit.elementText(root, "KfAccount"));
 			return e;
 		}
 		// 多客服转接会话事件
 		if ("kf_switch_session".equals(event)) {
 			InCustomEvent e = new InCustomEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setKfAccount(root.elementText("KfAccount"));
-			e.setToKfAccount(root.elementText("ToKfAccount"));
+			e.setKfAccount(XmlKit.elementText(root, "KfAccount"));
+			e.setToKfAccount(XmlKit.elementText(root, "ToKfAccount"));
 			return e;
 		}
 		// 微信摇一摇事件
 		if ("ShakearoundUserShake".equals(event)){
 			InShakearoundUserShakeEvent e = new InShakearoundUserShakeEvent(toUserName, fromUserName, createTime, msgType);
 			e.setEvent(event);
-			Element c = root.element("ChosenBeacon");
-			e.setUuid(c.elementText("Uuid"));
-			e.setMajor(Integer.parseInt(c.elementText("Major")));
-			e.setMinor(Integer.parseInt(c.elementText("Minor")));
-			e.setDistance(Float.parseFloat(c.elementText("Distance")));
+			Document c = XmlKit.element(root, "ChosenBeacon");
+			e.setUuid(XmlKit.documentText(c, "Uuid"));
+			e.setMajor(Integer.parseInt(XmlKit.documentText(c, "Major")));
+			e.setMinor(Integer.parseInt(XmlKit.documentText(c, "Minor")));
+			e.setDistance(Float.parseFloat(XmlKit.documentText(c, "Distance")));
 
-			List list = root.elements("AroundBeacon");
-			if (list != null && list.size() > 0) {
+			NodeList nodeList = root.getElementsByTagName("AroundBeacon");
+			if (nodeList != null && nodeList.getLength() > 0) {
 				AroundBeacon aroundBeacon = null;
 				List<AroundBeacon> aroundBeacons = new ArrayList<AroundBeacon>();
-				for (Iterator it = list.iterator(); it.hasNext();) {
-					Element elm = (Element) it.next();
+				for (int i = 0; i < nodeList.getLength(); i++) {
+					Document nodeDoc = nodeList.item(i).getOwnerDocument();
+					
 					aroundBeacon = new AroundBeacon();
-					aroundBeacon.setUuid(elm.elementText("Uuid"));
-					aroundBeacon.setMajor(Integer.parseInt(elm.elementText("Major")));
-					aroundBeacon.setMinor(Integer.parseInt(elm.elementText("Minor")));
-					aroundBeacon.setDistance(Float.parseFloat(elm.elementText("Distance")));
+					aroundBeacon.setUuid(XmlKit.documentText(nodeDoc, "Uuid"));
+					aroundBeacon.setMajor(Integer.parseInt(XmlKit.documentText(nodeDoc, "Major")));
+					aroundBeacon.setMinor(Integer.parseInt(XmlKit.documentText(nodeDoc, "Minor")));
+					aroundBeacon.setDistance(Float.parseFloat(XmlKit.documentText(nodeDoc, "Distance")));
 					aroundBeacons.add(aroundBeacon);
 				}
 				e.setAroundBeaconList(aroundBeacons);
@@ -329,14 +326,23 @@ public class InMsgParser {
 		if ("qualification_verify_success".equals(event) || "naming_verify_success".equals(event)
 				 || "annual_renew".equals(event) || "verify_expired".equals(event)) {
 			InVerifySuccessEvent e = new InVerifySuccessEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setExpiredTime(root.elementText("expiredTime"));
+			e.setExpiredTime(XmlKit.elementText(root, "expiredTime"));
 			return e;
 		}
 		// 资质认证失败 || 名称认证失败
 		if ("qualification_verify_fail".equals(event) || "naming_verify_fail".equals(event)) {
 			InVerifyFailEvent e = new InVerifyFailEvent(toUserName, fromUserName, createTime, msgType, event);
-			e.setFailTime(root.elementText("failTime"));
-			e.setFailReason(root.elementText("failReason"));
+			e.setFailTime(XmlKit.elementText(root, "failTime"));
+			e.setFailReason(XmlKit.elementText(root, "failReason"));
+			return e;
+		}
+		// 门店在审核事件消息
+		if ("poi_check_notify".equals(event)) {
+			InPoiCheckNotifyEvent e = new InPoiCheckNotifyEvent(toUserName, fromUserName, createTime, msgType);
+			e.setUniqId(XmlKit.elementText(root, "UniqId"));
+			e.setPoiId(XmlKit.elementText(root, "PoiId"));
+			e.setResult(XmlKit.elementText(root, "Result"));
+			e.setMsg(XmlKit.elementText(root, "Msg"));
 			return e;
 		}
 

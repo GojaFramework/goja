@@ -10,12 +10,12 @@ import java.io.Serializable;
 import java.util.Map;
 
 import com.jfinal.weixin.sdk.utils.JsonUtils;
-
+import com.jfinal.weixin.sdk.utils.RetryUtils.ResultCheck;
 
 /**
  * 封装 access_token
  */
-public class AccessToken implements Serializable {
+public class AccessToken implements ResultCheck, Serializable {
 	
 	private static final long serialVersionUID = -822464425433824314L;
 	
@@ -32,10 +32,10 @@ public class AccessToken implements Serializable {
 		this.json = jsonStr;
 
 		try {
-			Map<String, Object> temp = JsonUtils.decode(jsonStr, Map.class);
+			Map<String, Object> temp = JsonUtils.parse(jsonStr, Map.class);
 			access_token = (String) temp.get("access_token");
-			expires_in = (Integer) temp.get("expires_in");
-			errcode = (Integer) temp.get("errcode");
+			expires_in = getInt(temp, "expires_in");
+			errcode = getInt(temp, "errcode");
 			errmsg = (String) temp.get("errmsg");
 
 			if (expires_in != null)
@@ -60,6 +60,11 @@ public class AccessToken implements Serializable {
 		return access_token != null;
 	}
 	
+	private Integer getInt(Map<String, Object> temp, String key) {
+		Number number = (Number) temp.get(key);
+		return number == null ? null : number.intValue();
+	}
+	
 	public String getAccessToken() {
 		return access_token;
 	}
@@ -79,5 +84,10 @@ public class AccessToken implements Serializable {
 				return result;
 		}
 		return errmsg;
+	}
+
+	@Override
+	public boolean matching() {
+		return isAvailable();
 	}
 }

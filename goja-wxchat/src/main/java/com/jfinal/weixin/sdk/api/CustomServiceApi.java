@@ -6,11 +6,12 @@
 
 package com.jfinal.weixin.sdk.api;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.JsonUtils;
 
 /**
@@ -27,10 +28,100 @@ public class CustomServiceApi {
      * 获取客服聊天记录
      */
     public static ApiResult getRecord(String jsonStr) {
-        String jsonResult = HttpKit.post(getRecordUrl + AccessTokenApi.getAccessTokenStr(), jsonStr);
+        String jsonResult = HttpUtils.post(getRecordUrl + AccessTokenApi.getAccessTokenStr(), jsonStr);
         return new ApiResult(jsonResult);
     }
 
+    private static String addKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=";
+    
+    /**
+     * 添加客服帐号
+     * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
+     * @param nickname 客服昵称，最长6个汉字或12个英文字符
+     * @param password 客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
+     * @return ApiResult
+     */
+    public static ApiResult addKfAccount(String kf_account, String nickname, String password) {
+        String accessToken = AccessTokenApi.getAccessTokenStr();
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("kf_account", kf_account);
+        params.put("nickname", nickname);
+        params.put("password", password);
+        
+        String jsonResult = HttpUtils.post(addKfAccountUrl + accessToken, JsonUtils.toJson(params));
+        return new ApiResult(jsonResult);
+    }
+    
+    private static String updateKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/update?access_token=";
+    
+    /**
+     * 修改客服帐号
+     * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
+     * @param nickname 客服昵称，最长6个汉字或12个英文字符
+     * @param password 客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
+     * @return ApiResult
+     */
+    public static ApiResult updateKfAccount(String kf_account, String nickname, String password) {
+        String accessToken = AccessTokenApi.getAccessTokenStr();
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("kf_account", kf_account);
+        params.put("nickname", nickname);
+        params.put("password", password);
+        
+        String jsonResult = HttpUtils.post(updateKfAccountUrl + accessToken, JsonUtils.toJson(params));
+        return new ApiResult(jsonResult);
+    }
+    
+    private static String delKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/del?access_token=";
+    
+    /**
+     * 删除客服帐号
+     * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
+     * @param nickname 客服昵称，最长6个汉字或12个英文字符
+     * @param password 客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
+     * @return ApiResult
+     */
+    public static ApiResult delKfAccount(String kf_account, String nickname, String password) {
+        String accessToken = AccessTokenApi.getAccessTokenStr();
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("kf_account", kf_account);
+        params.put("nickname", nickname);
+        params.put("password", password);
+        
+        String jsonResult = HttpUtils.post(delKfAccountUrl + accessToken, JsonUtils.toJson(params));
+        return new ApiResult(jsonResult);
+    }
+    
+    private static String uploadKfAccountHeadImgUrl = "http://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?access_token=";
+    
+    /**
+     * 设置客服帐号的头像
+     * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
+     * @param headImg 客服人员的头像，头像图片文件必须是jpg格式，推荐使用640*640大小的图片以达到最佳效果
+     * @return
+     */
+    public static ApiResult uploadKfAccountHeadImg(String kf_account, File headImg) {
+        String accessToken = AccessTokenApi.getAccessTokenStr();
+        String url = uploadKfAccountHeadImgUrl + accessToken + "&kf_account=" + kf_account;
+        String jsonResult = HttpUtils.upload(url, headImg, null);
+        return new ApiResult(jsonResult);
+    }
+    
+    private static String getKfListUrl = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=";
+    
+    /**
+     * 获取所有客服账号
+     * @return ApiResult
+     */
+    public static ApiResult getKfList() {
+        String accessToken = AccessTokenApi.getAccessTokenStr();
+        String jsonResult = HttpUtils.get(getKfListUrl + accessToken);
+        return new ApiResult(jsonResult);
+    }
+    
     private static String customMessageUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=";
 
     /**
@@ -40,7 +131,7 @@ public class CustomServiceApi {
      */
     private static ApiResult sendMsg(Map<String, Object> message) {
         String accessToken = AccessTokenApi.getAccessTokenStr();
-        String jsonResult = HttpKit.post(customMessageUrl + accessToken, JsonUtils.toJson(message));
+        String jsonResult = HttpUtils.post(customMessageUrl + accessToken, JsonUtils.toJson(message));
         return new ApiResult(jsonResult);
     }
 

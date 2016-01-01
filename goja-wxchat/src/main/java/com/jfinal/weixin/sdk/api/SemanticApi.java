@@ -1,6 +1,6 @@
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 
 /**
  * 语义接口
@@ -18,7 +18,7 @@ public class SemanticApi {
 	 */
 	public static ApiResult search(String jsonStr) {
 		String url = semanticUrl + AccessTokenApi.getAccessTokenStr();
-		String jsonResult = HttpKit.post(url, jsonStr);
+		String jsonResult = HttpUtils.post(url, jsonStr);
 		return new ApiResult(jsonResult);
 	}
 	

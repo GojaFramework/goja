@@ -3,7 +3,7 @@ package com.jfinal.weixin.sdk.api;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.JsonUtils;
 
 /**
@@ -29,7 +29,7 @@ public class DatacubeApi {
 		mapData.put("begin_date", begin_date);
 		mapData.put("end_date", end_date);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(mapData));
 		return new ApiResult(jsonResult);
 	}
 	

@@ -61,24 +61,30 @@ public abstract class MsgController extends Controller {
 			processInLocationMsg((InLocationMsg) msg);
 		else if (msg instanceof InLinkMsg)
 			processInLinkMsg((InLinkMsg) msg);
-        else if (msg instanceof InCustomEvent)
-            processInCustomEvent((InCustomEvent) msg);
+		else if (msg instanceof InCustomEvent)
+			processInCustomEvent((InCustomEvent) msg);
 		else if (msg instanceof InFollowEvent)
 			processInFollowEvent((InFollowEvent) msg);
 		else if (msg instanceof InQrCodeEvent)
 			processInQrCodeEvent((InQrCodeEvent) msg);
 		else if (msg instanceof InLocationEvent)
 			processInLocationEvent((InLocationEvent) msg);
-        else if (msg instanceof InMassEvent)
-            processInMassEvent((InMassEvent) msg);
+		else if (msg instanceof InMassEvent)
+			processInMassEvent((InMassEvent) msg);
 		else if (msg instanceof InMenuEvent)
 			processInMenuEvent((InMenuEvent) msg);
 		else if (msg instanceof InSpeechRecognitionResults)
 			processInSpeechRecognitionResults((InSpeechRecognitionResults) msg);
 		else if (msg instanceof InTemplateMsgEvent)
-			processInTemplateMsgEvent((InTemplateMsgEvent)msg);
+			processInTemplateMsgEvent((InTemplateMsgEvent) msg);
 		else if (msg instanceof InShakearoundUserShakeEvent)
-			processInShakearoundUserShakeEvent((InShakearoundUserShakeEvent)msg);
+			processInShakearoundUserShakeEvent((InShakearoundUserShakeEvent) msg);
+		else if (msg instanceof InVerifySuccessEvent)
+			processInVerifySuccessEvent((InVerifySuccessEvent) msg);
+		else if (msg instanceof InVerifyFailEvent)
+			processInVerifyFailEvent((InVerifyFailEvent) msg);
+		else if (msg instanceof InPoiCheckNotifyEvent)
+			processInPoiCheckNotifyEvent((InPoiCheckNotifyEvent) msg);
 		else
 			log.error("未能识别的消息类型。 消息 xml 内容为：\n" + getInMsgXml());
 	}
@@ -112,7 +118,7 @@ public abstract class MsgController extends Controller {
 	@Before(NotAction.class)
 	public String getInMsgXml() {
 		if (inMsgXml == null) {
-			inMsgXml = HttpKit.readIncommingRequestData(getRequest());
+			inMsgXml = HttpKit.readData(getRequest());
 			
 			// 是否需要解密消息
 			if (ApiConfigKit.getApiConfig().isEncryptMessage()) {
@@ -182,6 +188,9 @@ public abstract class MsgController extends Controller {
 
 	// 资质认证失败 || 名称认证失败
 	protected abstract void processInVerifyFailEvent(InVerifyFailEvent inVerifyFailEvent);
+	
+	// 门店在审核事件消息
+	protected abstract void processInPoiCheckNotifyEvent(InPoiCheckNotifyEvent inPoiCheckNotifyEvent);
 }
 
 
