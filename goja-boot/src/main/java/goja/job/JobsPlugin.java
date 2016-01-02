@@ -24,6 +24,7 @@ import goja.initialize.ctxbox.ClassType;
 import goja.core.libs.Expression;
 import goja.core.libs.PThreadFactory;
 import goja.core.libs.Time;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
@@ -42,7 +43,7 @@ public class JobsPlugin implements IPlugin {
             return Job.class.isAssignableFrom(input);
         }
     };
-    private static final org.slf4j.Logger logger              = LoggerFactory.getLogger(JobsPlugin.class);
+    private static final Logger logger              = LoggerFactory.getLogger(JobsPlugin.class);
     protected static ScheduledThreadPoolExecutor executor;
     protected static List<Job>   scheduledJobs       = null;
     private static   List<Class> applicationStopJobs = Lists.newArrayList();
@@ -124,9 +125,7 @@ public class JobsPlugin implements IPlugin {
                                 }
                                 throw new RuntimeException("@OnApplicationStart Job has failed");
                             }
-                        } catch (InstantiationException e) {
-                            throw new UnexpectedException("Job could not be instantiated", e);
-                        } catch (IllegalAccessException e) {
+                        } catch (InstantiationException | IllegalAccessException e) {
                             throw new UnexpectedException("Job could not be instantiated", e);
                         } catch (Throwable ex) {
                             if (ex instanceof GojaException) {
@@ -143,9 +142,7 @@ public class JobsPlugin implements IPlugin {
                             @SuppressWarnings("unchecked")
                             Callable<Job> callable = (Callable<Job>) job;
                             executor.submit(callable);
-                        } catch (InstantiationException ex) {
-                            throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
-                        } catch (IllegalAccessException ex) {
+                        } catch (InstantiationException | IllegalAccessException ex) {
                             throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
                         }
                     }
@@ -160,9 +157,7 @@ public class JobsPlugin implements IPlugin {
                         Job<?> job = ((Job<?>) clazz.newInstance());
                         scheduledJobs.add(job);
                         scheduleForCRON(job);
-                    } catch (InstantiationException ex) {
-                        throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
-                    } catch (IllegalAccessException ex) {
+                    } catch (InstantiationException | IllegalAccessException ex) {
                         throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
                     }
                 }
@@ -179,9 +174,7 @@ public class JobsPlugin implements IPlugin {
                         if (!"never".equalsIgnoreCase(value)) {
                             executor.scheduleWithFixedDelay(job, Time.parseDuration(value), Time.parseDuration(value), TimeUnit.SECONDS);
                         }
-                    } catch (InstantiationException ex) {
-                        throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
-                    } catch (IllegalAccessException ex) {
+                    } catch (InstantiationException | IllegalAccessException ex) {
                         throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
                     }
                 }
@@ -205,9 +198,7 @@ public class JobsPlugin implements IPlugin {
                         }
                         throw new RuntimeException("@OnApplicationStop Job has failed");
                     }
-                } catch (InstantiationException e) {
-                    throw new UnexpectedException("ApplicationStop job could not be instantiated", e);
-                } catch (IllegalAccessException e) {
+                } catch (InstantiationException | IllegalAccessException e) {
                     throw new UnexpectedException("ApplicationStop job could not be instantiated", e);
                 } catch (Throwable ex) {
                     if (ex instanceof GojaException) {

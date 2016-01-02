@@ -33,10 +33,10 @@ public class AddHeaderHandler extends Handler {
             } else if (header instanceof Long) {
                 response.addDateHeader(name, (Long) header);
             } else {
-                new RuntimeException("does not support the name (" + name + ") with  value that type is "
+                throw new RuntimeException("does not support the name (" + name + ") with  value that type is "
                         + header.getClass());
             }
         }
-        nextHandler.handle(target, request, response, isHandled);
+        next.handle(target, request, response, isHandled);
     }
 }

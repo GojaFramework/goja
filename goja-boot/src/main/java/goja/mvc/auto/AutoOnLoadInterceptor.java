@@ -43,10 +43,7 @@ public class AutoOnLoadInterceptor {
                 if (interceptor != null) {
                     try {
                         interceptors.add((Interceptor) interceptorClas.newInstance());
-                    } catch (InstantiationException e) {
-                        Logger.error("instance aop interceptor is error!", e);
-                        throw new IllegalArgumentException("instance aop interceptor is error!");
-                    } catch (IllegalAccessException e) {
+                    } catch (InstantiationException | IllegalAccessException e) {
                         Logger.error("instance aop interceptor is error!", e);
                         throw new IllegalArgumentException("instance aop interceptor is error!");
                     }

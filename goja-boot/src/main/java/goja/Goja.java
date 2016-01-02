@@ -11,6 +11,7 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
 import com.jfinal.config.*;
@@ -144,9 +145,7 @@ public class Goja extends JFinalConfig {
             if (security_user != null && security_user.size() == 1) {
                 try {
                     securityUserData = (SecurityUserData) security_user.get(0).newInstance();
-                } catch (InstantiationException e) {
-                    logger.error("the security user data has error!", e);
-                } catch (IllegalAccessException e) {
+                } catch (InstantiationException | IllegalAccessException e) {
                     logger.error("the security user data has error!", e);
                 }
             }
@@ -217,7 +216,7 @@ public class Goja extends JFinalConfig {
                 for (String cacheName : cacheNameList) {
                     final String cacheRedistPort = redisConfigProp.getProperty(cacheName + ".port");
                     final String cacheRedistHost = redisConfigProp.getProperty(cacheName + ".host", String.valueOf(Protocol.DEFAULT_PORT));
-                    int port = Strings.isNullOrEmpty(cacheRedistPort) ? Protocol.DEFAULT_PORT : Ints.tryParse(cacheRedistPort);
+                    int port = Strings.isNullOrEmpty(cacheRedistPort) ? Protocol.DEFAULT_PORT : MoreObjects.firstNonNull(Ints.tryParse(cacheRedistPort), Protocol.DEFAULT_PORT);
                     final RedisPlugin jedis = new RedisPlugin(cacheName, cacheRedistHost, port);
                     plugins.add(jedis);
                 }
@@ -227,7 +226,7 @@ public class Goja extends JFinalConfig {
             if (!Strings.isNullOrEmpty(redis_host)) {
                 final String cacheName = GojaConfig.getProperty(GojaPropConst.REDIS_CACHENAME, "goja.redis.cache");
                 final String strProt = GojaConfig.getProperty(GojaPropConst.REDIS_PORT);
-                int port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT : Ints.tryParse(strProt);
+                int port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT : MoreObjects.firstNonNull(Ints.tryParse(strProt), Protocol.DEFAULT_PORT);
                 final RedisPlugin jedis = new RedisPlugin(cacheName, redis_host, port);
                 plugins.add(jedis);
             }
@@ -272,11 +271,7 @@ public class Goja extends JFinalConfig {
                 }
             }
 
-        } catch (IllegalArgumentException e) {
-            logger.error("Enable the system operation log interceptor abnormalities.", e);
-        } catch (InstantiationException e) {
-            logger.error("Enable the system operation log interceptor abnormalities.", e);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
             logger.error("Enable the system operation log interceptor abnormalities.", e);
         }
 

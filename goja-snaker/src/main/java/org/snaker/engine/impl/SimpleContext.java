@@ -14,15 +14,15 @@
  */
 package org.snaker.engine.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.snaker.engine.Context;
 import org.snaker.engine.cfg.Configuration;
 import org.snaker.engine.helper.ClassHelper;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 简单的服务查找实现类，由 {@link Configuration}设置
@@ -33,7 +33,7 @@ public class SimpleContext implements Context {
 	/**
 	 * 上下文注册的配置对象
 	 */
-	private Map<String, Object> contextMap = new HashMap<String, Object>();
+	private Map<String, Object> contextMap = Maps.newHashMap();
 	
 	/**
 	 * 根据服务名称查找对象
@@ -63,7 +63,7 @@ public class SimpleContext implements Context {
 	 * @return
 	 */
 	public <T> List<T> findList(Class<T> clazz) {
-		List<T> list = new ArrayList<T>();
+		List<T> list = Lists.newArrayList();
 		for (Entry<String, Object> entry : contextMap.entrySet()) {
 			if (clazz.isInstance(entry.getValue())) {
 				list.add(clazz.cast(entry.getValue()));

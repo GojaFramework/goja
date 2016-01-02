@@ -47,7 +47,7 @@ public class AppLogConfigurator {
         final boolean isDev = GojaConfig.getApplicationMode().isDev();
 
         if (isDev) {
-            ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<ILoggingEvent>();
+            ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<>();
             ca.setContext(lc);
             ca.setName("console");
 
@@ -94,11 +94,11 @@ public class AppLogConfigurator {
             final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + logFileName + ".log");
             rfa.setFile(logger_file);
 
-            final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
+            final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<>();
             rollingPolicy.setParent(rfa);
             rollingPolicy.setMaxHistory(15);
             rollingPolicy.setFileNamePattern(StringUtils.replace(logger_file, ".log", ".%d{yyyy-MM-dd}.%i.log"));
-            SizeAndTimeBasedFNATP<ILoggingEvent> timeBasedTriggering = new SizeAndTimeBasedFNATP<ILoggingEvent>();
+            SizeAndTimeBasedFNATP<ILoggingEvent> timeBasedTriggering = new SizeAndTimeBasedFNATP<>();
             timeBasedTriggering.setMaxFileSize("100MB");
             rollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(timeBasedTriggering);
             rollingPolicy.setContext(lc);
