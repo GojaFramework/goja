@@ -15,7 +15,7 @@ import goja.core.libs.base.Option;
  * @version 1.0 2014-09-11 13:36
  * @since JDK 1.6
  */
-public abstract class Matcher<T,R> {
+public abstract class Matcher<T, R> {
 
     public static Matcher<Object, String> String = new Matcher<Object, String>() {
 

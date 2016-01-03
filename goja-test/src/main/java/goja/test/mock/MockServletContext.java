@@ -1,15 +1,7 @@
 package goja.test.mock;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterRegistration;
+import javax.servlet.*;
 import javax.servlet.FilterRegistration.Dynamic;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.SessionCookieConfig;
-import javax.servlet.SessionTrackingMode;
 import javax.servlet.descriptor.JspConfigDescriptor;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -27,7 +19,6 @@ import java.util.Set;
  * @since JDK 1.6
  */
 public class MockServletContext implements ServletContext {
-
 
     /**
      * @see javax.servlet.ServletContext#addFilter(java.lang.String, java.lang.Class)
@@ -84,7 +75,8 @@ public class MockServletContext implements ServletContext {
      * @see javax.servlet.ServletContext#addServlet(java.lang.String, java.lang.Class)
      */
     @Override
-    public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, Class<? extends Servlet> arg1) {
+    public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0,
+                                                                Class<? extends Servlet> arg1) {
 
         return null;
     }

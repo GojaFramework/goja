@@ -25,7 +25,6 @@ import java.util.concurrent.*;
  */
 public class G {
 
-
     public static String str(Object obj) {
         if (obj == null) {
             return "null";
@@ -117,7 +116,6 @@ public class G {
         return String.format(format, args);
     }
 
-
     public static String render(Object[] items, String itemFormat, String sep) {
         StringBuilder sb = new StringBuilder();
 
@@ -149,8 +147,6 @@ public class G {
         return sb.toString();
     }
 
-
-
     @SuppressWarnings("unchecked")
     public static <T> Set<T> synchronizedSet() {
         return (Set<T>) Collections.synchronizedSet(set());
@@ -171,7 +167,7 @@ public class G {
     }
 
     @SafeVarargs
-    @SuppressWarnings({ "varargs" })
+    @SuppressWarnings({"varargs"})
     public static <T> Set<T> set(T... values) {
         Set<T> set = set();
 
@@ -200,7 +196,7 @@ public class G {
     }
 
     @SafeVarargs
-    @SuppressWarnings({ "varargs" })
+    @SuppressWarnings({"varargs"})
     public static <T> List<T> list(T... values) {
         List<T> list = list();
 
@@ -237,13 +233,15 @@ public class G {
         return map;
     }
 
-    public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+    public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4,
+                                       V value4) {
         Map<K, V> map = map(key1, value1, key2, value2, key3, value3);
         map.put(key4, value4);
         return map;
     }
 
-    public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5,
+    public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4,
+                                       V value4, K key5,
                                        V value5) {
         Map<K, V> map = map(key1, value1, key2, value2, key3, value3, key4, value4);
         map.put(key5, value5);
@@ -252,7 +250,8 @@ public class G {
 
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> map(Object... keysAndValues) {
-        must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
+        must(keysAndValues.length % 2 == 0,
+                "Incorrect number of arguments (expected key-value pairs)!");
 
         Map<K, V> map = map();
 
@@ -267,7 +266,8 @@ public class G {
         return Maps.newConcurrentMap();
     }
 
-    public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
+    public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src,
+                                                           boolean ignoreNullValues) {
         ConcurrentMap<K, V> map = concurrentMap();
 
         for (Map.Entry<? extends K, ? extends V> e : src.entrySet()) {
@@ -291,20 +291,23 @@ public class G {
         return map;
     }
 
-    public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3) {
+    public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3,
+                                                           V value3) {
         ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2);
         map.put(key3, value3);
         return map;
     }
 
-    public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3,
+    public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3,
+                                                           V value3,
                                                            K key4, V value4) {
         ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3);
         map.put(key4, value4);
         return map;
     }
 
-    public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3,
+    public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3,
+                                                           V value3,
                                                            K key4, V value4, K key5, V value5) {
         ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3, key4, value4);
         map.put(key5, value5);
@@ -313,7 +316,8 @@ public class G {
 
     @SuppressWarnings("unchecked")
     public static <K, V> ConcurrentMap<K, V> concurrentMap(Object... keysAndValues) {
-        must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
+        must(keysAndValues.length % 2 == 0,
+                "Incorrect number of arguments (expected key-value pairs)!");
 
         ConcurrentMap<K, V> map = concurrentMap();
 
@@ -328,7 +332,8 @@ public class G {
         return Maps.newLinkedHashMap();
     }
 
-    public static <K, V> Map<K, V> orderedMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
+    public static <K, V> Map<K, V> orderedMap(Map<? extends K, ? extends V> src,
+                                              boolean ignoreNullValues) {
         Map<K, V> map = orderedMap();
 
         for (Map.Entry<? extends K, ? extends V> e : src.entrySet()) {
@@ -358,13 +363,15 @@ public class G {
         return map;
     }
 
-    public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+    public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3,
+                                              K key4, V value4) {
         Map<K, V> map = orderedMap(key1, value1, key2, value2, key3, value3);
         map.put(key4, value4);
         return map;
     }
 
-    public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4,
+    public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3,
+                                              K key4, V value4,
                                               K key5, V value5) {
         Map<K, V> map = orderedMap(key1, value1, key2, value2, key3, value3, key4, value4);
         map.put(key5, value5);
@@ -373,7 +380,8 @@ public class G {
 
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> orderedMap(Object... keysAndValues) {
-        must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
+        must(keysAndValues.length % 2 == 0,
+                "Incorrect number of arguments (expected key-value pairs)!");
 
         Map<K, V> map = orderedMap();
 
@@ -385,7 +393,7 @@ public class G {
     }
 
     public static <K, V> Map<K, V> synchronizedMap() {
-        return Collections.synchronizedMap(G.<K, V> map());
+        return Collections.synchronizedMap(G.<K, V>map());
     }
 
     public static <T> Queue<T> queue() {
@@ -434,15 +442,15 @@ public class G {
     }
 
     public static <T> List<T> safe(List<T> list) {
-        return list != null ? list : G.<T> list();
+        return list != null ? list : G.<T>list();
     }
 
     public static <T> Set<T> safe(Set<T> set) {
-        return set != null ? set : G.<T> set();
+        return set != null ? set : G.<T>set();
     }
 
     public static <K, V> Map<K, V> safe(Map<K, V> map) {
-        return map != null ? map : G.<K, V> map();
+        return map != null ? map : G.<K, V>map();
     }
 
     public static long time() {
@@ -530,7 +538,8 @@ public class G {
         return true;
     }
 
-    public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2, Object arg3) {
+    public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2,
+                               Object arg3) {
         if (!expectedCondition) {
             throw rte(message, str(arg1), str(arg2), str(arg3));
         }
@@ -766,11 +775,11 @@ public class G {
 
     /**
      * Sleeps (calling Thread.sleep) for the specified period.
+     * <p/>
+     * If the thread is interrupted while sleeping, throws {@link CancellationException} to propagate
+     * the interruption.
      *
-     * If the thread is interrupted while sleeping, throws {@link CancellationException} to propagate the interruption.
-     *
-     * @param millis
-     *            the length of time to sleep in milliseconds.
+     * @param millis the length of time to sleep in milliseconds.
      */
     public static void sleep(long millis) {
         try {
@@ -816,7 +825,6 @@ public class G {
 
                 return val;
             }
-
         });
     }
 
@@ -827,7 +835,6 @@ public class G {
             public Map<K2, V> map(K1 src) throws Exception {
                 return synchronizedMap();
             }
-
         });
     }
 
@@ -836,9 +843,8 @@ public class G {
 
             @Override
             public List<V> map(K src) throws Exception {
-                return Collections.synchronizedList(G.<V> list());
+                return Collections.synchronizedList(G.<V>list());
             }
-
         });
     }
 
@@ -847,9 +853,8 @@ public class G {
 
             @Override
             public Set<V> map(K src) throws Exception {
-                return Collections.synchronizedSet(G.<V> set());
+                return Collections.synchronizedSet(G.<V>set());
             }
-
         });
     }
 
@@ -895,14 +900,14 @@ public class G {
 
                 return dynamic.call(method, safe(args));
             }
-
         };
 
-        return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[] { targetInterface }, handler));
+        return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(),
+                new Class[]{targetInterface}, handler));
     }
 
     @SafeVarargs
-    @SuppressWarnings({ "varargs" })
+    @SuppressWarnings({"varargs"})
     public static <T> boolean isIn(T value, T... candidates) {
         for (T candidate : candidates) {
             if (eq(value, candidate)) {
@@ -934,7 +939,8 @@ public class G {
         return constructPath(File.separator, true, parts);
     }
 
-    private static String constructPath(String separator, boolean preserveFirstSegment, String... parts) {
+    private static String constructPath(String separator, boolean preserveFirstSegment,
+                                        String... parts) {
         String s = "";
 
         for (int i = 0; i < parts.length; i++) {
@@ -990,5 +996,4 @@ public class G {
             destination.putAll(source);
         }
     }
-
 }

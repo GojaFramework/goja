@@ -1,6 +1,5 @@
 package goja.core.concurrent;
 
-
 import goja.core.lambda.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,8 @@ public class Callbacks {
         done(callback, null, error);
     }
 
-    public static <FROM, TO> Callback<FROM> mapping(final Callback<TO> callback, final Mapper<FROM, TO> mapper) {
+    public static <FROM, TO> Callback<FROM> mapping(final Callback<TO> callback,
+                                                    final Mapper<FROM, TO> mapper) {
         return new Callback<FROM>() {
 
             @Override
@@ -44,7 +44,6 @@ public class Callbacks {
                 TO mapped = error == null ? mapper.map(result) : null;
                 Callbacks.done(callback, mapped, error);
             }
-
         };
     }
 

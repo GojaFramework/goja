@@ -3,22 +3,16 @@ package goja.rapid.db;
 import goja.core.StringPool;
 
 /**
- * <p/>
- * Simple queries follow the following syntax [Property][Comparator]And? where Comparator can be the following:
- * <ol>
- * <li> LessThan - less than the given value</li>
- * <li> LessThanEquals - less than or equal a give value</li>
- * <li> GreaterThan - greater than a given value</li>
- * <li> GreaterThanEquals - greater than or equal a given value</li>
- * <li> Like - Equivalent to a SQL like expression, except that the property will always convert to lower case.</li>
- * <li> Ilike - Similar to a Like, except case insensitive, meaning that your argument will convert to lower case too.</li>
- * <li> Elike - Equivalent to a SQL like expression, no conversion.</li>
- * <li> NotEqual - Negates equality</li>
- * <li> Equal - Equal</li>
- * <li> Between - Between two values (requires two arguments)</li>
- * <li> IsNotNull - Not a null value (doesn’t require an argument)</li>
- * <li> IsNull - Is a null value (doesn’t require an argument)</li>
- * </ol>
+ * <p/> Simple queries follow the following syntax [Property][Comparator]And? where Comparator can
+ * be the following: <ol> <li> LessThan - less than the given value</li> <li> LessThanEquals - less
+ * than or equal a give value</li> <li> GreaterThan - greater than a given value</li> <li>
+ * GreaterThanEquals - greater than or equal a given value</li> <li> Like - Equivalent to a SQL like
+ * expression, except that the property will always convert to lower case.</li> <li> Ilike - Similar
+ * to a Like, except case insensitive, meaning that your argument will convert to lower case
+ * too.</li> <li> Elike - Equivalent to a SQL like expression, no conversion.</li> <li> NotEqual -
+ * Negates equality</li> <li> Equal - Equal</li> <li> Between - Between two values (requires two
+ * arguments)</li> <li> IsNotNull - Not a null value (doesn’t require an argument)</li> <li> IsNull
+ * - Is a null value (doesn’t require an argument)</li> </ol>
  *
  * @author sogYF
  * @version 1.0
@@ -37,9 +31,11 @@ public class FindBy {
         findBy = findBy.substring(2);
         final StringBuilder sql = new StringBuilder();
         String subRequest;
-        if (findBy.contains("OrderBy"))
+        if (findBy.contains("OrderBy")) {
             subRequest = findBy.split("OrderBy")[0];
-        else subRequest = findBy;
+        } else {
+            subRequest = findBy;
+        }
         String[] parts = subRequest.split("And");
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
@@ -104,11 +100,14 @@ public class FindBy {
             for (int i = 0; i < parts.length; i++) {
                 String part = parts[i];
                 String orderProp;
-                if (part.endsWith("Desc"))
+                if (part.endsWith("Desc")) {
                     orderProp = extractProp(part, "Desc") + " DESC";
-                else orderProp = part.toLowerCase();
-                if (i > 0)
+                } else {
+                    orderProp = part.toLowerCase();
+                }
+                if (i > 0) {
                     sql.append(", ");
+                }
                 sql.append(orderProp);
             }
         }
@@ -120,5 +119,4 @@ public class FindBy {
         prop = (prop.charAt(0) + StringPool.EMPTY).toLowerCase() + prop.substring(1);
         return prop;
     }
-
 }

@@ -7,9 +7,7 @@
 package goja.core.exceptions;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:19
@@ -41,8 +39,12 @@ public class UnexpectedException extends GojaException {
 
     @Override
     public String getErrorDescription() {
-        if (getCause() != null && getCause().getClass() != null)
-            return String.format("An unexpected error occured caused by exception <strong>%s</strong>:<br/> <strong>%s</strong>", getCause().getClass().getSimpleName(), getCause().getMessage());
-        else return String.format("Unexpected error : %s", getMessage());
+        if (getCause() != null && getCause().getClass() != null) {
+            return String.format(
+                    "An unexpected error occured caused by exception <strong>%s</strong>:<br/> <strong>%s</strong>",
+                    getCause().getClass().getSimpleName(), getCause().getMessage());
+        } else {
+            return String.format("Unexpected error : %s", getMessage());
+        }
     }
 }

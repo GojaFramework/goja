@@ -6,16 +6,13 @@
 
 package goja.security.shiro;
 
-
 import com.jfinal.plugin.activerecord.Model;
 import org.apache.shiro.subject.Subject;
 
 import static org.apache.shiro.SecurityUtils.getSubject;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author walter yang
  * @version 1.0 2013-10-29 11:05 PM
@@ -29,7 +26,7 @@ public final class Securitys {
      */
     public static <U extends Model> AppUser<U> getLogin() {
 
-        return (AppUser< U>) getSubject().getPrincipal();
+        return (AppUser<U>) getSubject().getPrincipal();
     }
 
     /**
@@ -39,7 +36,6 @@ public final class Securitys {
         if (isLogin()) {
             getSubject().logout();
         }
-
     }
 
     /**

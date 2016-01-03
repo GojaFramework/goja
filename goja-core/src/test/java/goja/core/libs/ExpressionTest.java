@@ -13,7 +13,7 @@ public class ExpressionTest {
 
     @Test
     public void testName() throws Exception {
-        System.out.println("Expression.evaluate(\"cron.(abc)\") = " + Expression.evaluate("0 0 12 * * ?","*.*.*1"));
-
+        System.out.println(
+                "Expression.evaluate(\"cron.(abc)\") = " + Expression.evaluate("0 0 12 * * ?", "*.*.*1"));
     }
 }

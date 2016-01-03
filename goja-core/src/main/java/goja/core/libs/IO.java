@@ -11,25 +11,12 @@ import goja.core.exceptions.UnexpectedException;
 import goja.core.kits.io.OrderSafeProperties;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * <p>
- * IO utils.
- * </p>
+ * <p> IO utils. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:18

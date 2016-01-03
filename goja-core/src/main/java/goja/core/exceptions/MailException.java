@@ -11,7 +11,6 @@ package goja.core.exceptions;
  */
 public class MailException extends GojaException {
 
-
     private static final long serialVersionUID = -5300552095279529931L;
 
     public MailException(String message) {
@@ -31,6 +30,4 @@ public class MailException extends GojaException {
     public String getErrorDescription() {
         return String.format("A mail error occured : <strong>%s</strong>", getMessage());
     }
-
-
 }

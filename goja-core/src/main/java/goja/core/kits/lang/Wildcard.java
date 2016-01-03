@@ -17,7 +17,7 @@ package goja.core.kits.lang;
  */
 public class Wildcard {
 
-    protected static final String PATH_MATCH      = "**";
+    protected static final String PATH_MATCH = "**";
     protected static final String PATH_SEPARATORS = "/\\";
 
     /**

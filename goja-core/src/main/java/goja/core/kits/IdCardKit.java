@@ -15,9 +15,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * <p>
- * Chinese Id Card Kit class.
- * </p>
+ * <p> Chinese Id Card Kit class. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-09-30 23:13
@@ -26,36 +24,54 @@ import java.util.Map;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class IdCardKit {
 
-    /** 中国公民身份证号码最小长度。 */
+    /**
+     * 中国公民身份证号码最小长度。
+     */
     public static final int CHINA_ID_MIN_LENGTH = 15;
 
-    /** 中国公民身份证号码最大长度。 */
+    /**
+     * 中国公民身份证号码最大长度。
+     */
     public static final int CHINA_ID_MAX_LENGTH = 18;
 
-    /** 省、直辖市代码表 */
+    /**
+     * 省、直辖市代码表
+     */
     public static final String cityCode[] = {
-            "11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34", "35", "36", "37", "41",
-            "42", "43", "44", "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64", "65", "71",
+            "11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34", "35", "36", "37",
+            "41",
+            "42", "43", "44", "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64", "65",
+            "71",
             "81", "82", "91"
     };
 
-    /** 每位加权因子 */
+    /**
+     * 每位加权因子
+     */
     public static final int power[] = {
             7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2
     };
 
-    /** 第18位校检码 */
+    /**
+     * 第18位校检码
+     */
     public static final String verifyCode[] = {
             "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"
     };
 
-    /** 最低年限 */
+    /**
+     * 最低年限
+     */
     public static final int MIN = 1930;
 
-    public static final Map<String, String>  cityCodes   = Maps.newHashMap();
-    /** 台湾身份首字母对应数字 */
+    public static final Map<String, String> cityCodes = Maps.newHashMap();
+    /**
+     * 台湾身份首字母对应数字
+     */
     public static final Map<String, Integer> twFirstCode = Maps.newHashMap();
-    /** 香港身份首字母对应数字 */
+    /**
+     * 香港身份首字母对应数字
+     */
     public static final Map<String, Integer> hkFirstCode = Maps.newHashMap();
 
     static {
@@ -153,8 +169,9 @@ public abstract class IdCardKit {
                 e.printStackTrace();
             }
             Calendar cal = Calendar.getInstance();
-            if (birthDate != null)
+            if (birthDate != null) {
                 cal.setTime(birthDate);
+            }
             // 获取出生年(完全表现形式,如：2010)
             String sYear = String.valueOf(cal.get(Calendar.YEAR));
             idCard18 = idCard.substring(0, 6) + sYear + idCard.substring(8);
@@ -247,8 +264,9 @@ public abstract class IdCardKit {
                 e.printStackTrace();
             }
             Calendar cal = Calendar.getInstance();
-            if (birthDate != null)
+            if (birthDate != null) {
                 cal.setTime(birthDate);
+            }
             if (!valiDate(cal.get(Calendar.YEAR), Integer.valueOf(birthCode.substring(2, 4)),
                     Integer.valueOf(birthCode.substring(4, 6)))) {
                 return false;
@@ -263,11 +281,8 @@ public abstract class IdCardKit {
      * 验证10位身份编码是否合法
      *
      * @param idCard 身份编码
-     * @return 身份证信息数组
-     * <p>
-     * [0] - 台湾、澳门、香港 [1] - 性别(男M,女F,未知N) [2] - 是否合法(合法true,不合法false)
-     * 若不是身份证件号码则返回null
-     * </p>
+     * @return 身份证信息数组 <p> [0] - 台湾、澳门、香港 [1] - 性别(男M,女F,未知N) [2] - 是否合法(合法true,不合法false)
+     * 若不是身份证件号码则返回null </p>
      */
     public static String[] validateIdCard10(String idCard) {
         String[] info = new String[3];
@@ -328,14 +343,8 @@ public abstract class IdCardKit {
     }
 
     /**
-     * 验证香港身份证号码(存在Bug，部份特殊身份证无法检查)
-     * <p>
-     * 身份证前2位为英文字符，如果只出现一个英文字符则表示第一位是空格，对应数字58 前2位英文字符A-Z分别对应数字10-35
-     * 最后一位校验码为0-9的数字加上字符"A"，"A"代表10
-     * </p>
-     * <p>
-     * 将身份证号码全部转换为数字，分别对应乘9-1相加的总和，整除11则证件号码有效
-     * </p>
+     * 验证香港身份证号码(存在Bug，部份特殊身份证无法检查) <p> 身份证前2位为英文字符，如果只出现一个英文字符则表示第一位是空格，对应数字58 前2位英文字符A-Z分别对应数字10-35
+     * 最后一位校验码为0-9的数字加上字符"A"，"A"代表10 </p> <p> 将身份证号码全部转换为数字，分别对应乘9-1相加的总和，整除11则证件号码有效 </p>
      *
      * @param idCard 身份证号码
      * @return 验证码是否符合

@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2011-2013, James Zhan 詹波 (jfinal@126.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package goja.mvc.kit;
@@ -26,9 +24,9 @@ import java.util.Random;
 public class SessionIds {
 
     private static final SessionIds me = new SessionIds();
-    protected static Random  random;
-    private static   boolean weakRandom;
     private static final Object lock = new Object();
+    protected static Random random;
+    private static boolean weakRandom;
 
     private SessionIds() {
         try {
@@ -53,7 +51,10 @@ public class SessionIds {
         synchronized (lock) {
             String id = null;
             while (id == null || id.length() == 0) {    //)||idInUse(id))
-                long r0 = weakRandom ? (hashCode() ^ Runtime.getRuntime().freeMemory() ^ random.nextInt() ^ (((long) request.hashCode()) << 32)) : random.nextLong();
+                long r0 = weakRandom ? (hashCode()
+                        ^ Runtime.getRuntime().freeMemory()
+                        ^ random.nextInt()
+                        ^ (((long) request.hashCode()) << 32)) : random.nextLong();
                 long r1 = random.nextLong();
                 if (r0 < 0) r0 = -r0;
                 if (r1 < 0) r1 = -r1;

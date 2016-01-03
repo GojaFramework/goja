@@ -12,9 +12,7 @@ import com.jfinal.render.Render;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * <p>
- * 304 Not Modified.
- * </p>
+ * <p> 304 Not Modified. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-03-29 14:06

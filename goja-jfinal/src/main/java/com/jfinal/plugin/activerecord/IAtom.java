@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,13 +28,13 @@ import java.sql.SQLException;
  * 			int result1 = Db.update("update account set cash = cash - ? where id = ?", 100, 123);<br>
  * 			int result2 = Db.update("update account set cash = cash + ? where id = ?", 100, 456);<br>
  * 			return result1 == 1 && result2 == 1;<br>
- * 		}});
+ *        }});
  */
 public interface IAtom {
-	
-	/**
-	 * Place codes here that need transaction support.
-	 * @return true if you want to commit the transaction otherwise roll back transaction
-	 */
-	boolean run() throws SQLException;
+
+    /**
+     * Place codes here that need transaction support.
+     * @return true if you want to commit the transaction otherwise roll back transaction
+     */
+    boolean run() throws SQLException;
 }

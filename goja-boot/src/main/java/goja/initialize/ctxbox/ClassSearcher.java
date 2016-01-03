@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2011-2013, kidzhou 周磊 (zhouleib1412@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package goja.initialize.ctxbox;
 
@@ -37,11 +35,12 @@ public class ClassSearcher {
 
     private final List<Class> targets;
 
-    private String       classpath           = PathKit.getRootClassPath();
-    private String       libDir              = PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib";
-    private List<String> scanPackages        = Lists.newArrayList();
-    private boolean      includeAllJarsInLib = false;
-    private List<String> includeJars         = Lists.newArrayList();
+    private String classpath = PathKit.getRootClassPath();
+    private String libDir =
+            PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib";
+    private List<String> scanPackages = Lists.newArrayList();
+    private boolean includeAllJarsInLib = false;
+    private List<String> includeJars = Lists.newArrayList();
 
     public ClassSearcher(Class target) {
         targets = Lists.newArrayListWithCapacity(11);
@@ -52,7 +51,6 @@ public class ClassSearcher {
         this.targets = Lists.newArrayListWithCapacity(targets.length);
         Collections.addAll(this.targets, targets);
     }
-
 
     private static List<Class<?>> extraction(Class<?> clazz, List<String> classFileList) {
         List<Class<?>> classList = Lists.newArrayList();
@@ -70,17 +68,16 @@ public class ClassSearcher {
         return new ClassSearcher(target);
     }
 
-
     public static ClassSearcher of(Class... targets) {
         return new ClassSearcher(targets);
     }
-
 
     /**
      * @param baseDirName    查找的文件夹路径
      * @param targetFileName 需要查找的文件名
      */
-    private static List<String> findFiles(String baseDirName, String targetFileName, final String classpath) {
+    private static List<String> findFiles(String baseDirName, String targetFileName,
+                                          final String classpath) {
         /**
          * 算法简述： 从某个给定的需查找的文件夹出发，搜索该文件夹的所有子文件夹及文件，
          * 若为文件，则进行匹配，匹配成功则加入结果集，若为子文件夹，则进队列。 队列不空，重复上述操作，队列为空，程序结束，返回结果。
@@ -97,14 +94,17 @@ public class ClassSearcher {
             for (String file_path : files) {
                 file = new File(baseDirName + File.separator + file_path);
                 if (file.isDirectory()) {
-                    classFiles.addAll(findFiles(baseDirName + File.separator + file_path, targetFileName,classpath));
+                    classFiles.addAll(
+                            findFiles(baseDirName + File.separator + file_path, targetFileName, classpath));
                 } else {
                     if (wildcardMatch(targetFileName, file.getName())) {
                         fileName = file.getAbsolutePath();
                         start = fileName.indexOf(open);
                         end = fileName.indexOf(close, start + open.length());
                         // window 下会出现问题,正则替换问题
-                        String className = StringUtils.replace(fileName.substring(start + open.length(), end), File.separator, ".");
+                        String className =
+                                StringUtils.replace(fileName.substring(start + open.length(), end), File.separator,
+                                        ".");
                         classFiles.add(className);
                     }
                 }
@@ -154,10 +154,12 @@ public class ClassSearcher {
     public List<Class<?>> search() {
         List<String> classFileList = Lists.newArrayList();
         if (scanPackages.isEmpty()) {
-            classFileList = findFiles(classpath, "*.class",classpath);
+            classFileList = findFiles(classpath, "*.class", classpath);
         } else {
             for (String scanPackage : scanPackages) {
-                classFileList = findFiles(classpath + File.separator + scanPackage.replaceAll("\\.", "\\" + File.separator), "*.class",classpath);
+                classFileList = findFiles(
+                        classpath + File.separator + scanPackage.replaceAll("\\.", "\\" + File.separator),
+                        "*.class", classpath);
             }
         }
         classFileList.addAll(findjarFiles(libDir));
@@ -195,14 +197,18 @@ public class ClassSearcher {
                                 String entryName = jarEntry.getName();
                                 if (scanPackages.isEmpty()) {
                                     if (!jarEntry.isDirectory() && entryName.endsWith(".class")) {
-                                        String className = StringUtils.replace(entryName, StringPool.SLASH, ".").substring(0, entryName.length() - 6);
+                                        String className = StringUtils.replace(entryName, StringPool.SLASH, ".")
+                                                .substring(0, entryName.length() - 6);
                                         classFiles.add(className);
                                     }
                                 } else {
                                     for (String scanPackage : scanPackages) {
                                         scanPackage = scanPackage.replaceAll("\\.", "\\" + File.separator);
-                                        if (!jarEntry.isDirectory() && entryName.endsWith(".class") && entryName.startsWith(scanPackage)) {
-                                            String className = StringUtils.replace(entryName, File.separator, ".").substring(0, entryName.length() - 6);
+                                        if (!jarEntry.isDirectory()
+                                                && entryName.endsWith(".class")
+                                                && entryName.startsWith(scanPackage)) {
+                                            String className = StringUtils.replace(entryName, File.separator, ".")
+                                                    .substring(0, entryName.length() - 6);
                                             classFiles.add(className);
                                         }
                                     }
@@ -221,7 +227,6 @@ public class ClassSearcher {
                         }
                     }
                 }
-
             }
         }
         return classFiles;

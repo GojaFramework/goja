@@ -9,9 +9,7 @@ package goja.logging;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>
- * Main logger for the application.
- * </p>
+ * <p> Main logger for the application. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-01 18:00
@@ -43,7 +41,6 @@ public class Logger {
         return slf4j.isDebugEnabled();
     }
 
-
     /**
      * Log with DEBUG level
      *
@@ -57,7 +54,6 @@ public class Logger {
         } else {
             slf4j.debug(message, args);
         }
-
     }
 
     /**
@@ -159,7 +155,6 @@ public class Logger {
             slf4j.error("Oops. Error in Logger !", ex);
             return false;
         }
-
     }
 
     /**
@@ -179,7 +174,6 @@ public class Logger {
         } catch (Throwable ex) {
             slf4j.error("Oops. Error in Logger !", ex);
         }
-
     }
 
     /**
@@ -198,7 +192,6 @@ public class Logger {
         }
     }
 
-
     public static boolean isWarnEnabled() {
 
         try {
@@ -212,7 +205,6 @@ public class Logger {
             return false;
         }
     }
-
 
     /**
      * @return the className of the class actually logging the message
@@ -258,5 +250,4 @@ public class Logger {
             this.methodName = methodName;
         }
     }
-
 }

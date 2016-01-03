@@ -15,17 +15,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:20
@@ -130,5 +123,4 @@ public class OrderSafeProperties extends java.util.Properties {
             throw new IllegalStateException("not implemented");
         }
     }
-
 }

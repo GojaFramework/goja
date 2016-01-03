@@ -17,25 +17,18 @@ public class Sql {
     public final String sql;
 
     /**
-     * 是否有分页的WHERE子句
-     * <p/>
-     * 由 Sql中的 --where-- 约定注释来判断
+     * 是否有分页的WHERE子句 <p/> 由 Sql中的 --where-- 约定注释来判断
      */
     public final boolean where;
 
     /**
-     * 是否有条件
-     * <p/>
-     * 由 Sql中的 --conditions-- 约定注释来判断
+     * 是否有条件 <p/> 由 Sql中的 --conditions-- 约定注释来判断
      */
     public final boolean conditions;
 
-
     public final String selectSql;
 
-
     public final String whereSql;
-
 
     public Sql(String sql) {
         this.sql = sql;

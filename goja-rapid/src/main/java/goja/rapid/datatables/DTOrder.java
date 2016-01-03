@@ -17,10 +17,11 @@ public final class DTOrder {
         this.dir = dir;
     }
 
-    public static DTOrder create(String column, String dir){
+    public static DTOrder create(String column, String dir) {
         return new DTOrder(column, dir);
     }
-    public static DTOrder create(String column){
+
+    public static DTOrder create(String column) {
         return new DTOrder(column, "asc");
     }
 

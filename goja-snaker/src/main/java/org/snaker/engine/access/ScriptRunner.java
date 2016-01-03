@@ -23,10 +23,13 @@ import org.snaker.engine.helper.AssertHelper;
 import org.snaker.engine.helper.StreamHelper;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * SQL脚本运行类
+ *
  * @author yuqs
  * @since 2.0
  */
@@ -39,13 +42,10 @@ public class ScriptRunner {
     private boolean autoCommit;
     //默认的分隔符;
     private String delimiter = DEFAULT_DELIMITER;
+
     public ScriptRunner(Connection connection, boolean autoCommit) {
         this.connection = connection;
         this.autoCommit = autoCommit;
-    }
-
-    public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
     }
 
     public void runScript(String resource) throws IOException, SQLException {
@@ -57,6 +57,7 @@ public class ScriptRunner {
 
     /**
      * 根据reader读取sql脚本，并运行
+     *
      * @param reader 脚本资源
      */
     public void runScript(Reader reader) throws IOException, SQLException {
@@ -82,9 +83,10 @@ public class ScriptRunner {
 
     /**
      * 根据给定的sql脚本资源、数据库连接对象，执行sql脚本
-     * @param conn 数据库连接对象
+     *
+     * @param conn   数据库连接对象
      * @param reader sql脚本资源
-     * @throws IOException io异常
+     * @throws IOException  io异常
      * @throws SQLException sql异常
      */
     private void runScript(Connection conn, Reader reader)
@@ -146,9 +148,14 @@ public class ScriptRunner {
 
     /**
      * 获取分隔符
+     *
      * @return delimiter
      */
     private String getDelimiter() {
         return delimiter;
+    }
+
+    public void setDelimiter(String delimiter) {
+        this.delimiter = delimiter;
     }
 }

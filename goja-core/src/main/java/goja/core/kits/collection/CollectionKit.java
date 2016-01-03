@@ -35,6 +35,7 @@ public abstract class CollectionKit {
     /**
      * Return {@code true} if the supplied Collection is {@code null} or empty.
      * Otherwise, return {@code false}.
+     *
      * @param collection the Collection to check
      * @return whether the given Collection is empty
      */
@@ -45,6 +46,7 @@ public abstract class CollectionKit {
     /**
      * Return {@code true} if the supplied Map is {@code null} or empty.
      * Otherwise, return {@code false}.
+     *
      * @param map the Map to check
      * @return whether the given Map is empty
      */
@@ -54,7 +56,8 @@ public abstract class CollectionKit {
 
     /**
      * Merge the given array into the given Collection.
-     * @param array the array to merge (may be {@code null})
+     *
+     * @param array      the array to merge (may be {@code null})
      * @param collection the target Collection to merge the array into
      */
     @SuppressWarnings("unchecked")

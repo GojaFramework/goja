@@ -27,7 +27,9 @@ import java.util.Map;
  * @since JDK 1.5
  */
 public class OverrideDirective implements TemplateDirectiveModel {
-    /** 覆盖模板的自定义指令名称 */
+    /**
+     * 覆盖模板的自定义指令名称
+     */
     public final static String DIRECTIVE_NAME = "override";
 
     @SuppressWarnings("rawtypes")

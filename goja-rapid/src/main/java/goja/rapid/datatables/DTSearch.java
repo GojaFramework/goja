@@ -16,11 +16,11 @@ public final class DTSearch {
         this.regex = regex;
     }
 
-
-    public static DTSearch create(String value, boolean regex){
+    public static DTSearch create(String value, boolean regex) {
         return new DTSearch(value, regex);
     }
-    public static DTSearch create(String value){
+
+    public static DTSearch create(String value) {
         return create(value, false);
     }
 

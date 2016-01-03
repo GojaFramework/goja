@@ -1,10 +1,10 @@
 package org.snaker.engine.access.dialect;
 
 import org.snaker.engine.access.Page;
-import org.snaker.engine.access.dialect.Dialect;
 
 /**
  * db2方言
+ *
  * @author yuqs
  * @since 2.5
  */

@@ -9,9 +9,7 @@ package goja.mvc.render;
 import com.jfinal.render.Render;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-03-29 14:09

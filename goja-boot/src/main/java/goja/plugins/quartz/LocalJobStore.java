@@ -18,9 +18,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-23 16:17
@@ -28,26 +26,24 @@ import java.sql.SQLException;
  */
 public class LocalJobStore extends JobStoreCMT {
     /**
-     * Name used for the transactional ConnectionProvider for Quartz.
-     * This provider will delegate to the local Spring-managed DataSource.
+     * Name used for the transactional ConnectionProvider for Quartz. This provider will delegate to
+     * the local Spring-managed DataSource.
      *
      * @see org.quartz.utils.DBConnectionManager#addConnectionProvider
      */
     public static final String TX_DATA_SOURCE_PREFIX = "gojaTxDataSource.";
 
     /**
-     * Name used for the non-transactional ConnectionProvider for Quartz.
-     * This provider will delegate to the local Spring-managed DataSource.
+     * Name used for the non-transactional ConnectionProvider for Quartz. This provider will delegate
+     * to the local Spring-managed DataSource.
      *
      * @see org.quartz.utils.DBConnectionManager#addConnectionProvider
      */
     public static final String NON_TX_DATA_SOURCE_PREFIX = "gojaNonTxDataSource.";
 
-
     @Override
     public void initialize(ClassLoadHelper loadHelper, SchedulerSignaler signaler)
             throws SchedulerConfigException {
-
 
         // Configure transactional connection settings for Quartz.
         setDataSource(TX_DATA_SOURCE_PREFIX + getInstanceName());
@@ -72,7 +68,6 @@ public class LocalJobStore extends JobStoreCMT {
                 }
         );
 
-
         setNonManagedTXDataSource(NON_TX_DATA_SOURCE_PREFIX + getInstanceName());
 
         // Register non-transactional ConnectionProvider for Quartz.
@@ -95,7 +90,5 @@ public class LocalJobStore extends JobStoreCMT {
         );
 
         super.initialize(loadHelper, signaler);
-
     }
-
 }

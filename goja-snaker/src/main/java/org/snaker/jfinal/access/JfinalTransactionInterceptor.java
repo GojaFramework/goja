@@ -29,11 +29,13 @@ import java.sql.Connection;
 
 /**
  * Jfinal事务拦截器
+ *
  * @author yuqs
  * @since 2.0
  */
 public class JfinalTransactionInterceptor extends DataSourceTransactionInterceptor {
     private static final Logger log = LoggerFactory.getLogger(TransactionInterceptor.class);
+
     public void initialize(Object accessObject) {
         //ignore
     }
@@ -43,7 +45,7 @@ public class JfinalTransactionInterceptor extends DataSourceTransactionIntercept
             boolean isNew = false;
             Config config = JfinalHelper.getConfig();
             Connection conn = config.getThreadLocalConnection();
-            if(conn == null) {
+            if (conn == null) {
                 conn = config.getConnection();
                 config.setThreadLocalConnection(conn);
                 conn.setAutoCommit(false);

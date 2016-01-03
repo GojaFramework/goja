@@ -25,9 +25,7 @@ import java.util.jar.JarFile;
 import static goja.core.StringPool.DOT;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-02-06 23:45
@@ -77,7 +75,8 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
                             final String jar_file_name = jarEntry.getName();
                             if (jar_file_name.endsWith(SqlKit.CONFIG_SUFFIX)) {
                                 try {
-                                    String xml_content = Resources.toString(Resources.getResource(jar_file_name), Charsets.UTF_8);
+                                    String xml_content =
+                                            Resources.toString(Resources.getResource(jar_file_name), Charsets.UTF_8);
                                     group = JaxbKit.unmarshal(xml_content, SqlGroup.class);
                                     String name = group.name;
                                     if (StringUtils.isBlank(name)) {
@@ -110,7 +109,6 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
                 }
             }
         }
-
     }
 
     private void removeFile(File remove_file) {
@@ -129,7 +127,6 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
             }
         }
     }
-
 
     @Override
     public void onFileCreate(File file) {

@@ -5,11 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 
-import static goja.core.StringPool.EQUALS;
-import static goja.core.StringPool.LEFT_BRACKET;
-import static goja.core.StringPool.QUESTION_MARK;
-import static goja.core.StringPool.RIGHT_BRACKET;
-import static goja.core.StringPool.SINGLE_QUOTE;
+import static goja.core.StringPool.*;
 
 /**
  * <p> </p>
@@ -34,8 +30,9 @@ public abstract class SqlQuery {
         if (param == null) return "NULL";
 
         String str;
-        if (param instanceof String) str = quote(param.toString());
-        else if (param instanceof Iterable<?>) {
+        if (param instanceof String) {
+            str = quote(param.toString());
+        } else if (param instanceof Iterable<?>) {
             SqlConcat list = new SqlConcat(LEFT_BRACKET, ", ", RIGHT_BRACKET);
             for (Object p : (Iterable<?>) param) list.append(inlineParam(p));
             str = list.toString();
@@ -45,7 +42,9 @@ public abstract class SqlQuery {
             str = list.toString();
         } else if (param instanceof Enum<?>) {
             str = quote(param.toString());
-        } else str = param.toString();
+        } else {
+            str = param.toString();
+        }
         return str;
     }
 
@@ -64,7 +63,6 @@ public abstract class SqlQuery {
 
         return column + operator + value;
     }
-
 
     public SqlQuery param(Object obj) {
         params.add(obj);
@@ -91,5 +89,4 @@ public abstract class SqlQuery {
     public String pmark(int offset) {
         return QUESTION_MARK + Integer.toString(paramCurrentIndex() + offset);
     }
-
 }

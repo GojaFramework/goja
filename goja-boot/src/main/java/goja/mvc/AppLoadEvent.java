@@ -7,9 +7,7 @@
 package goja.mvc;
 
 /**
- * <p>
- * After JFinal start, run class.
- * </p>
+ * <p> After JFinal start, run class. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-19 22:29

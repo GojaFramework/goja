@@ -6,17 +6,15 @@
 
 package goja.core.kits.io;
 
+import com.google.common.collect.Lists;
 import goja.core.StringPool;
 import goja.core.kits.lang.CharKit;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-31 17:57
@@ -24,11 +22,10 @@ import java.util.List;
  */
 public abstract class CsvKit {
 
-
-    protected static final char   FIELD_SEPARATOR = ',';
-    protected static final char   FIELD_QUOTE     = '"';
-    protected static final String DOUBLE_QUOTE    = "\"\"";
-    protected static final String SPECIAL_CHARS   = StringPool.CRLF;
+    protected static final char FIELD_SEPARATOR = ',';
+    protected static final char FIELD_QUOTE = '"';
+    protected static final String DOUBLE_QUOTE = "\"\"";
+    protected static final String SPECIAL_CHARS = StringPool.CRLF;
 
     /**
      * Parse fields as csv string,
@@ -77,7 +74,6 @@ public abstract class CsvKit {
         return line.toString();
     }
 
-
     /**
      * Converts CSV line to string array.
      */
@@ -97,7 +93,9 @@ public abstract class CsvKit {
                 }
             } else if (c == FIELD_QUOTE) {
                 if (inQuotedField) {
-                    if (i + 1 == len || line.charAt(i + 1) == FIELD_SEPARATOR) {    // we are already quoting - peek to see if this is the end of the field
+                    if (i + 1 == len
+                            || line.charAt(i + 1)
+                            == FIELD_SEPARATOR) {    // we are already quoting - peek to see if this is the end of the field
                         addField(row, line, fieldStart, i, inQuotedField);
                         fieldStart = i + 2;
                         i++; // and skip the comma
@@ -116,7 +114,8 @@ public abstract class CsvKit {
         return row.toArray(new String[row.size()]);
     }
 
-    private static void addField(List<String> row, String line, int startIndex, int endIndex, boolean inQuoted) {
+    private static void addField(List<String> row, String line, int startIndex, int endIndex,
+                                 boolean inQuoted) {
         String field = line.substring(startIndex, endIndex);
         if (inQuoted) {
             field = StringUtils.replace(field, DOUBLE_QUOTE, StringPool.QUOTE);

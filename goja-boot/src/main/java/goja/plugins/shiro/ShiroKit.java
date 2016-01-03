@@ -7,7 +7,6 @@ package goja.plugins.shiro;
 
 import java.util.concurrent.ConcurrentMap;
 
-
 /**
  * ShiroKit. (Singleton, ThreadSafe)
  *

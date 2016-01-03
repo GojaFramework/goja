@@ -24,6 +24,7 @@ import org.snaker.engine.helper.StringHelper;
 
 /**
  * Jfinal帮助类
+ *
  * @author yuqs
  * @since 2.0
  */
@@ -31,14 +32,15 @@ public class JfinalHelper {
     private static final String CONFIG_NAME = "jfinal.configName";
     private static String configName = ConfigHelper.getProperty(CONFIG_NAME);
     private static Config config = null;
+
     public static Config getConfig() {
-        if(config == null) {
+        if (config == null) {
             synchronized (JfinalHelper.class) {
-                if(config == null) {
-                    if(StringHelper.isNotEmpty(configName)) {
+                if (config == null) {
+                    if (StringHelper.isNotEmpty(configName)) {
                         config = DbKit.getConfig(configName);
                     }
-                    if(config == null) {
+                    if (config == null) {
                         config = DbKit.getConfig();
                     }
                 }

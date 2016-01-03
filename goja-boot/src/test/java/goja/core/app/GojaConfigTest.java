@@ -18,7 +18,6 @@ public class GojaConfigTest {
         GojaConfig.init();
     }
 
-
     @Test
     public void testRedis() throws Exception {
         Assert.assertEquals("goja-test-app", GojaConfig.getAppName());

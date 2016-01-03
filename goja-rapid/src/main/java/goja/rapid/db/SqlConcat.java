@@ -54,9 +54,14 @@ public class SqlConcat {
         final String text;
         if (obj != null) {
             String objStr = obj.toString();
-            if (objStr.length() > 0) text = objStr;
-            else text = defaultValue;
-        } else text = defaultValue;
+            if (objStr.length() > 0) {
+                text = objStr;
+            } else {
+                text = defaultValue;
+            }
+        } else {
+            text = defaultValue;
+        }
 
         if (text != null) {
             if (expr.length() > 0) {

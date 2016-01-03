@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * 字段模型类
+ *
  * @author yuqs
  * @since 2.0
  */
@@ -34,6 +35,7 @@ public class FieldModel extends BaseModel {
      * 字段模型对应的属性key/value数据
      */
     private Map<String, String> attrMap = new HashMap<String, String>();
+
     public String getType() {
         return type;
     }
@@ -41,9 +43,11 @@ public class FieldModel extends BaseModel {
     public void setType(String type) {
         this.type = type;
     }
+
     /**
      * 向属性集合添加key/value数据
-     * @param name 属性名称
+     *
+     * @param name  属性名称
      * @param value 属性值
      */
     public void addAttr(String name, String value) {
@@ -52,6 +56,7 @@ public class FieldModel extends BaseModel {
 
     /**
      * 获取属性集合
+     *
      * @return 属性集合
      */
     public Map<String, String> getAttrMap() {
@@ -60,6 +65,7 @@ public class FieldModel extends BaseModel {
 
     /**
      * 设置属性集合
+     *
      * @param attrMap 属性集合
      */
     public void setAttrMap(Map<String, String> attrMap) {

@@ -23,10 +23,10 @@ import org.snaker.engine.model.TaskModel;
  * @since 1.0
  */
 public class TaskAssign extends Assignment {
-	
-	public Object assign(TaskModel model, Execution execution) {
+
+    public Object assign(TaskModel model, Execution execution) {
         System.out.println(model);
-		System.out.println(execution.getArgs());
-		return "admin";
-	}
+        System.out.println(execution.getArgs());
+        return "admin";
+    }
 }

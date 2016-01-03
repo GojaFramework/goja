@@ -6,42 +6,43 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import com.jfinal.kit.StrKit;
 import com.jfinal.weixin.sdk.kit.ParaMap;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.RetryUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 /**
  * 网页授权获取 access_token API
  */
-public class SnsAccessTokenApi
-{
+public class SnsAccessTokenApi {
     private static String url = "https://api.weixin.qq.com/sns/oauth2/access_token?grant_type=authorization_code";
     private static String authorize_uri = "http://open.weixin.qq.com/connect/oauth2/authorize";
     private static String qrconnect_url = "https://open.weixin.qq.com/connect/qrconnect";
-    
+
     /**
      * 生成Authorize链接
-     * @param appId 应用id
+     *
+     * @param appId        应用id
      * @param redirect_uri 回跳地址
-     * @param snsapiBase snsapi_base（不弹出授权页面，只能拿到用户openid）snsapi_userinfo（弹出授权页面，这个可以通过 openid 拿到昵称、性别、所在地）
+     * @param snsapiBase   snsapi_base（不弹出授权页面，只能拿到用户openid）snsapi_userinfo（弹出授权页面，这个可以通过 openid 拿到昵称、性别、所在地）
      * @return url
      */
     public static String getAuthorizeURL(String appId, String redirect_uri, boolean snsapiBase) {
         return getAuthorizeURL(appId, redirect_uri, null, snsapiBase);
     }
-    
+
     /**
      * 生成Authorize链接
-     * @param appId 应用id
+     *
+     * @param appId        应用id
      * @param redirect_uri 回跳地址
-     * @param state 重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
-     * @param snsapiBase snsapi_base（不弹出授权页面，只能拿到用户openid）snsapi_userinfo（弹出授权页面，这个可以通过 openid 拿到昵称、性别、所在地）
+     * @param state        重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
+     * @param snsapiBase   snsapi_base（不弹出授权页面，只能拿到用户openid）snsapi_userinfo（弹出授权页面，这个可以通过 openid 拿到昵称、性别、所在地）
      * @return url
      */
     public static String getAuthorizeURL(String appId, String redirect_uri, String state, boolean snsapiBase) {
@@ -59,28 +60,30 @@ public class SnsAccessTokenApi
         if (StrKit.isBlank(state)) {
             params.put("state", "wx#wechat_redirect");
         } else {
-        	params.put("state", state.concat("#wechat_redirect"));
+            params.put("state", state.concat("#wechat_redirect"));
         }
         String para = PaymentKit.packageSign(params, false);
         return authorize_uri + "?" + para;
     }
-    
+
 
     /**
      * 生成网页二维码授权链接
-     * @param appId 应用id
+     *
+     * @param appId        应用id
      * @param redirect_uri 回跳地址
      * @return url
      */
     public static String getQrConnectURL(String appId, String redirect_uri) {
         return getQrConnectURL(appId, redirect_uri, null);
     }
-    
+
     /**
      * 生成网页二维码授权链接
-     * @param appId 应用id
+     *
+     * @param appId        应用id
      * @param redirect_uri 回跳地址
-     * @param state 重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
+     * @param state        重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
      * @return url
      */
     public static String getQrConnectURL(String appId, String redirect_uri, String state) {
@@ -92,12 +95,12 @@ public class SnsAccessTokenApi
         if (StrKit.isBlank(state)) {
             params.put("state", "wx#wechat_redirect");
         } else {
-        	params.put("state", state.concat("#wechat_redirect"));
+            params.put("state", state.concat("#wechat_redirect"));
         }
         String para = PaymentKit.packageSign(params, false);
         return qrconnect_url + "?" + para;
     }
-    
+
     /**
      * 通过code获取access_token
      *
@@ -106,12 +109,11 @@ public class SnsAccessTokenApi
      * @param secret 应用密钥AppSecret
      * @return SnsAccessToken
      */
-    public static SnsAccessToken getSnsAccessToken(String appId, String secret, String code)
-    {
+    public static SnsAccessToken getSnsAccessToken(String appId, String secret, String code) {
         final Map<String, String> queryParas = ParaMap.create("appid", appId).put("secret", secret).put("code", code).getData();
-        
+
         return RetryUtils.retryOnException(3, new Callable<SnsAccessToken>() {
-            
+
             @Override
             public SnsAccessToken call() throws Exception {
                 String json = HttpUtils.get(url, queryParas);

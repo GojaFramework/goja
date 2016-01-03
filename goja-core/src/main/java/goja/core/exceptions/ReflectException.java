@@ -6,19 +6,11 @@
 package goja.core.exceptions;
 
 /**
- * A unchecked wrapper for any of Java's checked reflection exceptions:
- * <p/>
- * These exceptions are
- * <ul>
- * <li> {@link ClassNotFoundException}</li>
- * <li> {@link IllegalAccessException}</li>
- * <li> {@link IllegalArgumentException}</li>
- * <li> {@link InstantiationException}</li>
- * <li> {@link java.lang.reflect.InvocationTargetException}</li>
- * <li> {@link NoSuchMethodException}</li>
- * <li> {@link NoSuchFieldException}</li>
- * <li> {@link SecurityException}</li>
- * </ul>
+ * A unchecked wrapper for any of Java's checked reflection exceptions: <p/> These exceptions are
+ * <ul> <li> {@link ClassNotFoundException}</li> <li> {@link IllegalAccessException}</li> <li>
+ * {@link IllegalArgumentException}</li> <li> {@link InstantiationException}</li> <li> {@link
+ * java.lang.reflect.InvocationTargetException}</li> <li> {@link NoSuchMethodException}</li> <li>
+ * {@link NoSuchFieldException}</li> <li> {@link SecurityException}</li> </ul>
  *
  * @author Lukas Eder
  */

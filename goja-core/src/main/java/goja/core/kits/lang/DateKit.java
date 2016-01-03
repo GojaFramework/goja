@@ -25,29 +25,28 @@ import java.util.Locale;
  * @since JDK 1.6
  */
 public class DateKit {
-    private DateKit() {}
-
-    /** From here: http://www.ietf.org/rfc/rfc1123.txt */
+    /**
+     * From here: http://www.ietf.org/rfc/rfc1123.txt
+     */
     private static final DateTimeFormatter RFC1123_DATE_FORMAT = DateTimeFormat
             .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
-
     private static final DateTimeFormatter YMDHMS_DASH_DATE_FORMAT = DateTimeFormat
             .forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
-
     private static final DateTimeFormatter YMD_DASH_DATE_FORMAT = DateTimeFormat
             .forPattern(DateFormatter.YYYY_MM_DD)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
-
     private static final DateTimeFormatter YMDHM_DASH_DATE_FORMAT = DateTimeFormat
             .forPattern(DateFormatter.YYYY_MM_DD_HH_MM)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
 
+    private DateKit() {
+    }
 
     /**
      * Can be used to format a date into http header compatible

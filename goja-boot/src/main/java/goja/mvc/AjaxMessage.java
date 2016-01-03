@@ -23,12 +23,11 @@ import static goja.core.StringPool.EMPTY;
  */
 public final class AjaxMessage<E> implements Serializable {
 
-
-    public static final AjaxMessage OK        = ok(EMPTY, null);
-    public static final AjaxMessage NODATA    = nodata(EMPTY, null);
+    public static final AjaxMessage OK = ok(EMPTY, null);
+    public static final AjaxMessage NODATA = nodata(EMPTY, null);
     public static final AjaxMessage FORBIDDEN = forbidden(null);
-    public static final AjaxMessage ERROR     = error(null);
-    public static final AjaxMessage FAILURE   = failure(null);
+    public static final AjaxMessage ERROR = error(null);
+    public static final AjaxMessage FAILURE = failure(null);
 
     private static final long serialVersionUID = 1091092803607855861L;
     /**
@@ -48,7 +47,7 @@ public final class AjaxMessage<E> implements Serializable {
     /**
      * Exception
      */
-    private final Exception     exception;
+    private final Exception exception;
 
     /**
      * Message code.
@@ -84,7 +83,7 @@ public final class AjaxMessage<E> implements Serializable {
         this.exception = exception;
     }
 
-    public static AjaxMessage ok(){
+    public static AjaxMessage ok() {
         return OK;
     }
 
@@ -131,7 +130,7 @@ public final class AjaxMessage<E> implements Serializable {
         return ok("Online Developeing...", null);
     }
 
-    public static AjaxMessage nodata(){
+    public static AjaxMessage nodata() {
         return NODATA;
     }
 
@@ -157,7 +156,6 @@ public final class AjaxMessage<E> implements Serializable {
         return new AjaxMessage<E>(data, message, MessageStatus.NODATA);
     }
 
-
     /**
      * 返回没有登录时消息内容
      *
@@ -178,7 +176,7 @@ public final class AjaxMessage<E> implements Serializable {
         return nologin(null);
     }
 
-    public static AjaxMessage forbidden(){
+    public static AjaxMessage forbidden() {
         return FORBIDDEN;
     }
 
@@ -204,8 +202,7 @@ public final class AjaxMessage<E> implements Serializable {
         return new AjaxMessage<E>(data, message, MessageStatus.FORBIDDEN);
     }
 
-
-    public static AjaxMessage error(){
+    public static AjaxMessage error() {
         return ERROR;
     }
 
@@ -252,7 +249,6 @@ public final class AjaxMessage<E> implements Serializable {
         return new AjaxMessage<E>(data, message, MessageStatus.ERROR, exception);
     }
 
-
     /**
      * 返回处理失败的消息内容
      *
@@ -295,10 +291,12 @@ public final class AjaxMessage<E> implements Serializable {
     public static <E> AjaxMessage failure(String message, E data, Exception exception) {
         return new AjaxMessage<E>(data, message, MessageStatus.FAILURE, exception);
     }
+
     public AjaxMessage<E> code(String code) {
         this.code = code;
         return this;
     }
+
     /**
      * 获取消息数据
      *
@@ -344,12 +342,9 @@ public final class AjaxMessage<E> implements Serializable {
         return exception;
     }
 
-
     public String getCode() {
         return code;
     }
-
-
 
     /**
      * Request message processing state
@@ -381,5 +376,4 @@ public final class AjaxMessage<E> implements Serializable {
         NOLOGIN
 
     }
-
 }

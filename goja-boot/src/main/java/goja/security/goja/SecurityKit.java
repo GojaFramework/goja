@@ -32,9 +32,7 @@ import java.security.SecureRandom;
 import java.util.Enumeration;
 
 /**
- * <p>
- * The Security Kit.
- * </p>
+ * <p> The Security Kit. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-02-12 22:15
@@ -44,7 +42,7 @@ public class SecurityKit {
     /**
      * 登录存储在客户端的用户Session标识
      */
-    public final static  String COOKIE_LOGIN      = Goja.appName + "_session_id";
+    public final static String COOKIE_LOGIN = Goja.appName + "_session_id";
     /**
      * 登录的SESSION。KEY
      */
@@ -52,14 +50,13 @@ public class SecurityKit {
     /**
      * 登录的会员IDSession信息
      */
-    private static final String LOGIN_MEMBER_ID   = Goja.appName + "@session#member%id";
-
+    private static final String LOGIN_MEMBER_ID = Goja.appName + "@session#member%id";
 
     private static final String LOGIN_CACHE_SESSION = "login.session";
 
-    private final static byte[] E_KEY   = new byte[]{'1', '2', '3', '4', '5', '6', '7', '8'};
-    private final static String DES     = "DES";
-    private final static int    MAX_AGE = 86400 * 365;
+    private final static byte[] E_KEY = new byte[]{'1', '2', '3', '4', '5', '6', '7', '8'};
+    private final static String DES = "DES";
+    private final static int MAX_AGE = 86400 * 365;
 
     /**
      * Determine whether the user is logged in, if you have logged in, return <code> true </ code>
@@ -84,7 +81,8 @@ public class SecurityKit {
      */
     public static <T extends Model> boolean login(T user, String password, boolean remember
             , HttpServletRequest request, HttpServletResponse response) {
-        boolean matcher = SecurityKit.checkPassword(user.getStr("salt"), user.getStr("password"), password);
+        boolean matcher =
+                SecurityKit.checkPassword(user.getStr("salt"), user.getStr("password"), password);
         if (matcher) {
             SecurityKit.setLoginMember(request, response, user, remember);
         }
@@ -97,7 +95,8 @@ public class SecurityKit {
      * @param req      http request
      * @param response http response
      */
-    public static <T extends Model> void logout(HttpServletRequest req, HttpServletResponse response) {
+    public static <T extends Model> void logout(HttpServletRequest req,
+                                                HttpServletResponse response) {
         CookieUser cookie_user = getUserFromCookie(req);
         Requests.deleteCookie(req, response, COOKIE_LOGIN, true);
         // 清理Cache
@@ -106,7 +105,8 @@ public class SecurityKit {
         } else {
             T user = getLoginUser(req);
             if (user != null) {
-                CacheKit.remove(LOGIN_CACHE_SESSION, LOGIN_CACHE_SESSION + user.getNumber(StringPool.PK_COLUMN));
+                CacheKit.remove(LOGIN_CACHE_SESSION,
+                        LOGIN_CACHE_SESSION + user.getNumber(StringPool.PK_COLUMN));
             }
         }
         //清除session
@@ -119,8 +119,8 @@ public class SecurityKit {
     }
 
     /**
-     * Get user login information,
-     * if the session does not exist, then try to obtain from the Cookie, if cookie exists, then decrypt obtain user information.
+     * Get user login information, if the session does not exist, then try to obtain from the Cookie,
+     * if cookie exists, then decrypt obtain user information.
      *
      * @param req      requeset
      * @param response http response
@@ -141,7 +141,8 @@ public class SecurityKit {
                 CacheKit.put(LOGIN_CACHE_SESSION, LOGIN_CACHE_SESSION + cookie_user.getId(), user);
             }
             // 用户密码和cookie中存储的密码一致
-            if (user != null && StringUtils.equalsIgnoreCase(user.getStr("password"), cookie_user.getPassword())) {
+            if (user != null && StringUtils.equalsIgnoreCase(user.getStr("password"),
+                    cookie_user.getPassword())) {
                 setLoginMember(req, response, user, true);
                 return user;
             } else {
@@ -170,7 +171,8 @@ public class SecurityKit {
      * @param user     The logged user.
      * @param remember is remember.
      */
-    private static <T extends Model> void setLoginMember(HttpServletRequest request, HttpServletResponse response,
+    private static <T extends Model> void setLoginMember(HttpServletRequest request,
+                                                         HttpServletResponse response,
                                                          T user, boolean remember) {
         request.getSession().setAttribute(LOGIN_SESSION_KEY, user);
         request.getSession().setAttribute(LOGIN_MEMBER_ID, user.getNumber(StringPool.PK_COLUMN));
@@ -187,7 +189,8 @@ public class SecurityKit {
      */
     public static boolean checkPassword(String salt, String password, String plainPassword) {
         byte[] saltHex = EncodeKit.decodeHex(salt);
-        byte[] hashPassword = DigestsKit.sha1(plainPassword.getBytes(), saltHex, EncodeKit.HASH_INTERATIONS);
+        byte[] hashPassword =
+                DigestsKit.sha1(plainPassword.getBytes(), saltHex, EncodeKit.HASH_INTERATIONS);
         return StringUtils.equals(EncodeKit.encodeHex(hashPassword), password);
     }
 
@@ -201,7 +204,8 @@ public class SecurityKit {
      */
     public static <T extends Model> void saveMemberInCookie(T user, boolean save,
                                                             HttpServletRequest request, HttpServletResponse response) {
-        String new_value = getLoginKey(user, Requests.remoteAddr(request), request.getHeader("user-agent"));
+        String new_value =
+                getLoginKey(user, Requests.remoteAddr(request), request.getHeader("user-agent"));
         int max_age = save ? MAX_AGE : -1;
         Requests.deleteCookie(request, response, COOKIE_LOGIN, true);
         Requests.setCookie(request, response, COOKIE_LOGIN, new_value, max_age, true);
@@ -217,7 +221,8 @@ public class SecurityKit {
      */
     private static <T extends Model> String getLoginKey(T user, String ip, String user_agent) {
         return encrypt(String.valueOf(user.getNumber(StringPool.PK_COLUMN)) + '|'
-                + user.getStr("password") + '|' + ip + '|' + ((user_agent == null) ? 0 : user_agent.hashCode()) + '|' + System.currentTimeMillis());
+                + user.getStr("password") + '|' + ip + '|' + ((user_agent == null) ? 0
+                : user_agent.hashCode()) + '|' + System.currentTimeMillis());
     }
 
     /**
@@ -290,8 +295,9 @@ public class SecurityKit {
      * @return cookie user.
      */
     private static CookieUser userForCookie(String uuid, HttpServletRequest request) {
-        if (StringUtils.isBlank(uuid))
+        if (StringUtils.isBlank(uuid)) {
             return null;
+        }
         String ck = decrypt(uuid);
         final String[] items = StringUtils.split(ck, '|');
         if (items.length == 5) {

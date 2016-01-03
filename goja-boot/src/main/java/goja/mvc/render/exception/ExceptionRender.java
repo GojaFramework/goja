@@ -20,5 +20,4 @@ public abstract class ExceptionRender extends Render {
         this.exception = exception;
         return this;
     }
-
 }

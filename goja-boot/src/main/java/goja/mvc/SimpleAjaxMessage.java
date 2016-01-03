@@ -3,15 +3,13 @@ package goja.mvc;
 import java.io.Serializable;
 
 /**
- * <p>
- *     简单格式的Ajax数据封装类
- * </p>
+ * <p> 简单格式的Ajax数据封装类 </p>
  *
  * @author sogYF
  * @version 1.0
  * @since JDK 1.6
  */
-public class SimpleAjaxMessage implements Serializable{
+public class SimpleAjaxMessage implements Serializable {
 
     private static final long serialVersionUID = -8792299524734422099L;
     /**
@@ -24,14 +22,10 @@ public class SimpleAjaxMessage implements Serializable{
      */
     private final String msg;
 
-
     public SimpleAjaxMessage(boolean success, String msg) {
         this.success = success;
         this.msg = msg;
     }
-
-
-    
 
     public boolean isSuccess() {
         return success;

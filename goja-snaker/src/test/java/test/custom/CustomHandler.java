@@ -22,8 +22,8 @@ import org.snaker.engine.handlers.IHandler;
  * @since 1.0
  */
 public class CustomHandler implements IHandler {
-	
-	public void handle(Execution execution) {
-		System.out.println("custom handler");
-	}
+
+    public void handle(Execution execution) {
+        System.out.println("custom handler");
+    }
 }

@@ -28,12 +28,16 @@ import java.util.Map;
  * @since JDK 1.5
  */
 public class PrincipalTag extends SecureTag {
-    /** The type of principal to be retrieved, or null if the default principal should be used. */
+    /**
+     * The type of principal to be retrieved, or null if the default principal should be used.
+     */
     String getType(Map params) {
         return getParam(params, "type");
     }
 
-    /** The property name to retrieve of the principal, or null if the <tt>toString()</tt> value should be used. */
+    /**
+     * The property name to retrieve of the principal, or null if the <tt>toString()</tt> value should be used.
+     */
     String getProperty(Map params) {
         return getParam(params, "property");
     }

@@ -9,12 +9,9 @@ import java.util.List;
 
 import static goja.core.StringPool.EMPTY;
 
-
 /**
- * 用来测试并统计线程执行时间的工具。
- * <p/>
- * Profiler.start(message),Profiler.release() 及 Profiler.enter(message),Profiler.release() 要成对出现
- * <p/>
+ * 用来测试并统计线程执行时间的工具。 <p/> Profiler.start(message),Profiler.release() 及
+ * Profiler.enter(message),Profiler.release() 要成对出现 <p/>
  * <pre>
  * 	public void test_dump() throws InterruptedException {
  * 		try {
@@ -64,7 +61,6 @@ import static goja.core.StringPool.EMPTY;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class Profiler {
-
 
     private static final ThreadLocal<Step> stepThreadLocal = new ThreadLocal<Step>();
 
@@ -198,7 +194,6 @@ public final class Profiler {
         return 0;
     }
 
-
     /**
      * 取得耗费的总时间。
      *
@@ -297,16 +292,16 @@ public final class Profiler {
     public static final class Step {
         private final List<Step> subStepList = Lists.newArrayListWithCapacity(4);
         private final String message;
-        private final Step   parentStep;
-        private final Step   firstStep;
-        private final long   baseTime;
-        private final long   startTime;
+        private final Step parentStep;
+        private final Step firstStep;
+        private final long baseTime;
+        private final long startTime;
         DecimalFormat pecentageFormat = new DecimalFormat("##.#%");
-        DecimalFormat numberFormat    = new DecimalFormat("##,###,###");
-        private long      endTime;
-        private long      loopCount;
+        DecimalFormat numberFormat = new DecimalFormat("##,###,###");
+        private long endTime;
+        private long loopCount;
         private Throwable exception;
-        private int       resultSize;
+        private int resultSize;
 
         /**
          * 创建一个新的step。
@@ -589,7 +584,9 @@ public final class Profiler {
                 buffer.append("[totalCost:").append(numberFormat.format(getDuration())).append("ms");
 
                 if ((getDurationOfSelf() > 0) && (getDurationOfSelf() != getDuration())) {
-                    buffer.append(" (selfCost:").append(numberFormat.format(getDurationOfSelf())).append("ms)");
+                    buffer.append(" (selfCost:")
+                            .append(numberFormat.format(getDurationOfSelf()))
+                            .append("ms)");
                 }
 
                 if (getPecentage() > 0) {
@@ -612,7 +609,9 @@ public final class Profiler {
                 }
                 buffer.append(StringPool.RIGHT_SQ_BRACKET);
             } else {
-                buffer.append("[UNRELEASED start:").append(numberFormat.format(getStartCostTime())).append("]ms");
+                buffer.append("[UNRELEASED start:")
+                        .append(numberFormat.format(getStartCostTime()))
+                        .append("]ms");
             }
 
             if (getMessage() != null) {
@@ -633,9 +632,5 @@ public final class Profiler {
                 }
             }
         }
-
-
     }
-
-
 }

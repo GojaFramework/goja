@@ -10,23 +10,15 @@ import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
-import static goja.core.StringPool.COMMA;
-import static goja.core.StringPool.EMPTY;
-import static goja.core.StringPool.NEWLINE;
-import static goja.core.StringPool.QUOTE;
+import static goja.core.StringPool.*;
 import static goja.core.date.DateFormatter.DP_YYYY_MM_DD_HH_MM;
 
 /**
- * 该类是把数据转化成csv字符串做了简要的封装 List headers是显示数据每列的属性，建议使用字符 List data数据，单个元素格式可以为Array，list，map，model，record List columns
- * 表示需要显示的数据，如果data是Array与list，输入希望显示列的下标即可 如果data是map，model，record，输入希望显示列的key值即可。
+ * 该类是把数据转化成csv字符串做了简要的封装 List headers是显示数据每列的属性，建议使用字符 List data数据，单个元素格式可以为Array，list，map，model，record
+ * List columns 表示需要显示的数据，如果data是Array与list，输入希望显示列的下标即可 如果data是map，model，record，输入希望显示列的key值即可。
  */
 public class CsvUtil {
 
@@ -197,10 +189,12 @@ public class CsvUtil {
 
         if (!textQualify
                 && userSettings.useTextQualifier
-                && (content.indexOf(userSettings.textQualifier) > -1 || content.indexOf(userSettings.delimiter) > -1
+                && (content.indexOf(userSettings.textQualifier) > -1
+                || content.indexOf(userSettings.delimiter) > -1
                 || (content.indexOf(Letters.LF) > -1 || content.indexOf(Letters.CR) > -1)
                 || (content.indexOf(userSettings.recordDelimiter) > -1)
-                || (content.length() > 0 && content.charAt(0) == userSettings.comment) || (content.length() == 0))) {
+                || (content.length() > 0 && content.charAt(0) == userSettings.comment)
+                || (content.length() == 0))) {
             textQualify = true;
         }
 
@@ -223,7 +217,8 @@ public class CsvUtil {
         if (textQualify) {
 
             if (userSettings.escapeMode == UserSettings.ESCAPE_MODE_BACKSLASH) {
-                content = replace(content, "" + Letters.BACKSLASH, "" + Letters.BACKSLASH + Letters.BACKSLASH);
+                content =
+                        replace(content, "" + Letters.BACKSLASH, "" + Letters.BACKSLASH + Letters.BACKSLASH);
                 content = replace(content, "" + userSettings.textQualifier, "" + Letters.BACKSLASH
                         + userSettings.textQualifier);
             } else {
@@ -231,8 +226,10 @@ public class CsvUtil {
                         + userSettings.textQualifier);
             }
         } else if (userSettings.escapeMode == UserSettings.ESCAPE_MODE_BACKSLASH) {
-            content = replace(content, "" + Letters.BACKSLASH, "" + Letters.BACKSLASH + Letters.BACKSLASH);
-            content = replace(content, "" + userSettings.delimiter, "" + Letters.BACKSLASH + userSettings.delimiter);
+            content =
+                    replace(content, "" + Letters.BACKSLASH, "" + Letters.BACKSLASH + Letters.BACKSLASH);
+            content = replace(content, "" + userSettings.delimiter,
+                    "" + Letters.BACKSLASH + userSettings.delimiter);
 
             content = replace(content, "" + Letters.CR, "" + Letters.BACKSLASH + Letters.CR);
             content = replace(content, "" + Letters.LF, "" + Letters.BACKSLASH + Letters.LF);
@@ -259,5 +256,4 @@ public class CsvUtil {
             return original;
         }
     }
-
 }

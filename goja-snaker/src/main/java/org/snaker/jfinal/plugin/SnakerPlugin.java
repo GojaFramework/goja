@@ -30,7 +30,7 @@ import javax.sql.DataSource;
  */
 public class SnakerPlugin implements IPlugin {
     private static boolean isStarted = false;
-//    private static DataSource dataSource;
+    //    private static DataSource dataSource;
 //    private static Properties properties;
     //	private static IDataSourceProvider dataSourceProvider;
     private static SnakerEngine engine;
@@ -72,6 +72,15 @@ public class SnakerPlugin implements IPlugin {
 //
 
     /**
+     * 获取snaker的流程引擎
+     *
+     * @return SnakerEngine
+     */
+    public static SnakerEngine getEngine() {
+        return engine;
+    }
+
+    /**
      * 启动插件
      */
     public boolean start() {
@@ -92,19 +101,10 @@ public class SnakerPlugin implements IPlugin {
     }
 
     /**
-     * 获取snaker的流程引擎
-     *
-     * @return SnakerEngine
-     */
-    public static SnakerEngine getEngine() {
-        return engine;
-    }
-
-    /**
      * 停止插件
      */
     public boolean stop() {
-        druidPlugin =null;
+        druidPlugin = null;
         isStarted = false;
         return true;
     }

@@ -6,16 +6,12 @@
 package goja.plugins.quartz;
 
 import com.jfinal.plugin.IPlugin;
-import goja.core.app.GojaConfig;
-import goja.logging.Logger;
 import goja.annotation.On;
+import goja.core.app.GojaConfig;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
-import org.quartz.Job;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
+import goja.logging.Logger;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.Date;
@@ -40,7 +36,6 @@ public class QuartzPlugin implements IPlugin {
         this.sched = tmp_sched;
     }
 
-
     @Override
     public boolean start() {
         List<Class> jobClasses = ClassBox.getInstance().getClasses(ClassType.QUARTZ);
@@ -53,7 +48,7 @@ public class QuartzPlugin implements IPlugin {
                     if (jobCronExp.startsWith("cron.")) {
                         jobCronExp = GojaConfig.getProperty(jobCronExp);
                     }
-                    if(on.enabled()) {
+                    if (on.enabled()) {
                         addJob(jobClass, jobCronExp, jobClass.getName() + ".job");
                     }
                 }
@@ -80,11 +75,13 @@ public class QuartzPlugin implements IPlugin {
             propagate(e);
         }
         if (Logger.isDebugEnabled()) {
-            Logger.debug(job.getKey() + " has been scheduled to run at: " + ft + " and repeat based on expression: "
+            Logger.debug(job.getKey()
+                    + " has been scheduled to run at: "
+                    + ft
+                    + " and repeat based on expression: "
                     + jobCronExp);
         }
     }
-
 
     @Override
     public boolean stop() {
@@ -95,5 +92,4 @@ public class QuartzPlugin implements IPlugin {
         }
         return true;
     }
-
 }

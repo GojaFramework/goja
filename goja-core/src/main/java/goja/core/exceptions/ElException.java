@@ -25,5 +25,4 @@ public class ElException extends RuntimeException {
     public ElException(Throwable cause) {
         super(cause);
     }
-
 }

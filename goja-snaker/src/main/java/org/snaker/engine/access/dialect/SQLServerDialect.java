@@ -20,36 +20,37 @@ import org.snaker.engine.helper.StringHelper;
 
 /**
  * SQLServer数据库方言实现
+ *
  * @author yuqs
  * @since 1.0
  */
 public class SQLServerDialect implements Dialect {
     private static final String STR_ORDERBY = " order by ";
 
-	public String getPageSql(String sql, Page<?> page) {
-		int orderIdx = sql.indexOf(STR_ORDERBY);
+    public String getPageSql(String sql, Page<?> page) {
+        int orderIdx = sql.indexOf(STR_ORDERBY);
         String orderStr = null;
-		if(orderIdx != -1) {
+        if (orderIdx != -1) {
             orderStr = sql.substring(orderIdx + 10);
-			sql = sql.substring(0, orderIdx);
-		}
-		StringBuilder pageSql = new StringBuilder();
-		pageSql.append("select top ");
-		pageSql.append(page.getPageSize());
-		pageSql.append(" * from (select row_number() over (");
-		String orderBy = getOrderBy(sql, orderStr);
-		pageSql.append(orderBy);
-		pageSql.append(") row_number, * from (");
-		pageSql.append(sql);
-		int start = (page.getPageNo() - 1) * page.getPageSize();
-		pageSql.append(") aa ) a where row_number > ");
-		pageSql.append(start);
-		pageSql.append(" order by row_number");
-		return pageSql.toString();
-	}
+            sql = sql.substring(0, orderIdx);
+        }
+        StringBuilder pageSql = new StringBuilder();
+        pageSql.append("select top ");
+        pageSql.append(page.getPageSize());
+        pageSql.append(" * from (select row_number() over (");
+        String orderBy = getOrderBy(sql, orderStr);
+        pageSql.append(orderBy);
+        pageSql.append(") row_number, * from (");
+        pageSql.append(sql);
+        int start = (page.getPageNo() - 1) * page.getPageSize();
+        pageSql.append(") aa ) a where row_number > ");
+        pageSql.append(start);
+        pageSql.append(" order by row_number");
+        return pageSql.toString();
+    }
 
     public String getOrderBy(String sql, String orderBy) {
-        if(StringHelper.isEmpty(orderBy)) {
+        if (StringHelper.isEmpty(orderBy)) {
             return STR_ORDERBY + " id desc ";
         }
         StringBuilder orderBuffer = new StringBuilder(30);

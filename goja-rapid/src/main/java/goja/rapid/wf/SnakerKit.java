@@ -36,7 +36,8 @@ public class SnakerKit {
         mapper.put(SubProcessModel.class, "subprocess");
     }
 
-    public static String getStateJson(ProcessModel model, List<Task> activeTasks, List<HistoryTask> historyTasks) {
+    public static String getStateJson(ProcessModel model, List<Task> activeTasks,
+                                      List<HistoryTask> historyTasks) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("{'activeRects':{'rects':[");
         if (activeTasks != null && activeTasks.size() > 0) {
@@ -130,7 +131,11 @@ public class SnakerKit {
                 buffer.append("x:").append(values[0]).append(",");
                 buffer.append("y:").append(values[1]).append("");
             }
-            buffer.append("}, props:{name:{value:'").append(tm.getName()).append("'},expr:{value:'").append(tm.getExpr()).append("'}}}");
+            buffer.append("}, props:{name:{value:'")
+                    .append(tm.getName())
+                    .append("'},expr:{value:'")
+                    .append(tm.getExpr())
+                    .append("'}}}");
             buffer.append(",");
         }
         buffer.deleteCharAt(buffer.length() - 1);
@@ -152,8 +157,10 @@ public class SnakerKit {
         try {
             PropertyDescriptor[] beanProperties = PropertyUtils.getPropertyDescriptors(node);
             for (PropertyDescriptor propertyDescriptor : beanProperties) {
-                if (propertyDescriptor.getReadMethod() == null || propertyDescriptor.getWriteMethod() == null)
+                if (propertyDescriptor.getReadMethod() == null
+                        || propertyDescriptor.getWriteMethod() == null) {
                     continue;
+                }
                 String name = propertyDescriptor.getName();
                 String value;
                 if (propertyDescriptor.getPropertyType() == String.class) {
@@ -182,7 +189,9 @@ public class SnakerKit {
         buffer.append("x:").append(getNumber(values[0])).append(",");
         buffer.append("y:").append(values[1]).append(",");
         if ("-1".equals(values[2])) {
-            if (node instanceof TaskModel || node instanceof CustomModel || node instanceof SubProcessModel) {
+            if (node instanceof TaskModel
+                    || node instanceof CustomModel
+                    || node instanceof SubProcessModel) {
                 values[2] = "100";
             } else {
                 values[2] = "50";
@@ -198,8 +207,9 @@ public class SnakerKit {
     }
 
     private static String convert(String value) {
-        if (StringUtils.isEmpty(value))
+        if (StringUtils.isEmpty(value)) {
             return "";
+        }
         if (value.contains("'")) {
             value = value.replaceAll("'", "#1");
         }

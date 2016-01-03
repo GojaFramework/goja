@@ -6,8 +6,8 @@
 
 package goja.rapid.email;
 
-import goja.core.app.GojaConfig;
 import goja.core.StringPool;
+import goja.core.app.GojaConfig;
 import goja.core.exceptions.MailException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.Email;
@@ -15,14 +15,7 @@ import org.apache.commons.mail.EmailException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.Authenticator;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -30,13 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 /**
  * Mail utils
@@ -45,7 +32,7 @@ public class EMail {
 
     private static final Logger logger = LoggerFactory.getLogger(EMail.class);
     public static Session session;
-    public static boolean         asynchronousSend = true;
+    public static boolean asynchronousSend = true;
     public static ExecutorService executor = Executors.newCachedThreadPool();
 
     private EMail() {
@@ -58,7 +45,8 @@ public class EMail {
         try {
             email = buildMessage(email);
 
-            if (GojaConfig.getProperty("mail.smtp", StringPool.EMPTY).equals("mock") && GojaConfig.getApplicationMode().isDev()) {
+            if (GojaConfig.getProperty("mail.smtp", StringPool.EMPTY).equals("mock")
+                    && GojaConfig.getApplicationMode().isDev()) {
                 Mock.send(email);
                 return new Future<Boolean>() {
                     @Override
@@ -82,7 +70,8 @@ public class EMail {
                     }
 
                     @Override
-                    public Boolean get(long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+                    public Boolean get(long timeout, final TimeUnit unit)
+                            throws InterruptedException, ExecutionException, TimeoutException {
                         return true;
                     }
                 };
@@ -109,7 +98,8 @@ public class EMail {
         if ((email.getToAddresses() == null || email.getToAddresses().size() == 0) &&
                 (email.getCcAddresses() == null || email.getCcAddresses().size() == 0) &&
                 (email.getBccAddresses() == null || email.getBccAddresses().size() == 0)) {
-            throw new MailException("Please define a recipient email address", new NullPointerException());
+            throw new MailException("Please define a recipient email address",
+                    new NullPointerException());
         }
         if (email.getSubject() == null) {
             throw new MailException("Please define a subject", new NullPointerException());
@@ -128,7 +118,8 @@ public class EMail {
             props.put("mail.smtp.host", GojaConfig.getProperty("mail.smtp.host", "localhost"));
 
             String channelEncryption;
-            if (GojaConfig.containsKey("mail.smtp.protocol") && GojaConfig.getProperty("mail.smtp.protocol", "smtp").equals("smtps")) {
+            if (GojaConfig.containsKey("mail.smtp.protocol") && GojaConfig.getProperty(
+                    "mail.smtp.protocol", "smtp").equals("smtps")) {
                 // Backward compatibility before stable5
                 channelEncryption = "starttls";
             } else {
@@ -152,7 +143,8 @@ public class EMail {
             }
 
             if (GojaConfig.containsKey("mail.smtp.localhost")) {
-                props.put("mail.smtp.localhost", GojaConfig.get("mail.smtp.localhost"));            //override defaults
+                props.put("mail.smtp.localhost",
+                        GojaConfig.get("mail.smtp.localhost"));            //override defaults
             }
             if (GojaConfig.containsKey("mail.smtp.socketFactory.class")) {
                 props.put("mail.smtp.socketFactory.class", GojaConfig.get("mail.smtp.socketFactory.class"));
@@ -168,7 +160,6 @@ public class EMail {
             }
             session = null;
 
-
             if (user != null && password != null) {
                 props.put("mail.smtp.auth", "true");
                 session = Session.getInstance(props, new SMTPAuthenticator(user, password));
@@ -176,7 +167,6 @@ public class EMail {
                 props.remove("mail.smtp.auth");
                 session = Session.getInstance(props);
             }
-
 
             if (Boolean.parseBoolean(GojaConfig.getProperty("mail.debug", "false"))) {
                 session.setDebug(true);
@@ -234,7 +224,8 @@ public class EMail {
                     return result.length() == 0;
                 }
 
-                public Boolean get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+                public Boolean get(long timeout, TimeUnit unit)
+                        throws InterruptedException, ExecutionException, TimeoutException {
                     return result.length() == 0;
                 }
             };
@@ -261,7 +252,6 @@ public class EMail {
 
         static Map<String, String> emails = new HashMap<String, String>();
 
-
         public static String getContent(Part message) throws MessagingException,
                 IOException {
 
@@ -276,9 +266,11 @@ public class EMail {
                         text += getContent(bodyPart);
                     } else {
                         text += "attachment: \n" +
-                                "\t\t name: " + (StringUtils.isEmpty(bodyPart.getFileName()) ? "none" : bodyPart.getFileName()) + "\n" +
+                                "\t\t name: " + (StringUtils.isEmpty(bodyPart.getFileName()) ? "none"
+                                : bodyPart.getFileName()) + "\n" +
                                 "\t\t disposition: " + bodyPart.getDisposition() + "\n" +
-                                "\t\t description: " + (StringUtils.isEmpty(bodyPart.getDescription()) ? "none" : bodyPart.getDescription()) + "\n\t";
+                                "\t\t description: " + (StringUtils.isEmpty(bodyPart.getDescription()) ? "none"
+                                : bodyPart.getDescription()) + "\n\t";
                     }
                 }
                 return text;
@@ -288,15 +280,16 @@ public class EMail {
                     return getContent((Part) message.getContent());
                 } else {
                     return "attachment: \n" +
-                            "\t\t name: " + (StringUtils.isEmpty(message.getFileName()) ? "none" : message.getFileName()) + "\n" +
+                            "\t\t name: " + (StringUtils.isEmpty(message.getFileName()) ? "none"
+                            : message.getFileName()) + "\n" +
                             "\t\t disposition: " + message.getDisposition() + "\n" +
-                            "\t\t description: " + (StringUtils.isEmpty(message.getDescription()) ? "none" : message.getDescription()) + "\n\t";
+                            "\t\t description: " + (StringUtils.isEmpty(message.getDescription()) ? "none"
+                            : message.getDescription()) + "\n\t";
                 }
             }
 
             return "";
         }
-
 
         static void send(Email email) {
 
@@ -316,7 +309,6 @@ public class EMail {
                 String body = getContent(msg);
 
                 content.append("From Mock Mailer\n\tNew email received by");
-
 
                 content.append("\n\tFrom: ").append(email.getFromAddress().getAddress());
                 content.append("\n\tReplyTo: ").append(email.getReplyToAddresses().get(0).getAddress());
@@ -352,11 +344,9 @@ public class EMail {
                     content.append(", ").append(add.toString());
                     emails.put(((InternetAddress) add).getAddress(), content.toString());
                 }
-
             } catch (Exception e) {
                 logger.error("error sending mock email", e);
             }
-
         }
 
         public static String getLastMessageReceivedBy(String email) {

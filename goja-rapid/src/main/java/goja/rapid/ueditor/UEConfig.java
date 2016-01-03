@@ -21,6 +21,7 @@ public final class UEConfig {
 
     /*上传图片配置项*/
 
+    public static final UEConfig me = config();
     /**
      * 执行上传图片的action名称
      */
@@ -29,28 +30,22 @@ public final class UEConfig {
      * 提交的图片表单名称
      */
     private String imageFieldName;
-
     /**
      * 上传大小限制，单位B
      */
     private long imageMaxSize;
-
     /**
      * 上传图片格式显示
      */
     private List<String> imageAllowFiles;
-
     /**
      * 是否压缩图片
      */
     private boolean imageCompressEnable;
-
-
     /**
      * 图片压缩最长边限制
      */
     private int imageCompressBorder;
-
     /**
      * 插入的图片浮动方式
      */
@@ -59,26 +54,14 @@ public final class UEConfig {
      * 图片访问路径前缀
      */
     private String imageUrlPrefix;
-    /**
-     * 上传保存路径,可以自定义保存路径和文件名格式
-     * <p/>
-     * {filename} 会替换成原文件名,配置这项需要注意中文乱码问题
-     * {rand:6} 会替换成随机数,后面的数字是随机数的位数
-     * {time} 会替换成时间戳
-     * {yyyy} 会替换成四位年份
-     * {yy} 会替换成两位年份
-     * {mm} 会替换成两位月份
-     * {dd} 会替换成两位日期
-     * {hh} 会替换成两位小时
-     * {ii} 会替换成两位分钟
-     * {ss} 会替换成两位秒
-     * 非法字符 \ : * ? " < > |
-     * 具请体看线上文档: fex.baidu.com/ueditor/#use-format_upload_filename
-     */
-    private String imagePathFormat;
 
     /*涂鸦图片上传配置项*/
-
+    /**
+     * 上传保存路径,可以自定义保存路径和文件名格式 <p/> {filename} 会替换成原文件名,配置这项需要注意中文乱码问题 {rand:6} 会替换成随机数,后面的数字是随机数的位数
+     * {time} 会替换成时间戳 {yyyy} 会替换成四位年份 {yy} 会替换成两位年份 {mm} 会替换成两位月份 {dd} 会替换成两位日期 {hh} 会替换成两位小时 {ii}
+     * 会替换成两位分钟 {ss} 会替换成两位秒 非法字符 \ : * ? " < > | 具请体看线上文档: fex.baidu.com/ueditor/#use-format_upload_filename
+     */
+    private String imagePathFormat;
     /**
      * 执行上传涂鸦的action名称
      */
@@ -94,7 +77,7 @@ public final class UEConfig {
     /**
      * 上传大小限制，单位B
      */
-    private long   scrawlMaxSize;
+    private long scrawlMaxSize;
     /**
      * 图片访问路径前缀
      */
@@ -115,13 +98,12 @@ public final class UEConfig {
      * 图片访问路径前缀
      */
     private String snapscreenUrlPrefix;
+
+    /* 抓取远程图片配置*/
     /**
      * 插入的图片浮动方式
      */
     private String snapscreenInsertAlign;
-
-    /* 抓取远程图片配置*/
-
     /**
      * 执行抓取远程图片的action名称
      */
@@ -129,143 +111,138 @@ public final class UEConfig {
     /**
      * 提交的图片列表表单名称
      */
-    private String       catcherActionName;
+    private String catcherActionName;
     /**
      * 上传保存路径,可以自定义保存路径和文件名格式
      */
-    private String       catcherFieldName;
+    private String catcherFieldName;
     /**
      * 图片访问路径前缀
      */
-    private String       catcherPathFormat;
+    private String catcherPathFormat;
     /**
      *
      */
-    private String       catcherUrlPrefix;
+    private String catcherUrlPrefix;
     /**
      * 上传大小限制 单位B
      */
-    private int          catcherMaxSize;
+    private int catcherMaxSize;
+
+    /*上传视频配置*/
     /**
      * 抓取图片格式显示
      */
     private List<String> catcherAllowFiles;
-
-    /*上传视频配置*/
-
     /**
      * 执行上传视频的action名称
      */
-    private String       videoActionName;
+    private String videoActionName;
     /**
      * 提交的视频表单名称
      */
-    private String       videoFieldName;
+    private String videoFieldName;
     /**
      * 上传保存路径,可以自定义保存路径和文件名格式
      */
-    private String       videoPathFormat;
+    private String videoPathFormat;
     /**
      * 视频访问路径前缀
      */
-    private String       videoUrlPrefix;
+    private String videoUrlPrefix;
     /**
      * 上传大小限制，单位B，默认100MB
      */
-    private long         videoMaxSize;
+    private long videoMaxSize;
+
+    /*上传文件配置*/
     /**
      * 上传视频格式显示
      */
     private List<String> videoAllowFiles;
-
-    /*上传文件配置*/
-
     /**
      * controller里,执行上传视频的action名称
      */
-    private String       fileActionName;
+    private String fileActionName;
     /**
      * 提交的文件表单名称
      */
-    private String       fileFieldName;
+    private String fileFieldName;
     /**
      * 上传保存路径,可以自定义保存路径和文件名格式
      */
-    private String       filePathFormat;
+    private String filePathFormat;
     /**
      * 文件访问路径前缀
      */
-    private String       fileUrlPrefix;
+    private String fileUrlPrefix;
     /**
      * 上传大小限制，单位B，默认50MB
      */
-    private long         fileMaxSize;
+    private long fileMaxSize;
+
+    /*指定要列出图片的目录*/
     /**
      * 上传文件格式显示
      */
     private List<String> fileAllowFiles;
-
-    /*指定要列出图片的目录*/
-
     /**
      * 指定要列出图片的目录
      */
-    private String       imageManagerActionName;
+    private String imageManagerActionName;
     /**
      * 每次列出文件数量
      */
-    private String       imageManagerListPath;
+    private String imageManagerListPath;
     /**
      * 图片访问路径前缀
      */
-    private int          imageManagerListSize;
+    private int imageManagerListSize;
     /**
      * 插入的图片浮动方式
      */
-    private String       imageManagerUrlPrefix;
+    private String imageManagerUrlPrefix;
     /**
      *
      */
-    private String       imageManagerInsertAlign;
+    private String imageManagerInsertAlign;
+
+    /*列出指定目录下的文件*/
     /**
      * 列出的文件类型
      */
     private List<String> imageManagerAllowFiles;
-
-    /*列出指定目录下的文件*/
-
     /**
      * 执行文件管理的action名称
      */
-    private String       fileManagerActionName;
+    private String fileManagerActionName;
     /**
      * 指定要列出文件的目录
      */
-    private String       fileManagerListPath;
+    private String fileManagerListPath;
     /**
      * 文件访问路径前缀
      */
-    private String       fileManagerUrlPrefix;
+    private String fileManagerUrlPrefix;
     /**
      * 每次列出文件数量
      */
-    private int          fileManagerListSize;
+    private int fileManagerListSize;
     /**
      * 列出的文件类型
      */
     private List<String> fileManagerAllowFiles;
-
-    public static  final UEConfig me = config();
 
     private static UEConfig config() {
 
         final UEConfig config = new UEConfig();
 
         String urlPrefix = GojaConfig.getProperty(GojaPropConst.UE_URLPREFIX);
-        if(Strings.isNullOrEmpty(urlPrefix)){
+        if (Strings.isNullOrEmpty(urlPrefix)) {
 
             final String appDomain = GojaConfig.getAppDomain();
-            urlPrefix = appDomain + (StringUtils.endsWith(appDomain, StringPool.SLASH) ? StringPool.EMPTY : StringPool.SLASH) + "upload/" ;
+            urlPrefix = appDomain + (StringUtils.endsWith(appDomain, StringPool.SLASH) ? StringPool.EMPTY
+                    : StringPool.SLASH) + "upload/";
         }
         config.imageActionName = "uploadimage";
         config.imageFieldName = "upfile";
@@ -279,57 +256,64 @@ public final class UEConfig {
 
         config.scrawlActionName = "uploadscrawl";
         config.scrawlFieldName = "upfile";
-        config.scrawlPathFormat =  UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.scrawlPathFormat = UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
         config.scrawlMaxSize = 2048000;
         config.scrawlUrlPrefix = urlPrefix;
         config.scrawlInsertAlign = "none";
 
         config.snapscreenActionName = "uploadimage";
-        config.snapscreenPathFormat =  UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.snapscreenPathFormat = UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
         config.snapscreenUrlPrefix = urlPrefix;
         config.snapscreenInsertAlign = "none";
 
         config.catcherLocalDomain = Lists.newArrayList("127.0.0.1", "localhost");
         config.catcherActionName = "catchimage";
         config.catcherFieldName = "source";
-        config.catcherPathFormat =  UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.catcherPathFormat = UEConst.UE_FOLDER + "image/{yyyy}{mm}{dd}/{time}{rand:6}";
         config.catcherUrlPrefix = urlPrefix;
         config.catcherMaxSize = 2048000;
         config.catcherAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp");
 
         config.videoActionName = "uploadvideo";
         config.videoFieldName = "upfile";
-        config.videoPathFormat =  UEConst.UE_FOLDER + "video/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.videoPathFormat = UEConst.UE_FOLDER + "video/{yyyy}{mm}{dd}/{time}{rand:6}";
         config.videoUrlPrefix = urlPrefix;
         config.videoMaxSize = 102400000;
-        config.videoAllowFiles = Lists.newArrayList(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg"
-                , ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid");
+        config.videoAllowFiles =
+                Lists.newArrayList(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg"
+                        , ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid");
 
         config.fileActionName = "uploadfile";
         config.fileFieldName = "upfile";
-        config.filePathFormat =  UEConst.UE_FOLDER + "file/{yyyy}{mm}{dd}/{time}{rand:6}";
+        config.filePathFormat = UEConst.UE_FOLDER + "file/{yyyy}{mm}{dd}/{time}{rand:6}";
         config.fileUrlPrefix = urlPrefix;
         config.fileMaxSize = 51200000;
-        config.fileAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".flv", ".swf", ".mkv"
-                , ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3"
-                , ".wav", ".mid", ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso", ".doc", ".docx"
-                , ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml");
+        config.fileAllowFiles =
+                Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".flv", ".swf", ".mkv"
+                        , ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4",
+                        ".webm", ".mp3"
+                        , ".wav", ".mid", ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso", ".doc",
+                        ".docx"
+                        , ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml");
 
         config.imageManagerActionName = "listimage";
-        config.imageManagerListPath =  UEConst.UE_FOLDER + "image/";
+        config.imageManagerListPath = UEConst.UE_FOLDER + "image/";
         config.imageManagerUrlPrefix = urlPrefix;
         config.imageManagerInsertAlign = "none";
         config.imageManagerListSize = 20;
         config.imageManagerAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp");
 
         config.fileManagerActionName = "listfile";
-        config.fileManagerListPath =  UEConst.UE_FOLDER + "file/";
+        config.fileManagerListPath = UEConst.UE_FOLDER + "file/";
         config.fileManagerUrlPrefix = urlPrefix;
         config.fileManagerListSize = 20;
-        config.fileManagerAllowFiles = Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".flv", ".swf"
-                , ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm"
-                , ".mp3", ".wav", ".mid", ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso", ".doc", ".docx"
-                , ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml");
+        config.fileManagerAllowFiles =
+                Lists.newArrayList(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".flv", ".swf"
+                        , ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv",
+                        ".mp4", ".webm"
+                        , ".mp3", ".wav", ".mid", ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso",
+                        ".doc", ".docx"
+                        , ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml");
         return config;
     }
 
@@ -359,6 +343,10 @@ public final class UEConfig {
 
     public List<String> getImageAllowFiles() {
         return imageAllowFiles;
+    }
+
+    public void setImageAllowFiles(List<String> imageAllowFiles) {
+        this.imageAllowFiles = imageAllowFiles;
     }
 
     public boolean isImageCompressEnable() {
@@ -394,20 +382,10 @@ public final class UEConfig {
     }
 
     /**
-     * @return 上传保存路径, 可以自定义保存路径和文件名格式
-     * <p/>
-     * {filename} 会替换成原文件名,配置这项需要注意中文乱码问题
-     * {rand:6} 会替换成随机数,后面的数字是随机数的位数
-     * {time} 会替换成时间戳
-     * {yyyy} 会替换成四位年份
-     * {yy} 会替换成两位年份
-     * {mm} 会替换成两位月份
-     * {dd} 会替换成两位日期
-     * {hh} 会替换成两位小时
-     * {ii} 会替换成两位分钟
-     * {ss} 会替换成两位秒
-     * 非法字符 \ : * ? " < > |
-     * 具请体看线上文档: fex.baidu.com/ueditor/#use-format_upload_filename
+     * @return 上传保存路径, 可以自定义保存路径和文件名格式 <p/> {filename} 会替换成原文件名,配置这项需要注意中文乱码问题 {rand:6}
+     * 会替换成随机数,后面的数字是随机数的位数 {time} 会替换成时间戳 {yyyy} 会替换成四位年份 {yy} 会替换成两位年份 {mm} 会替换成两位月份 {dd} 会替换成两位日期
+     * {hh} 会替换成两位小时 {ii} 会替换成两位分钟 {ss} 会替换成两位秒 非法字符 \ : * ? " < > | 具请体看线上文档:
+     * fex.baidu.com/ueditor/#use-format_upload_filename
      */
     public String getImagePathFormat() {
         return imagePathFormat;
@@ -549,6 +527,10 @@ public final class UEConfig {
         return catcherAllowFiles;
     }
 
+    public void setCatcherAllowFiles(List<String> catcherAllowFiles) {
+        this.catcherAllowFiles = catcherAllowFiles;
+    }
+
     public String getVideoActionName() {
         return videoActionName;
     }
@@ -591,6 +573,10 @@ public final class UEConfig {
 
     public List<String> getVideoAllowFiles() {
         return videoAllowFiles;
+    }
+
+    public void setVideoAllowFiles(List<String> videoAllowFiles) {
+        this.videoAllowFiles = videoAllowFiles;
     }
 
     public String getFileActionName() {
@@ -637,6 +623,10 @@ public final class UEConfig {
         return fileAllowFiles;
     }
 
+    public void setFileAllowFiles(List<String> fileAllowFiles) {
+        this.fileAllowFiles = fileAllowFiles;
+    }
+
     public String getImageManagerActionName() {
         return imageManagerActionName;
     }
@@ -681,6 +671,10 @@ public final class UEConfig {
         return imageManagerAllowFiles;
     }
 
+    public void setImageManagerAllowFiles(List<String> imageManagerAllowFiles) {
+        this.imageManagerAllowFiles = imageManagerAllowFiles;
+    }
+
     public String getFileManagerActionName() {
         return fileManagerActionName;
     }
@@ -713,31 +707,11 @@ public final class UEConfig {
         this.fileManagerListSize = fileManagerListSize;
     }
 
-    public void setImageAllowFiles(List<String> imageAllowFiles) {
-        this.imageAllowFiles = imageAllowFiles;
-    }
-
-    public void setCatcherAllowFiles(List<String> catcherAllowFiles) {
-        this.catcherAllowFiles = catcherAllowFiles;
-    }
-
-    public void setVideoAllowFiles(List<String> videoAllowFiles) {
-        this.videoAllowFiles = videoAllowFiles;
-    }
-
-    public void setFileAllowFiles(List<String> fileAllowFiles) {
-        this.fileAllowFiles = fileAllowFiles;
-    }
-
-    public void setImageManagerAllowFiles(List<String> imageManagerAllowFiles) {
-        this.imageManagerAllowFiles = imageManagerAllowFiles;
+    public List<String> getFileManagerAllowFiles() {
+        return fileManagerAllowFiles;
     }
 
     public void setFileManagerAllowFiles(List<String> fileManagerAllowFiles) {
         this.fileManagerAllowFiles = fileManagerAllowFiles;
-    }
-
-    public List<String> getFileManagerAllowFiles() {
-        return fileManagerAllowFiles;
     }
 }

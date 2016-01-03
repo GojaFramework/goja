@@ -9,9 +9,9 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import goja.core.StringPool;
 import goja.core.kits.lang.Strs;
-import goja.rapid.db.Condition;
 import goja.core.tuples.Pair;
 import goja.core.tuples.Triplet;
+import goja.rapid.db.Condition;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -60,8 +60,8 @@ public final class DTCriterias implements Serializable {
 
     private final List<Triplet<String, Condition, Object>> params;
 
-
-    private DTCriterias(DTSearch search, int start, int length, List<DTColumn> columns, List<DTOrder> order, int draw) {
+    private DTCriterias(DTSearch search, int start, int length, List<DTColumn> columns,
+                        List<DTOrder> order, int draw) {
         this.search = search;
         this.start = start;
         this.length = length;
@@ -70,7 +70,6 @@ public final class DTCriterias implements Serializable {
         this.draw = draw;
         this.params = Lists.newArrayListWithCapacity(1);
     }
-
 
     public static DTCriterias criteriasWithRequest(HttpServletRequest request) {
         if (request != null) {
@@ -81,7 +80,8 @@ public final class DTCriterias implements Serializable {
             String r_search_value = request.getParameter(DTConstants.DT_SEARCH_VALUE);
             String r_search_regex = request.getParameter(DTConstants.DT_SEARCH_REGEX);
 
-            boolean custom_search = !Strings.isNullOrEmpty(request.getParameter(DTConstants.DT_SEARCH_FLAG));
+            boolean custom_search =
+                    !Strings.isNullOrEmpty(request.getParameter(DTConstants.DT_SEARCH_FLAG));
 
             int draw = Strings.isNullOrEmpty(r_draw) ? 1 : Ints.tryParse(r_draw);
             int start = Strings.isNullOrEmpty(r_start) ? 1 : Ints.tryParse(r_start);
@@ -103,40 +103,48 @@ public final class DTCriterias implements Serializable {
                 final Enumeration<String> parameterNames = request.getParameterNames();
                 while (parameterNames.hasMoreElements()) {
                     String param_name = parameterNames.nextElement();
-                    if (custom_search && StringUtils.startsWith(param_name, DTConstants.DT_CUSTEM_SEARCH_PREFIX)) {
-                            final String req_val = request.getParameter(param_name);
-                            if (!Strings.isNullOrEmpty(req_val)) {
-                                String[] param_array = StringUtils.split(param_name, StringPool.DASH);
-                                if (param_array != null && param_array.length >= 2) {
+                    if (custom_search && StringUtils.startsWith(param_name,
+                            DTConstants.DT_CUSTEM_SEARCH_PREFIX)) {
+                        final String req_val = request.getParameter(param_name);
+                        if (!Strings.isNullOrEmpty(req_val)) {
+                            String[] param_array = StringUtils.split(param_name, StringPool.DASH);
+                            if (param_array != null && param_array.length >= 2) {
 
-                                    String name = param_array[1];
-                                    String condition = param_array.length == 2 ? Condition.EQ.toString() : param_array[2];
-                                    Condition query_condition;
-                                    if (Strings.isNullOrEmpty(condition)) {
-                                        query_condition = Condition.EQ;
-                                    } else {
-                                        query_condition = Condition.valueOf(condition.toUpperCase());
-                                    }
-                                    switch (query_condition) {
-                                        case BETWEEN:
-                                            String two_param = StringUtils.replace(param_name, Condition.BETWEEN.toString(), "AND");
-                                            String req_val2 = request.getParameter(two_param);
-                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition, new String[]{req_val, req_val2}));
-                                            break;
-                                        case LIKE:
-                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition, Strs.like(req_val)));
-                                            break;
-                                        case LLIKE:
-                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition, Strs.llike(req_val)));
-                                            break;
-                                        case RLIKE:
-                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition, Strs.rlike(req_val)));
-                                            break;
-                                        default:
-                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition, req_val));
-                                    }
+                                String name = param_array[1];
+                                String condition =
+                                        param_array.length == 2 ? Condition.EQ.toString() : param_array[2];
+                                Condition query_condition;
+                                if (Strings.isNullOrEmpty(condition)) {
+                                    query_condition = Condition.EQ;
+                                } else {
+                                    query_condition = Condition.valueOf(condition.toUpperCase());
+                                }
+                                switch (query_condition) {
+                                    case BETWEEN:
+                                        String two_param =
+                                                StringUtils.replace(param_name, Condition.BETWEEN.toString(), "AND");
+                                        String req_val2 = request.getParameter(two_param);
+                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                                new String[]{req_val, req_val2}));
+                                        break;
+                                    case LIKE:
+                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                                Strs.like(req_val)));
+                                        break;
+                                    case LLIKE:
+                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                                Strs.llike(req_val)));
+                                        break;
+                                    case RLIKE:
+                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                                Strs.rlike(req_val)));
+                                        break;
+                                    default:
+                                        _params.add(
+                                                Triplet.<String, Condition, Object>with(name, query_condition, req_val));
                                 }
                             }
+                        }
                     }
 
                     // column setting
@@ -158,16 +166,16 @@ public final class DTCriterias implements Serializable {
                         String column_name = request.getParameter("columns[" + p_index + "][name]");
                         String column_searchable = request.getParameter("columns[" + p_index + "][searchable]");
                         String column_orderable = request.getParameter("columns[" + p_index + "][orderable]");
-                        String column_search_value = request.getParameter("columns[" + p_index + "][search][value]");
-                        String column_search_regex = request.getParameter("columns[" + p_index + "][search][regex]");
-
+                        String column_search_value =
+                                request.getParameter("columns[" + p_index + "][search][value]");
+                        String column_search_regex =
+                                request.getParameter("columns[" + p_index + "][search][regex]");
 
                         dtColumns.add(new DTColumn(column_data, column_name
                                 , BooleanUtils.toBoolean(column_searchable)
                                 , BooleanUtils.toBoolean(column_orderable)
-                                , DTSearch.create(column_search_value, BooleanUtils.toBoolean(column_search_regex))));
-
-
+                                ,
+                                DTSearch.create(column_search_value, BooleanUtils.toBoolean(column_search_regex))));
                     } else if (StringUtils.startsWithIgnoreCase(param_name, DTConstants.DT_ORDER)) {
                         int index = Ints.tryParse(p_index);
                         if (!_orders.isEmpty() && _orders.get(index) != null) {
@@ -175,7 +183,8 @@ public final class DTCriterias implements Serializable {
                         }
                         String order_column_index = request.getParameter("order[" + p_index + "][column]");
                         String order_column_dir = request.getParameter("order[" + p_index + "][dir]");
-                        Pair<Integer, String> _temp_order = Pair.with(Ints.tryParse(order_column_index), order_column_dir);
+                        Pair<Integer, String> _temp_order =
+                                Pair.with(Ints.tryParse(order_column_index), order_column_dir);
                         _orders.add(_temp_order);
                     }
                 }
@@ -194,15 +203,14 @@ public final class DTCriterias implements Serializable {
                 processed = null;
             }
 
-
-            final DTCriterias dtCriterias = new DTCriterias(dtSearch, start, length, dtColumns, dtOrders, draw);
+            final DTCriterias dtCriterias =
+                    new DTCriterias(dtSearch, start, length, dtColumns, dtOrders, draw);
             dtCriterias.setAllParams(_params);
             return dtCriterias;
         } else {
             return null;
         }
     }
-
 
     public void setAllParams(List<Triplet<String, Condition, Object>> _params) {
         this.params.addAll(_params);
@@ -213,8 +221,8 @@ public final class DTCriterias implements Serializable {
      *
      * @param field     query condition
      * @param condition condition
-     * @param value     query condition
-     *                  If it is a LIKE query, then you need to pass an array of objects, the size of 2.
+     * @param value     query condition If it is a LIKE query, then you need to pass an array of objects,
+     *                  the size of 2.
      */
     public void setParam(String field, Condition condition, Object value) {
         this.params.add(Triplet.with(field, condition, value));
@@ -242,13 +250,10 @@ public final class DTCriterias implements Serializable {
      */
     public DTResponse response(Class<? extends Model> model) {
 
-
         Preconditions.checkNotNull(this, "datatable criterias is must be not null.");
         final Page<Record> datas = DTDao.paginate(model, this);
         return DTResponse.build(this, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
     }
-
-
 
     public DTResponse response(String whereSql, String columns, List<Object> params) {
 
@@ -256,7 +261,6 @@ public final class DTCriterias implements Serializable {
         final Page<Record> datas = DTDao.paginate(whereSql, columns, this, params);
         return DTResponse.build(this, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
     }
-
 
     public DTSearch getSearch() {
         return search;
@@ -281,5 +285,4 @@ public final class DTCriterias implements Serializable {
     public int getDraw() {
         return draw;
     }
-
 }

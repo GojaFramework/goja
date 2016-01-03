@@ -2,17 +2,15 @@ package goja.mvc.auto;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.config.Interceptors;
-import goja.logging.Logger;
 import goja.annotation.AppInterceptor;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
+import goja.logging.Logger;
 
 import java.util.List;
 
 /**
- * <p>
- * Interceptor annotation scan.
- * </p>
+ * <p> Interceptor annotation scan. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-04 13:11
@@ -27,6 +25,7 @@ public class AutoOnLoadInterceptor {
 
     /**
      * 构造函数，指定全局拦截器
+     *
      * @param interceptors jfinal 全局拦截器
      */
     public AutoOnLoadInterceptor(Interceptors interceptors) {
@@ -50,6 +49,5 @@ public class AutoOnLoadInterceptor {
                 }
             }
         }
-
     }
 }

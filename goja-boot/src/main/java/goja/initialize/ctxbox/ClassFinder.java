@@ -21,16 +21,13 @@ import goja.security.shiro.SecurityUserData;
 import java.util.List;
 
 /**
- * <p>
- * Class Finder.
- * </p>
+ * <p> Class Finder. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-19 22:32
  * @since JDK 1.6
  */
 public class ClassFinder {
-
 
     /**
      * find class files.
@@ -66,6 +63,4 @@ public class ClassFinder {
             ClassBox.getInstance().push(cls);
         }
     }
-
-
 }

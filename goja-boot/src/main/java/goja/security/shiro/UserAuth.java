@@ -22,7 +22,8 @@ public class UserAuth {
 
     /**
      * 构造函数
-     * @param roles 用户的角色
+     *
+     * @param roles       用户的角色
      * @param permissions 用户的权限
      */
     public UserAuth(List<String> roles, List<String> permissions) {
@@ -32,6 +33,7 @@ public class UserAuth {
 
     /**
      * 用户的角色
+     *
      * @return 用户的角色
      */
     public List<String> getRoles() {
@@ -40,6 +42,7 @@ public class UserAuth {
 
     /**
      * 用户的权限
+     *
      * @return 用户的权限
      */
     public List<String> getPermissions() {

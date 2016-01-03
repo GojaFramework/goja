@@ -17,17 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * <p> . </p>
@@ -44,6 +35,16 @@ public final class Invoker {
      * Main executor for requests invocations.
      */
     public static ScheduledThreadPoolExecutor executor = null;
+
+    /**
+     * Init executor at load time.
+     */
+    static {
+        int core = GojaConfig.getPropertyToInt("goja.pool", GojaConfig.getApplicationMode().isDev() ? 1
+                : (Runtime.getRuntime().availableProcessors() + 1));
+        executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("goja"),
+                new ThreadPoolExecutor.AbortPolicy());
+    }
 
     private Invoker() {
     }
@@ -102,7 +103,7 @@ public final class Invoker {
 
         public static ThreadLocal<InvocationContext> current = new ThreadLocal<InvocationContext>();
         private final List<Annotation> annotations;
-        private final String           invocationType;
+        private final String invocationType;
 
         public InvocationContext(String invocationType) {
             this.invocationType = invocationType;
@@ -155,8 +156,8 @@ public final class Invoker {
         }
 
         /**
-         * Returns the InvocationType for this invocation - Ie: A plugin can use this to find out if it runs in the
-         * context of a background Job
+         * Returns the InvocationType for this invocation - Ie: A plugin can use this to find out if it
+         * runs in the context of a background Job
          */
         public String getInvocationType() {
             return invocationType;
@@ -187,14 +188,14 @@ public final class Invoker {
          */
         public abstract void execute() throws Exception;
 
-
         /**
-         * Needs this method to do stuff *before* init() is executed. The different Invocation-implementations does a
-         * lot of stuff in init() and they might do it before calling super.init()
+         * Needs this method to do stuff *before* init() is executed. The different
+         * Invocation-implementations does a lot of stuff in init() and they might do it before calling
+         * super.init()
          */
         protected void preInit() {
             // clear language for this request - we're resolving it later when it is needed
-//            I18n.clear();
+            //            I18n.clear();
         }
 
         /**
@@ -203,14 +204,13 @@ public final class Invoker {
         public boolean init() {
             Thread.currentThread().setContextClassLoader(Goja.class.getClassLoader());
             if (!Goja.started) {
-                if ( GojaConfig.getApplicationMode() == ApplicationMode.PROD) {
+                if (GojaConfig.getApplicationMode() == ApplicationMode.PROD) {
                     throw new UnexpectedException("Application is not started");
                 }
             }
             InvocationContext.current.set(getInvocationContext());
             return true;
         }
-
 
         public abstract InvocationContext getInvocationContext();
 
@@ -245,8 +245,6 @@ public final class Invoker {
 
         /**
          * The request is suspended
-         *
-         * @param suspendRequest
          */
         public void suspend(Suspend suspendRequest) {
             if (suspendRequest.task != null) {
@@ -310,14 +308,6 @@ public final class Invoker {
         public InvocationContext getInvocationContext() {
             return new InvocationContext(invocationType);
         }
-    }
-
-    /**
-     * Init executor at load time.
-     */
-    static {
-        int core = GojaConfig.getPropertyToInt("goja.pool",  GojaConfig.getApplicationMode().isDev() ? 1 : (Runtime.getRuntime().availableProcessors() + 1));
-        executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("goja"), new ThreadPoolExecutor.AbortPolicy());
     }
 
     /**

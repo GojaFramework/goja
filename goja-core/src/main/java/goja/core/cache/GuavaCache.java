@@ -22,7 +22,8 @@ public class GuavaCache<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    private static <K, V> CacheBuilder<K, V> builder(long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
+    private static <K, V> CacheBuilder<K, V> builder(long timeToLiveMs,
+                                                     boolean resetTimeToLiveWhenAccessed) {
         CacheBuilder<K, V> builder = (CacheBuilder<K, V>) CacheBuilder.newBuilder();
 
         if (resetTimeToLiveWhenAccessed) {
@@ -41,5 +42,4 @@ public class GuavaCache<K, V> {
         V value = cache.getIfPresent(key);
         Callbacks.success(callback, value);
     }
-
 }

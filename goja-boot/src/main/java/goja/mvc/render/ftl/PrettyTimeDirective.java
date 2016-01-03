@@ -8,12 +8,7 @@ package goja.mvc.render.ftl;
 
 import com.google.common.base.Strings;
 import freemarker.core.Environment;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateDirectiveBody;
-import freemarker.template.TemplateDirectiveModel;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import freemarker.template.*;
 import goja.core.date.DateFormatter;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -24,9 +19,7 @@ import java.io.Writer;
 import java.util.Map;
 
 /**
- * <p>
- * 日期友好化显示.
- * </p>
+ * <p> 日期友好化显示. </p>
  *
  * @author sagyf yang
  * @version 1.0 2013-12-18 10:34
@@ -34,9 +27,9 @@ import java.util.Map;
  */
 public class PrettyTimeDirective implements TemplateDirectiveModel {
 
-
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
+    public void execute(Environment env, Map params, TemplateModel[] loopVars,
+                        TemplateDirectiveBody body)
             throws TemplateException, IOException {
         // 检查是否传递参数，此指令禁止传参！
         if (params.isEmpty()) {
@@ -74,10 +67,11 @@ public class PrettyTimeDirective implements TemplateDirectiveModel {
                 int days = d.getDays();
                 if (days == 0) {
                     int hour = (int) ((today.getMillis() - p_date.getMillis()) / 3600000);
-                    if (hour == 0)
+                    if (hour == 0) {
                         ftime = Math.max((today.getMillis() - p_date.getMillis()) / 60000, 1) + "分钟前";
-                    else
+                    } else {
                         ftime = hour + "小时前";
+                    }
                 } else if (days == 1) {
                     ftime = "昨天";
                 } else if (days == 2) {
@@ -94,5 +88,4 @@ public class PrettyTimeDirective implements TemplateDirectiveModel {
             throw new RuntimeException("missing body");
         }
     }
-
 }

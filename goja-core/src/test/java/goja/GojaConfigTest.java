@@ -18,5 +18,4 @@ public class GojaConfigTest {
     public void testGetConfigProps() throws Exception {
 
     }
-
 }

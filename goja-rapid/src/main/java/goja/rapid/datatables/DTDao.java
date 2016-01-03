@@ -2,16 +2,11 @@ package goja.rapid.datatables;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.Table;
-import com.jfinal.plugin.activerecord.TableMapping;
+import com.jfinal.plugin.activerecord.*;
 import goja.core.StringPool;
 import goja.core.sqlinxml.Sql;
-import goja.rapid.db.Condition;
 import goja.core.tuples.Triplet;
+import goja.rapid.db.Condition;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -33,8 +28,8 @@ public final class DTDao {
                                         List<Object> params) {
         // sql语句类似这样
         // FROM table_name --conditions-- where field_name =?
-        return paginate(sql.whereSql + (sql.conditions ? StringPool.SPACE : " WHERE 1=1 "), sql.selectSql, criterias, params);
-
+        return paginate(sql.whereSql + (sql.conditions ? StringPool.SPACE : " WHERE 1=1 "),
+                sql.selectSql, criterias, params);
     }
 
     /**
@@ -142,12 +137,11 @@ public final class DTDao {
         StringBuilder where = new StringBuilder(" FROM ");
         where.append(tableName).append(SPACE);
 
-//        final DTSearch search = criterias.getSearch();
+        //        final DTSearch search = criterias.getSearch();
 
         final List<Triplet<String, Condition, Object>> custom_params = criterias.getParams();
         final List<Object> params = Lists.newArrayList();
         appendWhereSql(params, where, custom_params);
-
 
         final List<DTOrder> order = criterias.getOrder();
         if (!(order == null || order.isEmpty())) {
@@ -163,8 +157,8 @@ public final class DTDao {
         return Db.paginate(start, pageSize, sql_columns, where.toString(), params.toArray());
     }
 
-
-    public static void appendWhereSql(List<Object> params, StringBuilder where, List<Triplet<String, Condition, Object>> custom_params) {
+    public static void appendWhereSql(List<Object> params, StringBuilder where,
+                                      List<Triplet<String, Condition, Object>> custom_params) {
         if (!custom_params.isEmpty()) {
             where.append(" WHERE ");
             itemCustomParamSql(params, where, custom_params, false);

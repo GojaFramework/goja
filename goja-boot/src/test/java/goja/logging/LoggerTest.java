@@ -13,19 +13,16 @@ import org.junit.Test;
  */
 public class LoggerTest {
 
-
     @Before
     public void setUp() throws Exception {
         GojaConfig.init();
         LoggerInit.init();
     }
 
-
     @Test
     public void testInfo() throws Exception {
         for (int i = 0; i < 1000; i++) {
             Logger.info("test index os ... {}", i);
         }
-
     }
 }

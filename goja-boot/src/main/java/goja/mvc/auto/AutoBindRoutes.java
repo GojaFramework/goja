@@ -25,8 +25,57 @@ public class AutoBindRoutes extends Routes {
 
     private static final Logger logger = LoggerFactory.getLogger(AutoBindRoutes.class);
 
-
     private static final String suffix = "Controller";
+
+    private static String controllerKey(Class clazz) {
+        final String simpleName = clazz.getSimpleName();
+        Preconditions.checkArgument(simpleName.endsWith(suffix),
+                " does not has a @ControllerBind annotation and it's name is not end with " + suffix);
+        String controllerKey = StringPool.SLASH + StrKit.firstCharToLowerCase(simpleName);
+        controllerKey = controllerKey.substring(0, controllerKey.indexOf(suffix));
+        String packName = clazz.getPackage().getName();
+
+        // 增加一种新的路由机制
+        // prefix       com.mo008
+        // controller   com.mo008.controllers
+        // controller   com.mo008.sys.controllers
+        // controller2  com.mo008.member.controllers
+        final String appPackPrefix = GojaConfig.getAppPackPrefix();
+        if (StringUtils.startsWith(packName, appPackPrefix)) {
+            // 如果是配置的包,则进行路由生成
+            if (StringUtils.startsWith(packName,
+                    appPackPrefix + StringPool.DOT + "controllers")) { // 包名正好为 com.mo008.controllers 开头
+                if (StringUtils.endsWith(packName, "controllers")) {
+                    return controllerKey;
+                } else {
+                    String biz_pk = StringUtils.substringAfter(packName, ".controllers.");
+                    controllerKey = StringPool.SLASH
+                            + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
+                            + controllerKey;
+                    return controllerKey;
+                }
+            } else {
+                // 取得中间的信息
+                String moduleRoute =
+                        StringUtils.replace(packName.replace(appPackPrefix + StringPool.DOT, StringPool.EMPTY)
+                                        .replace(".controllers", StringPool.EMPTY), StringPool.DOT,
+                                StringPool.SLASH); //得到中间区域的配置
+                // sys/user
+                if (StringUtils.endsWith(packName, "controllers")) {
+                    return StringPool.SLASH + moduleRoute + controllerKey;
+                } else {
+                    String biz_pk = StringUtils.substringAfter(packName, ".controllers.");
+                    controllerKey = StringPool.SLASH
+                            + moduleRoute
+                            + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
+                            + controllerKey;
+                    return controllerKey;
+                }
+            }
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public void config() {
@@ -50,55 +99,4 @@ public class AutoBindRoutes extends Routes {
             }
         }
     }
-
-    private static String controllerKey(Class clazz) {
-        final String simpleName = clazz.getSimpleName();
-        Preconditions.checkArgument(simpleName.endsWith(suffix), " does not has a @ControllerBind annotation and it's name is not end with " + suffix);
-        String controllerKey = StringPool.SLASH + StrKit.firstCharToLowerCase(simpleName);
-        controllerKey = controllerKey.substring(0, controllerKey.indexOf(suffix));
-        String packName = clazz.getPackage().getName();
-
-        // 增加一种新的路由机制
-        // prefix       com.mo008
-        // controller   com.mo008.controllers
-        // controller   com.mo008.sys.controllers
-        // controller2  com.mo008.member.controllers
-        final String appPackPrefix = GojaConfig.getAppPackPrefix();
-        if (StringUtils.startsWith(packName, appPackPrefix)) {
-            // 如果是配置的包,则进行路由生成
-            if (StringUtils.startsWith(packName, appPackPrefix + StringPool.DOT + "controllers")) { // 包名正好为 com.mo008.controllers 开头
-                if (StringUtils.endsWith(packName, "controllers")) {
-                    return controllerKey;
-                } else {
-                    String biz_pk = StringUtils.substringAfter(packName, ".controllers.");
-                    controllerKey = StringPool.SLASH
-                            + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
-                            + controllerKey;
-                    return controllerKey;
-                }
-            } else {
-                // 取得中间的信息
-                String moduleRoute = StringUtils.replace(packName.replace(appPackPrefix + StringPool.DOT, StringPool.EMPTY)
-                        .replace(".controllers", StringPool.EMPTY), StringPool.DOT, StringPool.SLASH); //得到中间区域的配置
-                // sys/user
-                if (StringUtils.endsWith(packName, "controllers")) {
-                    return StringPool.SLASH + moduleRoute + controllerKey;
-                } else {
-                    String biz_pk = StringUtils.substringAfter(packName, ".controllers.");
-                    controllerKey = StringPool.SLASH
-                            + moduleRoute
-                            + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
-                            + controllerKey;
-                    return controllerKey;
-                }
-
-            }
-        } else {
-            return null;
-        }
-
-
-    }
-
-
 }

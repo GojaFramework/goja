@@ -37,5 +37,4 @@ public class Is<T> {
     public boolean collection() {
         return G.isCollection(value);
     }
-
 }

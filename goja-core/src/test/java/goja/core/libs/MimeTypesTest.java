@@ -9,9 +9,7 @@ package goja.core.libs;
 import org.junit.Test;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:43
@@ -23,6 +21,5 @@ public class MimeTypesTest {
 
         final String contentType = MimeTypes.getContentType("abc.png");
         System.out.println(contentType);
-
     }
 }

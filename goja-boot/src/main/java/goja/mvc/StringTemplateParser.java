@@ -2,35 +2,33 @@
 
 package goja.mvc;
 
-
 import goja.core.StringPool;
 
 import java.util.Map;
 
 /**
- * Parser for string macro templates. On parsing, macro values
- * in provided string are resolved and replaced with real values.
- * Once set, one string template parser can be reused for parsing,
- * even using different macro resolvers.
+ * Parser for string macro templates. On parsing, macro values in provided string are resolved and
+ * replaced with real values. Once set, one string template parser can be reused for parsing, even
+ * using different macro resolvers.
  */
 public class StringTemplateParser {
 
     public static final String DEFAULT_MACRO_START = "${";
-    protected           String macroStart          = DEFAULT_MACRO_START;
-
     // ---------------------------------------------------------------- properties
-    public static final String  DEFAULT_MACRO_END = "}";
-    protected           String  macroEnd          = DEFAULT_MACRO_END;
-    protected           boolean replaceMissingKey = true;
+    public static final String DEFAULT_MACRO_END = "}";
+    protected String macroStart = DEFAULT_MACRO_START;
+    protected String macroEnd = DEFAULT_MACRO_END;
+    protected boolean replaceMissingKey = true;
     protected String missingKeyReplacement;
     protected boolean resolveEscapes = true;
-    protected char    escapeChar     = '\\';
+    protected char escapeChar = '\\';
     protected boolean parseValues;
 
     /**
-     * Finds first occurrence of a substring in the given source but within limited range [start, end).
-     * It is fastest possible code, but still original <code>String.indexOf(String, int)</code>
-     * is much faster (since it uses char[] value directly) and should be used when no range is needed.
+     * Finds first occurrence of a substring in the given source but within limited range [start,
+     * end). It is fastest possible code, but still original <code>String.indexOf(String, int)</code>
+     * is much faster (since it uses char[] value directly) and should be used when no range is
+     * needed.
      *
      * @param src        source string for examination
      * @param sub        substring to find
@@ -73,8 +71,8 @@ public class StringTemplateParser {
     }
 
     /**
-     * Creates commonly used {@link StringTemplateParser.MacroResolver} that resolved
-     * macros in the provided map.
+     * Creates commonly used {@link StringTemplateParser.MacroResolver} that resolved macros in the
+     * provided map.
      */
     public static MacroResolver createMapMacroResolver(final Map map) {
         return new MacroResolver() {
@@ -95,10 +93,8 @@ public class StringTemplateParser {
     }
 
     /**
-     * Specifies if missing keys should be resolved at all,
-     * <code>true</code> by default.
-     * If <code>false</code> missing keys will be left as it were, i.e.
-     * they will not be replaced.
+     * Specifies if missing keys should be resolved at all, <code>true</code> by default. If
+     * <code>false</code> missing keys will be left as it were, i.e. they will not be replaced.
      */
     public void setReplaceMissingKey(boolean replaceMissingKey) {
         this.replaceMissingKey = replaceMissingKey;
@@ -109,8 +105,7 @@ public class StringTemplateParser {
     }
 
     /**
-     * Specifies replacement for missing keys. If <code>null</code>
-     * exception will be thrown.
+     * Specifies replacement for missing keys. If <code>null</code> exception will be thrown.
      */
     public void setMissingKeyReplacement(String missingKeyReplacement) {
         this.missingKeyReplacement = missingKeyReplacement;
@@ -121,9 +116,8 @@ public class StringTemplateParser {
     }
 
     /**
-     * Specifies if escaped values should be resolved. In special usecases,
-     * when the same string has to be processed more then once,
-     * this may be set to <code>false</code> so escaped values
+     * Specifies if escaped values should be resolved. In special usecases, when the same string has
+     * to be processed more then once, this may be set to <code>false</code> so escaped values
      * remains.
      */
     public void setResolveEscapes(boolean resolveEscapes) {
@@ -163,7 +157,6 @@ public class StringTemplateParser {
         this.escapeChar = escapeChar;
     }
 
-
     // ---------------------------------------------------------------- parse
 
     public boolean isParseValues() {
@@ -171,8 +164,8 @@ public class StringTemplateParser {
     }
 
     /**
-     * Defines if macro values has to be parsed, too.
-     * By default, macro values are returned as they are.
+     * Defines if macro values has to be parsed, too. By default, macro values are returned as they
+     * are.
      */
     public void setParseValues(boolean parseValues) {
         this.parseValues = parseValues;
@@ -226,7 +219,8 @@ public class StringTemplateParser {
             ndx += startLen;
             int ndx2 = template.indexOf(macroEnd, ndx);
             if (ndx2 == -1) {
-                throw new IllegalArgumentException("Invalid template, unclosed macro at: " + (ndx - startLen));
+                throw new IllegalArgumentException(
+                        "Invalid template, unclosed macro at: " + (ndx - startLen));
             }
 
             // detect inner macros, there is no escaping
@@ -275,7 +269,8 @@ public class StringTemplateParser {
                 i = ndx2 + endLen;
             } else {
                 // inner macro
-                template = template.substring(0, ndx1 - startLen) + value.toString() + template.substring(ndx2 + endLen);
+                template = template.substring(0, ndx1 - startLen) + value.toString() + template.substring(
+                        ndx2 + endLen);
                 len = template.length();
                 i = ndx - startLen;
             }
@@ -288,12 +283,9 @@ public class StringTemplateParser {
      */
     public interface MacroResolver {
         /**
-         * Resolves macro value for macro name founded in
-         * string template. <code>null</code> values will
+         * Resolves macro value for macro name founded in string template. <code>null</code> values will
          * be replaced with empty strings.
          */
         String resolve(String macroName);
-
     }
-
 }

@@ -8,16 +8,8 @@ package goja.core.libs;
 
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * <p> . </p>
@@ -35,7 +27,7 @@ public class Promise<V> implements Future<V>, Action<V> {
 
     List<Action<Promise<V>>> callbacks = Lists.newArrayList();
 
-    V         result    = null;
+    V result = null;
     Throwable exception = null;
 
     public static <T> Promise<List<T>> waitAll(final Promise<T>... promises) {
@@ -84,7 +76,8 @@ public class Promise<V> implements Future<V>, Action<V> {
             }
 
             @Override
-            public List<T> get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+            public List<T> get(long timeout, TimeUnit unit)
+                    throws InterruptedException, ExecutionException, TimeoutException {
                 waitAllLock.await(timeout, unit);
                 return get();
             }
@@ -163,7 +156,8 @@ public class Promise<V> implements Future<V>, Action<V> {
         return result;
     }
 
-    public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public V get(long timeout, TimeUnit unit)
+            throws InterruptedException, ExecutionException, TimeoutException {
         taskLock.await(timeout, unit);
         if (exception != null) {
             // The result of the promise is an exception - throw it

@@ -86,7 +86,6 @@ import java.util.Properties;
  */
 public class Goja extends JFinalConfig {
 
-
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Goja.class);
     public static boolean initlization = false;
     public static boolean started = false;
@@ -102,9 +101,7 @@ public class Goja extends JFinalConfig {
     private Routes _routes;
 
     /**
-     * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用,调用采用反射机制
-     * <p/>
-     * Reflect.on(Goja.class).call("initWithTest");
+     * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用,调用采用反射机制 <p/> Reflect.on(Goja.class).call("initWithTest");
      */
     static void initWithTest() {
 
@@ -127,7 +124,8 @@ public class Goja extends JFinalConfig {
         // dev_mode
         constants.setDevMode(GojaConfig.getApplicationMode().isDev());
         // fixed: render view has views//xxx.ftl
-        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, File.separator + "WEB-INF" + File.separator + "views");
+        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH,
+                File.separator + "WEB-INF" + File.separator + "views");
         constants.setBaseViewPath(viewPath);
 
         appName = GojaConfig.getAppName();
@@ -161,9 +159,11 @@ public class Goja extends JFinalConfig {
         }
         constants.setErrorRenderFactory(new GojaErrorRenderFactory());
 
-        constants.setMaxPostSize(GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
+        constants.setMaxPostSize(
+                GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
 
-        final String attachmentPath = GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "attachment");
+        final String attachmentPath =
+                GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "attachment");
         constants.setBaseUploadPath(attachmentPath);
         constants.setBaseDownloadPath(attachmentPath);
     }
@@ -181,7 +181,6 @@ public class Goja extends JFinalConfig {
 
         initDataSource(plugins);
 
-
         if (new File(PathKit.getRootClassPath() + File.separator + "ehcache.xml").exists()) {
             plugins.add(new EhCachePlugin());
         } else {
@@ -198,7 +197,8 @@ public class Goja extends JFinalConfig {
 
         final String mongo_host = GojaConfig.getProperty(GojaPropConst.MONGO_HOST, StringUtils.EMPTY);
         if (!Strings.isNullOrEmpty(mongo_host)) {
-            int mongo_port = GojaConfig.getPropertyToInt(GojaPropConst.MONGO_PORT, MongoPlugin.DEFAUL_PORT);
+            int mongo_port =
+                    GojaConfig.getPropertyToInt(GojaPropConst.MONGO_PORT, MongoPlugin.DEFAUL_PORT);
             String mongo_db = GojaConfig.getProperty(GojaPropConst.MONGO_DB, "test");
             String pkgs = GojaConfig.getProperty(GojaPropConst.MONGO_MODELS, MongoPlugin.DEFAULT_PKGS);
             final MongoPlugin mongodb = new MongoPlugin(mongo_host, mongo_port, mongo_db, pkgs);
@@ -209,14 +209,17 @@ public class Goja extends JFinalConfig {
         if (!Strings.isNullOrEmpty(redisConfig)) {
             final Properties redisConfigProp;
             final File configFolderFile = GojaConfig.getConfigFolderFile();
-            redisConfigProp = configFolderFile == null ? PropKit.use(redisConfig).getProperties() : PropKit.use(FileUtils.getFile(configFolderFile, redisConfig)).getProperties();
+            redisConfigProp = configFolderFile == null ? PropKit.use(redisConfig).getProperties()
+                    : PropKit.use(FileUtils.getFile(configFolderFile, redisConfig)).getProperties();
             String cacheNames = redisConfigProp.getProperty(GojaPropConst.REDIS_CACHES);
             if (!Strings.isNullOrEmpty(cacheNames)) {
                 List<String> cacheNameList = Func.COMMA_SPLITTER.splitToList(cacheNames);
                 for (String cacheName : cacheNameList) {
                     final String cacheRedistPort = redisConfigProp.getProperty(cacheName + ".port");
-                    final String cacheRedistHost = redisConfigProp.getProperty(cacheName + ".host", String.valueOf(Protocol.DEFAULT_PORT));
-                    int port = Strings.isNullOrEmpty(cacheRedistPort) ? Protocol.DEFAULT_PORT : MoreObjects.firstNonNull(Ints.tryParse(cacheRedistPort), Protocol.DEFAULT_PORT);
+                    final String cacheRedistHost = redisConfigProp.getProperty(cacheName + ".host",
+                            String.valueOf(Protocol.DEFAULT_PORT));
+                    int port = Strings.isNullOrEmpty(cacheRedistPort) ? Protocol.DEFAULT_PORT
+                            : MoreObjects.firstNonNull(Ints.tryParse(cacheRedistPort), Protocol.DEFAULT_PORT);
                     final RedisPlugin jedis = new RedisPlugin(cacheName, cacheRedistHost, port);
                     plugins.add(jedis);
                 }
@@ -224,35 +227,35 @@ public class Goja extends JFinalConfig {
         } else {
             final String redis_host = GojaConfig.getProperty(GojaPropConst.REDIS_HOST, StringUtils.EMPTY);
             if (!Strings.isNullOrEmpty(redis_host)) {
-                final String cacheName = GojaConfig.getProperty(GojaPropConst.REDIS_CACHENAME, "goja.redis.cache");
+                final String cacheName =
+                        GojaConfig.getProperty(GojaPropConst.REDIS_CACHENAME, "goja.redis.cache");
                 final String strProt = GojaConfig.getProperty(GojaPropConst.REDIS_PORT);
-                int port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT : MoreObjects.firstNonNull(Ints.tryParse(strProt), Protocol.DEFAULT_PORT);
+                int port = Strings.isNullOrEmpty(strProt) ? Protocol.DEFAULT_PORT
+                        : MoreObjects.firstNonNull(Ints.tryParse(strProt), Protocol.DEFAULT_PORT);
                 final RedisPlugin jedis = new RedisPlugin(cacheName, redis_host, port);
                 plugins.add(jedis);
             }
         }
 
-
-//        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
-//        if (plugins_clses != null && !plugins_clses.isEmpty()) {
-//            PluginBind pluginBind;
-//            for (Class plugin : plugins_clses) {
-//                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
-//                if (pluginBind != null) {
-//                    try {
-//                        plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
-//                    } catch (InstantiationException e) {
-//                        Logger.error("The plugin instance is error!", e);
-//                    } catch (IllegalAccessException e) {
-//                        Logger.error("The plugin instance is error!", e);
-//                    }
-//                }
-//            }
-//        }
+        //        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
+        //        if (plugins_clses != null && !plugins_clses.isEmpty()) {
+        //            PluginBind pluginBind;
+        //            for (Class plugin : plugins_clses) {
+        //                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
+        //                if (pluginBind != null) {
+        //                    try {
+        //                        plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
+        //                    } catch (InstantiationException e) {
+        //                        Logger.error("The plugin instance is error!", e);
+        //                    } catch (IllegalAccessException e) {
+        //                        Logger.error("The plugin instance is error!", e);
+        //                    }
+        //                }
+        //            }
+        //        }
 
         // Because the system itself the task of startup tasks, so the system task plugin must be the last to join the list
         plugins.add(new JobsPlugin());
-
     }
 
     @Override
@@ -264,13 +267,14 @@ public class Goja extends JFinalConfig {
                 URL config_url = com.google.common.io.Resources.getResource("syslog.json");
                 if (config_url != null) {
                     SysLogInterceptor sysLogInterceptor = new SysLogInterceptor();
-                    sysLogInterceptor = sysLogInterceptor.setLogProcesser((LogProcessor) log_percess_impl_cls.newInstance(), config_url.getPath());
+                    sysLogInterceptor =
+                            sysLogInterceptor.setLogProcesser((LogProcessor) log_percess_impl_cls.newInstance(),
+                                    config_url.getPath());
                     if (sysLogInterceptor != null) {
                         interceptors.add(sysLogInterceptor);
                     }
                 }
             }
-
         } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
             logger.error("Enable the system operation log interceptor abnormalities.", e);
         }
@@ -287,7 +291,8 @@ public class Goja extends JFinalConfig {
         handlers.add(new ContextPathHandler("ctx"));
         final boolean monitorDB = GojaConfig.getPropertyToBoolean(GojaPropConst.DB_MONITOR, false);
         if (monitorDB) {
-            final String view_url = GojaConfig.getProperty(GojaPropConst.DB_MONITOR_URL, "/druid/monitor");
+            final String view_url =
+                    GojaConfig.getProperty(GojaPropConst.DB_MONITOR_URL, "/druid/monitor");
 
             final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
                 @Override
@@ -297,27 +302,25 @@ public class Goja extends JFinalConfig {
                 }
             });
 
-
             handlers.add(dvh);
         }
 
-
-//        final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
-//        if (handler_clses != null && !handler_clses.isEmpty()) {
-//            HandlerBind handlerBind;
-//            for (Class handler : handler_clses) {
-//                handlerBind = (HandlerBind) handler.getAnnotation(HandlerBind.class);
-//                if (handlerBind != null) {
-//                    try {
-//                        handlers.add((com.jfinal.handler.Handler) handler.newInstance());
-//                    } catch (InstantiationException e) {
-//                        logger.error("The Handler instance is error!", e);
-//                    } catch (IllegalAccessException e) {
-//                        logger.error("The Handler instance is error!", e);
-//                    }
-//                }
-//            }
-//        }
+        //        final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
+        //        if (handler_clses != null && !handler_clses.isEmpty()) {
+        //            HandlerBind handlerBind;
+        //            for (Class handler : handler_clses) {
+        //                handlerBind = (HandlerBind) handler.getAnnotation(HandlerBind.class);
+        //                if (handlerBind != null) {
+        //                    try {
+        //                        handlers.add((com.jfinal.handler.Handler) handler.newInstance());
+        //                    } catch (InstantiationException e) {
+        //                        logger.error("The Handler instance is error!", e);
+        //                    } catch (IllegalAccessException e) {
+        //                        logger.error("The Handler instance is error!", e);
+        //                    }
+        //                }
+        //            }
+        //        }
     }
 
     @Override
@@ -337,7 +340,7 @@ public class Goja extends JFinalConfig {
                 }
             }
         }
-//        GojaConfig.clear();
+        //        GojaConfig.clear();
     }
 
     @Override
@@ -354,9 +357,9 @@ public class Goja extends JFinalConfig {
      */
     private void initDataSource(final Plugins plugins) {
 
-
         final boolean snakerFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_SNAKER, false);
-        final String snalkerDb = GojaConfig.getProperty(GojaPropConst.APP_SNAKER + ".db", DbKit.MAIN_CONFIG_NAME);
+        final String snalkerDb =
+                GojaConfig.getProperty(GojaPropConst.APP_SNAKER + ".db", DbKit.MAIN_CONFIG_NAME);
 
         final Map<String, Properties> dbConfig = GojaConfig.loadDBConfig(GojaConfig.getConfigProps());
         for (String db_config : dbConfig.keySet()) {
@@ -375,7 +378,6 @@ public class Goja extends JFinalConfig {
         if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLINXML, true)) {
             plugins.add(new SqlInXmlPlugin());
         }
-
     }
 
     /**
@@ -385,8 +387,8 @@ public class Goja extends JFinalConfig {
      * @param plugins    the jfinal plugins.
      * @param dbProp     数据库配置
      */
-    private DruidPlugin configDatabasePlugins(String configName, final Plugins plugins, Properties dbProp) {
-
+    private DruidPlugin configDatabasePlugins(String configName, final Plugins plugins,
+                                              Properties dbProp) {
 
         String dbUrl = dbProp.getProperty(GojaPropConst.DBURL),
                 username = dbProp.getProperty(GojaPropConst.DBUSERNAME),
@@ -432,15 +434,16 @@ public class Goja extends JFinalConfig {
             if (!Strings.isNullOrEmpty(initial_active)) {
                 druidPlugin.setMaxActive(Ints.tryParse(initial_active));
             }
-            final String timeBetweenEvictionRunsMillis = dbProp.getProperty(GojaPropConst.DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
+            final String timeBetweenEvictionRunsMillis =
+                    dbProp.getProperty(GojaPropConst.DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
             if (!Strings.isNullOrEmpty(timeBetweenEvictionRunsMillis)) {
                 druidPlugin.setTimeBetweenEvictionRunsMillis(Ints.tryParse(timeBetweenEvictionRunsMillis));
             }
-            final String minEvictableIdleTimeMillis = dbProp.getProperty(GojaPropConst.DB_MIN_EVICTABLE_IDLE_TIME_MILLIS);
+            final String minEvictableIdleTimeMillis =
+                    dbProp.getProperty(GojaPropConst.DB_MIN_EVICTABLE_IDLE_TIME_MILLIS);
             if (!Strings.isNullOrEmpty(minEvictableIdleTimeMillis)) {
                 druidPlugin.setMinEvictableIdleTimeMillis(Ints.tryParse(minEvictableIdleTimeMillis));
             }
-
 
             final WallFilter wall = new WallFilter();
             wall.setDbType(dbtype);
@@ -480,7 +483,6 @@ public class Goja extends JFinalConfig {
         return null;
     }
 
-
     /**
      * set freemarker variable.
      */
@@ -497,5 +499,4 @@ public class Goja extends JFinalConfig {
             config.setSharedVariable("shiro", new ShiroTags(config.getObjectWrapper()));
         }
     }
-
 }

@@ -19,8 +19,8 @@ public class FastCharBuffer implements CharSequence, Appendable {
     private int buffersCount;
     private int currentBufferIndex = -1;
     private char[] currentBuffer;
-    private int    offset;
-    private int    size;
+    private int offset;
+    private int size;
 
     /**
      * Creates a new <code>char</code> buffer. The buffer capacity is

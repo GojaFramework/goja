@@ -49,7 +49,7 @@ public final class GojaConfig {
     /**
      * 身份验证配置文件
      */
-    private static String  appSecurityConfig;
+    private static String appSecurityConfig;
 
     /**
      * 系统版本
@@ -113,9 +113,11 @@ public final class GojaConfig {
         if (!Strings.isNullOrEmpty(configFolder)) {
             configFolderFile = new File(configFolder);
             if (!configFolderFile.exists()) {
-                throw new RuntimeException("The application config folder " + configFolder + " is not found!");
+                throw new RuntimeException(
+                        "The application config folder " + configFolder + " is not found!");
             }
-            configProps = PropKit.use(FileUtils.getFile(configFolderFile, "application.conf")).getProperties();
+            configProps =
+                    PropKit.use(FileUtils.getFile(configFolderFile, "application.conf")).getProperties();
         } else {
             configProps = p;
         }
@@ -127,7 +129,11 @@ public final class GojaConfig {
             if (!Strings.isNullOrEmpty(configFolder)) {
                 final File securityFile = FileUtils.getFile(configFolderFile, appSecurityConfig);
                 if (!securityFile.exists()) {
-                    throw new RuntimeException("The app security config file [ " + appSecurityConfig + "] not found in [" + configFolder + "]!");
+                    throw new RuntimeException("The app security config file [ "
+                            + appSecurityConfig
+                            + "] not found in ["
+                            + configFolder
+                            + "]!");
                 }
             }
         }
@@ -137,12 +143,12 @@ public final class GojaConfig {
         defaultDBUrl = getProperty(GojaPropConst.DBURL);
         defaultDBUsername = getProperty(GojaPropConst.DBUSERNAME, "root");
         defaultDBPassword = getProperty(GojaPropConst.DBPASSWORD, "123456");
-        defaultViewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, File.separator + "WEB-INF" + File.separator + "views");
+        defaultViewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH,
+                File.separator + "WEB-INF" + File.separator + "views");
 
         appPackPrefix = GojaConfig.getProperty(GojaPropConst.APP_PACKAGE_PREFIX, "app");
         initialize = true;
     }
-
 
     public static String getDefaultViewPath() {
         return defaultViewPath;
@@ -202,7 +208,6 @@ public final class GojaConfig {
         return defaultDBPassword;
     }
 
-
     public static File getConfigFolderFile() {
         return configFolderFile;
     }
@@ -218,7 +223,7 @@ public final class GojaConfig {
                 if (last_idx > 2) {
                     // like db.second.url
                     String config_name = _key.substring(_key.indexOf(StringPool.DOT) + 1, last_idx);
-                    if(logger.isDebugEnabled()){
+                    if (logger.isDebugEnabled()) {
                         logger.debug("the db config is {}", config_name);
                     }
                     Properties db_config_props = dbConfigs.get(config_name);
@@ -228,7 +233,6 @@ public final class GojaConfig {
                     }
                     _key = _key.replace(StringPool.DOT + config_name, StringPool.EMPTY);
                     db_config_props.put(_key, value);
-
                 } else {
                     Properties db_main_props = dbConfigs.get("main");
                     if (db_main_props == null) {
@@ -239,19 +243,17 @@ public final class GojaConfig {
                 }
             }
         }
-        return  dbConfigs;
+        return dbConfigs;
     }
 
     /**
      * 重新加载配置文件
      */
-//    public static void reload() {
-//        configProps.remove();
-//        clear();
-//        readConf();
-//    }
-
-
+    //    public static void reload() {
+    //        configProps.remove();
+    //        clear();
+    //        readConf();
+    //    }
 
     /**
      * 如果属性文件为空或者没有内容，则返回true
@@ -271,8 +273,6 @@ public final class GojaConfig {
     public static Properties getConfigProps() {
         return configProps;
     }
-
-
 
     public static String getProperty(String key) {
         if (checkNullOrEmpty(configProps)) {
@@ -294,8 +294,9 @@ public final class GojaConfig {
             return null;
         }
         String resultStr = configProps.getProperty(key);
-        if (resultStr != null)
+        if (resultStr != null) {
             resultInt = Ints.tryParse(resultStr);
+        }
         return resultInt;
     }
 
@@ -310,10 +311,11 @@ public final class GojaConfig {
         String resultStr = configProps.getProperty(key);
         Boolean resultBool = null;
         if (resultStr != null) {
-            if (resultStr.trim().equalsIgnoreCase("true"))
+            if (resultStr.trim().equalsIgnoreCase("true")) {
                 resultBool = true;
-            else if (resultStr.trim().equalsIgnoreCase("false"))
+            } else if (resultStr.trim().equalsIgnoreCase("false")) {
                 resultBool = false;
+            }
         }
         return resultBool;
     }
@@ -322,7 +324,6 @@ public final class GojaConfig {
         Boolean result = getPropertyToBoolean(key);
         return result != null ? result : defaultValue;
     }
-
 
     /**
      * 取得系统的运行模式
@@ -334,10 +335,9 @@ public final class GojaConfig {
         return ApplicationMode.valueOf(mode);
     }
 
-
     public static List<String> getAppJars() {
         String appJarsConfigStr = getProperty("app.jars");
-        if(Strings.isNullOrEmpty(appJarsConfigStr)){
+        if (Strings.isNullOrEmpty(appJarsConfigStr)) {
             return Collections.EMPTY_LIST;
         } else {
             return Func.COMMA_SPLITTER.splitToList(appJarsConfigStr);
@@ -348,10 +348,7 @@ public final class GojaConfig {
         return configProps.containsKey(key);
     }
 
-
-
     public static Object get(String key) {
         return configProps.get(key);
     }
-
 }

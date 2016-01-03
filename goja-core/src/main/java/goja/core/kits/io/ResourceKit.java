@@ -6,11 +6,11 @@
 package goja.core.kits.io;
 
 import com.google.common.base.Preconditions;
-import goja.core.StringPool;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+import goja.core.StringPool;
 import goja.core.kits.reflect.ClassKit;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,15 +18,44 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.Map;
 import java.util.Properties;
 
 public class ResourceKit {
+
+    /**
+     * Pseudo URL prefix for loading from the class path: "classpath:"
+     */
+    public static final String CLASSPATH_URL_PREFIX = "classpath:";
+    /**
+     * URL prefix for loading from the file system: "file:"
+     */
+    public static final String FILE_URL_PREFIX = "file:";
+    /**
+     * URL protocol for a file in the file system: "file"
+     */
+    public static final String URL_PROTOCOL_FILE = "file";
+    /**
+     * URL protocol for an entry from a jar file: "jar"
+     */
+    public static final String URL_PROTOCOL_JAR = "jar";
+    /**
+     * URL protocol for an entry from a zip file: "zip"
+     */
+    public static final String URL_PROTOCOL_ZIP = "zip";
+    /**
+     * URL protocol for an entry from a JBoss jar file: "vfszip"
+     */
+    public static final String URL_PROTOCOL_VFSZIP = "vfszip";
+    /**
+     * URL protocol for an entry from a WebSphere jar file: "wsjar"
+     */
+    public static final String URL_PROTOCOL_WSJAR = "wsjar";
+    /**
+     * Separator between JAR URL and file path within the JAR
+     */
+    public static final String JAR_URL_SEPARATOR = "!/";
 
     private ResourceKit() {
     }
@@ -56,52 +85,9 @@ public class ResourceKit {
         }
     }
 
-
-
     /**
-     * Pseudo URL prefix for loading from the class path: "classpath:"
-     */
-    public static final String CLASSPATH_URL_PREFIX = "classpath:";
-
-    /**
-     * URL prefix for loading from the file system: "file:"
-     */
-    public static final String FILE_URL_PREFIX = "file:";
-
-    /**
-     * URL protocol for a file in the file system: "file"
-     */
-    public static final String URL_PROTOCOL_FILE = "file";
-
-    /**
-     * URL protocol for an entry from a jar file: "jar"
-     */
-    public static final String URL_PROTOCOL_JAR = "jar";
-
-    /**
-     * URL protocol for an entry from a zip file: "zip"
-     */
-    public static final String URL_PROTOCOL_ZIP = "zip";
-
-    /**
-     * URL protocol for an entry from a JBoss jar file: "vfszip"
-     */
-    public static final String URL_PROTOCOL_VFSZIP = "vfszip";
-
-    /**
-     * URL protocol for an entry from a WebSphere jar file: "wsjar"
-     */
-    public static final String URL_PROTOCOL_WSJAR = "wsjar";
-
-    /**
-     * Separator between JAR URL and file path within the JAR
-     */
-    public static final String JAR_URL_SEPARATOR = "!/";
-
-
-    /**
-     * Return whether the given resource location is a URL:
-     * either a special "classpath" pseudo URL or a standard URL.
+     * Return whether the given resource location is a URL: either a special "classpath" pseudo URL or
+     * a standard URL.
      *
      * @param resourceLocation the location String to check
      * @return whether the location qualifies as a URL
@@ -124,12 +110,11 @@ public class ResourceKit {
     }
 
     /**
-     * Resolve the given resource location to a {@code java.net.URL}.
-     * <p>Does not check whether the URL actually exists; simply returns
-     * the URL that the given location would correspond to.
+     * Resolve the given resource location to a {@code java.net.URL}. <p>Does not check whether the
+     * URL actually exists; simply returns the URL that the given location would correspond to.
      *
-     * @param resourceLocation the resource location to resolve: either a
-     *                         "classpath:" pseudo URL, a "file:" URL, or a plain file path
+     * @param resourceLocation the resource location to resolve: either a "classpath:" pseudo URL, a
+     *                         "file:" URL, or a plain file path
      * @return a corresponding URL object
      * @throws FileNotFoundException if the resource cannot be resolved to a URL
      */
@@ -160,16 +145,14 @@ public class ResourceKit {
     }
 
     /**
-     * Resolve the given resource location to a {@code java.io.File},
-     * i.e. to a file in the file system.
-     * <p>Does not check whether the file actually exists; simply returns
-     * the File that the given location would correspond to.
+     * Resolve the given resource location to a {@code java.io.File}, i.e. to a file in the file
+     * system. <p>Does not check whether the file actually exists; simply returns the File that the
+     * given location would correspond to.
      *
-     * @param resourceLocation the resource location to resolve: either a
-     *                         "classpath:" pseudo URL, a "file:" URL, or a plain file path
+     * @param resourceLocation the resource location to resolve: either a "classpath:" pseudo URL, a
+     *                         "file:" URL, or a plain file path
      * @return a corresponding File object
-     * @throws FileNotFoundException if the resource cannot be resolved to
-     *                               a file in the file system
+     * @throws FileNotFoundException if the resource cannot be resolved to a file in the file system
      */
     public static File getFile(String resourceLocation) throws FileNotFoundException {
         Preconditions.checkNotNull(resourceLocation, "Resource location must not be null");
@@ -195,28 +178,24 @@ public class ResourceKit {
     }
 
     /**
-     * Resolve the given resource URL to a {@code java.io.File},
-     * i.e. to a file in the file system.
+     * Resolve the given resource URL to a {@code java.io.File}, i.e. to a file in the file system.
      *
      * @param resourceUrl the resource URL to resolve
      * @return a corresponding File object
-     * @throws FileNotFoundException if the URL cannot be resolved to
-     *                               a file in the file system
+     * @throws FileNotFoundException if the URL cannot be resolved to a file in the file system
      */
     public static File getFile(URL resourceUrl) throws FileNotFoundException {
         return getFile(resourceUrl, "URL");
     }
 
     /**
-     * Resolve the given resource URL to a {@code java.io.File},
-     * i.e. to a file in the file system.
+     * Resolve the given resource URL to a {@code java.io.File}, i.e. to a file in the file system.
      *
      * @param resourceUrl the resource URL to resolve
-     * @param description a description of the original resource that
-     *                    the URL was created for (for example, a class path location)
+     * @param description a description of the original resource that the URL was created for (for
+     *                    example, a class path location)
      * @return a corresponding File object
-     * @throws FileNotFoundException if the URL cannot be resolved to
-     *                               a file in the file system
+     * @throws FileNotFoundException if the URL cannot be resolved to a file in the file system
      */
     public static File getFile(URL resourceUrl, String description) throws FileNotFoundException {
         Preconditions.checkNotNull(resourceUrl, "Resource URL must not be null");
@@ -235,28 +214,24 @@ public class ResourceKit {
     }
 
     /**
-     * Resolve the given resource URI to a {@code java.io.File},
-     * i.e. to a file in the file system.
+     * Resolve the given resource URI to a {@code java.io.File}, i.e. to a file in the file system.
      *
      * @param resourceUri the resource URI to resolve
      * @return a corresponding File object
-     * @throws FileNotFoundException if the URL cannot be resolved to
-     *                               a file in the file system
+     * @throws FileNotFoundException if the URL cannot be resolved to a file in the file system
      */
     public static File getFile(URI resourceUri) throws FileNotFoundException {
         return getFile(resourceUri, "URI");
     }
 
     /**
-     * Resolve the given resource URI to a {@code java.io.File},
-     * i.e. to a file in the file system.
+     * Resolve the given resource URI to a {@code java.io.File}, i.e. to a file in the file system.
      *
      * @param resourceUri the resource URI to resolve
-     * @param description a description of the original resource that
-     *                    the URI was created for (for example, a class path location)
+     * @param description a description of the original resource that the URI was created for (for
+     *                    example, a class path location)
      * @return a corresponding File object
-     * @throws FileNotFoundException if the URL cannot be resolved to
-     *                               a file in the file system
+     * @throws FileNotFoundException if the URL cannot be resolved to a file in the file system
      */
     public static File getFile(URI resourceUri, String description) throws FileNotFoundException {
         Preconditions.checkNotNull(resourceUri, "Resource URI must not be null");
@@ -270,8 +245,8 @@ public class ResourceKit {
     }
 
     /**
-     * Determine whether the given URL points to a resource in the file system,
-     * that is, has protocol "file" or "vfs".
+     * Determine whether the given URL points to a resource in the file system, that is, has protocol
+     * "file" or "vfs".
      *
      * @param url the URL to check
      * @return whether the URL has been identified as a file system URL
@@ -282,22 +257,22 @@ public class ResourceKit {
     }
 
     /**
-     * Determine whether the given URL points to a resource in a jar file,
-     * that is, has protocol "jar", "zip", "wsjar" or "code-source".
-     * <p>"zip" and "wsjar" are used by WebLogic Server and WebSphere, respectively,
-     * but can be treated like jar files.
+     * Determine whether the given URL points to a resource in a jar file, that is, has protocol
+     * "jar", "zip", "wsjar" or "code-source". <p>"zip" and "wsjar" are used by WebLogic Server and
+     * WebSphere, respectively, but can be treated like jar files.
      *
      * @param url the URL to check
      * @return whether the URL has been identified as a JAR URL
      */
     public static boolean isJarURL(URL url) {
         String up = url.getProtocol();
-        return (URL_PROTOCOL_JAR.equals(up) || URL_PROTOCOL_ZIP.equals(up) || URL_PROTOCOL_WSJAR.equals(up));
+        return (URL_PROTOCOL_JAR.equals(up) || URL_PROTOCOL_ZIP.equals(up) || URL_PROTOCOL_WSJAR.equals(
+                up));
     }
 
     /**
-     * Extract the URL for the actual jar file from the given URL
-     * (which may point to a resource in a jar file or to a jar file itself).
+     * Extract the URL for the actual jar file from the given URL (which may point to a resource in a
+     * jar file or to a jar file itself).
      *
      * @param jarUrl the original URL
      * @return the URL for the actual jar file
@@ -324,10 +299,9 @@ public class ResourceKit {
     }
 
     /**
-     * Create a URI instance for the given URL,
-     * replacing spaces with "%20" URI encoding first.
-     * <p>Furthermore, this method works on JDK 1.4 as well,
-     * in contrast to the {@code URL.toURI()} method.
+     * Create a URI instance for the given URL, replacing spaces with "%20" URI encoding first.
+     * <p>Furthermore, this method works on JDK 1.4 as well, in contrast to the {@code URL.toURI()}
+     * method.
      *
      * @param url the URL to convert into a URI instance
      * @return the URI instance
@@ -339,8 +313,8 @@ public class ResourceKit {
     }
 
     /**
-     * Create a URI instance for the given location String,
-     * replacing spaces with "%20" URI encoding first.
+     * Create a URI instance for the given location String, replacing spaces with "%20" URI encoding
+     * first.
      *
      * @param location the location String to convert into a URI instance
      * @return the URI instance
@@ -351,9 +325,8 @@ public class ResourceKit {
     }
 
     /**
-     * Set the {@link URLConnection#setUseCaches "useCaches"} flag on the
-     * given connection, preferring {@code false} but leaving the
-     * flag at {@code true} for JNLP based resources.
+     * Set the {@link URLConnection#setUseCaches "useCaches"} flag on the given connection, preferring
+     * {@code false} but leaving the flag at {@code true} for JNLP based resources.
      *
      * @param con the URLConnection to set the flag on
      */

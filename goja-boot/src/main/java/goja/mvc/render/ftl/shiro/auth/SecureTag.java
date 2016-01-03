@@ -7,12 +7,7 @@
 package goja.mvc.render.ftl.shiro.auth;
 
 import freemarker.core.Environment;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateDirectiveBody;
-import freemarker.template.TemplateDirectiveModel;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import freemarker.template.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -32,10 +27,14 @@ import java.util.Map;
  */
 public abstract class SecureTag implements TemplateDirectiveModel {
 
-    /** 日志信息 */
+    /**
+     * 日志信息
+     */
     protected final Logger _logger;
 
-    /** 构造函数，初始化日志 */
+    /**
+     * 构造函数，初始化日志
+     */
     protected SecureTag() {
         _logger = LoggerFactory.getLogger(getClass());
     }

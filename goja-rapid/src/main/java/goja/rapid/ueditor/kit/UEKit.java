@@ -9,15 +9,15 @@ package goja.rapid.ueditor.kit;
  */
 public class UEKit {
 
-    public static String toUnicode ( String input ) {
+    public static String toUnicode(String input) {
 
         StringBuilder builder = new StringBuilder();
         char[] chars = input.toCharArray();
 
-        for ( char ch : chars ) {
+        for (char ch : chars) {
 
-            if ( ch < 256 ) {
-                builder.append( ch );
+            if (ch < 256) {
+                builder.append(ch);
             } else {
                 builder.append("\\u").append(Integer.toHexString(ch & 0xffff));
             }

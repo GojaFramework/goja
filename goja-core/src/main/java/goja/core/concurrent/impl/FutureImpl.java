@@ -25,11 +25,6 @@ public class FutureImpl<T> implements Future<T> {
         done = true;
     }
 
-    public void setError(Throwable error) {
-        this.error = error;
-        done = true;
-    }
-
     public T get() {
         try {
             return get(Long.MAX_VALUE);
@@ -64,6 +59,11 @@ public class FutureImpl<T> implements Future<T> {
 
     public Throwable getError() {
         return error;
+    }
+
+    public void setError(Throwable error) {
+        this.error = error;
+        done = true;
     }
 
     @Override

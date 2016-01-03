@@ -20,9 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-19 22:18
@@ -88,7 +86,6 @@ public class ClassBox {
 
     public void clearBox() {
         CLASS_BOX_MAP.clear();
-
     }
 
     /**

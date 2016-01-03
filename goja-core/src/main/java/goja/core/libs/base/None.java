@@ -16,7 +16,7 @@ import java.util.Iterator;
  * @version 1.0 2014-09-11 13:26
  * @since JDK 1.6
  */
- class None<T> extends Option<T>{
+class None<T> extends Option<T> {
 
     @Override
     public boolean isDefined() {

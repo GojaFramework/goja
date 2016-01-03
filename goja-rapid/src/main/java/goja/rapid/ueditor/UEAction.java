@@ -28,7 +28,6 @@ import java.util.List;
  */
 enum UEAction {
 
-
     CONFIG
 
             {
@@ -44,11 +43,7 @@ enum UEAction {
             },
 
     /**
-     * 上传图片
-     * <p/>
-     * 返回示例：
-     * <p/>
-     * {"original":"demo.jpg","name":"demo.jpg","url":"\/server\/ueditor\/upload\/image\/demo.jpg",UEConst.SIZE:"99697",
+     * 上传图片 <p/> 返回示例： <p/> {"original":"demo.jpg","name":"demo.jpg","url":"\/server\/ueditor\/upload\/image\/demo.jpg",UEConst.SIZE:"99697",
      * "type":".jpg","state":"SUCCESS"}
      */
     UPLOADIMAGE
@@ -135,32 +130,13 @@ enum UEAction {
             },
 
     /**
-     * 列出指定目录下的图片
-     * <p/>
-     * imageManagerActionName {String} [默认值："listimage"] //执行图片管理的action名称
+     * 列出指定目录下的图片 <p/> imageManagerActionName {String} [默认值："listimage"] //执行图片管理的action名称
      * imageManagerListPath {String} [默认值："/ueditor/php/upload/image/"] //指定要列出图片的目录
-     * imageManagerListSize {String} [默认值：20] //每次列出文件数量
-     * imageManagerUrlPrefix {String} [默认值：""] //图片访问路径前缀
-     * imageManagerInsertAlign {String} [默认值："none"] //插入的图片浮动方式
-     * imageManagerAllowFiles {Array}, //列出的文件类型
-     * <p/>
-     * example:
-     * <p/>
-     * {
-     * "state": "SUCCESS",
-     * "list": [
-     * {
-     * "url": "/server/ueditor/upload/image/3 2.jpg",
-     * "mtime": 1400203383
-     * },
-     * {
-     * "url": "/server/ueditor/upload/image/1.jpg",
-     * "mtime": 1400203383
-     * }
-     * ],
-     * "start": "0",
-     * "total": 29
-     * }
+     * imageManagerListSize {String} [默认值：20] //每次列出文件数量 imageManagerUrlPrefix {String} [默认值：""]
+     * //图片访问路径前缀 imageManagerInsertAlign {String} [默认值："none"] //插入的图片浮动方式 imageManagerAllowFiles
+     * {Array}, //列出的文件类型 <p/> example: <p/> { "state": "SUCCESS", "list": [ { "url":
+     * "/server/ueditor/upload/image/3 2.jpg", "mtime": 1400203383 }, { "url":
+     * "/server/ueditor/upload/image/1.jpg", "mtime": 1400203383 } ], "start": "0", "total": 29 }
      */
     LISTIMAGE
 
@@ -178,35 +154,20 @@ enum UEAction {
                     final UEConfig ueConfig = UEConfig.me;
 
                     return new FileManager(ueConfig.getImageManagerListPath(),
-                                           ueConfig.getImageManagerAllowFiles(),
-                                           ueConfig.getImageManagerListSize())
+                            ueConfig.getImageManagerAllowFiles(),
+                            ueConfig.getImageManagerListSize())
                             .listFile(index)
                             .toJSONString();
                 }
             },
 
     /**
-     * 列出指定目录下的文件
-     * <p/>
-     * fileManagerActionName {String} [默认值："listfile"] //执行文件管理的action名称
+     * 列出指定目录下的文件 <p/> fileManagerActionName {String} [默认值："listfile"] //执行文件管理的action名称
      * fileManagerListPath {String} [默认值："/ueditor/php/upload/file/"] //指定要列出文件的目录
-     * fileManagerUrlPrefix {String} [默认值：""] //文件访问路径前缀
-     * fileManagerListSize {String} [默认值：20] //每次列出文件数量
-     * fileManagerAllowFiles {Array} //列出的文件类型
-     * <p/>
-     * 返回示例 ：
-     * <p/>
-     * {
-     * "state": "SUCCESS",
-     * "list": [
-     * {
-     * "url": "/server/ueditor/upload/file/7.pptx",
-     * "mtime": 1400203383
-     * }
-     * ],
-     * "start": "0",
-     * "total": 7
-     * }
+     * fileManagerUrlPrefix {String} [默认值：""] //文件访问路径前缀 fileManagerListSize {String} [默认值：20]
+     * //每次列出文件数量 fileManagerAllowFiles {Array} //列出的文件类型 <p/> 返回示例 ： <p/> { "state": "SUCCESS",
+     * "list": [ { "url": "/server/ueditor/upload/file/7.pptx", "mtime": 1400203383 } ], "start": "0",
+     * "total": 7 }
      */
     LISTFILE
 
@@ -232,19 +193,14 @@ enum UEAction {
                 }
             };
 
-
-    public abstract String invoke();
-
-    public abstract String invoke(Controller controller);
-
-
     /**
      * @param controller 请求控制器
      * @param ueConfig   UE配置
      * @param image_flag 是否是上传图片，true表示是
      * @return 请求状态
      */
-    private static State storageUploadFile(Controller controller, final UEConfig ueConfig, boolean image_flag) {
+    private static State storageUploadFile(Controller controller, final UEConfig ueConfig,
+                                           boolean image_flag) {
         final UploadFile uploadFile = controller.getFile(ueConfig.getImageFieldName());
         if (uploadFile == null) {
             return new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
@@ -253,7 +209,8 @@ enum UEAction {
             try {
                 String originFileName = uploadFile.getOriginalFileName();
                 String suffix = StringPool.DOT + Files.getFileExtension(originFileName);
-                final List<String> allowFiles = image_flag ? ueConfig.getImageAllowFiles() : ueConfig.getFileAllowFiles();
+                final List<String> allowFiles =
+                        image_flag ? ueConfig.getImageAllowFiles() : ueConfig.getFileAllowFiles();
                 if (!allowFiles.contains(suffix)) {
                     return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
                 }
@@ -267,8 +224,8 @@ enum UEAction {
 
                 State storageState = StorageManager
                         .saveFileByInputStream(fileInputStream,
-                                               savePath,
-                                               image_flag ? ueConfig.getImageMaxSize() : ueConfig.getFileMaxSize());
+                                savePath,
+                                image_flag ? ueConfig.getImageMaxSize() : ueConfig.getFileMaxSize());
                 if (storageState.isSuccess()) {
                     final String url = PathFormatKit.format(savePath);
                     storageState.putInfo(UEConst.URL, url);
@@ -287,7 +244,6 @@ enum UEAction {
         }
     }
 
-
     /**
      * @param content Base64图片字符串
      * @return 存储状态
@@ -305,7 +261,8 @@ enum UEAction {
 
         String suffix = ".jpg";
 
-        String savePath = PathFormatKit.parse(config.getScrawlPathFormat(), config.getScrawlFieldName());
+        String savePath =
+                PathFormatKit.parse(config.getScrawlPathFormat(), config.getScrawlFieldName());
 
         savePath = savePath + suffix;
 
@@ -320,5 +277,8 @@ enum UEAction {
         return storageState;
     }
 
+    public abstract String invoke();
+
+    public abstract String invoke(Controller controller);
 
 }

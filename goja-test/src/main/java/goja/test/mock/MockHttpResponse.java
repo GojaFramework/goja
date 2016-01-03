@@ -86,15 +86,30 @@ public class MockHttpResponse implements HttpServletResponse {
     }
 
     @Override
+    public void setBufferSize(int arg0) {
+
+    }
+
+    @Override
     public String getCharacterEncoding() {
 
         return null;
     }
 
     @Override
+    public void setCharacterEncoding(String arg0) {
+
+    }
+
+    @Override
     public String getContentType() {
 
         return null;
+    }
+
+    @Override
+    public void setContentType(String arg0) {
+
     }
 
     @Override
@@ -122,6 +137,11 @@ public class MockHttpResponse implements HttpServletResponse {
     }
 
     @Override
+    public void setLocale(Locale arg0) {
+
+    }
+
+    @Override
     public ServletOutputStream getOutputStream() throws IOException {
         // OutputStream os = new FileOutputStream(new File("/home/kid/mock"));
         // return new MockServletOutputStream(os);
@@ -132,6 +152,11 @@ public class MockHttpResponse implements HttpServletResponse {
     public int getStatus() {
 
         return 0;
+    }
+
+    @Override
+    public void setStatus(int arg0) {
+
     }
 
     @Override
@@ -172,22 +197,7 @@ public class MockHttpResponse implements HttpServletResponse {
     }
 
     @Override
-    public void setBufferSize(int arg0) {
-
-    }
-
-    @Override
-    public void setCharacterEncoding(String arg0) {
-
-    }
-
-    @Override
     public void setContentLength(int arg0) {
-
-    }
-
-    @Override
-    public void setContentType(String arg0) {
 
     }
 
@@ -203,16 +213,6 @@ public class MockHttpResponse implements HttpServletResponse {
 
     @Override
     public void setIntHeader(String arg0, int arg1) {
-
-    }
-
-    @Override
-    public void setLocale(Locale arg0) {
-
-    }
-
-    @Override
-    public void setStatus(int arg0) {
 
     }
 

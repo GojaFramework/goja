@@ -16,7 +16,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * A job is an asynchronously executed unit of work
  *
@@ -24,13 +23,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class Job<V> extends Invoker.Invocation implements Callable<V> {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Job.class);
-
     public static final String invocationType = "GojaJob";
-
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Job.class);
     protected ExecutorService executor;
 
-    protected long    lastRun  = 0;
+    protected long lastRun = 0;
     protected boolean wasError = false;
 
     protected Throwable lastException = null;
@@ -93,7 +90,6 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
         return smartFuture;
     }
 
-
     private Callable<V> getJobCallingCallable(final Promise<V> smartFuture) {
         return new Callable<V>() {
             public V call() throws Exception {
@@ -112,7 +108,6 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
             }
         };
     }
-
 
     /**
      * Run this job every n seconds
@@ -179,6 +174,4 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
     public String toString() {
         return this.getClass().getName();
     }
-
-
 }

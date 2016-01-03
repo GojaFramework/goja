@@ -29,8 +29,10 @@ import java.util.Map;
  */
 public class DirectiveKit {
 
-    /** override的标记 */
-    public static final String BLOCK                 = "__ftl_override__";
+    /**
+     * override的标记
+     */
+    public static final String BLOCK = "__ftl_override__";
     public static final String OVERRIDE_CURRENT_NODE = "__ftl_override_current_node";
 
     /**

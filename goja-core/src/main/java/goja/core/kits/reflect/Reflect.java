@@ -8,13 +8,7 @@ package goja.core.kits.reflect;
 import com.google.common.collect.Maps;
 import goja.core.exceptions.ReflectException;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -32,7 +26,7 @@ import java.util.Map;
  * // Invoke methods using the call() method:
  * .call("toString")
  * // Retrieve the wrapped object
- *
+ * <p/>
  * @author Lukas Eder
  */
 public class Reflect {
@@ -65,7 +59,7 @@ public class Reflect {
      *
      * @param o      object to match
      * @param target target class
-     * @return            <code>true</code> if object is an instance of target class
+     * @return <code>true</code> if object is an instance of target class
      */
     public static boolean isInstanceOf(Object o, Class target) {
         return isSubclass(o.getClass(), target);

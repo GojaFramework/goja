@@ -37,14 +37,13 @@ import static goja.core.StringPool.SPACE;
  */
 public class EuiDataGrid {
 
-    public static final DataGridRsp EMPTY_DATAGRID = new DataGridRsp.Builder().rows(Collections.EMPTY_LIST).total(0).build();
+    public static final DataGridRsp EMPTY_DATAGRID =
+            new DataGridRsp.Builder().rows(Collections.EMPTY_LIST).total(0).build();
     public static final String EASYUI_DATAGRID = ".easyui.datagrid";
-
+    private static final Logger logger = LoggerFactory.getLogger(EuiDataGrid.class);
 
     private EuiDataGrid() {
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(EuiDataGrid.class);
 
     public static Optional<DataGridReq> req(HttpServletRequest request) {
         if (request != null) {
@@ -91,43 +90,54 @@ public class EuiDataGrid {
                             String name = param_array[1];
                             String condition = param_array.length == 2 ? Condition.EQ.toString() : param_array[2];
                             Condition query_condition
-                                    = Strings.isNullOrEmpty(condition) ? Condition.EQ : Condition.valueOf(condition.toUpperCase());
+                                    = Strings.isNullOrEmpty(condition) ? Condition.EQ
+                                    : Condition.valueOf(condition.toUpperCase());
                             switch (query_condition) {
                                 case BETWEEN:
 
                                     if (StringUtils.startsWith(req_val, "date-")) {
                                         //需要转让为日期 示例 date-2015-10-10~2015-10-10 或者 date-2015-10-10 12:12:12~2015-10-10 12:12:12
-                                        final String realValue = StringUtils.replace(req_val, "date-", StringPool.EMPTY);
+                                        final String realValue =
+                                                StringUtils.replace(req_val, "date-", StringPool.EMPTY);
                                         String[] dataValues = StringUtils.split(realValue, "~");
                                         try {
-                                            final Date startDate = DateUtils.parseDate(dataValues[0], DateFormatter.YYYY_MM_DD, DateFormatter.YYYY_MM_DD_HH_MM_SS);
-                                            final Date endDate = DateUtils.parseDate(dataValues[1], DateFormatter.YYYY_MM_DD, DateFormatter.YYYY_MM_DD_HH_MM_SS);
-                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition, new Date[]{startDate, endDate}));
+                                            final Date startDate =
+                                                    DateUtils.parseDate(dataValues[0], DateFormatter.YYYY_MM_DD,
+                                                            DateFormatter.YYYY_MM_DD_HH_MM_SS);
+                                            final Date endDate =
+                                                    DateUtils.parseDate(dataValues[1], DateFormatter.YYYY_MM_DD,
+                                                            DateFormatter.YYYY_MM_DD_HH_MM_SS);
+                                            _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                                    new Date[]{startDate, endDate}));
                                         } catch (ParseException e) {
                                             logger.error("日期转换出错！", e);
                                         }
                                     } else {
                                         String[] dataValues = StringUtils.split(req_val, "~");
-                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition, new String[]{dataValues[0], dataValues[1]}));
+                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                                new String[]{dataValues[0], dataValues[1]}));
                                     }
 
                                     break;
                                 case LIKE:
-                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition, Strs.like(req_val)));
+                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                            Strs.like(req_val)));
                                     break;
                                 case LLIKE:
-                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition, Strs.llike(req_val)));
+                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                            Strs.llike(req_val)));
                                     break;
                                 case RLIKE:
-                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition, Strs.rlike(req_val)));
+                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                            Strs.rlike(req_val)));
                                     break;
                                 default:
-                                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition, req_val));
+                                    _params.add(
+                                            Triplet.<String, Condition, Object>with(name, query_condition, req_val));
                             }
                         }
                     }
                 }
-
             }
 
             builder.params(_params);
@@ -136,7 +146,6 @@ public class EuiDataGrid {
 
         return Optional.absent();
     }
-
 
     public static DataGridRsp rsp(DataGridReq req, Class<? extends Model> model) {
 
@@ -152,29 +161,23 @@ public class EuiDataGrid {
 
         String sql_columns = "SELECT " + StringUtils.join(columnTypeMap.keySet(), COMMA);
 
-
         StringBuilder where = new StringBuilder(" FROM ");
         where.append(tableName).append(SPACE);
-
 
         final List<Triplet<String, Condition, Object>> custom_params = req.params;
         final List<Object> params = Lists.newArrayList();
         DTDao.appendWhereSql(params, where, custom_params);
 
-
         if (!Strings.isNullOrEmpty(req.sortField)) {
             where.append(" ORDER BY ").append(req.sortField).append(StringPool.SPACE).append(req.order);
         }
 
-
-        final Page<Record> paginate = Db.paginate(page, pageSize, sql_columns, where.toString(), params.toArray());
+        final Page<Record> paginate =
+                Db.paginate(page, pageSize, sql_columns, where.toString(), params.toArray());
         DataGridRsp.Builder builder = new DataGridRsp.Builder();
         builder.rows(paginate.getList()).total(paginate.getTotalRow());
         return builder.build();
-
-
     }
-
 
     public static DataGridRsp rsp(DataGridReq req, String sqlGroupName) {
 
@@ -182,7 +185,6 @@ public class EuiDataGrid {
 
         List<Object> params = Lists.newArrayList();
         return rsp(req, sqlGroupName, params);
-
     }
 
     public static DataGridRsp rsp(DataGridReq req, String sqlGroupName, List<Object> params) {
@@ -204,22 +206,17 @@ public class EuiDataGrid {
             return EMPTY_DATAGRID;
         }
 
-
         final List<Triplet<String, Condition, Object>> custom_params = req.params;
         StringBuilder where = DTDao.appendWhereSql(params, sql, custom_params);
-
 
         if (!Strings.isNullOrEmpty(req.sortField)) {
             where.append(" ORDER BY ").append(req.sortField).append(StringPool.SPACE).append(req.order);
         }
 
-
-        final Page<Record> paginate = Db.paginate(page, pageSize, sql.selectSql, where.toString(), params.toArray());
+        final Page<Record> paginate =
+                Db.paginate(page, pageSize, sql.selectSql, where.toString(), params.toArray());
         DataGridRsp.Builder builder = new DataGridRsp.Builder();
         builder.rows(paginate.getList()).total(paginate.getTotalRow());
         return builder.build();
-
-
     }
-
 }

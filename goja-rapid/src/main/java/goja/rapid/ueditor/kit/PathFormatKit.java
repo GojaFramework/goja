@@ -15,21 +15,18 @@ import java.util.regex.Pattern;
  */
 public class PathFormatKit {
 
-    private static final String TIME      = "time";
-    private static final String FULL_YEAR = "yyyy";
-    private static final String YEAR      = "yy";
-    private static final String MONTH     = "mm";
-    private static final String DAY       = "dd";
-    private static final String HOUR      = "hh";
-    private static final String MINUTE    = "ii";
-    private static final String SECOND    = "ss";
-    private static final String RAND      = "rand";
-
     public static final String PATH_TWO_ZERO = "%02d";
-
-    private static DateTime currentDate = null;
-
+    private static final String TIME = "time";
+    private static final String FULL_YEAR = "yyyy";
+    private static final String YEAR = "yy";
+    private static final String MONTH = "mm";
+    private static final String DAY = "dd";
+    private static final String HOUR = "hh";
+    private static final String MINUTE = "ii";
+    private static final String SECOND = "ss";
+    private static final String RAND = "rand";
     private static final Pattern PARSE_PATTERN = Pattern.compile("\\{([^\\}]+)\\}", Pattern.CASE_INSENSITIVE);
+    private static DateTime currentDate = null;
 
     public static String parse(String input) {
 

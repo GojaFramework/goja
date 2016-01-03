@@ -20,11 +20,7 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -47,12 +43,11 @@ public class GojaShiroFilter extends AbstractShiroFilter {
         super.init();
         String shiroConfigFile = GojaConfig.getAppSecurityConfig();
         final File configFolderFile = GojaConfig.getConfigFolderFile();
-        shiroConfig = configFolderFile == null ? PropKit.use(shiroConfigFile).getProperties() : PropKit.use(FileUtils.getFile(configFolderFile, shiroConfigFile)).getProperties();
+        shiroConfig = configFolderFile == null ? PropKit.use(shiroConfigFile).getProperties()
+                : PropKit.use(FileUtils.getFile(configFolderFile, shiroConfigFile)).getProperties();
 
         WebSecurityManager webSecurityManager = initSecurityManager();
         FilterChainManager manager = createFilterChainManager();
-
-
 
         //Expose the constructed FilterChainManager by first wrapping it in a
         // FilterChainResolver implementation. The AbstractShiroFilter implementations
@@ -62,9 +57,7 @@ public class GojaShiroFilter extends AbstractShiroFilter {
 
         setSecurityManager(webSecurityManager);
         setFilterChainResolver(chainResolver);
-
     }
-
 
     protected FilterChainManager createFilterChainManager() {
 
@@ -75,23 +68,22 @@ public class GojaShiroFilter extends AbstractShiroFilter {
             applyGlobalPropertiesIfNecessary(filter);
         }
 
-        if(shiroConfig!=null && !shiroConfig.isEmpty()){
+        if (shiroConfig != null && !shiroConfig.isEmpty()) {
             for (Object urlKey : shiroConfig.keySet()) {
                 String url = String.valueOf(urlKey);
-                if(org.apache.commons.lang3.StringUtils.equals("login.url", url)
-                        ||org.apache.commons.lang3.StringUtils.equals("success.url", url)
-                        ||org.apache.commons.lang3.StringUtils.equals("unauthorized.url", url)
-                        ||org.apache.commons.lang3.StringUtils.equals("session.expired", url)
-                        ){
+                if (org.apache.commons.lang3.StringUtils.equals("login.url", url)
+                        || org.apache.commons.lang3.StringUtils.equals("success.url", url)
+                        || org.apache.commons.lang3.StringUtils.equals("unauthorized.url", url)
+                        || org.apache.commons.lang3.StringUtils.equals("session.expired", url)
+                        ) {
                     continue;
                 }
                 //  { "authc", "roles[admin,user]", "perms[file:edit]" }
-                manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url),"anon"));
+                manager.createChain(url, MoreObjects.firstNonNull(shiroConfig.getProperty(url), "anon"));
             }
         }
         return manager;
     }
-
 
     private WebSecurityManager initSecurityManager() {
         AppDbRealm appDbRealm = new AppDbRealm();
@@ -100,11 +92,11 @@ public class GojaShiroFilter extends AbstractShiroFilter {
         final DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setSessionIdCookieEnabled(true);
         // 默认一年过期时间
-        defaultWebSessionManager.setGlobalSessionTimeout(Ints.tryParse(shiroConfig.getProperty("session.expired","10800000")));
+        defaultWebSessionManager.setGlobalSessionTimeout(
+                Ints.tryParse(shiroConfig.getProperty("session.expired", "10800000")));
         securityManager.setSessionManager(defaultWebSessionManager);
         return securityManager;
     }
-
 
     private void applyLoginUrlIfNecessary(Filter filter) {
         String loginUrl = shiroConfig.getProperty("login.url", "/login");
@@ -149,7 +141,8 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     }
 
     @Override
-    protected void doFilterInternal(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(ServletRequest servletRequest, ServletResponse servletResponse,
+                                    FilterChain chain) throws ServletException, IOException {
         // Solving garbled form submission problem
         servletRequest.setCharacterEncoding(StringPool.UTF_8);
         servletResponse.setCharacterEncoding(StringPool.UTF_8);

@@ -14,32 +14,33 @@
  */
 package org.snaker.engine.entity;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Map;
-
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.helper.JsonHelper;
 
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * 历史流程实例实体类
+ *
  * @author yuqs
  * @since 1.0
  */
 public class HistoryOrder implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5853727929104539328L;
-	/**
-	 * 主键ID
-	 */
-	private String id;
-	/**
-	 * 流程定义ID
-	 */
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5853727929104539328L;
+    /**
+     * 主键ID
+     */
+    private String id;
+    /**
+     * 流程定义ID
+     */
     private String processId;
     /**
      * 流程实例状态（0：结束；1：活动）
@@ -73,29 +74,30 @@ public class HistoryOrder implements Serializable {
      * 流程实例编号
      */
     private String orderNo;
-	/**
+    /**
      * 流程实例附属变量
      */
     private String variable;
 
-	public HistoryOrder() {
-    	
+    public HistoryOrder() {
+
     }
-    
+
     public HistoryOrder(Order order) {
-    	this.id = order.getId();
-    	this.processId = order.getProcessId();
-    	this.createTime = order.getCreateTime();
-    	this.expireTime = order.getExpireTime();
-    	this.creator = order.getCreator();
-    	this.parentId = order.getParentId();
-    	this.priority = order.getPriority();
-    	this.orderNo = order.getOrderNo();
-    	this.variable = order.getVariable();
+        this.id = order.getId();
+        this.processId = order.getProcessId();
+        this.createTime = order.getCreateTime();
+        this.expireTime = order.getExpireTime();
+        this.creator = order.getCreator();
+        this.parentId = order.getParentId();
+        this.priority = order.getPriority();
+        this.orderNo = order.getOrderNo();
+        this.variable = order.getVariable();
     }
 
     /**
      * 根据历史实例撤回活动实例
+     *
      * @return 活动实例对象
      */
     public Order undo() {
@@ -115,115 +117,115 @@ public class HistoryOrder implements Serializable {
         return order;
     }
 
-	public String getProcessId() {
-		return processId;
-	}
+    public String getProcessId() {
+        return processId;
+    }
 
-	public void setProcessId(String processId) {
-		this.processId = processId;
-	}
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
 
-	public Integer getOrderState() {
-		return orderState;
-	}
+    public Integer getOrderState() {
+        return orderState;
+    }
 
-	public void setOrderState(Integer orderState) {
-		this.orderState = orderState;
-	}
+    public void setOrderState(Integer orderState) {
+        this.orderState = orderState;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public String getCreator() {
+        return creator;
+    }
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
-	public String getCreateTime() {
-		return createTime;
-	}
+    public String getCreateTime() {
+        return createTime;
+    }
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
-	public String getEndTime() {
-		return endTime;
-	}
+    public String getEndTime() {
+        return endTime;
+    }
 
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
-	public String getParentId() {
-		return parentId;
-	}
+    public String getParentId() {
+        return parentId;
+    }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
-	public String getExpireTime() {
-		return expireTime;
-	}
+    public String getExpireTime() {
+        return expireTime;
+    }
 
-	public void setExpireTime(String expireTime) {
-		this.expireTime = expireTime;
-	}
+    public void setExpireTime(String expireTime) {
+        this.expireTime = expireTime;
+    }
 
-	public Integer getPriority() {
-		return priority;
-	}
+    public Integer getPriority() {
+        return priority;
+    }
 
-	public void setPriority(Integer priority) {
-		this.priority = priority;
-	}
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
-    
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getOrderNo() {
-		return orderNo;
-	}
+        return orderNo;
+    }
 
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
-	}
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
-	public String getVariable() {
-		return variable;
-	}
+    public String getVariable() {
+        return variable;
+    }
 
-	public void setVariable(String variable) {
-		this.variable = variable;
-	}
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
 
     @SuppressWarnings("unchecked")
     public Map<String, Object> getVariableMap() {
         Map<String, Object> map = JsonHelper.fromJson(this.variable, Map.class);
-        if(map == null) return Collections.emptyMap();
+        if (map == null) return Collections.emptyMap();
         return map;
     }
-	
-	public String getProcessName() {
-		SnakerEngine engine = ServiceContext.getEngine();
-		Process process = engine.process().getProcessById(this.processId);
-		if(process == null) return this.processId;
-		return process.getDisplayName();
-	}
-	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("HistoryOrder(id=").append(this.id);
-		sb.append(",processId=").append(this.processId);
-		sb.append(",creator=").append(this.creator);
-		sb.append(",createTime").append(this.createTime);
-		sb.append(",orderNo=").append(this.orderNo).append(")");
-		return sb.toString();
-	}
+
+    public String getProcessName() {
+        SnakerEngine engine = ServiceContext.getEngine();
+        Process process = engine.process().getProcessById(this.processId);
+        if (process == null) return this.processId;
+        return process.getDisplayName();
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("HistoryOrder(id=").append(this.id);
+        sb.append(",processId=").append(this.processId);
+        sb.append(",creator=").append(this.creator);
+        sb.append(",createTime").append(this.createTime);
+        sb.append(",orderNo=").append(this.orderNo).append(")");
+        return sb.toString();
+    }
 }

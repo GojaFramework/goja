@@ -4,11 +4,7 @@ package goja.rapid.ueditor.kit;
 import com.jfinal.kit.PathKit;
 import goja.rapid.ueditor.UEConfig;
 import goja.rapid.ueditor.UEConst;
-import goja.rapid.ueditor.define.AppInfo;
-import goja.rapid.ueditor.define.BaseState;
-import goja.rapid.ueditor.define.MIMEType;
-import goja.rapid.ueditor.define.MultiState;
-import goja.rapid.ueditor.define.State;
+import goja.rapid.ueditor.define.*;
 
 import java.io.File;
 import java.net.HttpURLConnection;
@@ -23,11 +19,11 @@ import java.util.List;
  */
 public class ImageHunter {
 
-    private final String       filename   = "remote";
-    private String       savePath   = null;
-    private String       rootPath   = null;
+    private final String filename = "remote";
+    private String savePath = null;
+    private String rootPath = null;
     private List<String> allowTypes = null;
-    private long         maxSize    = -1;
+    private long maxSize = -1;
 
     private List<String> filters = null;
 

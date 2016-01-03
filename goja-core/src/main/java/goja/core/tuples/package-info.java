@@ -19,9 +19,7 @@
  */
 
 /**
- * <p>  
- *  .
- * </p>
+ * <p> . </p>
  *
  * @author Daniel Fern&aacute;ndez
  * @version 1.0 2014-11-04 09:30

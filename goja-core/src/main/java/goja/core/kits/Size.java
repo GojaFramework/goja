@@ -17,9 +17,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-11-08 17:39
@@ -49,6 +47,13 @@ public class Size implements Comparable<Size> {
             .put("terabyte", SizeUnit.TERABYTES)
             .put("terabytes", SizeUnit.TERABYTES)
             .build();
+    private final long count;
+    private final SizeUnit unit;
+
+    private Size(long count, SizeUnit unit) {
+        this.count = count;
+        this.unit = checkNotNull(unit);
+    }
 
     public static Size bytes(long count) {
         return new Size(count, SizeUnit.BYTES);
@@ -83,14 +88,6 @@ public class Size implements Comparable<Size> {
         return new Size(count, unit);
     }
 
-    private final long     count;
-    private final SizeUnit unit;
-
-    private Size(long count, SizeUnit unit) {
-        this.count = count;
-        this.unit = checkNotNull(unit);
-    }
-
     public long getQuantity() {
         return count;
     }
@@ -121,8 +118,12 @@ public class Size implements Comparable<Size> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) { return true; }
-        if ((obj == null) || (getClass() != obj.getClass())) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if ((obj == null) || (getClass() != obj.getClass())) {
+            return false;
+        }
         final Size size = (Size) obj;
         return (count == size.count) && (unit == size.unit);
     }

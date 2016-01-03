@@ -8,13 +8,7 @@ package goja.mvc.render.ftl.layout;
 
 import freemarker.cache.TemplateCache;
 import freemarker.core.Environment;
-import freemarker.template.Configuration;
-import freemarker.template.SimpleScalar;
-import freemarker.template.Template;
-import freemarker.template.TemplateDirectiveBody;
-import freemarker.template.TemplateDirectiveModel;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
+import freemarker.template.*;
 import goja.core.StringPool;
 import goja.mvc.render.ftl.kit.DirectiveKit;
 

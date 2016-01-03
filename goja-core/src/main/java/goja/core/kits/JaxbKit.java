@@ -20,13 +20,8 @@ import java.io.StringWriter;
  */
 public class JaxbKit {
 
-
     /**
      * string -> object
-     *
-     * @param src
-     * @param clazz
-     * @return
      */
     @SuppressWarnings("unchecked")
     public static <T> T unmarshal(String src, Class<T> clazz) {

@@ -2,28 +2,13 @@ package goja.test.mock;
 
 import com.google.common.collect.Maps;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p> </p>
@@ -75,6 +60,11 @@ public class MockHttpRequest implements HttpServletRequest {
     @Override
     public String getCharacterEncoding() {
         return "UTF-8";
+    }
+
+    @Override
+    public void setCharacterEncoding(String arg0) throws UnsupportedEncodingException {
+
     }
 
     @Override
@@ -195,7 +185,7 @@ public class MockHttpRequest implements HttpServletRequest {
 
     @Override
     public String[] getParameterValues(String key) {
-        return new String[] { para.get(key) };
+        return new String[]{para.get(key)};
     }
 
     @Override
@@ -274,7 +264,8 @@ public class MockHttpRequest implements HttpServletRequest {
     public RequestDispatcher getRequestDispatcher(final String view) {
         return new RequestDispatcher() {
             @Override
-            public void forward(ServletRequest arg0, ServletResponse arg1) throws ServletException, IOException {
+            public void forward(ServletRequest arg0, ServletResponse arg1)
+                    throws ServletException, IOException {
                 System.out.println();
                 System.out.println("JFinal view report -----------------------------------");
                 System.out.println("forward to view :" + view);
@@ -282,7 +273,8 @@ public class MockHttpRequest implements HttpServletRequest {
             }
 
             @Override
-            public void include(ServletRequest arg0, ServletResponse arg1) throws ServletException, IOException {
+            public void include(ServletRequest arg0, ServletResponse arg1)
+                    throws ServletException, IOException {
 
             }
         };
@@ -420,11 +412,6 @@ public class MockHttpRequest implements HttpServletRequest {
     @Override
     public void setAttribute(String key, Object value) {
         attr.put(key, value);
-    }
-
-    @Override
-    public void setCharacterEncoding(String arg0) throws UnsupportedEncodingException {
-
     }
 
     public void setParameter(String key, String val) {

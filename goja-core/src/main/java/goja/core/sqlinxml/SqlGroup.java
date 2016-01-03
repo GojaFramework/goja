@@ -22,5 +22,4 @@ class SqlGroup {
     void addSqlgroup(SqlItem sqlGroup) {
         sqlItems.add(sqlGroup);
     }
-
 }

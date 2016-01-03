@@ -15,8 +15,8 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import goja.Goja;
-import goja.logging.Logger;
 import goja.core.StringPool;
+import goja.logging.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -26,9 +26,7 @@ import java.io.Writer;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author walter yang
  * @version 1.0 2013-11-11 12:46 AM
@@ -36,16 +34,12 @@ import java.util.Map;
  */
 public class Freemarkers {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Freemarkers.class);
-
-    //配置
-    private static Configuration appConfig    = null;
-    private static Configuration stringConfig = null;
-
     public static final String UPDATE_RESPONSE_TEMPLATE = "__updateResponseTemplate";
-
-
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Freemarkers.class);
     private static final StringTemplateLoader stringLoader = new StringTemplateLoader();
+    //配置
+    private static Configuration appConfig = null;
+    private static Configuration stringConfig = null;
 
     static {
         getAppConfiguration();
@@ -60,12 +54,10 @@ public class Freemarkers {
             stringLoader.putTemplate(UPDATE_RESPONSE_TEMPLATE, StringPool.EMPTY);
         }
         return stringConfig;
-
     }
 
     /**
-     * appConfig配置所有参数
-     * 重写freemarker中的  reader方法，读取该配置文件
+     * appConfig配置所有参数 重写freemarker中的  reader方法，读取该配置文件
      *
      * @return config
      */
@@ -75,9 +67,9 @@ public class Freemarkers {
             appConfig = (Configuration) FreeMarkerRender.getConfiguration().clone();
             try {
                 //设置模板路径
-                appConfig.setDirectoryForTemplateLoading(new File(PathKit.getWebRootPath() + Goja.viewPath));
+                appConfig.setDirectoryForTemplateLoading(
+                        new File(PathKit.getWebRootPath() + Goja.viewPath));
                 appConfig.setObjectWrapper(new BeansWrapperBuilder(Configuration.VERSION_2_3_21).build());
-
             } catch (IOException e) {
                 logger.error("The Freemarkers has error!", e);
             }
@@ -132,5 +124,4 @@ public class Freemarkers {
 
         return out.toString();
     }
-
 }

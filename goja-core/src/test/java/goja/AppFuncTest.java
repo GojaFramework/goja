@@ -14,9 +14,7 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-02-16 21:55
@@ -55,7 +53,6 @@ public class AppFuncTest {
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
         List<String> dest = Func.DASH_SPLITTER.splitToList(abc);
         Assert.assertEquals(src_strs, dest);
-
     }
 
     @Test
@@ -73,6 +70,5 @@ public class AppFuncTest {
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
         List<String> dest = Func.DOT_SPLITTER.splitToList(abc);
         Assert.assertEquals(src_strs, dest);
-
     }
 }

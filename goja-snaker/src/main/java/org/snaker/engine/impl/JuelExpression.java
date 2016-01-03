@@ -24,18 +24,19 @@ import java.util.Map.Entry;
 
 /**
  * Juel 表达式引擎实现
+ *
  * @author yuqs
  * @since 1.2
  */
 public class JuelExpression implements Expression {
-	ExpressionFactory factory = new ExpressionFactoryImpl();
-	
-	@SuppressWarnings("unchecked")
-	public <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
-		SimpleContext context = new SimpleContext();
-		for(Entry<String, Object> entry : args.entrySet()) {
-			context.setVariable(entry.getKey(), factory.createValueExpression(entry.getValue(), Object.class));
-		}
-		return (T)factory.createValueExpression(context, expr, T).getValue(context);
-	}
+    ExpressionFactory factory = new ExpressionFactoryImpl();
+
+    @SuppressWarnings("unchecked")
+    public <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
+        SimpleContext context = new SimpleContext();
+        for (Entry<String, Object> entry : args.entrySet()) {
+            context.setVariable(entry.getKey(), factory.createValueExpression(entry.getValue(), Object.class));
+        }
+        return (T) factory.createValueExpression(context, expr, T).getValue(context);
+    }
 }

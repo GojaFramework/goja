@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public abstract class GojaException extends RuntimeException {
 
-    private static final long       serialVersionUID = -1849525598831557172L;
-    static               AtomicLong atomicLong       = new AtomicLong(System.currentTimeMillis());
+    private static final long serialVersionUID = -1849525598831557172L;
+    static AtomicLong atomicLong = new AtomicLong(System.currentTimeMillis());
     String id;
 
     public GojaException() {
@@ -41,7 +41,6 @@ public abstract class GojaException extends RuntimeException {
 
     public abstract String getErrorDescription();
 
-
     public Integer getLineNumber() {
         return -1;
     }
@@ -53,7 +52,6 @@ public abstract class GojaException extends RuntimeException {
     public String getId() {
         return id;
     }
-
 
     public String getMoreHTML() {
         return null;

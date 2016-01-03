@@ -16,13 +16,10 @@ import java.util.Map;
 import static net.sf.ehcache.config.PersistenceConfiguration.Strategy.LOCALTEMPSWAP;
 
 /**
- * EhCache implementation.
- * <p/>
- * <p>Ehcache is an open source, standards-based cache used to boost performance,
- * offload the database and simplify scalability. Ehcache is robust, proven and
- * full-featured and this has made it the most widely-used Java-based cache.</p>
- * <p/>
- * Expiration is specified in seconds
+ * EhCache implementation. <p/> <p>Ehcache is an open source, standards-based cache used to boost
+ * performance, offload the database and simplify scalability. Ehcache is robust, proven and
+ * full-featured and this has made it the most widely-used Java-based cache.</p> <p/> Expiration is
+ * specified in seconds
  *
  * @see <a href="http://ehcache.org/">http://ehcache.org/</a>
  */
@@ -53,7 +50,8 @@ public class EhCacheImpl implements CacheImpl {
 
         configuration.setDefaultCacheConfiguration(defaultCacheConfiguration);
         // shiro cache configuration.
-        CacheConfiguration shiroRealmConfig = new CacheConfiguration("gojaRealm_authorizationCache", 10000);
+        CacheConfiguration shiroRealmConfig =
+                new CacheConfiguration("gojaRealm_authorizationCache", 10000);
         shiroRealmConfig.eternal(true);
         shiroRealmConfig.timeToLiveSeconds(0);
         shiroRealmConfig.timeToIdleSeconds(0);
@@ -63,7 +61,8 @@ public class EhCacheImpl implements CacheImpl {
         shiroRealmConfig.persistence(shiroRealmConfiguration);
         shiroRealmConfig.diskExpiryThreadIntervalSeconds(600);
         configuration.cache(shiroRealmConfig);
-        CacheConfiguration shiroActiveSessionCache = new CacheConfiguration("gojaActive_activeSessionCache", 10000);
+        CacheConfiguration shiroActiveSessionCache =
+                new CacheConfiguration("gojaActive_activeSessionCache", 10000);
         shiroActiveSessionCache.eternal(true);
         shiroActiveSessionCache.timeToLiveSeconds(0);
         shiroActiveSessionCache.timeToIdleSeconds(0);
@@ -142,7 +141,6 @@ public class EhCacheImpl implements CacheImpl {
         newE.setTimeToLive(e.getTimeToLive());
         cache.put(newE);
         return newValue;
-
     }
 
     public void replace(String key, Object value, int expiration) {

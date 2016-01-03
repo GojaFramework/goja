@@ -7,9 +7,7 @@
 package goja.core.exceptions;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-03-28 12:08

@@ -13,11 +13,10 @@ import java.util.List;
 public class DTResponse<E> implements Serializable {
     private static final long serialVersionUID = -491962368629446336L;
 
-
     private final List<E> data;
-    private final long    recordsTotal;
-    private final long    recordsFiltered;
-    private final int     draw;
+    private final long recordsTotal;
+    private final long recordsFiltered;
+    private final int draw;
 
     public DTResponse(List<E> data, long recordsTotal, long recordsFiltered, int draw) {
         this.data = data;
@@ -26,7 +25,10 @@ public class DTResponse<E> implements Serializable {
         this.draw = draw;
     }
 
-
+    public static <E> DTResponse<E> build(DTCriterias dtCriterias, List<E> list, int recordsTotal,
+                                          int recordsFiltered) {
+        return new DTResponse<E>(list, recordsTotal, recordsFiltered, dtCriterias.getDraw());
+    }
 
     public List<E> getData() {
         return data;
@@ -42,9 +44,5 @@ public class DTResponse<E> implements Serializable {
 
     public int getDraw() {
         return draw;
-    }
-
-    public static <E> DTResponse<E> build(DTCriterias dtCriterias, List<E> list, int recordsTotal, int recordsFiltered) {
-        return new DTResponse<E>(list, recordsTotal, recordsFiltered, dtCriterias.getDraw());
     }
 }

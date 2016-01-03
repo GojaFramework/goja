@@ -7,15 +7,15 @@
 
 <ehcache updateCheck="true" monitoring="autodetect" dynamicConfig="true">
 
-    <diskStore controllerBind="java.io.tmpdir/jfinal-app"/>
-    <cacheManagerEventListenerFactory class="" properties=""/>
+  <diskStore controllerBind="java.io.tmpdir/jfinal-app"/>
+  <cacheManagerEventListenerFactory class="" properties=""/>
 
-    <defaultCache
-            maxElementsInMemory="1000"
-            eternal="false"
-            timeToIdleSeconds="120"
-            timeToLiveSeconds="120"
-            overflowToDisk="true"
-            />
+  <defaultCache
+      maxElementsInMemory="1000"
+      eternal="false"
+      timeToIdleSeconds="120"
+      timeToLiveSeconds="120"
+      overflowToDisk="true"
+  />
 
 </ehcache>

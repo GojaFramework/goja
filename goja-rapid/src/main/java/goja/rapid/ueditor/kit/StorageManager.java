@@ -13,12 +13,7 @@ import goja.rapid.ueditor.define.State;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public final class StorageManager {
     public static final int BUFFER_SIZE = 8192;

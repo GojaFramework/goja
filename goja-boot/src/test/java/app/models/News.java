@@ -4,9 +4,7 @@ import com.jfinal.plugin.activerecord.Model;
 import goja.annotation.TableBind;
 
 /**
- * <p>
- * The database xx Model.
- * </p>
+ * <p> The database xx Model. </p>
  *
  * @author sagyf yang
  * @version 1.0
@@ -19,6 +17,4 @@ public class News extends Model<News> {
      * The public dao.
      */
     public static final News dao = new News();
-
-
 }

@@ -24,11 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -36,9 +32,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * <p>
- * 通过Servlet 3.0 的动态加载方式加载JFinal，免去Web.xml的配置.
- * </p>
+ * <p> 通过Servlet 3.0 的动态加载方式加载JFinal，免去Web.xml的配置. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-02 15:06
@@ -57,9 +51,9 @@ public class GojaInitializer implements ServletContainerInitializer {
         // 初始化缓存
         Cache.init();
 
-        if (GojaConfig.isSecurity() ) {
+        if (GojaConfig.isSecurity()) {
             File shiroIniFile = new File(PathKit.getRootClassPath() + File.separator + "shiro.ini");
-            if(shiroIniFile.exists()){
+            if (shiroIniFile.exists()) {
                 ctx.addListener("org.apache.shiro.web.env.EnvironmentLoaderListener");
                 ctx.addFilter("Goja@shiroFilter", "org.apache.shiro.web.servlet.ShiroFilter")
                         .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -67,7 +61,6 @@ public class GojaInitializer implements ServletContainerInitializer {
                 ctx.addFilter("Goja@shiroFilter", "goja.security.shiro.GojaShiroFilter")
                         .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
             }
-
         }
         // init logger
         LoggerInit.init();
@@ -79,20 +72,19 @@ public class GojaInitializer implements ServletContainerInitializer {
 
         String app_name = GojaConfig.getAppName();
 
-        FilterRegistration.Dynamic jfinalFilter = ctx.addFilter("goja@jfinal", "com.jfinal.core.JFinalFilter");
+        FilterRegistration.Dynamic jfinalFilter =
+                ctx.addFilter("goja@jfinal", "com.jfinal.core.JFinalFilter");
 
         jfinalFilter.setInitParameter("configClass", "goja.Goja");
         jfinalFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         // 支持异步请求处理
         jfinalFilter.setAsyncSupported(true);
 
-
         System.out.println("initializer " + app_name + " Application ok!");
         if (GojaConfig.getApplicationMode().isDev()) {
             runScriptInitDb();
         }
     }
-
 
     private void runScriptInitDb() {
         try {
@@ -124,7 +116,8 @@ public class GojaInitializer implements ServletContainerInitializer {
                     sql_exec.setUserid(db_username);
                     sql_exec.setPassword(db_password);
 
-                    sql_exec.setOnerror((SQLExec.OnError) (EnumeratedAttribute.getInstance(SQLExec.OnError.class, "abort")));
+                    sql_exec.setOnerror(
+                            (SQLExec.OnError) (EnumeratedAttribute.getInstance(SQLExec.OnError.class, "abort")));
                     sql_exec.setPrint(true);
                     sql_exec.setProject(new Project());
                     sql_exec.setSrc(list_script_file);
@@ -140,5 +133,4 @@ public class GojaInitializer implements ServletContainerInitializer {
             throw Throwables.propagate(e);
         }
     }
-
 }

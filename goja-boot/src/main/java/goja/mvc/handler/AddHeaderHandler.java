@@ -22,7 +22,8 @@ public class AddHeaderHandler extends Handler {
     }
 
     @Override
-    public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
+    public void handle(String target, HttpServletRequest request, HttpServletResponse response,
+                       boolean[] isHandled) {
         for (Entry<String, Object> entry : headers.entrySet()) {
             Object header = entry.getValue();
             String name = entry.getKey();
@@ -33,8 +34,9 @@ public class AddHeaderHandler extends Handler {
             } else if (header instanceof Long) {
                 response.addDateHeader(name, (Long) header);
             } else {
-                throw new RuntimeException("does not support the name (" + name + ") with  value that type is "
-                        + header.getClass());
+                throw new RuntimeException(
+                        "does not support the name (" + name + ") with  value that type is "
+                                + header.getClass());
             }
         }
         next.handle(target, request, response, isHandled);

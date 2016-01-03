@@ -1,238 +1,240 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
 
-    <groupId>com.github.sogyf</groupId>
-    <artifactId>goja</artifactId>
-    <version>0.1.13-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  <groupId>com.github.sogyf</groupId>
+  <artifactId>goja</artifactId>
+  <version>0.1.13-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-    <name>goja</name>
-    <url>http://sogyf.github.io</url>
-    <developers>
-        <developer>
-            <id>sogyf</id>
-            <name>SogYF Yang</name>
-            <email>poplar1123@gmail.com</email>
-            <organization>Sog2Y</organization>
-            <roles>
-                <role>Project Leader</role>
-            </roles>
-            <timezone>+8</timezone>
-        </developer>
-    </developers>
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-        </license>
-    </licenses>
-    <scm>
-        <url>https://github.com/GojaFramework/goja</url>
-        <connection>scm:git:git@github.com:GojaFramework/goja.git</connection>
-        <developerConnection>scm:git:git@github.com:GojaFramework/goja.git</developerConnection>
-      <tag>HEAD</tag>
+  <name>goja</name>
+  <url>http://sogyf.github.io</url>
+  <developers>
+    <developer>
+      <id>sogyf</id>
+      <name>SogYF Yang</name>
+      <email>poplar1123@gmail.com</email>
+      <organization>Sog2Y</organization>
+      <roles>
+        <role>Project Leader</role>
+      </roles>
+      <timezone>+8</timezone>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+  <scm>
+    <url>https://github.com/GojaFramework/goja</url>
+    <connection>scm:git:git@github.com:GojaFramework/goja.git</connection>
+    <developerConnection>scm:git:git@github.com:GojaFramework/goja.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
 
-    <issueManagement>
-        <system>Github</system>
-        <url>https://github.com/GojaFramework/goja/issues</url>
-    </issueManagement>
+  <issueManagement>
+    <system>Github</system>
+    <url>https://github.com/GojaFramework/goja/issues</url>
+  </issueManagement>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.7</java.version>
-        <!-- the log -->
-        <logback-core.version>1.1.3</logback-core.version>
-        <slf4j-api.version>1.7.13</slf4j-api.version>
-        <!--the view render -->
-        <freemarker.version>2.3.23</freemarker.version>
-        <!-- utils -->
-        <commons-beanutils.version>1.9.2</commons-beanutils.version>
-        <commons-collections.version>3.2.1</commons-collections.version>
-        <commons-pool2.version>2.3</commons-pool2.version>
-        <commons-codec.version>1.10</commons-codec.version>
-        <commons-lang3.version>3.4</commons-lang3.version>
-        <commons-io.version>2.4</commons-io.version>
-        <commons-email.version>1.4</commons-email.version>
-        <commons-digester3.version>3.2</commons-digester3.version>
-        <commons-jexl.version>2.1.1</commons-jexl.version>
-        <httpclient.version>4.5.1</httpclient.version>
-        <httpcore.version>4.4.3</httpcore.version>
-        <!--the core util. -->
-        <guava.version>19.0</guava.version>
-        <fst.version>2.40</fst.version>
-        <fastjson.version>1.2.7</fastjson.version>
-        <jackson.version>2.6.3</jackson.version>
-        <objenesis.version>2.1</objenesis.version>
-        <javassist.version>3.19.0-GA</javassist.version>
-        <!-- the date time util. -->
-        <joda-time.version>2.8.2</joda-time.version>
-        <dom4j.version>1.6.1</dom4j.version>
-        <activation.version>1.1</activation.version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.7</java.version>
+    <!-- the log -->
+    <logback-core.version>1.1.3</logback-core.version>
+    <slf4j-api.version>1.7.13</slf4j-api.version>
+    <!--the view render -->
+    <freemarker.version>2.3.23</freemarker.version>
+    <!-- utils -->
+    <commons-beanutils.version>1.9.2</commons-beanutils.version>
+    <commons-collections.version>3.2.1</commons-collections.version>
+    <commons-pool2.version>2.3</commons-pool2.version>
+    <commons-codec.version>1.10</commons-codec.version>
+    <commons-lang3.version>3.4</commons-lang3.version>
+    <commons-io.version>2.4</commons-io.version>
+    <commons-email.version>1.4</commons-email.version>
+    <commons-digester3.version>3.2</commons-digester3.version>
+    <commons-jexl.version>2.1.1</commons-jexl.version>
+    <httpclient.version>4.5.1</httpclient.version>
+    <httpcore.version>4.4.3</httpcore.version>
+    <!--the core util. -->
+    <guava.version>19.0</guava.version>
+    <fst.version>2.40</fst.version>
+    <fastjson.version>1.2.7</fastjson.version>
+    <jackson.version>2.6.3</jackson.version>
+    <objenesis.version>2.1</objenesis.version>
+    <javassist.version>3.19.0-GA</javassist.version>
+    <!-- the date time util. -->
+    <joda-time.version>2.8.2</joda-time.version>
+    <dom4j.version>1.6.1</dom4j.version>
+    <activation.version>1.1</activation.version>
 
-        <jsoup.version>1.8.3</jsoup.version>
+    <jsoup.version>1.8.3</jsoup.version>
 
-        <zxing.version>3.2.1</zxing.version>
-        <xstream.version>1.4.8</xstream.version>
+    <zxing.version>3.2.1</zxing.version>
+    <xstream.version>1.4.8</xstream.version>
 
-        <!-- the common service -->
-        <mail.version>1.4.7</mail.version>
-        <quartz.version>2.2.1</quartz.version>
-        <thumbnailator.version>0.4.8</thumbnailator.version>
+    <!-- the common service -->
+    <mail.version>1.4.7</mail.version>
+    <quartz.version>2.2.1</quartz.version>
+    <thumbnailator.version>0.4.8</thumbnailator.version>
 
-        <!-- the cache and database -->
-        <ehcache-core.version>2.6.11</ehcache-core.version>
-        <!-- The database connection poll util. -->
-        <druid.version>1.0.16</druid.version>
-        <!-- the database jdbc driver. -->
-        <mysql-connector-java.version>5.1.38</mysql-connector-java.version>
-        <postgresql.version>9.4-1206-jdbc41</postgresql.version>
-        <h2.version>1.4.185</h2.version>
-        <!-- test -->
-        <junit.version>4.12</junit.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <!-- servlet and shiro -->
-        <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
-        <shiro.version>1.2.4</shiro.version>
-        <!-- nosql -->
-        <mongo-java-driver.version>3.2.0</mongo-java-driver.version>
-        <morphia.version>1.0.1</morphia.version>
-        <jedis.version>2.7.3</jedis.version>
+    <!-- the cache and database -->
+    <ehcache-core.version>2.6.11</ehcache-core.version>
+    <!-- The database connection poll util. -->
+    <druid.version>1.0.16</druid.version>
+    <!-- the database jdbc driver. -->
+    <mysql-connector-java.version>5.1.38</mysql-connector-java.version>
+    <postgresql.version>9.4-1206-jdbc41</postgresql.version>
+    <h2.version>1.4.185</h2.version>
+    <!-- test -->
+    <junit.version>4.12</junit.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <!-- servlet and shiro -->
+    <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
+    <shiro.version>1.2.4</shiro.version>
+    <!-- nosql -->
+    <mongo-java-driver.version>3.2.0</mongo-java-driver.version>
+    <morphia.version>1.0.1</morphia.version>
+    <jedis.version>2.7.3</jedis.version>
 
-        <jxls-core.version>1.0.6</jxls-core.version>
+    <jxls-core.version>1.0.6</jxls-core.version>
 
-        <ant.version>1.9.6</ant.version>
-        <!--the office -->
-        <poi.version>3.11</poi.version>
+    <ant.version>1.9.6</ant.version>
+    <!--the office -->
+    <poi.version>3.11</poi.version>
 
-        <!--报表工具-->
-        <jasperreports.version>6.2.0</jasperreports.version>
-    </properties>
+    <!--报表工具-->
+    <jasperreports.version>6.2.0</jasperreports.version>
+  </properties>
 
 
-    <modules>
-        <module>goja-jfinal</module>
-        <module>goja-core</module>
-        <module>goja-wxchat</module>
-        <module>goja-rapid</module>
-        <module>goja-snaker</module>
-        <module>goja-boot</module>
-        <module>goja-test</module>
-    </modules>
+  <modules>
+    <module>goja-jfinal</module>
+    <module>goja-core</module>
+    <module>goja-wxchat</module>
+    <module>goja-rapid</module>
+    <module>goja-snaker</module>
+    <module>goja-boot</module>
+    <module>goja-test</module>
+  </modules>
 
-    <build>
-        <finalName>goja</finalName>
+  <build>
+    <finalName>goja</finalName>
 
-        <plugins>
+    <plugins>
 
-            <!-- compiler插件, 设定JDK版本 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <showWarnings>true</showWarnings>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                </configuration>
-            </plugin>
-            <!-- resource插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-            <!-- 增加更多的Source和Test Source目录插件 -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.8</version>
-            </plugin>
+      <!-- compiler插件, 设定JDK版本 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
+      </plugin>
+      <!-- resource插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+      <!-- 增加更多的Source和Test Source目录插件 -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.8</version>
+      </plugin>
 
-            <!-- cobertura 测试覆盖率统计插插件 -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-            <!-- clean插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
+      <!-- cobertura 测试覆盖率统计插插件 -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+      <!-- clean插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
 
-            <!-- install插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
-            <!-- dependency相关插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.1</version>
-            </plugin>
+      <!-- install插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+      <!-- dependency相关插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.1</version>
+      </plugin>
 
-            <!-- ant插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-            </plugin>
+      <!-- ant插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+      </plugin>
 
-            <!-- exec java 插件 -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-            </plugin>
+      <!-- exec java 插件 -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.4.0</version>
+      </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
 
-        </plugins>
-    </build>
-    <repositories>
-        <repository>
-            <id>osc</id>
-            <name>os-china</name>
-            <url>http://maven.oschina.net/content/groups/public/</url>
-        </repository>
-    </repositories>
+    </plugins>
+  </build>
+  <repositories>
+    <repository>
+      <id>osc</id>
+      <name>os-china</name>
+      <url>http://maven.oschina.net/content/groups/public/</url>
+    </repository>
+  </repositories>
 </project>

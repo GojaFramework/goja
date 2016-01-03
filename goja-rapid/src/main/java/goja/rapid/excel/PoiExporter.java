@@ -24,14 +24,14 @@ import java.util.Set;
  * @since JDK 1.6
  */
 public class PoiExporter {
-    public static final  String VERSION_2003 = "2003";
-    private static final int    HEADER_ROW   = 1;
-    private static final int    MAX_ROWS     = 65535;
+    public static final String VERSION_2003 = "2003";
+    private static final int HEADER_ROW = 1;
+    private static final int MAX_ROWS = 65535;
     private List<?>[] data;
-    private String    version;
+    private String version;
     private String[] sheetNames = new String[]{"sheet"};
-    private int      cellWidth  = 8000;
-    private int        headerRow;
+    private int cellWidth = 8000;
+    private int headerRow;
     private String[][] headers;
     private String[][] columns;
 
@@ -48,7 +48,8 @@ public class PoiExporter {
         int chunk_num = size / chunkSize + (size % chunkSize == 0 ? 0 : 1);
         List<List<?>> result = Lists.newArrayList();
         for (int i = 0; i < chunk_num; i++) {
-            result.add(Lists.newArrayList(num.subList(i * chunkSize, i == chunk_num - 1 ? size : (i + 1) * chunkSize)));
+            result.add(Lists.newArrayList(
+                    num.subList(i * chunkSize, i == chunk_num - 1 ? size : (i + 1) * chunkSize)));
         }
         return result;
     }
@@ -117,9 +118,20 @@ public class PoiExporter {
         Preconditions.checkNotNull(data, "data can not be null");
         Preconditions.checkNotNull(headers, "headers can not be null");
         Preconditions.checkNotNull(columns, "columns can not be null");
-        Preconditions.checkArgument(data.length == sheetNames.length && sheetNames.length == headers.length
-                && headers.length == columns.length, "data,sheetNames,headers and columns'length should be the same." +
-                "(data:" + data.length + ",sheetNames:" + sheetNames.length + ",headers:" + headers.length + ",columns:" + columns.length + ")");
+        Preconditions.checkArgument(
+                data.length == sheetNames.length && sheetNames.length == headers.length
+                        && headers.length == columns.length,
+                "data,sheetNames,headers and columns'length should be the same."
+                        +
+                        "(data:"
+                        + data.length
+                        + ",sheetNames:"
+                        + sheetNames.length
+                        + ",headers:"
+                        + headers.length
+                        + ",columns:"
+                        + columns.length
+                        + ")");
         Preconditions.checkArgument(cellWidth >= 0, "cellWidth can not be less than 0");
         Workbook wb;
         if (VERSION_2003.equals(version)) {
@@ -127,7 +139,11 @@ public class PoiExporter {
             if (data.length > 1) {
                 for (int i = 0; i < data.length; i++) {
                     List<?> item = data[i];
-                    Preconditions.checkArgument(item.size() < MAX_ROWS, "Data [" + i + "] is invalid:invalid data size (" + item.size() + ") outside allowable range (0..65535)");
+                    Preconditions.checkArgument(item.size() < MAX_ROWS, "Data ["
+                            + i
+                            + "] is invalid:invalid data size ("
+                            + item.size()
+                            + ") outside allowable range (0..65535)");
                 }
             } else if (data.length == 1 && data[0].size() > MAX_ROWS) {
                 data = dice(data[0], MAX_ROWS).toArray(new List<?>[]{});
@@ -236,5 +252,4 @@ public class PoiExporter {
         this.columns = columns;
         return this;
     }
-
 }

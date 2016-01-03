@@ -9,18 +9,14 @@ package goja.test;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
-import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.OracleDialect;
-import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.SqlServerDialect;
-import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
+import com.jfinal.plugin.activerecord.dialect.*;
 import com.jfinal.plugin.druid.DruidPlugin;
 import goja.Goja;
 import goja.core.app.GojaConfig;
 import goja.core.exceptions.DatabaseException;
-import goja.initialize.ctxbox.ClassFinder;
 import goja.core.kits.reflect.Reflect;
 import goja.core.sqlinxml.SqlKit;
+import goja.initialize.ctxbox.ClassFinder;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.AfterClass;
@@ -31,9 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * <p>
- * Model Test case.
- * </p>
+ * <p> Model Test case. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-10-03 20:30
@@ -43,7 +37,6 @@ public abstract class ModelTestCase {
     protected static AutoTableBindPlugin activeRecord;
 
     protected static DruidPlugin dp;
-
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -58,12 +51,11 @@ public abstract class ModelTestCase {
             final Properties db_props = dbConfig.get(db_config);
             if (db_props != null && !db_props.isEmpty()) {
                 configDatabasePlugins(db_config,
-                                      db_props.getProperty("db.url"),
-                                      db_props.getProperty("db.username"),
-                                      db_props.getProperty("db.password"));
+                        db_props.getProperty("db.url"),
+                        db_props.getProperty("db.username"),
+                        db_props.getProperty("db.password"));
             }
         }
-
 
         if (GojaConfig.getPropertyToBoolean("db.sqlinxml", true)) {
             Reflect.on(SqlKit.class).call("initWithTest");
@@ -78,7 +70,8 @@ public abstract class ModelTestCase {
      * @param db_username 数据库链接用户
      * @param db_password 数据库链接密码
      */
-    private static void configDatabasePlugins(String db_config, String db_url, String db_username, String db_password) {
+    private static void configDatabasePlugins(String db_config, String db_url, String db_username,
+                                              String db_password) {
         String dbtype = JdbcUtils.getDbType(db_url, StringUtils.EMPTY);
         String driverClassName;
         try {
@@ -91,7 +84,7 @@ public abstract class ModelTestCase {
                 , db_password
                 , driverClassName);
 
-//        dp.addFilter(new StatFilter());
+        //        dp.addFilter(new StatFilter());
         WallFilter wall = new WallFilter();
         wall.setDbType(dbtype);
         dp.addFilter(wall);
@@ -110,7 +103,6 @@ public abstract class ModelTestCase {
 
         dp.getDataSource();
         dp.start();
-
 
         activeRecord = new AutoTableBindPlugin(db_config, dp);
         if (!StringUtils.equals(dbtype, JdbcConstants.MYSQL)) {
@@ -131,7 +123,6 @@ public abstract class ModelTestCase {
 
         activeRecord.setShowSql(true);
         activeRecord.start();
-
     }
 
     @AfterClass

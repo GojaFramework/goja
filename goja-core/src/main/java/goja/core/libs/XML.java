@@ -8,14 +8,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.crypto.KeySelector;
-import javax.xml.crypto.dsig.CanonicalizationMethod;
-import javax.xml.crypto.dsig.DigestMethod;
-import javax.xml.crypto.dsig.Reference;
-import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.crypto.dsig.SignedInfo;
-import javax.xml.crypto.dsig.Transform;
-import javax.xml.crypto.dsig.XMLSignature;
-import javax.xml.crypto.dsig.XMLSignatureFactory;
+import javax.xml.crypto.dsig.*;
 import javax.xml.crypto.dsig.dom.DOMSignContext;
 import javax.xml.crypto.dsig.dom.DOMValidateContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
@@ -31,11 +24,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.security.Key;
 import java.security.Provider;
 import java.security.interfaces.RSAPrivateKey;
@@ -74,6 +63,7 @@ public class XML {
 
     /**
      * Serialize to XML String
+     *
      * @param document The DOM document
      * @return The XML String
      */
@@ -94,8 +84,8 @@ public class XML {
 
     /**
      * Parse an XML file to DOM
-     * @return null if an error occurs during parsing.
      *
+     * @return null if an error occurs during parsing.
      */
     public static Document getDocument(File file) {
         try {
@@ -110,6 +100,7 @@ public class XML {
 
     /**
      * Parse an XML string content to DOM
+     *
      * @return null if an error occurs during parsing.
      */
     public static Document getDocument(String xml) {
@@ -126,6 +117,7 @@ public class XML {
 
     /**
      * Parse an XML coming from an input stream to DOM
+     *
      * @return null if an error occurs during parsing.
      */
     public static Document getDocument(InputStream stream) {
@@ -141,17 +133,20 @@ public class XML {
 
     /**
      * Check the xmldsig signature of the XML document.
-     * @param document the document to test
+     *
+     * @param document  the document to test
      * @param publicKey the public key corresponding to the key pair the document was signed with
      * @return true if a correct signature is present, false otherwise
      */
     public static boolean validSignature(Document document, Key publicKey) {
-        Node signatureNode =  document.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature").item(0);
+        Node signatureNode = document.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature").item(0);
         KeySelector keySelector = KeySelector.singletonKeySelector(publicKey);
 
         try {
-            String providerName = System.getProperty("jsr105Provider", "org.jcp.xml.dsig.internal.dom.XMLDSigRI");
-            XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM", (Provider) Class.forName(providerName).newInstance());
+            String providerName =
+                    System.getProperty("jsr105Provider", "org.jcp.xml.dsig.internal.dom.XMLDSigRI");
+            XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM",
+                    (Provider) Class.forName(providerName).newInstance());
             DOMValidateContext valContext = new DOMValidateContext(keySelector, signatureNode);
 
             XMLSignature signature = fac.unmarshalXMLSignature(valContext);
@@ -164,8 +159,9 @@ public class XML {
 
     /**
      * Sign the XML document using xmldsig.
-     * @param document the document to sign; it will be modified by the method.
-     * @param publicKey the public key from the key pair to sign the document.
+     *
+     * @param document   the document to sign; it will be modified by the method.
+     * @param publicKey  the public key from the key pair to sign the document.
      * @param privateKey the private key from the key pair to sign the document.
      * @return the signed document for chaining.
      */
@@ -174,16 +170,18 @@ public class XML {
         KeyInfoFactory keyInfoFactory = fac.getKeyInfoFactory();
 
         try {
-            Reference ref =fac.newReference(
+            Reference ref = fac.newReference(
                     "",
                     fac.newDigestMethod(DigestMethod.SHA1, null),
-                    Collections.singletonList(fac.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null)),
+                    Collections.singletonList(
+                            fac.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null)),
                     null,
                     null);
-            SignedInfo si = fac.newSignedInfo(fac.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE,
+            SignedInfo si =
+                    fac.newSignedInfo(fac.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE,
                             (C14NMethodParameterSpec) null),
-                    fac.newSignatureMethod(SignatureMethod.RSA_SHA1, null),
-                    Collections.singletonList(ref));
+                            fac.newSignatureMethod(SignatureMethod.RSA_SHA1, null),
+                            Collections.singletonList(ref));
             DOMSignContext dsc = new DOMSignContext(privateKey, document.getDocumentElement());
             KeyValue keyValue = keyInfoFactory.newKeyValue(publicKey);
             KeyInfo ki = keyInfoFactory.newKeyInfo(Collections.singletonList(keyValue));
@@ -195,5 +193,4 @@ public class XML {
 
         return document;
     }
-
 }

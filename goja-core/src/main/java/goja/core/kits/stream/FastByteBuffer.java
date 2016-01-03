@@ -18,8 +18,8 @@ public class FastByteBuffer {
     private int buffersCount;
     private int currentBufferIndex = -1;
     private byte[] currentBuffer;
-    private int    offset;
-    private int    size;
+    private int offset;
+    private int size;
 
     /**
      * Creates a new <code>byte</code> buffer. The buffer capacity is

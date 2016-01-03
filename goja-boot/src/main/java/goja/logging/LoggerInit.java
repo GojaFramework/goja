@@ -2,8 +2,8 @@ package goja.logging;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.jfinal.kit.PathKit;
-import goja.core.app.GojaConfig;
 import goja.core.StringPool;
+import goja.core.app.GojaConfig;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
@@ -18,7 +18,7 @@ import java.net.URL;
 public class LoggerInit {
     private static final String slf4jPath = GojaConfig.getProperty("logger.config", "/logback.xml");
 
-    public static void init(){
+    public static void init() {
         URL slf4jConf = LoggerInit.class.getResource(slf4jPath);
         final String app_name = GojaConfig.getAppName();
         final String app_version = GojaConfig.getVersion();
@@ -34,7 +34,6 @@ public class LoggerInit {
                 Logger.configuredManually = true;
             }
             Logger.slf4j = LoggerFactory.getLogger(app_name + StringPool.AT + app_version);
-
         }
     }
 }

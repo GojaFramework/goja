@@ -15,19 +15,13 @@ import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-03-29 14:12
@@ -36,8 +30,8 @@ import java.util.Map;
 public class JxlsRender extends Render {
     private static final String CONTENT_TYPE = "application/vnd.ms-excel;charset=" + getEncoding();
     private final String templetFile;
-    private Map<String, Object> beans    = Maps.newHashMap();
-    private String              filename = "file1.xls";
+    private Map<String, Object> beans = Maps.newHashMap();
+    private String filename = "file1.xls";
 
     public JxlsRender(String templetFile) {
         this.templetFile = templetFile;
@@ -73,7 +67,6 @@ public class JxlsRender extends Render {
             Object value = request.getAttribute(key);
             beans.put(key, value);
         }
-
     }
 
     public JxlsRender filename(String filename) {
@@ -87,7 +80,8 @@ public class JxlsRender extends Render {
             buildBean();
         }
         response.setContentType(CONTENT_TYPE);
-        response.setHeader("Content-Disposition", "attachment;Filename=" + encodeChineseDownloadFileName(request, filename));
+        response.setHeader("Content-Disposition",
+                "attachment;Filename=" + encodeChineseDownloadFileName(request, filename));
         try {
             OutputStream out = response.getOutputStream();
             InputStream is = new BufferedInputStream(new FileInputStream(templetFile));

@@ -14,16 +14,13 @@ import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 
 /**
- * <p>
- * MongoDb morphia framework kit.
- * </p>
+ * <p> MongoDb morphia framework kit. </p>
  *
  * @author walter yang
  * @version 1.0 2013-12-05 10:10
  * @since JDK 1.5
  */
 public final class MorphiaKit {
-
 
     private static Datastore _datastore;
 
@@ -50,7 +47,6 @@ public final class MorphiaKit {
         }
     }
 
-
     public static <T> Key<T> save(T t) {
         Preconditions.checkNotNull(_datastore, "the  morphia datasotre is not instace!");
         return _datastore.save(t);
@@ -74,7 +70,6 @@ public final class MorphiaKit {
     public static <T> T get(Class<T> cls, Object id) {
         return _datastore.get(cls, id);
     }
-
 
     /**
      * https://github.com/mongodb/morphia/wiki/Datastore

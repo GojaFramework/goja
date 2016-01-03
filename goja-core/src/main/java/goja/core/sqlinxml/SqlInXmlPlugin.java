@@ -23,5 +23,4 @@ public class SqlInXmlPlugin implements IPlugin {
         SqlKit.clearSqlMap();
         return true;
     }
-
 }

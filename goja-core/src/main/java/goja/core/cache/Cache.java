@@ -9,11 +9,9 @@ import java.io.NotSerializableException;
 import java.io.Serializable;
 import java.util.Map;
 
-
 /**
- * The Cache. Mainly an interface to memcached or EhCache.
- * <p/>
- * Note: When specifying expiration == "0s" (zero seconds) the actual expiration-time may vary between different cache implementations
+ * The Cache. Mainly an interface to memcached or EhCache. <p/> Note: When specifying expiration ==
+ * "0s" (zero seconds) the actual expiration-time may vary between different cache implementations
  */
 public abstract class Cache {
 
@@ -42,8 +40,8 @@ public abstract class Cache {
     }
 
     /**
-     * Add an element only if it doesn't exist, and return only when
-     * the element is effectively cached.
+     * Add an element only if it doesn't exist, and return only when the element is effectively
+     * cached.
      *
      * @param key        Element key
      * @param value      Element value
@@ -115,8 +113,8 @@ public abstract class Cache {
     }
 
     /**
-     * Replace an element only if it already exists and return only when the
-     * element is effectively cached.
+     * Replace an element only if it already exists and return only when the element is effectively
+     * cached.
      *
      * @param key        Element key
      * @param value      Element value
@@ -211,8 +209,7 @@ public abstract class Cache {
     }
 
     /**
-     * Delete an element from the cache and return only when the
-     * element is effectively removed.
+     * Delete an element from the cache and return only when the element is effectively removed.
      *
      * @param key The element key
      * @return If the element an eventually been deleted
@@ -264,7 +261,9 @@ public abstract class Cache {
      */
     static void checkSerializable(Object value) {
         if (value != null && !(value instanceof Serializable)) {
-            throw new CacheException("Cannot cache a non-serializable value of type " + value.getClass().getName(), new NotSerializableException(value.getClass().getName()));
+            throw new CacheException(
+                    "Cannot cache a non-serializable value of type " + value.getClass().getName(),
+                    new NotSerializableException(value.getClass().getName()));
         }
     }
 }

@@ -1,17 +1,15 @@
 package goja.core.tuples.valueintf;
 
-/** 
+/**
  * <p>
  * Marker interface for tuples with a "value" value.
- * </p> 
-
- * @since 1.1
- * 
- * @author Daniel Fern&aacute;ndez
+ * </p>
  *
+ * @author Daniel Fern&aacute;ndez
+ * @since 1.1
  */
 public interface IValueValue<X> {
 
     public X getValue();
-    
+
 }

@@ -18,7 +18,6 @@
 
 //     static JobsPlugin jobsPlugin;
 
-
 //     @Before
 //     public void setUp() throws Exception {
 //         ClassFinder.findWithTest();

@@ -13,7 +13,6 @@ public class SqlSelectTest {
         MatcherAssert.assertThat(dest, Matchers.equalTo(s));
     }
 
-
     @Test
     public void testFrom() throws Exception {
         String s = SqlSelect.create().select("f1,f2").from("t1").toString();
@@ -44,14 +43,16 @@ public class SqlSelectTest {
 
     @Test
     public void testAndWhere() throws Exception {
-        String s = SqlSelect.create().select("f1,f2").from("t1").where("f1=1").andWhere("f2=?").toString();
+        String s =
+                SqlSelect.create().select("f1,f2").from("t1").where("f1=1").andWhere("f2=?").toString();
         String dest = "SELECT f1,f2 FROM t1 WHERE f1=1 AND f2=?";
         MatcherAssert.assertThat(dest, Matchers.equalTo(s));
     }
 
     @Test
     public void testOrWhere() throws Exception {
-        String s = SqlSelect.create().select("f1,f2").from("t1").where("f1=1").orWhere("f2=?").toString();
+        String s =
+                SqlSelect.create().select("f1,f2").from("t1").where("f1=1").orWhere("f2=?").toString();
         String dest = "SELECT f1,f2 FROM t1 WHERE f1=1 OR f2=?";
         MatcherAssert.assertThat(dest, Matchers.equalTo(s));
     }
@@ -77,19 +78,22 @@ public class SqlSelectTest {
         MatcherAssert.assertThat(dest, Matchers.equalTo(s));
     }
 
-
     @Test
     public void testWhereIn() throws Exception {
-        String s = SqlSelect.create().select("f1,f2").from("t1").where(SqlQuery.whereIn("f1", Lists.newArrayList(1, 2, 3))).toString();
+        String s = SqlSelect.create()
+                .select("f1,f2")
+                .from("t1")
+                .where(SqlQuery.whereIn("f1", Lists.newArrayList(1, 2, 3)))
+                .toString();
         String dest = "SELECT f1,f2 FROM t1 WHERE f1 IN (1, 2, 3)";
         MatcherAssert.assertThat(dest, Matchers.equalTo(s));
     }
 
-
     @Test
     public void testFindBy() throws Exception {
 
-        String s = SqlSelect.create().select("f1,f2").from("t1").where(FindBy.findBy("ByF1Equal")).toString();
+        String s =
+                SqlSelect.create().select("f1,f2").from("t1").where(FindBy.findBy("ByF1Equal")).toString();
         String dest = "SELECT f1,f2 FROM t1 WHERE f1 = ?";
         MatcherAssert.assertThat(dest, Matchers.equalTo(s));
     }

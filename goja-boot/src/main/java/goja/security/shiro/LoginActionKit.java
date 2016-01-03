@@ -22,7 +22,8 @@ public abstract class LoginActionKit {
      * @param rememberMe 是否记住我
      * @throws AuthenticationException 授权失败的异常
      */
-    public static void login(String username, String password, boolean rememberMe) throws AuthenticationException {
+    public static void login(String username, String password, boolean rememberMe)
+            throws AuthenticationException {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
         final Subject subject = SecurityUtils.getSubject();
         subject.login(token);
@@ -38,6 +39,4 @@ public abstract class LoginActionKit {
     public static void login(String username, String password) throws AuthenticationException {
         login(username, password, false);
     }
-
-
 }

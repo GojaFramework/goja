@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 public class ShiroEhCacheManager implements CacheManager, Initializable, Destroyable {
 
     private static final Logger log = LoggerFactory.getLogger(ShiroEhCacheManager.class);
+
     @Override
     public <K, V> Cache<K, V> getCache(String name) throws CacheException {
         if (log.isTraceEnabled()) {

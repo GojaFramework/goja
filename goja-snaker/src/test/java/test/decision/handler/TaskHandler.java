@@ -22,9 +22,8 @@ import org.snaker.engine.core.Execution;
  * @since 1.0
  */
 public class TaskHandler implements DecisionHandler {
-	
-	public String decide(Execution execution) {
-		return (String)execution.getArgs().get("content");
-	}
 
+    public String decide(Execution execution) {
+        return (String) execution.getArgs().get("content");
+    }
 }

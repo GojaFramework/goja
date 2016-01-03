@@ -1,29 +1,29 @@
 <sqlMap model="News" package="app.models">
-    <sql id="new" method="findByTest">
-        select * from goja_news
-        <if test="a != 123">
-            new_id = ?
-        </if>
-        <choose>
-            <when test="a != 2">
-                new_a = ?
-            </when>
-            <otherwise>
-                new_b = ?
-            </otherwise>
-        </choose>
-    </sql>
+  <sql id="new" method="findByTest">
+    select * from goja_news
+    <if test="a != 123">
+      new_id = ?
+    </if>
+    <choose>
+      <when test="a != 2">
+        new_a = ?
+      </when>
+      <otherwise>
+        new_b = ?
+      </otherwise>
+    </choose>
+  </sql>
 
-    <sql id="trim" method="findByTrim">
+  <sql id="trim" method="findByTrim">
 
-        select * from goja_news
-        <trim prefix="WHERE" prefixOverrides="AND ">
-            <if test="a != 0">
-                field = ?
-            </if>
-            <if test="c != 0">
-                field = ?
-            </if>
-        </trim>
-    </sql>
+    select * from goja_news
+    <trim prefix="WHERE" prefixOverrides="AND ">
+      <if test="a != 0">
+        field = ?
+      </if>
+      <if test="c != 0">
+        field = ?
+      </if>
+    </trim>
+  </sql>
 </sqlMap>

@@ -2,8 +2,8 @@ package goja.test;
 
 import goja.Goja;
 import goja.core.app.GojaConfig;
-import goja.initialize.ctxbox.ClassFinder;
 import goja.core.kits.reflect.Reflect;
+import goja.initialize.ctxbox.ClassFinder;
 import org.junit.BeforeClass;
 
 /**
@@ -21,6 +21,5 @@ public abstract class GojaTestCase {
         GojaConfig.getConfigProps();
         ClassFinder.findWithTest();
         Reflect.on(Goja.class).call("initWithTest");
-
     }
 }

@@ -8,14 +8,7 @@ package goja.rapid.qrcode;
 
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
-import com.google.zxing.WriterException;
+import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
@@ -41,7 +34,6 @@ import java.nio.charset.Charset;
  */
 public final class QRCode {
 
-
     /**
      * QRCode 生成器格式
      */
@@ -56,24 +48,6 @@ public final class QRCode {
      * 生成的 QRCode 图片文件
      */
     private File qrcodeFile = null;
-
-    /**
-     * 返回生成的 QRCode 图像对象
-     *
-     * @return 生成的 QRCode 图像对象
-     */
-    public BufferedImage getQrcodeImage() {
-        return qrcodeImage;
-    }
-
-    /**
-     * 返回生成的 QRCode 图片文件
-     *
-     * @return 生成的 QRCode 图片文件
-     */
-    public File getQrcodeFile() {
-        return qrcodeFile;
-    }
 
     private QRCode() {
 
@@ -101,6 +75,147 @@ public final class QRCode {
         qrcode.format = format;
         qrcode.qrcodeImage = toQRCode(content, format);
         return qrcode;
+    }
+
+    /**
+     * 使用带默认值的「QRCode 生成器格式」，把指定的内容生成为一个 QRCode 的图像对象。
+     *
+     * @param content 所需生成 QRCode 的内容
+     * @return QRCode 的图像对象
+     */
+    public static BufferedImage toQRCode(String content) {
+        return toQRCode(content, null);
+    }
+
+    /**
+     * 使用指定的「QRCode生成器格式」，把指定的内容生成为一个 QRCode 的图像对象。
+     *
+     * @param content 所需生成 QRCode 的内容
+     * @return QRCode 的图像对象
+     */
+    public static BufferedImage toQRCode(String content, QRCodeFormat format) {
+        if (format == null) {
+            format = QRCodeFormat.NEW();
+        }
+
+        content = new String(content.getBytes(Charset.forName(format.getEncode())));
+        BitMatrix matrix;
+        try {
+            matrix = new QRCodeWriter().encode(content,
+                    BarcodeFormat.QR_CODE,
+                    format.getSize(),
+                    format.getSize(),
+                    format.getHints());
+        } catch (WriterException e) {
+            throw new RuntimeException(e);
+        }
+
+        int width = matrix.getWidth();
+        int height = matrix.getHeight();
+        int fgColor = format.getForeGroundColor().getRGB();
+        int bgColor = format.getBackGroundColor().getRGB();
+        BufferedImage image = new BufferedImage(width,
+                height,
+                ColorSpace.TYPE_RGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                image.setRGB(x, y, matrix.get(x, y) ? fgColor : bgColor);
+            }
+        }
+        return image;
+    }
+
+    /**
+     * 从指定的 QRCode 图片文件中解析出其内容。
+     *
+     * @param qrcodeFile QRCode 文件
+     * @return QRCode 中的内容
+     */
+    public static String from(String qrcodeFile) {
+        if (qrcodeFile.startsWith("http://")
+                || qrcodeFile.startsWith("https://")) {
+            try {
+                return from(new URL(qrcodeFile));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return from(new File(qrcodeFile));
+        }
+    }
+
+    /**
+     * 从指定的 QRCode 图片文件中解析出其内容。
+     *
+     * @param qrcodeFile QRCode 图片文件
+     * @return QRCode 中的内容
+     */
+    public static String from(File qrcodeFile) {
+        if (!qrcodeFile.exists()) {
+            return null;
+        }
+        try {
+            BufferedImage image = ImageIO.read(qrcodeFile);
+            return from(image);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 从指定的 QRCode 图片链接中解析出其内容。
+     *
+     * @param qrcodeUrl QRCode 图片链接
+     * @return QRCode 中的内容
+     */
+    public static String from(URL qrcodeUrl) {
+        try {
+            BufferedImage image = ImageIO.read(qrcodeUrl);
+            return from(image);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 从指定的 QRCode 图像对象中解析出其内容。
+     *
+     * @param qrcodeImage QRCode 图像对象
+     * @return QRCode 中的内容
+     */
+    public static String from(BufferedImage qrcodeImage) {
+        final LuminanceSource source = new BufferedImageLuminanceSource(qrcodeImage);
+        final BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        String content;
+        try {
+            Result result = new QRCodeReader().decode(bitmap);
+            content = result.getText();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (ChecksumException e) {
+            throw new RuntimeException(e);
+        } catch (FormatException e) {
+            throw new RuntimeException(e);
+        }
+        return content;
+    }
+
+    /**
+     * 返回生成的 QRCode 图像对象
+     *
+     * @return 生成的 QRCode 图像对象
+     */
+    public BufferedImage getQrcodeImage() {
+        return qrcodeImage;
+    }
+
+    /**
+     * 返回生成的 QRCode 图片文件
+     *
+     * @return 生成的 QRCode 图片文件
+     */
+    public File getQrcodeFile() {
+        return qrcodeFile;
     }
 
     /**
@@ -188,129 +303,6 @@ public final class QRCode {
                 appendImage.getHeight(),
                 format.getBackGroundColor(),
                 null);
-    }
-
-    /**
-     * 使用带默认值的「QRCode 生成器格式」，把指定的内容生成为一个 QRCode 的图像对象。
-     *
-     * @param content 所需生成 QRCode 的内容
-     * @return QRCode 的图像对象
-     */
-    public static BufferedImage toQRCode(String content) {
-        return toQRCode(content, null);
-    }
-
-    /**
-     * 使用指定的「QRCode生成器格式」，把指定的内容生成为一个 QRCode 的图像对象。
-     *
-     * @param content 所需生成 QRCode 的内容
-     * @return QRCode 的图像对象
-     */
-    public static BufferedImage toQRCode(String content, QRCodeFormat format) {
-        if (format == null) {
-            format = QRCodeFormat.NEW();
-        }
-
-        content = new String(content.getBytes(Charset.forName(format.getEncode())));
-        BitMatrix matrix;
-        try {
-            matrix = new QRCodeWriter().encode(content,
-                    BarcodeFormat.QR_CODE,
-                    format.getSize(),
-                    format.getSize(),
-                    format.getHints());
-        } catch (WriterException e) {
-            throw new RuntimeException(e);
-        }
-
-        int width = matrix.getWidth();
-        int height = matrix.getHeight();
-        int fgColor = format.getForeGroundColor().getRGB();
-        int bgColor = format.getBackGroundColor().getRGB();
-        BufferedImage image = new BufferedImage(width,
-                height,
-                ColorSpace.TYPE_RGB);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                image.setRGB(x, y, matrix.get(x, y) ? fgColor : bgColor);
-            }
-        }
-        return image;
-    }
-
-    /**
-     * 从指定的 QRCode 图片文件中解析出其内容。
-     *
-     * @param qrcodeFile QRCode 文件
-     * @return QRCode 中的内容
-     */
-    public static String from(String qrcodeFile) {
-        if (qrcodeFile.startsWith("http://")
-                || qrcodeFile.startsWith("https://")) {
-            try {
-                return from(new URL(qrcodeFile));
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            return from(new File(qrcodeFile));
-        }
-    }
-
-    /**
-     * 从指定的 QRCode 图片文件中解析出其内容。
-     *
-     * @param qrcodeFile QRCode 图片文件
-     * @return QRCode 中的内容
-     */
-    public static String from(File qrcodeFile) {
-        if(!qrcodeFile.exists()){
-            return null;
-        }
-        try {
-            BufferedImage image = ImageIO.read(qrcodeFile);
-            return from(image);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 从指定的 QRCode 图片链接中解析出其内容。
-     *
-     * @param qrcodeUrl QRCode 图片链接
-     * @return QRCode 中的内容
-     */
-    public static String from(URL qrcodeUrl) {
-        try {
-            BufferedImage image = ImageIO.read(qrcodeUrl);
-            return from(image);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 从指定的 QRCode 图像对象中解析出其内容。
-     *
-     * @param qrcodeImage QRCode 图像对象
-     * @return QRCode 中的内容
-     */
-    public static String from(BufferedImage qrcodeImage) {
-        final LuminanceSource source = new BufferedImageLuminanceSource(qrcodeImage);
-        final BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        String content;
-        try {
-            Result result = new QRCodeReader().decode(bitmap);
-            content = result.getText();
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (ChecksumException e) {
-            throw new RuntimeException(e);
-        } catch (FormatException e) {
-            throw new RuntimeException(e);
-        }
-        return content;
     }
 
     private String getSuffixName(File file) {

@@ -1,9 +1,7 @@
 package goja.core.app;
 
 /**
- * <p>
- * 系统运行模式
- * </p>
+ * <p> 系统运行模式 </p>
  *
  * @author sogYF
  * @version 1.0

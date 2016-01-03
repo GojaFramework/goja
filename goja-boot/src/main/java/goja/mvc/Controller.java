@@ -41,9 +41,7 @@ import java.util.Map;
 import static goja.core.StringPool.SLASH;
 
 /**
- * <p>
- * Controller.
- * </p>
+ * <p> Controller. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-01 20:29
@@ -68,7 +66,6 @@ public class Controller extends com.jfinal.core.Controller {
     protected static void badRequest() {
         new BadRequest().render();
     }
-
 
     /**
      * Rendering errors information, in Json format.
@@ -168,7 +165,6 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(AjaxMessage.ok(data));
     }
 
-
     protected <T> void renderAjaxSuccess(List<T> list) {
         if (list == null || list.isEmpty()) {
             renderJson(AjaxMessage.nodata());
@@ -200,7 +196,6 @@ public class Controller extends com.jfinal.core.Controller {
     protected void renderAjaxNodata() {
         renderJson(AjaxMessage.NODATA);
     }
-
 
     /**
      * Render the specified view as a string.
@@ -235,7 +230,6 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(AjaxMessage.developing());
     }
 
-
     /**
      * Based on the current path structure is going to jump full Action of the path
      *
@@ -254,7 +248,6 @@ public class Controller extends com.jfinal.core.Controller {
         ///abc/def","bcd/efg?abc
         return currentActionPath + SLASH + url.split("\\?")[0];
     }
-
 
     /**
      * The Request is ajax with return <code>true</code>.
@@ -275,9 +268,8 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     /**
-     * According to the request information of jquery.Datatables, the results of the query and returns the JSON data to the client.
-     * <p/>
-     * The specified query set the data.
+     * According to the request information of jquery.Datatables, the results of the query and returns
+     * the JSON data to the client. <p/> The specified query set the data.
      *
      * @param datas     The data.
      * @param criterias datatable criterias.
@@ -285,15 +277,15 @@ public class Controller extends com.jfinal.core.Controller {
      */
     protected <E> void renderDataTables(DTCriterias criterias, Page<E> datas) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
-        DTResponse<E> response = DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalPage());
+        DTResponse<E> response =
+                DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalPage());
         renderJson(response);
     }
 
-
     /**
-     * According to the request information of jquery.Datatables, the results of the query and returns the JSON data to the client.
-     * <p/>
-     * Automatically according to the request to create the query SQL and encapsulating the results back to the client.
+     * According to the request information of jquery.Datatables, the results of the query and returns
+     * the JSON data to the client. <p/> Automatically according to the request to create the query
+     * SQL and encapsulating the results back to the client.
      *
      * @param m_cls     The Model class.
      * @param criterias datatable criterias.
@@ -304,12 +296,11 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(response);
     }
 
-
     /**
-     * According to the request information of jquery.Datatables, the results of the query and returns the JSON data to the client.
-     * <p/>
-     * According to the SQL configuration file,
-     * in accordance with the Convention model_name.coloumns\model_name.where\model_name.order configured SQL to query and returns the results to the client.
+     * According to the request information of jquery.Datatables, the results of the query and returns
+     * the JSON data to the client. <p/> According to the SQL configuration file, in accordance with
+     * the Convention model_name.coloumns\model_name.where\model_name.order configured SQL to query
+     * and returns the results to the client.
      *
      * @param model_name The Model name.
      * @param criterias  datatable criterias.
@@ -317,16 +308,16 @@ public class Controller extends com.jfinal.core.Controller {
     protected void renderDataTables(DTCriterias criterias, String model_name) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
         final Page<Record> datas = Dao.paginate(model_name, criterias);
-        DTResponse response = DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
+        DTResponse response =
+                DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
         renderJson(response);
     }
 
-
     /**
-     * According to the request information of jquery.Datatables, the results of the query and returns the JSON data to the client.
-     * <p/>
-     * According to the SQL configuration file, in accordance with the Convention model_name.coloumns\model_name.where\model_name.order
-     * configured SQL to query and specify the parameters and return results to the client.
+     * According to the request information of jquery.Datatables, the results of the query and returns
+     * the JSON data to the client. <p/> According to the SQL configuration file, in accordance with
+     * the Convention model_name.coloumns\model_name.where\model_name.order configured SQL to query
+     * and specify the parameters and return results to the client.
      *
      * @param criterias    datatable criterias.
      * @param sqlGroupName The Model name.
@@ -335,7 +326,8 @@ public class Controller extends com.jfinal.core.Controller {
     protected void renderDataTables(DTCriterias criterias, String sqlGroupName, List<Object> params) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
         final Page<Record> datas = Dao.paginate(sqlGroupName, criterias, params);
-        DTResponse response = DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
+        DTResponse response =
+                DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
         renderJson(response);
     }
 
@@ -371,7 +363,6 @@ public class Controller extends com.jfinal.core.Controller {
         return EuiDataGrid.req(getRequest());
     }
 
-
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
      *
@@ -386,7 +377,6 @@ public class Controller extends com.jfinal.core.Controller {
         }
     }
 
-
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
      *
@@ -397,7 +387,6 @@ public class Controller extends com.jfinal.core.Controller {
         Preconditions.checkNotNull(gridReq, "参数不能为空");
         renderJson(EuiDataGrid.rsp(gridReq, sqlGroupName));
     }
-
 
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
@@ -414,7 +403,6 @@ public class Controller extends com.jfinal.core.Controller {
         }
     }
 
-
     /**
      * 渲染DataGrid的表格展示，支持排序和搜索
      *
@@ -430,11 +418,9 @@ public class Controller extends com.jfinal.core.Controller {
         }
     }
 
-
     /**
-     * For information on the logged in user.
-     * <p/>
-     * This access is through the way the Cookie and Session
+     * For information on the logged in user. <p/> This access is through the way the Cookie and
+     * Session
      *
      * @param <M> Generic parameter.
      * @return user model.
@@ -450,9 +436,8 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     /**
-     * The current Shiro login user.
-     * <p/>
-     * If it opens the secruity function can call this method to obtain the logged in user.
+     * The current Shiro login user. <p/> If it opens the secruity function can call this method to
+     * obtain the logged in user.
      *
      * @param <U> Generic parameter.
      * @return Shiro login user.
@@ -465,7 +450,6 @@ public class Controller extends com.jfinal.core.Controller {
         return Optional.absent();
     }
 
-
     /**
      * To get custom paging object.
      *
@@ -475,12 +459,10 @@ public class Controller extends com.jfinal.core.Controller {
         return PageDto.create(this);
     }
 
-
     /**
      * JodaTime time request
      *
-     * @param name param.
-     *             the datetime format : yyyy-MM-dd
+     * @param name param. the datetime format : yyyy-MM-dd
      * @return datetime.
      */
     protected DateTime getDate(String name) {
@@ -490,24 +472,22 @@ public class Controller extends com.jfinal.core.Controller {
     /**
      * JodaTime time request
      *
-     * @param name         param.
-     *                     the datetime format : yyyy-MM-dd
+     * @param name         param. the datetime format : yyyy-MM-dd
      * @param defaultValue the default value.
      * @return datetime.
      */
     protected DateTime getDate(String name, DateTime defaultValue) {
         String value = getRequest().getParameter(name);
-        if (Strings.isNullOrEmpty(value))
+        if (Strings.isNullOrEmpty(value)) {
             return defaultValue;
+        }
         return DateKit.parseDashYMDDateTime(value);
     }
-
 
     /**
      * JodaTime time request
      *
-     * @param name param.
-     *             the datetime format : yyyy-MM-dd HH:mm:ss
+     * @param name param. the datetime format : yyyy-MM-dd HH:mm:ss
      * @return datetime.
      */
     protected DateTime getDateTime(String name) {
@@ -517,18 +497,17 @@ public class Controller extends com.jfinal.core.Controller {
     /**
      * JodaTime time request
      *
-     * @param name         param.
-     *                     the datetime format : yyyy-MM-dd HH:mm:ss
+     * @param name         param. the datetime format : yyyy-MM-dd HH:mm:ss
      * @param defaultValue the default value.
      * @return datetime.
      */
     protected DateTime getDateTime(String name, DateTime defaultValue) {
         String value = getRequest().getParameter(name);
-        if (Strings.isNullOrEmpty(value))
+        if (Strings.isNullOrEmpty(value)) {
             return defaultValue;
+        }
         return DateKit.parseDashYMDHMSDateTime(value);
     }
-
 
     public List<UploadFile> getFiles(String saveDirectory, Integer maxPostSize,
                                      String encoding, FileRenamePolicy fileRenamePolicy) {
@@ -619,7 +598,6 @@ public class Controller extends com.jfinal.core.Controller {
         return null;
     }
 
-
     /**
      * Files
      */
@@ -635,7 +613,6 @@ public class Controller extends com.jfinal.core.Controller {
     public List<UploadFile> getFiles(String saveDirectory) {
         return this.getFiles(saveDirectory, fileRenamePolicy);
     }
-
 
     protected void renderAjaxSimpleSuccess(String msg) {
         renderJson(new SimpleAjaxMessage(true, msg));

@@ -12,17 +12,11 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 
 /**
- * <p>
- * The File Uitl.
- * </p>
+ * <p> The File Uitl. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-11-04 11:16
@@ -87,5 +81,4 @@ public final class FileEncodingKit {
 
         return Optional.absent();
     }
-
 }

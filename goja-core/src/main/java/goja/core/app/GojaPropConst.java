@@ -14,8 +14,7 @@ public interface GojaPropConst {
     String APPCONFIGFOLDER = "app.config.folder";
 
     /**
-     * 运行模式，
-     * 有 dev,test,prod三种模式，分别标示开发,测试,线上运行
+     * 运行模式， 有 dev,test,prod三种模式，分别标示开发,测试,线上运行
      */
     String APPMODE = "app.mode";
     /**
@@ -27,8 +26,7 @@ public interface GojaPropConst {
      */
     String APPNAME = "app.name";
     /**
-     * 应用包前缀
-     * 默认 app
+     * 应用包前缀 默认 app
      */
     String APP_PACKAGE_PREFIX = "app.prefix.pkg";
     /**
@@ -36,8 +34,7 @@ public interface GojaPropConst {
      */
     String APPDOMAIN = "app.domain";
     /**
-     * 是否启用身份验证，也就是是否启用shiro
-     * 配置为：true, false
+     * 是否启用身份验证，也就是是否启用shiro 配置为：true, false
      */
     String APPSECURITY = "app.security";
     /**
@@ -45,19 +42,17 @@ public interface GojaPropConst {
      */
     String APPSECURITYCONFIG = "app.security.config";
     /**
-     * 第三方包，可以扫描加载相关的类 模型等
-     * 配置为：classpath下的jar名称
+     * 第三方包，可以扫描加载相关的类 模型等 配置为：classpath下的jar名称
      */
     String APPJARS = "app.jars";
     /**
-     * 是否启用定时任务
-     * 配置为：true, false
+     * 是否启用定时任务 配置为：true, false
      */
     String APPJOB = "app.job";
     /**
      * 是否启用全文检索，配置为一个存在的路径地址
      */
-//    String APPFULLTEXT       = "app.fulltext";
+    //    String APPFULLTEXT       = "app.fulltext";
     /**
      * 最大支持的上传文件大小
      */
@@ -91,15 +86,12 @@ public interface GojaPropConst {
      */
     String APP_SNAKER = "app.snaker";
 
-
     /**
-     * 数据库连接地址
-     * 如果是多数据源，配置文件中应该是 db.config1.url
+     * 数据库连接地址 如果是多数据源，配置文件中应该是 db.config1.url
      */
     String DBURL = "db.url";
     /**
-     * 数据库连接登录账号
-     * 如果是多数据源，配置文件中应该是 db.config1.username
+     * 数据库连接登录账号 如果是多数据源，配置文件中应该是 db.config1.username
      */
     String DBUSERNAME = "db.username";
     /**
@@ -107,8 +99,7 @@ public interface GojaPropConst {
      */
     String DBLOGFILE = "db.logfile";
     /**
-     * 数据库连接登录密码
-     * 如果是多数据源，配置文件中应该是 db.config1.password
+     * 数据库连接登录密码 如果是多数据源，配置文件中应该是 db.config1.password
      */
     String DBPASSWORD = "db.password";
     /**
@@ -175,8 +166,7 @@ public interface GojaPropConst {
      */
     String REDIS_CONFIG = "redis.config";
     /**
-     * Redis的外部配置文件的Cache名称，多个以逗号相隔
-     * 会从外部文件中取得Redis的配置端口和地址，格式为 缓存名称.host 和 缓存名称.port
+     * Redis的外部配置文件的Cache名称，多个以逗号相隔 会从外部文件中取得Redis的配置端口和地址，格式为 缓存名称.host 和 缓存名称.port
      * 如果配置了该项，则默认的则不启动。
      */
     String REDIS_CACHES = "redis.caches";
@@ -201,7 +191,6 @@ public interface GojaPropConst {
      * UE控件访问文件（上传的图片、文件）获取的地址前缀
      */
     String UE_URLPREFIX = "ue.urlprefix";
-
 
     /**
      * 分页Sql 分割标记

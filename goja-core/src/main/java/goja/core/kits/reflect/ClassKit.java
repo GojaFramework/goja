@@ -10,20 +10,8 @@ import com.google.common.base.Preconditions;
 import goja.core.kits.collection.CollectionKit;
 
 import java.beans.Introspector;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * <p>
@@ -35,58 +23,58 @@ import java.util.Set;
  * @since JDK 1.6
  */
 public class ClassKit {
-    private ClassKit() {
-    }
-
-    /** Suffix for array class names: "[]" */
+    /**
+     * Suffix for array class names: "[]"
+     */
     public static final String ARRAY_SUFFIX = "[]";
-
-    /** Prefix for internal array class names: "[" */
-    private static final String INTERNAL_ARRAY_PREFIX = "[";
-
-    /** Prefix for internal non-primitive array class names: "[L" */
-    private static final String NON_PRIMITIVE_ARRAY_PREFIX = "[L";
-
-    /** The package separator character '.' */
-    private static final char PACKAGE_SEPARATOR = '.';
-
-    /** The path separator character '/' */
-    private static final char PATH_SEPARATOR = '/';
-
-    /** The inner class separator character '$' */
-    private static final char INNER_CLASS_SEPARATOR = '$';
-
-    /** The CGLIB class separator character "$$" */
+    /**
+     * The CGLIB class separator character "$$"
+     */
     public static final String CGLIB_CLASS_SEPARATOR = "$$";
-
-    /** The ".class" file suffix */
+    /**
+     * The ".class" file suffix
+     */
     public static final String CLASS_FILE_SUFFIX = ".class";
-
-
+    /**
+     * Prefix for internal array class names: "["
+     */
+    private static final String INTERNAL_ARRAY_PREFIX = "[";
+    /**
+     * Prefix for internal non-primitive array class names: "[L"
+     */
+    private static final String NON_PRIMITIVE_ARRAY_PREFIX = "[L";
+    /**
+     * The package separator character '.'
+     */
+    private static final char PACKAGE_SEPARATOR = '.';
+    /**
+     * The path separator character '/'
+     */
+    private static final char PATH_SEPARATOR = '/';
+    /**
+     * The inner class separator character '$'
+     */
+    private static final char INNER_CLASS_SEPARATOR = '$';
     /**
      * Map with primitive wrapper type as key and corresponding primitive
      * type as value, for example: Integer.class -> int.class.
      */
     private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new HashMap<Class<?>, Class<?>>(8);
-
     /**
      * Map with primitive type as key and corresponding wrapper
      * type as value, for example: int.class -> Integer.class.
      */
     private static final Map<Class<?>, Class<?>> primitiveTypeToWrapperMap = new HashMap<Class<?>, Class<?>>(8);
-
     /**
      * Map with primitive type name as key and corresponding primitive
      * type as value, for example: "int" -> "int.class".
      */
     private static final Map<String, Class<?>> primitiveTypeNameMap = new HashMap<String, Class<?>>(32);
-
     /**
      * Map with common "java.lang" class name as key and corresponding Class as value.
      * Primarily for efficient deserialization of remote invocations.
      */
     private static final Map<String, Class<?>> commonClassCache = new HashMap<String, Class<?>>(32);
-
 
     static {
         primitiveWrapperTypeMap.put(Boolean.class, boolean.class);
@@ -121,6 +109,9 @@ public class ClassKit {
                 Error.class, StackTraceElement.class, StackTraceElement[].class);
     }
 
+
+    private ClassKit() {
+    }
 
     /**
      * Register the given common classes with the ClassUtils cache.

@@ -26,8 +26,9 @@ class PermissionAuthzHandler extends AbstractAuthzHandler {
 
     @Override
     public void assertAuthorized() throws AuthorizationException {
-        if (!(annotation instanceof RequiresPermissions))
+        if (!(annotation instanceof RequiresPermissions)) {
             return;
+        }
 
         RequiresPermissions rpAnnotation = (RequiresPermissions) annotation;
         String[] perms = rpAnnotation.value();
@@ -46,15 +47,14 @@ class PermissionAuthzHandler extends AbstractAuthzHandler {
             // exception by calling hasRole first
             boolean hasAtLeastOnePermission = false;
             for (String permission : perms)
-                if (getSubject().isPermitted(permission))
+                if (getSubject().isPermitted(permission)) {
                     hasAtLeastOnePermission = true;
+                }
             // Cause the exception if none of the role match, note that the
             // exception message will be a bit misleading
-            if (!hasAtLeastOnePermission)
+            if (!hasAtLeastOnePermission) {
                 getSubject().checkPermission(perms[0]);
-
+            }
         }
-
     }
-
 }

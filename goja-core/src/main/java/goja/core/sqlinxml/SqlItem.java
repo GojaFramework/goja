@@ -16,5 +16,4 @@ class SqlItem {
 
     @XmlValue
     String value;
-
 }

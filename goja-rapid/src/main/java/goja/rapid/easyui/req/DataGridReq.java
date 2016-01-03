@@ -1,8 +1,8 @@
 package goja.rapid.easyui.req;
 
 import com.google.common.collect.Lists;
-import goja.rapid.db.Condition;
 import goja.core.tuples.Triplet;
+import goja.rapid.db.Condition;
 
 import java.io.Serializable;
 import java.util.List;
@@ -52,8 +52,8 @@ public final class DataGridReq implements Serializable {
     }
 
     public static class Builder<M> {
-        private int    page;
-        private int    rows;
+        private int page;
+        private int rows;
         private String sortField;
 
         private String order;

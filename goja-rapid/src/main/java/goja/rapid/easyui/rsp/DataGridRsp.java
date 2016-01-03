@@ -25,8 +25,16 @@ public class DataGridRsp implements Serializable {
         this.rows = rows;
     }
 
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Record> getRows() {
+        return rows;
+    }
+
     public static class Builder {
-        private int          total;
+        private int total;
         private List<Record> rows;
 
 
@@ -44,13 +52,5 @@ public class DataGridRsp implements Serializable {
         public DataGridRsp build() {
             return new DataGridRsp(total, rows);
         }
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public List<Record> getRows() {
-        return rows;
     }
 }

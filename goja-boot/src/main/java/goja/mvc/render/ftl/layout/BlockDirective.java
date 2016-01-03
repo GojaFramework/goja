@@ -27,7 +27,9 @@ import java.util.Map;
  * @since JDK 1.5
  */
 public class BlockDirective implements TemplateDirectiveModel {
-    /** 自定义指令名称 */
+    /**
+     * 自定义指令名称
+     */
     public final static String DIRECTIVE_NAME = "block";
 
     @SuppressWarnings("rawtypes")

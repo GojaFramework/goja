@@ -11,9 +11,7 @@ import com.jfinal.aop.Invocation;
 import goja.logging.Logger;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-02-24 16:51
@@ -28,7 +26,6 @@ public class ProfilerInterceptor implements Interceptor {
             Profiler.start("profiler " + actionKey + " start...");
 
             ai.invoke();
-
         } finally {
             Profiler.release();
             Logger.info(Profiler.dump());

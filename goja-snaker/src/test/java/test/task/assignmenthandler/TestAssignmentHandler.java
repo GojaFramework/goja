@@ -14,8 +14,6 @@
  */
 package test.task.assignmenthandler;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.access.QueryFilter;
@@ -24,23 +22,26 @@ import org.snaker.engine.entity.Task;
 import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.test.TestSnakerBase;
 
+import java.util.List;
+
 /**
  * @author yuqs
  * @since 1.0
  */
 public class TestAssignmentHandler extends TestSnakerBase {
-	@Before
-	public void before() {
-		processId = engine.process().deploy(StreamHelper.getStreamFromClasspath("test/task/assignmenthandler/process.snaker"));
-	}
-	
-	@Test
-	public void test() {
-		Order order = engine.startInstanceById(processId, "2");
-		System.out.println("order=" + order);
-		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
-		for(Task task : tasks) {
-			engine.executeTask(task.getId(), "admin");
-		}
-	}
+    @Before
+    public void before() {
+        processId = engine.process()
+                .deploy(StreamHelper.getStreamFromClasspath("test/task/assignmenthandler/process.snaker"));
+    }
+
+    @Test
+    public void test() {
+        Order order = engine.startInstanceById(processId, "2");
+        System.out.println("order=" + order);
+        List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
+        for (Task task : tasks) {
+            engine.executeTask(task.getId(), "admin");
+        }
+    }
 }

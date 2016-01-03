@@ -3,9 +3,9 @@ package goja.core.cache;
 import java.util.Map;
 
 /**
- * A cache implementation.
- * expiration is specified in seconds
- * @see  Cache
+ * A cache implementation. expiration is specified in seconds
+ *
+ * @see Cache
  */
 public interface CacheImpl {
 

@@ -25,7 +25,8 @@ public class CatchaException extends RuntimeException {
         super(cause);
     }
 
-    public CatchaException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public CatchaException(String message, Throwable cause, boolean enableSuppression,
+                           boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -7,9 +7,7 @@
 package goja.security.goja;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-02-12 22:20
@@ -22,7 +20,6 @@ public class CookieUser {
     private final String password;
 
     private final boolean blocked;
-
 
     public CookieUser(long id, String password, boolean blocked) {
         this.id = id;

@@ -18,5 +18,4 @@ public class FailToCastObjectException extends RuntimeException {
     public FailToCastObjectException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

@@ -13,9 +13,7 @@ import com.jfinal.plugin.activerecord.Model;
 import java.io.Serializable;
 
 /**
- * <p>
- * 登录对象包装.
- * </p>
+ * <p> 登录对象包装. </p>
  *
  * @author sogyf yang
  * @version 1.0 2013-10-26 9:57 AM
@@ -49,7 +47,6 @@ public class AppUser<U extends Model> implements Serializable {
      */
     public final U user;
 
-
     /**
      * Instantiates a new Shiro user.
      *
@@ -73,7 +70,6 @@ public class AppUser<U extends Model> implements Serializable {
         this.user = user;
         this.type = type;
     }
-
 
     /**
      * Gets id.
@@ -136,10 +132,10 @@ public class AppUser<U extends Model> implements Serializable {
 
         return id == appUser.id
                 && status == appUser.status
-                && type == appUser.type && !(name != null ? !name.equals(appUser.name) : appUser.name != null)
+                && type == appUser.type && !(name != null ? !name.equals(appUser.name)
+                : appUser.name != null)
                 && !(nickName != null ? !nickName.equals(appUser.nickName) : appUser.nickName != null)
                 && !(user != null ? !user.equals(appUser.user) : appUser.user != null);
-
     }
 
     @Override

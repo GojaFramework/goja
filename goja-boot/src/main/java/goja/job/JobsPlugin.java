@@ -19,11 +19,11 @@ import goja.core.app.GojaConfig;
 import goja.core.app.GojaPropConst;
 import goja.core.exceptions.GojaException;
 import goja.core.exceptions.UnexpectedException;
-import goja.initialize.ctxbox.ClassBox;
-import goja.initialize.ctxbox.ClassType;
 import goja.core.libs.Expression;
 import goja.core.libs.PThreadFactory;
 import goja.core.libs.Time;
+import goja.initialize.ctxbox.ClassBox;
+import goja.initialize.ctxbox.ClassType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,27 +34,25 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-
 public class JobsPlugin implements IPlugin {
 
-    public static final  Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
+    public static final Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
         @Override
         public boolean apply(Class input) {
             return Job.class.isAssignableFrom(input);
         }
     };
-    private static final Logger logger              = LoggerFactory.getLogger(JobsPlugin.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobsPlugin.class);
     protected static ScheduledThreadPoolExecutor executor;
-    protected static List<Job>   scheduledJobs       = null;
-    private static   List<Class> applicationStopJobs = Lists.newArrayList();
-
+    protected static List<Job> scheduledJobs = null;
+    private static List<Class> applicationStopJobs = Lists.newArrayList();
 
     public JobsPlugin() {
 
         int corePoolSize = GojaConfig.getPropertyToInt(GojaPropConst.APP_JOB_POOL, 10);
         PThreadFactory threadFactory = new PThreadFactory("goja-jobs");
-        executor = new ScheduledThreadPoolExecutor(corePoolSize, threadFactory, new ThreadPoolExecutor.AbortPolicy());
-
+        executor = new ScheduledThreadPoolExecutor(corePoolSize, threadFactory,
+                new ThreadPoolExecutor.AbortPolicy());
     }
 
     public static <V> void scheduleForCRON(Job<V> job) {
@@ -81,7 +79,9 @@ public class JobsPlugin implements IPlugin {
             Time.CronExpression cronExp = new Time.CronExpression(cron);
             Date nextDate = cronExp.getNextValidTimeAfter(now);
             if (nextDate == null) {
-                logger.warn("The cron expression for job %s doesn't have any match in the future, will never be executed", job.getClass().getName());
+                logger.warn(
+                        "The cron expression for job %s doesn't have any match in the future, will never be executed",
+                        job.getClass().getName());
                 return;
             }
             if (nextDate.equals(job.nextPlannedExecution)) {
@@ -91,7 +91,8 @@ public class JobsPlugin implements IPlugin {
                 nextDate = cronExp.getNextValidTimeAfter(nextInvalid);
             }
             job.nextPlannedExecution = nextDate;
-            executor.schedule((Callable<V>) job, nextDate.getTime() - now.getTime(), TimeUnit.MILLISECONDS);
+            executor.schedule((Callable<V>) job, nextDate.getTime() - now.getTime(),
+                    TimeUnit.MILLISECONDS);
             job.executor = executor;
         } catch (Exception ex) {
             throw new UnexpectedException(ex);
@@ -105,7 +106,8 @@ public class JobsPlugin implements IPlugin {
         if (job_classes == null || job_classes.isEmpty()) {
             return true;
         } else {
-            List<Class> jobClasses = Lists.newArrayList(Collections2.filter(job_classes, JOB_CLASS_PREDICATE));
+            List<Class> jobClasses =
+                    Lists.newArrayList(Collections2.filter(job_classes, JOB_CLASS_PREDICATE));
 
             scheduledJobs = Lists.newArrayList();
             for (final Class<?> clazz : jobClasses) {
@@ -172,7 +174,8 @@ public class JobsPlugin implements IPlugin {
                         }
                         value = Expression.evaluate(value, value).toString();
                         if (!"never".equalsIgnoreCase(value)) {
-                            executor.scheduleWithFixedDelay(job, Time.parseDuration(value), Time.parseDuration(value), TimeUnit.SECONDS);
+                            executor.scheduleWithFixedDelay(job, Time.parseDuration(value),
+                                    Time.parseDuration(value), TimeUnit.SECONDS);
                         }
                     } catch (InstantiationException | IllegalAccessException ex) {
                         throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
@@ -187,7 +190,7 @@ public class JobsPlugin implements IPlugin {
     @Override
     public boolean stop() {
 
-        if (!(applicationStopJobs== null || applicationStopJobs.isEmpty())) {
+        if (!(applicationStopJobs == null || applicationStopJobs.isEmpty())) {
             for (Class clazz : applicationStopJobs) {
                 try {
                     Job<?> job = ((Job<?>) clazz.newInstance());

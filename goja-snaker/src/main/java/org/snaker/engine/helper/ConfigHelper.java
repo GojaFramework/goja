@@ -24,13 +24,13 @@ import java.util.Properties;
 
 /**
  * 配置属性帮助类
+ *
  * @author yuqs
  * @since 1.0
  */
-public class ConfigHelper
-{
+public class ConfigHelper {
     private static final transient Logger log = LoggerFactory.getLogger(ConfigHelper.class);
-    
+
     /**
      * 常用配置属性文件名称.
      */
@@ -41,18 +41,19 @@ public class ConfigHelper
     private static Properties properties;
 
     public static Properties getProperties() {
-        if(properties == null) {
+        if (properties == null) {
             synchronized (ConfigHelper.class) {
-                if(properties == null) {
+                if (properties == null) {
                     loadProperties(PROPERTIES_FILENAME);
                 }
             }
         }
         return properties;
-	}
+    }
 
     /**
      * 根据key获取配置的字符串value值
+     *
      * @param key
      * @return
      */
@@ -62,38 +63,40 @@ public class ConfigHelper
         }
         return getProperties().getProperty(key);
     }
-    
+
     /**
      * 根据key获取配置的数字value值
+     *
      * @param key
      * @return
      */
     public static int getNumerProperty(String key) {
         String value = getProperties().getProperty(key);
-        if(NumberUtils.isNumber(value)) {
-        	return Integer.parseInt(value);
+        if (NumberUtils.isNumber(value)) {
+            return Integer.parseInt(value);
         } else {
-        	return 0;
+            return 0;
         }
     }
 
     public static void loadProperties(Properties props) {
         properties = props;
     }
-    
+
     /**
      * 根据指定的文件名称，从类路径中加载属性文件，构造Properties对象
+     *
      * @param filename 属性文件名称
      */
     public static void loadProperties(String filename) {
-    	InputStream in = null;
+        InputStream in = null;
         ClassLoader threadContextClassLoader = Thread.currentThread().getContextClassLoader();
         properties = new Properties();
         if (threadContextClassLoader != null) {
-        	in = threadContextClassLoader.getResourceAsStream(filename);
+            in = threadContextClassLoader.getResourceAsStream(filename);
         }
         if (in == null) {
-        	in = ConfigHelper.class.getResourceAsStream(filename);
+            in = ConfigHelper.class.getResourceAsStream(filename);
             if (in == null) {
                 log.warn("No properties file found in the classpath by filename " + filename);
             }

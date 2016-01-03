@@ -13,34 +13,20 @@ import goja.core.kits.stream.StreamUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Enumeration;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
+import java.util.zip.*;
 
 /**
- * Performs zip/gzip/zlib operations on files and directories.
- * These are just tools over existing <code>java.util.zip</code> classes,
- * meaning that existing behavior and bugs are persisted.
- * Most common issue is not being able to use UTF8 in file names,
- * because implementation uses old ZIP format that supports only
- * IBM Code Page 437. This bug was resolved in JDK7:
+ * Performs zip/gzip/zlib operations on files and directories. These are just tools over existing
+ * <code>java.util.zip</code> classes, meaning that existing behavior and bugs are persisted. Most
+ * common issue is not being able to use UTF8 in file names, because implementation uses old ZIP
+ * format that supports only IBM Code Page 437. This bug was resolved in JDK7:
  * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499
  */
 public class ZipKit {
 
-    public static final String ZIP_EXT  = ".zip";
+    public static final String ZIP_EXT = ".zip";
     public static final String GZIP_EXT = ".gz";
     public static final String ZLIB_EXT = ".zlib";
 
@@ -62,7 +48,8 @@ public class ZipKit {
         }
         FileInputStream fis = new FileInputStream(file);
         Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
-        DeflaterOutputStream dos = new DeflaterOutputStream(new FileOutputStream(file.getAbsolutePath() + ZLIB_EXT), deflater);
+        DeflaterOutputStream dos =
+                new DeflaterOutputStream(new FileOutputStream(file.getAbsolutePath() + ZLIB_EXT), deflater);
         try {
             StreamUtil.copy(fis, dos);
         } finally {
@@ -88,7 +75,8 @@ public class ZipKit {
             throw new IOException("Can't gzip folder");
         }
         FileInputStream fis = new FileInputStream(file);
-        GZIPOutputStream gzos = new GZIPOutputStream(new FileOutputStream(file.getAbsolutePath() + GZIP_EXT));
+        GZIPOutputStream gzos =
+                new GZIPOutputStream(new FileOutputStream(file.getAbsolutePath() + GZIP_EXT));
         try {
             StreamUtil.copy(fis, gzos);
         } finally {
@@ -160,8 +148,8 @@ public class ZipKit {
     }
 
     /**
-     * Extracts zip file to the target directory. If patterns are provided
-     * only matched paths are extracted.
+     * Extracts zip file to the target directory. If patterns are provided only matched paths are
+     * extracted.
      *
      * @param zipFile  zip file
      * @param destDir  destination directory
@@ -241,8 +229,8 @@ public class ZipKit {
     }
 
     /**
-     * Adds single entry to ZIP output stream. For user-friendly way of adding entries to zip
-     * see {@link #addToZip(java.util.zip.ZipOutputStream)}.
+     * Adds single entry to ZIP output stream. For user-friendly way of adding entries to zip see
+     * {@link #addToZip(java.util.zip.ZipOutputStream)}.
      *
      * @param zos       zip output stream
      * @param file      file or folder to add
@@ -250,7 +238,8 @@ public class ZipKit {
      * @param comment   optional comment
      * @param recursive when set to <code>true</code> content of added folders will be added, too
      */
-    public static void addToZip(ZipOutputStream zos, File file, String path, String comment, boolean recursive) throws IOException {
+    public static void addToZip(ZipOutputStream zos, File file, String path, String comment,
+                                boolean recursive) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException(file.toString());
         }
@@ -311,7 +300,6 @@ public class ZipKit {
                 }
             }
         }
-
     }
 
     /**
@@ -334,9 +322,9 @@ public class ZipKit {
      */
     public static class AddToZip {
         private final ZipOutputStream zos;
-        private       File            file;
-        private       String          path;
-        private       String          comment;
+        private File file;
+        private String path;
+        private String comment;
         private boolean recursive = true;
 
         private AddToZip(ZipOutputStream zos) {
@@ -384,8 +372,7 @@ public class ZipKit {
         }
 
         /**
-         * Defines if folders content should be added.
-         * Ignored for files.
+         * Defines if folders content should be added. Ignored for files.
          */
         public AddToZip recursive() {
             this.recursive = true;
@@ -399,5 +386,4 @@ public class ZipKit {
             addToZip(zos, file, path, comment, recursive);
         }
     }
-
 }

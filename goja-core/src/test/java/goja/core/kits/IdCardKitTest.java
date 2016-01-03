@@ -92,5 +92,4 @@ public class IdCardKitTest {
     public void testGetProvinceByIdCard() throws Exception {
 
     }
-
 }

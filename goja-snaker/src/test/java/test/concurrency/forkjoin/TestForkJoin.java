@@ -31,23 +31,23 @@ import java.util.Map;
  * @since 1.0
  */
 public class TestForkJoin extends TestSnakerBase {
-	@Before
-	public void before() {
-		processId = engine.process().deploy(StreamHelper
-						.getStreamFromClasspath("test/concurrency/forkjoin/process.snaker"));
-	}
-	
-	@Test
-	public void test() {
-		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("task1.operator", new String[]{"1"});
-		args.put("task2.operator", new String[]{"1"});
-		args.put("task3.operator", new String[]{"1"});
-		Order order = engine.startInstanceById(processId, "2", args);
-		System.out.println(order);
-		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
-		for(Task task : tasks) {
-			engine.executeTask(task.getId(), "1");
-		}
-	}
+    @Before
+    public void before() {
+        processId = engine.process().deploy(StreamHelper
+                .getStreamFromClasspath("test/concurrency/forkjoin/process.snaker"));
+    }
+
+    @Test
+    public void test() {
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("task1.operator", new String[]{"1"});
+        args.put("task2.operator", new String[]{"1"});
+        args.put("task3.operator", new String[]{"1"});
+        Order order = engine.startInstanceById(processId, "2", args);
+        System.out.println(order);
+        List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
+        for (Task task : tasks) {
+            engine.executeTask(task.getId(), "1");
+        }
+    }
 }

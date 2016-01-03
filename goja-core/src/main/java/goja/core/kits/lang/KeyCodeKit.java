@@ -35,7 +35,7 @@ public class KeyCodeKit {
      */
     public static String generateKeyCode(String productSerialNo, String codeKey) {
         return digestPassword(StringUtils.leftPad(productSerialNo, 10, StringPool.ZERO)
-                                      + StringUtils.leftPad(codeKey, 5, StringPool.ZERO)
+                + StringUtils.leftPad(codeKey, 5, StringPool.ZERO)
                 + RandomStringUtils.randomAlphanumeric(5)
                 + DateTime.now().getMillis());
     }

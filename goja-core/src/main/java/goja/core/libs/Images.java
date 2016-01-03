@@ -17,9 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * <p>
- * Images Utils.
- * </p>
+ * <p> Images Utils. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:16
@@ -46,7 +44,8 @@ public class Images {
      * @param to            The destination file
      * @param w             The new width (or -1 to proportionally resize) or the maxWidth if keepRatio is true
      * @param h             The new height (or -1 to proportionally resize) or the maxHeight if keepRatio is true
-     * @param keepRatio     : if true, resize will keep the original image ratio and use w and h as max dimensions
+     * @param keepRatio     : if true, resize will keep the original image ratio and use w and h as max
+     *                      dimensions
      */
     public static void resize(File originalImage, File to, int w, int h, boolean keepRatio) {
         try {
@@ -108,9 +107,7 @@ public class Images {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
-
 
     /**
      * Crop an image
@@ -152,7 +149,6 @@ public class Images {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -163,15 +159,15 @@ public class Images {
      * @throws java.io.IOException
      */
     public static String toBase64(File image) throws IOException {
-        return "data:" + MimeTypes.getMimeType(image.getName()) + ";base64," + Codec.encodeBASE64(IO.readContent(image));
+        return "data:" + MimeTypes.getMimeType(image.getName()) + ";base64," + Codec.encodeBASE64(
+                IO.readContent(image));
     }
 
     /**
      * 将指定的图片加入到当前图片中的指定位置. 即向图片中打水印.
      *
      * @param file     要添加的图片文件。
-     * @param position 要添加的图片在当前图片中的位置. <br />
-     *                 其取值范围为1-9之间的整数(默认为9)。分别代表：左上、上中、右上、左中、正中、右中、左下、中下、右下
+     * @param position 要添加的图片在当前图片中的位置. <br /> 其取值范围为1-9之间的整数(默认为9)。分别代表：左上、上中、右上、左中、正中、右中、左下、中下、右下
      */
     public void add(File dest, File file, int position) {
         if (dest.exists() && !dest.isDirectory()) {
@@ -244,5 +240,4 @@ public class Images {
             g.dispose();
         }
     }
-
 }

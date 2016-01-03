@@ -24,9 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <p>
- * Http Request Kit class.
- * </p>
+ * <p> Http Request Kit class. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-01 20:47
@@ -34,11 +32,9 @@ import java.util.regex.Pattern;
  */
 public abstract class Requests {
 
-
     /**
      * 获取客户端浏览器信息
      *
-     * @param req
      * @return string
      */
     public static String browserInfo(HttpServletRequest req) {
@@ -73,7 +69,6 @@ public abstract class Requests {
                 browserInfo = "firefox " + version.substring(0, version.indexOf("."));
                 return browserInfo;
             }
-
         }
 
         pattern = Pattern.compile(ieheighP);
@@ -265,7 +260,6 @@ public abstract class Requests {
                     e.printStackTrace();
                 }
             }
-
         }
         if ((ipAddress != null) && (ipAddress.length() > 15)) {
             if (ipAddress.indexOf(",") > 0) {
@@ -283,7 +277,23 @@ public abstract class Requests {
      */
     public static boolean robot(HttpServletRequest request) {
         String ua = request.getHeader("user-agent");
-        return !StringUtils.isBlank(ua) && ((ua.contains("Baiduspider") || ua.contains("Googlebot") || ua.contains("sogou") || ua.contains("sina") || ua.contains("iaskspider") || ua.contains("ia_archiver") || ua.contains("Sosospider") || ua.contains("YoudaoBot") || ua.contains("yahoo") || ua.contains("yodao") || ua.contains("MSNBot") || ua.contains("spider") || ua.contains("Twiceler") || ua.contains("Sosoimagespider") || ua.contains("naver.com/robots") || ua.contains("Nutch") || ua.contains("spider")));
+        return !StringUtils.isBlank(ua) && ((ua.contains("Baiduspider")
+                || ua.contains("Googlebot")
+                || ua.contains("sogou")
+                || ua.contains("sina")
+                || ua.contains("iaskspider")
+                || ua.contains("ia_archiver")
+                || ua.contains("Sosospider")
+                || ua.contains("YoudaoBot")
+                || ua.contains("yahoo")
+                || ua.contains("yodao")
+                || ua.contains("MSNBot")
+                || ua.contains("spider")
+                || ua.contains("Twiceler")
+                || ua.contains("Sosoimagespider")
+                || ua.contains("naver.com/robots")
+                || ua.contains("Nutch")
+                || ua.contains("spider")));
     }
 
     /**
@@ -297,8 +307,9 @@ public abstract class Requests {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return null;
         for (Cookie ck : cookies) {
-            if (StringUtils.equalsIgnoreCase(name, ck.getName()))
+            if (StringUtils.equalsIgnoreCase(name, ck.getName())) {
                 return ck;
+            }
         }
         return null;
     }
@@ -314,8 +325,9 @@ public abstract class Requests {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return null;
         for (Cookie ck : cookies) {
-            if (StringUtils.equalsIgnoreCase(name, ck.getName()))
+            if (StringUtils.equalsIgnoreCase(name, ck.getName())) {
                 return ck.getValue();
+            }
         }
         return null;
     }
@@ -339,7 +351,8 @@ public abstract class Requests {
      * @param value  cooke value.
      * @param maxAge age time.
      */
-    public static void setCookie(HttpServletRequest request, HttpServletResponse response, String name,
+    public static void setCookie(HttpServletRequest request, HttpServletResponse response,
+                                 String name,
                                  String value, int maxAge, boolean all_sub_domain) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
@@ -360,15 +373,15 @@ public abstract class Requests {
     }
 
     /**
-     * 获取用户访问URL中的根域名
-     * 例如: www.dlog.cn -> dlog.cn
+     * 获取用户访问URL中的根域名 例如: www.dlog.cn -> dlog.cn
      *
      * @param host 访问地址
      * @return 根域名
      */
     public static String domainOfServerName(String host) {
-        if (isIPAddr(host))
+        if (isIPAddr(host)) {
             return null;
+        }
         String[] names = StringUtils.split(host, '.');
         if (names == null) return null;
         int len = names.length;
@@ -378,10 +391,15 @@ public abstract class Requests {
         }
         if (len > 3) {
             String dp = names[len - 2];
-            if (dp.equalsIgnoreCase("com") || dp.equalsIgnoreCase("gov") || dp.equalsIgnoreCase("net") || dp.equalsIgnoreCase("edu") || dp.equalsIgnoreCase("org"))
+            if (dp.equalsIgnoreCase("com")
+                    || dp.equalsIgnoreCase("gov")
+                    || dp.equalsIgnoreCase("net")
+                    || dp.equalsIgnoreCase("edu")
+                    || dp.equalsIgnoreCase("org")) {
                 return makeup(names[len - 3], names[len - 2], names[len - 1]);
-            else
+            } else {
                 return makeup(names[len - 2], names[len - 1]);
+            }
         }
         return host;
     }
@@ -393,11 +411,13 @@ public abstract class Requests {
      * @return true 表示ip地址，否则反之
      */
     public static boolean isIPAddr(String addr) {
-        if (StringUtils.isEmpty(addr))
+        if (StringUtils.isEmpty(addr)) {
             return false;
+        }
         String[] ips = StringUtils.split(addr, '.');
-        if (ips == null || ips.length != 4)
+        if (ips == null || ips.length != 4) {
             return false;
+        }
         try {
             int ipa = Integer.parseInt(ips[0]);
             int ipb = Integer.parseInt(ips[1]);
@@ -413,8 +433,9 @@ public abstract class Requests {
     private static String makeup(String... ps) {
         StringBuilder s = new StringBuilder();
         for (int idx = 0; idx < ps.length; idx++) {
-            if (idx > 0)
+            if (idx > 0) {
                 s.append('.');
+            }
             s.append(ps[idx]);
         }
         return s.toString();

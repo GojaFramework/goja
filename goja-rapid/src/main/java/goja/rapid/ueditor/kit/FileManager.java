@@ -16,9 +16,9 @@ import java.util.List;
 
 
 public class FileManager {
-    private final String   dir;
+    private final String dir;
     private final String[] allowFiles;
-    private final int      count;
+    private final int count;
 
     /**
      * @param dir         文件目录

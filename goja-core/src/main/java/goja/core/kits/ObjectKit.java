@@ -20,9 +20,8 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
- * Miscellaneous object utility methods.
- * Mainly for internal use within the framework.
- *
+ * Miscellaneous object utility methods. Mainly for internal use within the framework.
+ * <p/>
  * <p>Thanks to Alex Ruiz for contributing several enhancements to this class!
  *
  * @author Juergen Hoeller
@@ -43,10 +42,9 @@ public abstract class ObjectKit {
     private static final String EMPTY_ARRAY = ARRAY_START + ARRAY_END;
     private static final String ARRAY_ELEMENT_SEPARATOR = ", ";
 
-
     /**
-     * Determine whether the given array is empty:
-     * i.e. {@code null} or of zero length.
+     * Determine whether the given array is empty: i.e. {@code null} or of zero length.
+     *
      * @param array the array to check
      */
     public static boolean isEmpty(Object[] array) {
@@ -54,10 +52,10 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Convert the given array (which may be a primitive array) to an
-     * object array (if necessary of primitive wrapper objects).
-     * <p>A {@code null} source value will be converted to an
-     * empty Object array.
+     * Convert the given array (which may be a primitive array) to an object array (if necessary of
+     * primitive wrapper objects). <p>A {@code null} source value will be converted to an empty Object
+     * array.
+     *
      * @param source the (potentially primitive) array
      * @return the corresponding object array (never {@code null})
      * @throws IllegalArgumentException if the parameter is not an array
@@ -84,17 +82,15 @@ public abstract class ObjectKit {
         return newArray;
     }
 
-
     //---------------------------------------------------------------------
     // Convenience methods for content-based equality/hash-code handling
     //---------------------------------------------------------------------
 
     /**
-     * Determine if the given objects are equal, returning {@code true}
-     * if both are {@code null} or {@code false} if only one is
-     * {@code null}.
-     * <p>Compares arrays with {@code Arrays.equals}, performing an equality
-     * check based on the array elements rather than the array reference.
+     * Determine if the given objects are equal, returning {@code true} if both are {@code null} or
+     * {@code false} if only one is {@code null}. <p>Compares arrays with {@code Arrays.equals},
+     * performing an equality check based on the array elements rather than the array reference.
+     *
      * @param o1 first Object to compare
      * @param o2 second Object to compare
      * @return whether the given objects are equal
@@ -143,11 +139,10 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return as hash code for the given object; typically the value of
-     * {@code Object#hashCode()}}. If the object is an array,
-     * this method will delegate to any of the {@code nullSafeHashCode}
-     * methods for arrays in this class. If the object is {@code null},
-     * this method returns 0.
+     * Return as hash code for the given object; typically the value of {@code Object#hashCode()}}. If
+     * the object is an array, this method will delegate to any of the {@code nullSafeHashCode}
+     * methods for arrays in this class. If the object is {@code null}, this method returns 0.
+     *
      * @see #nullSafeHashCode(Object[])
      * @see #nullSafeHashCode(boolean[])
      * @see #nullSafeHashCode(byte[])
@@ -195,8 +190,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(Object[] array) {
         if (array == null) {
@@ -210,8 +205,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(boolean[] array) {
         if (array == null) {
@@ -225,8 +220,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(byte[] array) {
         if (array == null) {
@@ -240,8 +235,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(char[] array) {
         if (array == null) {
@@ -255,8 +250,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(double[] array) {
         if (array == null) {
@@ -270,8 +265,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(float[] array) {
         if (array == null) {
@@ -285,8 +280,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(int[] array) {
         if (array == null) {
@@ -300,8 +295,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(long[] array) {
         if (array == null) {
@@ -315,8 +310,8 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a hash code based on the contents of the specified array.
-     * If {@code array} is {@code null}, this method returns 0.
+     * Return a hash code based on the contents of the specified array. If {@code array} is {@code
+     * null}, this method returns 0.
      */
     public static int nullSafeHashCode(short[] array) {
         if (array == null) {
@@ -331,6 +326,7 @@ public abstract class ObjectKit {
 
     /**
      * Return the same value as {@link Boolean#hashCode()}}.
+     *
      * @see Boolean#hashCode()
      */
     public static int hashCode(boolean bool) {
@@ -339,6 +335,7 @@ public abstract class ObjectKit {
 
     /**
      * Return the same value as {@link Double#hashCode()}}.
+     *
      * @see Double#hashCode()
      */
     public static int hashCode(double dbl) {
@@ -347,6 +344,7 @@ public abstract class ObjectKit {
 
     /**
      * Return the same value as {@link Float#hashCode()}}.
+     *
      * @see Float#hashCode()
      */
     public static int hashCode(float flt) {
@@ -355,21 +353,21 @@ public abstract class ObjectKit {
 
     /**
      * Return the same value as {@link Long#hashCode()}}.
+     *
      * @see Long#hashCode()
      */
     public static int hashCode(long lng) {
         return (int) (lng ^ (lng >>> 32));
     }
 
-
     //---------------------------------------------------------------------
     // Convenience methods for toString output
     //---------------------------------------------------------------------
 
     /**
-     * Return a String representation of the specified Object.
-     * <p>Builds a String representation of the contents in case of an array.
-     * Returns {@code "null"} if {@code obj} is {@code null}.
+     * Return a String representation of the specified Object. <p>Builds a String representation of
+     * the contents in case of an array. Returns {@code "null"} if {@code obj} is {@code null}.
+     *
      * @param obj the object to build a String representation for
      * @return a String representation of {@code obj}
      */
@@ -411,11 +409,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -431,8 +429,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
             sb.append(String.valueOf(array[i]));
@@ -442,11 +439,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -462,8 +459,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
 
@@ -474,11 +470,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -494,8 +490,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
             sb.append(array[i]);
@@ -505,11 +500,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -525,8 +520,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
             sb.append("'").append(array[i]).append("'");
@@ -536,11 +530,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -556,8 +550,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
 
@@ -568,11 +561,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -588,8 +581,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
 
@@ -600,11 +592,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -620,8 +612,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
             sb.append(array[i]);
@@ -631,11 +622,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -651,8 +642,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
             sb.append(array[i]);
@@ -662,11 +652,11 @@ public abstract class ObjectKit {
     }
 
     /**
-     * Return a String representation of the contents of the specified array.
-     * <p>The String representation consists of a list of the array's elements,
-     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-     * by the characters {@code ", "} (a comma followed by a space). Returns
-     * {@code "null"} if {@code array} is {@code null}.
+     * Return a String representation of the contents of the specified array. <p>The String
+     * representation consists of a list of the array's elements, enclosed in curly braces ({@code
+     * "{}"}). Adjacent elements are separated by the characters {@code ", "} (a comma followed by a
+     * space). Returns {@code "null"} if {@code array} is {@code null}.
+     *
      * @param array the array to build a String representation for
      * @return a String representation of {@code array}
      */
@@ -682,8 +672,7 @@ public abstract class ObjectKit {
         for (int i = 0; i < length; i++) {
             if (i == 0) {
                 sb.append(ARRAY_START);
-            }
-            else {
+            } else {
                 sb.append(ARRAY_ELEMENT_SEPARATOR);
             }
             sb.append(array[i]);
@@ -691,5 +680,4 @@ public abstract class ObjectKit {
         sb.append(ARRAY_END);
         return sb.toString();
     }
-
 }

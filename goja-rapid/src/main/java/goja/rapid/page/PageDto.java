@@ -9,8 +9,8 @@ package goja.rapid.page;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import goja.core.app.GojaConfig;
 import goja.core.StringPool;
+import goja.core.app.GojaConfig;
 import goja.core.kits.lang.Strs;
 import goja.rapid.db.Condition;
 import goja.rapid.db.RequestParam;
@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-08-17 16:11
@@ -32,60 +30,18 @@ import java.util.Map;
  */
 public class PageDto {
 
+    public static final Integer DEFAULT_PAGE_SIZE =
+            GojaConfig.getPropertyToInt("app.page.defaultsize", 10);
 
-    public static final Integer DEFAULT_PAGE_SIZE = GojaConfig.getPropertyToInt("app.page.defaultsize", 10);
-
-    public final  int       page;
-    public final  int       pageSize;
-    private final String    sort;
-    private final Direction direction;
-    private final boolean   hasSort;
-
+    public final int page;
+    public final int pageSize;
     public final List<RequestParam> params = Lists.newArrayListWithCapacity(3);
-
-    private final Map<String, Object> fq = Maps.newHashMap();
-
     public final List<Object> query_params = Lists.newArrayListWithCapacity(3);
-
+    private final String sort;
+    private final Direction direction;
+    private final boolean hasSort;
+    private final Map<String, Object> fq = Maps.newHashMap();
     private final StringBuilder filter_url = new StringBuilder();
-
-
-    public static PageDto create(com.jfinal.core.Controller controller) {
-
-        String dir = controller.getPara("dir", "desc").toUpperCase();
-        final Direction direction = Direction.valueOf(dir);
-
-        final Enumeration<String> paraNames = controller.getParaNames();
-        // exmaple add app.page.size=pager.pageSize into application.conf
-        final int current_page = controller.getParaToInt("p", 1);
-        // pager.pageNo
-        final int page_size = controller.getParaToInt("s", DEFAULT_PAGE_SIZE);
-
-        String sort = controller.getPara("sort");
-        PageDto pageDto = Strings.isNullOrEmpty(sort) ? new PageDto(current_page, page_size) : new PageDto(current_page, page_size, sort, direction);
-        while (paraNames.hasMoreElements()) {
-            String p_key = paraNames.nextElement();
-            if (!Strings.isNullOrEmpty(p_key) && StringUtils.startsWith(p_key, "s-")) {
-                final String req_val = controller.getPara(p_key);
-                if (!Strings.isNullOrEmpty(req_val)) {
-                    String[] param_array = StringUtils.split(p_key, StringPool.DASH);
-                    if (param_array != null && param_array.length >= 2) {
-
-                        String name = param_array[1];
-                        String condition = param_array.length == 2 ? Condition.EQ.toString() : param_array[2];
-                        condition = Strings.isNullOrEmpty(condition) ? Condition.EQ.toString() : condition.toUpperCase();
-                        if (StringUtils.equals(condition, Condition.BETWEEN.toString())) {
-                            String req_val2 = controller.getPara(StringUtils.replace(p_key, Condition.BETWEEN.toString(), "AND"));
-                            pageDto.putTwoVal(name, req_val, req_val2, condition);
-                        } else {
-                            pageDto.put(name, req_val, condition);
-                        }
-                    }
-                }
-            }
-        }
-        return pageDto;
-    }
 
     private PageDto(int pageNo, int pageSize,
                     String sort,
@@ -103,6 +59,46 @@ public class PageDto {
         this.sort = StringPool.EMPTY;
         this.direction = Direction.DESC;
         hasSort = false;
+    }
+
+    public static PageDto create(com.jfinal.core.Controller controller) {
+
+        String dir = controller.getPara("dir", "desc").toUpperCase();
+        final Direction direction = Direction.valueOf(dir);
+
+        final Enumeration<String> paraNames = controller.getParaNames();
+        // exmaple add app.page.size=pager.pageSize into application.conf
+        final int current_page = controller.getParaToInt("p", 1);
+        // pager.pageNo
+        final int page_size = controller.getParaToInt("s", DEFAULT_PAGE_SIZE);
+
+        String sort = controller.getPara("sort");
+        PageDto pageDto = Strings.isNullOrEmpty(sort) ? new PageDto(current_page, page_size)
+                : new PageDto(current_page, page_size, sort, direction);
+        while (paraNames.hasMoreElements()) {
+            String p_key = paraNames.nextElement();
+            if (!Strings.isNullOrEmpty(p_key) && StringUtils.startsWith(p_key, "s-")) {
+                final String req_val = controller.getPara(p_key);
+                if (!Strings.isNullOrEmpty(req_val)) {
+                    String[] param_array = StringUtils.split(p_key, StringPool.DASH);
+                    if (param_array != null && param_array.length >= 2) {
+
+                        String name = param_array[1];
+                        String condition = param_array.length == 2 ? Condition.EQ.toString() : param_array[2];
+                        condition = Strings.isNullOrEmpty(condition) ? Condition.EQ.toString()
+                                : condition.toUpperCase();
+                        if (StringUtils.equals(condition, Condition.BETWEEN.toString())) {
+                            String req_val2 = controller.getPara(
+                                    StringUtils.replace(p_key, Condition.BETWEEN.toString(), "AND"));
+                            pageDto.putTwoVal(name, req_val, req_val2, condition);
+                        } else {
+                            pageDto.put(name, req_val, condition);
+                        }
+                    }
+                }
+            }
+        }
+        return pageDto;
     }
 
     public void put(String key, String value, String condition) {
@@ -141,7 +137,10 @@ public class PageDto {
         if (val2 != null) {
             final String key_two = key + "2";
             fq.put(key_two, val2);
-            filter_url.append(StringPool.AMPERSAND).append(key_two).append(StringPool.EQUALS).append(val2);
+            filter_url.append(StringPool.AMPERSAND)
+                    .append(key_two)
+                    .append(StringPool.EQUALS)
+                    .append(val2);
         }
     }
 
@@ -180,6 +179,4 @@ public class PageDto {
     public boolean isHasSort() {
         return hasSort;
     }
-
-
 }

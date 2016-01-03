@@ -8,7 +8,7 @@ package goja.core.libs;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class PromiseTest {
 
@@ -17,6 +17,5 @@ public class PromiseTest {
         Promise<Integer> promise = new Promise<Integer>();
         promise.invoke(100);
         assertTrue(promise.isDone());
-
     }
 }

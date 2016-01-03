@@ -19,7 +19,6 @@ public class AjaxMessageTest {
 
         AjaxMessage ok = AjaxMessage.OK;
         assertEquals(ok.getMessage(), StringPool.EMPTY);
-
     }
 
     @Test
@@ -31,7 +30,7 @@ public class AjaxMessageTest {
 
     @Test
     public void testOk2() throws Exception {
-        Pair<Integer, Integer> data = Pair.with(1,2);
+        Pair<Integer, Integer> data = Pair.with(1, 2);
         AjaxMessage ok = AjaxMessage.ok(data);
         assertEquals(ok.getMessage(), StringPool.EMPTY);
     }

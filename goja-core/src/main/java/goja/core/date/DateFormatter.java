@@ -12,9 +12,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.text.SimpleDateFormat;
 
 /**
- * <p>
- * Date format string constants .
- * </p>
+ * <p> Date format string constants . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-11-15 16:29
@@ -37,7 +35,6 @@ public interface DateFormatter {
      */
     String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
-
     /**
      * Date format method
      * <pre>
@@ -52,6 +49,6 @@ public interface DateFormatter {
      *     yyyy-MM-dd HH:mm:ss
      * </pre>
      */
-    DateTimeFormatter DTP_YYYY_MM_DD_HH_MM_SS = DateTimeFormat.forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS);
-
+    DateTimeFormatter DTP_YYYY_MM_DD_HH_MM_SS =
+            DateTimeFormat.forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS);
 }

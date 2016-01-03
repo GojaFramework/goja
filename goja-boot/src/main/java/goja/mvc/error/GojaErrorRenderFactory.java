@@ -10,16 +10,13 @@ import com.jfinal.render.IErrorRenderFactory;
 import com.jfinal.render.Render;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-11-08 20:48
  * @since JDK 1.6
  */
 public class GojaErrorRenderFactory implements IErrorRenderFactory {
-
 
     @Override
     public Render getRender(int errorCode, String view) {

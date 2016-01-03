@@ -24,16 +24,13 @@ import goja.core.app.GojaPropConst;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-02 21:13
  * @since JDK 1.6
  */
 public class AppLogConfigurator {
-
 
     private AppLogConfigurator() {
     }
@@ -78,8 +75,6 @@ public class AppLogConfigurator {
             rootLogger.addAppender(ca);
             // 这个配置告诉root日志不追加上述按照包名的日志记录
             rootLogger.setAdditive(false);
-
-
         } else {
 
             // init async loggin
@@ -90,14 +85,18 @@ public class AppLogConfigurator {
 
             final RollingFileAppender rfa = new RollingFileAppender();
 
-            final String logFileName = GojaConfig.getApplicationMode().isTest() ? GojaConfig.getAppName() + "-test" : GojaConfig.getAppName();
-            final String logger_file = GojaConfig.getProperty("logger.path", "../logs/" + logFileName + ".log");
+            final String logFileName =
+                    GojaConfig.getApplicationMode().isTest() ? GojaConfig.getAppName() + "-test"
+                            : GojaConfig.getAppName();
+            final String logger_file =
+                    GojaConfig.getProperty("logger.path", "../logs/" + logFileName + ".log");
             rfa.setFile(logger_file);
 
             final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<>();
             rollingPolicy.setParent(rfa);
             rollingPolicy.setMaxHistory(15);
-            rollingPolicy.setFileNamePattern(StringUtils.replace(logger_file, ".log", ".%d{yyyy-MM-dd}.%i.log"));
+            rollingPolicy.setFileNamePattern(
+                    StringUtils.replace(logger_file, ".log", ".%d{yyyy-MM-dd}.%i.log"));
             SizeAndTimeBasedFNATP<ILoggingEvent> timeBasedTriggering = new SizeAndTimeBasedFNATP<>();
             timeBasedTriggering.setMaxFileSize("100MB");
             rollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(timeBasedTriggering);
@@ -107,7 +106,6 @@ public class AppLogConfigurator {
             rfa.setContext(lc);
             rfa.setName("app_log_file");
 
-
             PatternLayoutEncoder pl = new PatternLayoutEncoder();
             pl.setContext(lc);
             pl.setCharset(Charsets.UTF_8);
@@ -115,15 +113,12 @@ public class AppLogConfigurator {
 
             rfa.setEncoder(pl);
 
-
             asyncAppender.addAppender(rfa);
-
 
             pl.start();
             rollingPolicy.start();
             rfa.start();
             asyncAppender.start();
-
 
             final String loggerLevel = GojaConfig.getProperty(GojaPropConst.APP_LOGGER);
             final Level config_level = Level.toLevel(loggerLevel, Level.INFO);
@@ -137,9 +132,6 @@ public class AppLogConfigurator {
             rootLogger.setLevel(config_level);
             rootLogger.addAppender(asyncAppender);
             rootLogger.setAdditive(false);
-
         }
-
     }
-
 }

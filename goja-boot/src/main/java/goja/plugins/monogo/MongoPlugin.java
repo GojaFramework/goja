@@ -11,15 +11,13 @@ import com.mongodb.MongoClient;
 
 public class MongoPlugin implements IPlugin {
 
-    public static final int    DEFAUL_PORT  = 27017;
+    public static final int DEFAUL_PORT = 27017;
     public static final String DEFAULT_PKGS = "app.entitys";
-
-    private final  String      host;
-    private final  int         port;
-    private final  String      database;
-    private final  String      morphia_pkgs;
     private static MongoClient client;
-
+    private final String host;
+    private final int port;
+    private final String database;
+    private final String morphia_pkgs;
 
     public MongoPlugin(String host, int port, String database, String morphia_pkgs) {
         this.host = host;
@@ -47,5 +45,4 @@ public class MongoPlugin implements IPlugin {
         }
         return true;
     }
-
 }

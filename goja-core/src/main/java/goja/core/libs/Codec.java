@@ -17,16 +17,13 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:22
  * @since JDK 1.6
  */
 public class Codec {
-
 
     /**
      * @return an UUID String

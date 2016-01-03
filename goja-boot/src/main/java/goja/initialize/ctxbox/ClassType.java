@@ -7,9 +7,7 @@
 package goja.initialize.ctxbox;
 
 /**
- * <p>
- * The Class type .
- * </p>
+ * <p> The Class type . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-01-19 22:13
@@ -47,14 +45,14 @@ public enum ClassType {
      * THE Quartz job class.
      */
     QUARTZ,
-//    /**
-//     * The plugin class.
-//     */
-//    PLUGIN,
-//    /**
-//     * The handle class.
-//     */
-//    HANDLER,
+    //    /**
+    //     * The plugin class.
+    //     */
+    //    PLUGIN,
+    //    /**
+    //     * The handle class.
+    //     */
+    //    HANDLER,
     /**
      * Syslog Analysis
      */

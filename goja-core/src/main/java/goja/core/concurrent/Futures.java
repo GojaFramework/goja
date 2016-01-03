@@ -15,8 +15,8 @@ import java.util.concurrent.TimeoutException;
  */
 public class Futures {
 
-
-    public static <FROM, TO> Future<TO> mapping(final Future<FROM> future, final Mapper<FROM, TO> mapper) {
+    public static <FROM, TO> Future<TO> mapping(final Future<FROM> future,
+                                                final Mapper<FROM, TO> mapper) {
         return new FutureImpl<TO>() {
 
             @Override
@@ -27,7 +27,6 @@ public class Futures {
                     throw G.rte(e);
                 }
             }
-
         };
     }
 }

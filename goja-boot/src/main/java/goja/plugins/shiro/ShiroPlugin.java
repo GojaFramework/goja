@@ -12,11 +12,7 @@ import com.jfinal.config.Routes;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.IPlugin;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresGuest;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.authz.annotation.RequiresUser;
+import org.apache.shiro.authz.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -35,7 +31,6 @@ import static goja.core.StringPool.SLASH;
  */
 @SuppressWarnings("unchecked")
 public class ShiroPlugin implements IPlugin {
-
 
     /**
      * Shiro的几种访问控制注解
@@ -120,8 +115,9 @@ public class ShiroPlugin implements IPlugin {
         Set<String> excludedMethodName = new HashSet<String>();
         Method[] methods = Controller.class.getMethods();
         for (Method m : methods) {
-            if (m.getParameterTypes().length == 0)
+            if (m.getParameterTypes().length == 0) {
                 excludedMethodName.add(m.getName());
+            }
         }
         return excludedMethodName;
     }
@@ -169,12 +165,8 @@ public class ShiroPlugin implements IPlugin {
     }
 
     /**
-     * 逐个扫描注解，若是相应的注解则在相应的位置赋值。
-     * 注解的处理是有顺序的，依次为RequiresRoles，RequiresPermissions，
+     * 逐个扫描注解，若是相应的注解则在相应的位置赋值。 注解的处理是有顺序的，依次为RequiresRoles，RequiresPermissions，
      * RequiresAuthentication，RequiresUser，RequiresGuest
-     *
-     * @param authzArray
-     * @param annotations
      */
     private void scanAnnotation(List<AuthzHandler> authzArray,
                                 List<Annotation> annotations) {
@@ -198,11 +190,6 @@ public class ShiroPlugin implements IPlugin {
 
     /**
      * 构建actionkey，参考ActionMapping中的实现。
-     *
-     * @param controllerClass
-     * @param method
-     * @param controllerKey
-     * @return
      */
     private String createActionKey(Class<? extends Controller> controllerClass,
                                    Method method, String controllerKey) {
@@ -212,23 +199,26 @@ public class ShiroPlugin implements IPlugin {
         ActionKey ak = method.getAnnotation(ActionKey.class);
         if (ak != null) {
             actionKey = ak.value().trim();
-            if (Strings.isNullOrEmpty(actionKey))
-                throw new IllegalArgumentException(controllerClass.getName() + "." + methodName + "(): The argument of ActionKey can not be blank.");
-            if (!actionKey.startsWith(SLASH))
+            if (Strings.isNullOrEmpty(actionKey)) {
+                throw new IllegalArgumentException(controllerClass.getName()
+                        + "."
+                        + methodName
+                        + "(): The argument of ActionKey can not be blank.");
+            }
+            if (!actionKey.startsWith(SLASH)) {
                 actionKey = SLASH + actionKey;
+            }
         } else if (methodName.equals("index")) {
             actionKey = controllerKey;
         } else {
-            actionKey = controllerKey.equals(SLASH) ? SLASH + methodName : controllerKey + SLASH + methodName;
+            actionKey =
+                    controllerKey.equals(SLASH) ? SLASH + methodName : controllerKey + SLASH + methodName;
         }
         return actionKey;
     }
 
     /**
      * 返回该方法的所有访问控制注解
-     *
-     * @param method
-     * @return
      */
     private List<Annotation> getAuthzAnnotations(Method method) {
         List<Annotation> annotations = Lists.newArrayList();
@@ -243,9 +233,6 @@ public class ShiroPlugin implements IPlugin {
 
     /**
      * 返回该Controller的所有访问控制注解
-     *
-     * @param targetClass
-     * @return
      */
     private List<Annotation> getAuthzAnnotations(
             Class<? extends Controller> targetClass) {
@@ -261,9 +248,6 @@ public class ShiroPlugin implements IPlugin {
 
     /**
      * 该方法上是否有ClearShiro注解
-     *
-     * @param method
-     * @return
      */
     private boolean isClearShiroAnnotationPresent(Method method) {
         Annotation a = method.getAnnotation(ClearShiro.class);

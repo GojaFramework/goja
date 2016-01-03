@@ -8,11 +8,7 @@ package goja.mvc.render.ftl.shiro;
 
 import freemarker.template.ObjectWrapper;
 import freemarker.template.SimpleHash;
-import goja.mvc.render.ftl.shiro.auth.AuthenticatedTag;
-import goja.mvc.render.ftl.shiro.auth.GuestTag;
-import goja.mvc.render.ftl.shiro.auth.NotAuthenticatedTag;
-import goja.mvc.render.ftl.shiro.auth.PrincipalTag;
-import goja.mvc.render.ftl.shiro.auth.UserTag;
+import goja.mvc.render.ftl.shiro.auth.*;
 import goja.mvc.render.ftl.shiro.permission.HasAnyPermissionsTag;
 import goja.mvc.render.ftl.shiro.permission.HasPermissionTag;
 import goja.mvc.render.ftl.shiro.permission.LacksPermissionTag;

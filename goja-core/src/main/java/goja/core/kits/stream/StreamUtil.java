@@ -7,19 +7,9 @@
 package goja.core.kits.stream;
 
 
-
-
 import com.jfinal.core.Const;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 
 /**
  * Optimized byte and character stream utilities.
@@ -159,7 +149,7 @@ public class StreamUtil {
      * Copies specified number of bytes from input stream to writer using buffer.
      */
     public static void copy(InputStream input, Writer output, int byteCount) throws IOException {
-        copy(input, output,  Const.DEFAULT_ENCODING, byteCount);
+        copy(input, output, Const.DEFAULT_ENCODING, byteCount);
     }
 
     /**
@@ -220,14 +210,14 @@ public class StreamUtil {
      * Copies reader to output stream using buffer.
      */
     public static void copy(Reader input, OutputStream output) throws IOException {
-        copy(input, output,  Const.DEFAULT_ENCODING);
+        copy(input, output, Const.DEFAULT_ENCODING);
     }
 
     /**
      * Copies specified number of characters from reader to output stream using buffer.
      */
     public static void copy(Reader input, OutputStream output, int charCount) throws IOException {
-        copy(input, output,  Const.DEFAULT_ENCODING, charCount);
+        copy(input, output, Const.DEFAULT_ENCODING, charCount);
     }
 
     /**

@@ -12,9 +12,7 @@ import goja.core.exceptions.UnexpectedException;
 import java.net.URLEncoder;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:28
@@ -23,7 +21,11 @@ import java.net.URLEncoder;
 public class URLs {
 
     public static String addParam(String originalUrl, String name, String value) {
-        return originalUrl + (originalUrl.contains("?") ? "&" : "?") + encodePart(name) + "=" + encodePart(value);
+        return originalUrl
+                + (originalUrl.contains("?") ? "&" : "?")
+                + encodePart(name)
+                + "="
+                + encodePart(value);
     }
 
     public static String encodePart(String part) {

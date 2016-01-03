@@ -11,7 +11,6 @@ import java.util.concurrent.TimeoutException;
  */
 public interface Future<T> {
 
-
     T get();
 
     T get(long timeoutMs) throws TimeoutException;

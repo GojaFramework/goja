@@ -57,8 +57,14 @@ public class SysLog {
 
     @Override
     public String toString() {
-        return "SysLog [user=" + user + ", createTime=" + createTime + ", ip=" + ip + ", message=" + message + "]";
+        return "SysLog [user="
+                + user
+                + ", createTime="
+                + createTime
+                + ", ip="
+                + ip
+                + ", message="
+                + message
+                + "]";
     }
-
-
 }

@@ -6,13 +6,12 @@
   -->
 
 <sqlGroup name="test">
-    <sql id="slqinxml">
-      SELECT * FROM table_abc
-    </sql>
+  <sql id="slqinxml">
+    SELECT * FROM table_abc
+  </sql>
 
-    <sql id="xxx">
+  <sql id="xxx">
 
 
-
-    </sql>
+  </sql>
 </sqlGroup>

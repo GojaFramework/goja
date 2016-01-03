@@ -7,7 +7,7 @@ import org.apache.shiro.subject.Subject;
  * <p>
  * A plurality of permission, as long as the only one.
  * </p>
- *
+ * <p/>
  * Note: From the <a href="https://github.com/springside/springside4">SpringSide4</a>
  *
  * @author sogYF

@@ -54,6 +54,7 @@ public class LoginUser<U extends Model> implements Serializable {
 
     /**
      * 登录密码
+     *
      * @return 登录密码
      */
     public String getPassword() {
@@ -62,6 +63,7 @@ public class LoginUser<U extends Model> implements Serializable {
 
     /**
      * 密码盐值
+     *
      * @return 密码盐值
      */
     public String getSalt() {

@@ -38,7 +38,6 @@ public class SqlKit {
      */
     protected static final String CONFIG_SUFFIX = "sql.xml";
 
-
     private static final Logger logger = LoggerFactory.getLogger(SqlKit.class);
 
     /**
@@ -74,7 +73,6 @@ public class SqlKit {
         SQL_MAP.put(name, value);
     }
 
-
     static void init() {
         final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
         initScanFiles(resource);
@@ -85,13 +83,14 @@ public class SqlKit {
     }
 
     static void reload() {
-//        SQL_MAP.clear();
+        //        SQL_MAP.clear();
         final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
         initScanFiles(resource);
     }
 
     private static void initScanFiles(String resource) {
-        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(resource));
+        FluentIterable<File> iterable =
+                Files.fileTreeTraverser().breadthFirstTraversal(new File(resource));
         final List<File> files = Lists.newArrayList();
         for (File f : iterable) {
             if (f.getName().endsWith(CONFIG_SUFFIX)) {
@@ -107,7 +106,12 @@ public class SqlKit {
         // Search Jar file xml config.
         List<String> jarlist = GojaConfig.getAppJars();
         if (!(jarlist == null || jarlist.isEmpty())) {
-            String lib_path = PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib" + File.separator;
+            String lib_path = PathKit.getWebRootPath()
+                    + File.separator
+                    + "WEB-INF"
+                    + File.separator
+                    + "lib"
+                    + File.separator;
 
             JarFile jarFile;
             for (String jar : jarlist) {
@@ -124,7 +128,8 @@ public class SqlKit {
                     final String jar_file_name = jarEntry.getName();
                     if (jar_file_name.endsWith(CONFIG_SUFFIX)) {
                         try {
-                            String xml_content = Resources.toString(Resources.getResource(jar_file_name), Charsets.UTF_8);
+                            String xml_content =
+                                    Resources.toString(Resources.getResource(jar_file_name), Charsets.UTF_8);
                             group = JaxbKit.unmarshal(xml_content, SqlGroup.class);
                             groupxmlfile(group, Files.getNameWithoutExtension(jar_file_name));
                         } catch (IOException e) {
@@ -134,8 +139,6 @@ public class SqlKit {
                 }
             }
         }
-
-
     }
 
     private static void groupxmlfile(SqlGroup group, String file_name) {
@@ -181,12 +184,12 @@ public class SqlKit {
             for (File child : childrenfiles) {
                 if (child.isDirectory()) {
                     final FileAlterationObserver observer = new FileAlterationObserver(child.getAbsolutePath()
-                            , FileFilterUtils.and(FileFilterUtils.fileFileFilter(), FileFilterUtils.suffixFileFilter(CONFIG_SUFFIX)
+                            , FileFilterUtils.and(FileFilterUtils.fileFileFilter(),
+                            FileFilterUtils.suffixFileFilter(CONFIG_SUFFIX)
                     ), null);
 
                     observer.addListener(SqlXmlFileListener.me);
                     observerList.add(observer);
-
                 }
             }
             final FileAlterationObserver observer = new FileAlterationObserver(config_file);
@@ -197,14 +200,19 @@ public class SqlKit {
 
         List<String> jarlist = GojaConfig.getAppJars();
         if (!(jarlist == null || jarlist.isEmpty())) {
-            String jar_path = PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib" + File.separator;
+            String jar_path = PathKit.getWebRootPath()
+                    + File.separator
+                    + "WEB-INF"
+                    + File.separator
+                    + "lib"
+                    + File.separator;
             final FileAlterationObserver observer = new FileAlterationObserver(jar_path);
             observer.addListener(SqlXmlFileListener.me);
             observerList.add(observer);
-
         }
 
-        final FileAlterationObserver[] observers = observerList.toArray(new FileAlterationObserver[observerList.size()]);
+        final FileAlterationObserver[] observers =
+                observerList.toArray(new FileAlterationObserver[observerList.size()]);
         FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observers);
 
         try {
@@ -212,7 +220,6 @@ public class SqlKit {
         } catch (Exception e) {
             logger.error("file monitor is error!", e);
         }
-
     }
 
     static void remove(String s) {

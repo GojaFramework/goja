@@ -64,13 +64,14 @@ public class SqlSelect extends SqlQuery {
 
     /**
      * Link Sql Select
+     *
      * @return SQL SELECT
      */
-    public static SqlSelect create(){
+    public static SqlSelect create() {
         return new SqlSelect();
     }
 
-    public static SqlSelect create(SqlSelect src){
+    public static SqlSelect create(SqlSelect src) {
         return new SqlSelect(src);
     }
 

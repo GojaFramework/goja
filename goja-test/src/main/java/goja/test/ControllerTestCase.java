@@ -9,8 +9,8 @@ import com.jfinal.config.JFinalConfig;
 import com.jfinal.core.JFinal;
 import com.jfinal.handler.Handler;
 import goja.Goja;
-import goja.initialize.ctxbox.ClassFinder;
 import goja.core.kits.reflect.Reflect;
+import goja.initialize.ctxbox.ClassFinder;
 import goja.test.mock.MockHttpRequest;
 import goja.test.mock.MockHttpResponse;
 import goja.test.mock.MockServletContext;
@@ -35,16 +35,24 @@ import java.util.List;
 public abstract class ControllerTestCase {
 
     protected static ServletContext servletContext = new MockServletContext();
-    protected static MockHttpRequest  request;
+    protected static MockHttpRequest request;
     protected static MockHttpResponse response;
-    protected static Handler          handler;
+    protected static Handler handler;
     private static boolean configStarted = false;
-    private static JFinalConfig                  configInstance;
-    private        String                        actionUrl;
-    private        String                        bodyData;
-    private        File                          bodyFile;
-    private        File                          responseFile;
-    private        Class<Goja> config;
+    private static JFinalConfig configInstance;
+    private String actionUrl;
+    private String bodyData;
+    private File bodyFile;
+    private File responseFile;
+    private Class<Goja> config;
+
+    @SuppressWarnings("unchecked")
+    public ControllerTestCase() {
+        Type genericSuperclass = getClass().getGenericSuperclass();
+        Preconditions.checkArgument(genericSuperclass instanceof ParameterizedType,
+                "Your ControllerTestCase must have genericType");
+        config = Goja.class;
+    }
 
     private static void initConfig(JFinal me, ServletContext servletContext, JFinalConfig config) {
         Reflect.on(me).call("init", config, servletContext);
@@ -54,7 +62,6 @@ public abstract class ControllerTestCase {
         if (configStarted) {
             return;
         }
-
 
         ClassFinder.findWithTest();
         Reflect.on(Goja.class).call("initWithTest");
@@ -67,12 +74,9 @@ public abstract class ControllerTestCase {
         configInstance.afterJFinalStart();
     }
 
-    @SuppressWarnings("unchecked")
-    public ControllerTestCase() {
-        Type genericSuperclass = getClass().getGenericSuperclass();
-        Preconditions.checkArgument(genericSuperclass instanceof ParameterizedType,
-                                    "Your ControllerTestCase must have genericType");
-        config = Goja.class;
+    @AfterClass
+    public static void stop() throws Exception {
+        configInstance.beforeJFinalStop();
     }
 
     public Object findAttrAfterInvoke(String key) {
@@ -93,17 +97,11 @@ public abstract class ControllerTestCase {
             }
         }
         return target;
-
     }
 
     @Before
     public void init() throws Exception {
         start(config);
-    }
-
-    @AfterClass
-    public static void stop() throws Exception {
-        configInstance.beforeJFinalStop();
     }
 
     public String invoke() {
@@ -119,7 +117,8 @@ public abstract class ControllerTestCase {
         StringWriter resp = new StringWriter();
         request = new MockHttpRequest(bodyData);
         response = new MockHttpResponse(resp);
-        Reflect.on(handler).call("handle", getTarget(actionUrl, request), request, response, new boolean[]{true});
+        Reflect.on(handler)
+                .call("handle", getTarget(actionUrl, request), request, response, new boolean[]{true});
         String response = resp.toString();
         if (responseFile != null) {
             try {

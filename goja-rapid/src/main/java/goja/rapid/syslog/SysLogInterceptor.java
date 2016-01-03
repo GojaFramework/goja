@@ -27,8 +27,19 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class SysLogInterceptor implements Interceptor {
-    private static final Map<String, LogConfig> acitonLogs   = Maps.newConcurrentMap();
-    private              LogProcessor           logProcesser = null;
+    private static final Map<String, LogConfig> acitonLogs = Maps.newConcurrentMap();
+    private LogProcessor logProcesser = null;
+
+    private static String getIp(HttpServletRequest request) {
+        String remoteAddr = request.getHeader("X-Real-IP");
+        if (remoteAddr == null) {
+            remoteAddr = request.getHeader("X-Forwarded-For");
+        }
+        if (remoteAddr == null) {
+            remoteAddr = request.getRemoteAddr();
+        }
+        return remoteAddr;
+    }
 
     public SysLogInterceptor setLogProcesser(LogProcessor logProcesser, String path) {
         this.logProcesser = logProcesser;
@@ -40,8 +51,9 @@ public class SysLogInterceptor implements Interceptor {
                 return null;
             }
 
-            List<LogPathConfig> pathConfigs = JSON.parseObject(config, new TypeReference<List<LogPathConfig>>() {
-            });
+            List<LogPathConfig> pathConfigs =
+                    JSON.parseObject(config, new TypeReference<List<LogPathConfig>>() {
+                    });
             if (pathConfigs != null && !pathConfigs.isEmpty()) {
                 for (LogPathConfig pathConfig : pathConfigs) {
                     final LogConfig logConfig = (Strings.isNullOrEmpty(pathConfig.getFormat()))
@@ -90,24 +102,13 @@ public class SysLogInterceptor implements Interceptor {
             _key = entry.getKey();
             _value = entry.getValue()[0];
             _result = log.params.get(_key);
-            if (StringUtils.isBlank(_result))
+            if (StringUtils.isBlank(_result)) {
                 continue;
+            }
             paraMap.put(_result, _value);
         }
         sysLog.message = logProcesser.formatMessage(log, paraMap);
         sysLog.title = log.getTitle();
         logProcesser.process(sysLog);
-    }
-
-
-    private static String getIp(HttpServletRequest request) {
-        String remoteAddr = request.getHeader("X-Real-IP");
-        if (remoteAddr == null) {
-            remoteAddr = request.getHeader("X-Forwarded-For");
-        }
-        if (remoteAddr == null) {
-            remoteAddr = request.getRemoteAddr();
-        }
-        return remoteAddr;
     }
 }

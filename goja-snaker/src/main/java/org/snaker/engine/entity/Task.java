@@ -14,34 +14,35 @@
  */
 package org.snaker.engine.entity;
 
+import org.snaker.engine.helper.JsonHelper;
+import org.snaker.engine.model.TaskModel;
+import org.snaker.engine.model.TaskModel.TaskType;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import org.snaker.engine.helper.JsonHelper;
-import org.snaker.engine.model.TaskModel;
-import org.snaker.engine.model.TaskModel.TaskType;
-
 /**
  * 任务实体类
+ *
  * @author yuqs
  * @since 1.0
  */
 public class Task implements Serializable, Cloneable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -189094546633914087L;
-	public static final String KEY_ACTOR = "S-ACTOR";
-	/**
-	 * 主键ID
-	 */
-	private String id;
-	/**
-	 * 版本
-	 */
-	private Integer version = 0;
+    public static final String KEY_ACTOR = "S-ACTOR";
+    /**
+     *
+     */
+    private static final long serialVersionUID = -189094546633914087L;
+    /**
+     * 主键ID
+     */
+    private String id;
+    /**
+     * 版本
+     */
+    private Integer version = 0;
     /**
      * 流程实例ID
      */
@@ -49,18 +50,18 @@ public class Task implements Serializable, Cloneable {
     /**
      * 任务名称
      */
-	private String taskName;
-	/**
-	 * 任务显示名称
-	 */
-	private String displayName;
-	/**
-	 * 参与方式（0：普通任务；1：参与者会签任务）
-	 */
-	private Integer performType;
-	/**
-	 * 任务类型（0：主办任务；1：协办任务）
-	 */
+    private String taskName;
+    /**
+     * 任务显示名称
+     */
+    private String displayName;
+    /**
+     * 参与方式（0：普通任务；1：参与者会签任务）
+     */
+    private Integer performType;
+    /**
+     * 任务类型（0：主办任务；1：协办任务）
+     */
     private Integer taskType;
     /**
      * 任务处理者ID
@@ -98,7 +99,7 @@ public class Task implements Serializable, Cloneable {
      * 父任务Id
      */
     private String parentTaskId;
-	/**
+    /**
      * 任务附属变量
      */
     private String variable;
@@ -106,189 +107,189 @@ public class Task implements Serializable, Cloneable {
      * 保持模型对象
      */
     private TaskModel model;
-    
+
     public Task() {
-    	
+
     }
-    
+
     public Task(String id) {
-    	this.id = id;
+        this.id = id;
     }
-    
+
     public boolean isMajor() {
-    	return this.taskType == TaskType.Major.ordinal();
+        return this.taskType == TaskType.Major.ordinal();
     }
-    
-	public String getParentTaskId() {
-		return parentTaskId;
-	}
 
-	public void setParentTaskId(String parentTaskId) {
-		this.parentTaskId = parentTaskId;
-	}
+    public String getParentTaskId() {
+        return parentTaskId;
+    }
 
-	public String getVariable() {
-		return variable;
-	}
+    public void setParentTaskId(String parentTaskId) {
+        this.parentTaskId = parentTaskId;
+    }
 
-	public void setVariable(String variable) {
-		this.variable = variable;
-	}
+    public String getVariable() {
+        return variable;
+    }
 
-	public String getTaskName() {
-		return taskName;
-	}
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
 
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
-	}
+    public String getTaskName() {
+        return taskName;
+    }
 
-	public Integer getTaskType() {
-		return taskType;
-	}
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
 
-	public void setTaskType(Integer taskType) {
-		this.taskType = taskType;
-	}
+    public Integer getTaskType() {
+        return taskType;
+    }
 
-	public String getOperator() {
-		return operator;
-	}
+    public void setTaskType(Integer taskType) {
+        this.taskType = taskType;
+    }
 
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
+    public String getOperator() {
+        return operator;
+    }
 
-	public String getCreateTime() {
-		return createTime;
-	}
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
+    public String getCreateTime() {
+        return createTime;
+    }
 
-	public String getFinishTime() {
-		return finishTime;
-	}
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setFinishTime(String finishTime) {
-		this.finishTime = finishTime;
-	}
+    public String getFinishTime() {
+        return finishTime;
+    }
 
-	public String getExpireTime() {
-		return expireTime;
-	}
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
 
-	public void setExpireTime(String expireTime) {
-		this.expireTime = expireTime;
-	}
+    public String getExpireTime() {
+        return expireTime;
+    }
 
-	public String getActionUrl() {
-		return actionUrl;
-	}
+    public void setExpireTime(String expireTime) {
+        this.expireTime = expireTime;
+    }
 
-	public void setActionUrl(String actionUrl) {
-		this.actionUrl = actionUrl;
-	}
+    public String getActionUrl() {
+        return actionUrl;
+    }
 
-	public String getDisplayName() {
-		return displayName;
-	}
+    public void setActionUrl(String actionUrl) {
+        this.actionUrl = actionUrl;
+    }
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
+    public String getDisplayName() {
+        return displayName;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getOrderId() {
-		return orderId;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
+    public String getOrderId() {
+        return orderId;
+    }
 
-	public String[] getActorIds() {
-		if(actorIds == null) {
-			String actorStr = (String)getVariableMap().get(KEY_ACTOR);
-			if(actorStr != null) {
-				actorIds = actorStr.split(",");
-			}
-		}
-		return actorIds;
-	}
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
-	public void setActorIds(String[] actorIds) {
-		this.actorIds = actorIds;
-	}
-	
-	public Integer getPerformType() {
-		return performType;
-	}
+    public String[] getActorIds() {
+        if (actorIds == null) {
+            String actorStr = (String) getVariableMap().get(KEY_ACTOR);
+            if (actorStr != null) {
+                actorIds = actorStr.split(",");
+            }
+        }
+        return actorIds;
+    }
 
-	public void setPerformType(Integer performType) {
-		this.performType = performType;
-	}
+    public void setActorIds(String[] actorIds) {
+        this.actorIds = actorIds;
+    }
 
-	public Integer getVersion() {
-		return version;
-	}
+    public Integer getPerformType() {
+        return performType;
+    }
 
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-	
-	public Date getExpireDate() {
-		return expireDate;
-	}
+    public void setPerformType(Integer performType) {
+        this.performType = performType;
+    }
 
-	public void setExpireDate(Date expireDate) {
-		this.expireDate = expireDate;
-	}
+    public Integer getVersion() {
+        return version;
+    }
 
-	public Date getRemindDate() {
-		return remindDate;
-	}
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
-	public void setRemindDate(Date remindDate) {
-		this.remindDate = remindDate;
-	}
+    public Date getExpireDate() {
+        return expireDate;
+    }
 
-	public TaskModel getModel() {
-		return model;
-	}
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
 
-	public void setModel(TaskModel model) {
-		this.model = model;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> getVariableMap() {
+    public Date getRemindDate() {
+        return remindDate;
+    }
+
+    public void setRemindDate(Date remindDate) {
+        this.remindDate = remindDate;
+    }
+
+    public TaskModel getModel() {
+        return model;
+    }
+
+    public void setModel(TaskModel model) {
+        this.model = model;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getVariableMap() {
         Map<String, Object> map = JsonHelper.fromJson(this.variable, Map.class);
-        if(map == null) return Collections.emptyMap();
+        if (map == null) return Collections.emptyMap();
         return map;
-	}
-	
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    }
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Task(id=").append(this.id);
-		sb.append(",orderId=").append(this.orderId);
-		sb.append(",taskName=").append(this.taskName);
-		sb.append(",displayName").append(this.displayName);
-		sb.append(",taskType=").append(this.taskType);
-		sb.append(",createTime=").append(this.createTime);
-		sb.append(",performType=").append(this.performType).append(")");
-		return sb.toString();
-	}
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Task(id=").append(this.id);
+        sb.append(",orderId=").append(this.orderId);
+        sb.append(",taskName=").append(this.taskName);
+        sb.append(",displayName").append(this.displayName);
+        sb.append(",taskType=").append(this.taskType);
+        sb.append(",createTime=").append(this.createTime);
+        sb.append(",performType=").append(this.performType).append(")");
+        return sb.toString();
+    }
 }

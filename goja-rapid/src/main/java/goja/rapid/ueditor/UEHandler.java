@@ -19,11 +19,9 @@ public class UEHandler {
         this.controller = controller;
     }
 
-
     public static UEHandler build(Controller controller) {
         return new UEHandler(controller);
     }
-
 
     public void exec() {
         String action = controller.getPara("action");
@@ -46,7 +44,6 @@ public class UEHandler {
                 case LISTFILE:
                     controller.renderText(ueAction.invoke(controller));
                     break;
-
             }
         } else {
             controller.renderText(new BaseState(false).toJSONString());

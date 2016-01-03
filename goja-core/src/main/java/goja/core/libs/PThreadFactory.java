@@ -10,16 +10,13 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-24 21:54
  * @since JDK 1.6
  */
 public class PThreadFactory implements ThreadFactory {
-
 
     final ThreadGroup group;
     final AtomicInteger threadNumber = new AtomicInteger(1);

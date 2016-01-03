@@ -12,6 +12,7 @@ public class ConfigurationException extends GojaException {
     public ConfigurationException(String message) {
         super(message);
     }
+
     @Override
     public String getErrorTitle() {
         return getMessage();

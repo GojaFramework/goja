@@ -11,7 +11,7 @@ import java.util.Map;
 public class BaseState implements State {
 
     private boolean state = false;
-    private String  info  = null;
+    private String info = null;
 
     private Map<String, String> infoMap = Maps.newHashMap();
 
@@ -28,65 +28,65 @@ public class BaseState implements State {
         this.info = info;
     }
 
-    public BaseState ( boolean state, int infoCode ) {
-		this.setState( state );
-		this.info = AppInfo.getStateInfo( infoCode );
-	}
-	
-	public boolean isSuccess () {
-		return this.state;
-	}
-	
-	public void setState ( boolean state ) {
-		this.state = state;
-	}
-	
-	public void setInfo ( String info ) {
-		this.info = info;
-	}
-	
-	public void setInfo ( int infoCode ) {
-		this.info = AppInfo.getStateInfo( infoCode );
-	}
-	
-	@Override
-	public String toJSONString() {
-		return this.toString();
-	}
-	
-	public String toString () {
-		
-		String key;
-		String stateVal = this.isSuccess() ? AppInfo.getStateInfo( AppInfo.SUCCESS ) : this.info;
-		
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append("{\"state\": \"").append(stateVal).append("\"");
+    public BaseState(boolean state, int infoCode) {
+        this.setState(state);
+        this.info = AppInfo.getStateInfo(infoCode);
+    }
 
-		Iterator<String> iterator = this.infoMap.keySet().iterator();
+    public boolean isSuccess() {
+        return this.state;
+    }
 
-		while ( iterator.hasNext() ) {
+    public void setState(boolean state) {
+        this.state = state;
+    }
 
-			key = iterator.next();
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
-			builder.append(",\"").append(key).append("\": \"").append(this.infoMap.get(key)).append("\"");
+    public void setInfo(int infoCode) {
+        this.info = AppInfo.getStateInfo(infoCode);
+    }
 
-		}
-		
-		builder.append( "}" );
+    @Override
+    public String toJSONString() {
+        return this.toString();
+    }
 
-		return UEKit.toUnicode(builder.toString());
+    public String toString() {
 
-	}
+        String key;
+        String stateVal = this.isSuccess() ? AppInfo.getStateInfo(AppInfo.SUCCESS) : this.info;
 
-	@Override
-	public void putInfo(String name, String val) {
-		this.infoMap.put(name, val);
-	}
+        StringBuilder builder = new StringBuilder();
 
-	@Override
-	public void putInfo(String name, long val) {
-		this.putInfo(name, val+"");
-	}
+        builder.append("{\"state\": \"").append(stateVal).append("\"");
+
+        Iterator<String> iterator = this.infoMap.keySet().iterator();
+
+        while (iterator.hasNext()) {
+
+            key = iterator.next();
+
+            builder.append(",\"").append(key).append("\": \"").append(this.infoMap.get(key)).append("\"");
+
+        }
+
+        builder.append("}");
+
+        return UEKit.toUnicode(builder.toString());
+
+    }
+
+    @Override
+    public void putInfo(String name, String val) {
+        this.infoMap.put(name, val);
+    }
+
+    @Override
+    public void putInfo(String name, long val) {
+        this.putInfo(name, val + "");
+    }
 
 }

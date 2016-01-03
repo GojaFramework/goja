@@ -1,28 +1,21 @@
 /**
  * Copyright (c) 2011-2013, kidzhou 周磊 (zhouleib1412@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package goja.plugins.monogo;
 
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +26,16 @@ import java.util.regex.Pattern;
 
 public class MongoKit {
 
-
     private static MongoClient client;
     private static DB defaultDb;
 
     public static void init(MongoClient client, String database) {
         MongoKit.client = client;
         MongoKit.defaultDb = client.getDB(database);
-
     }
 
-    public static void updateFirst(String collectionName, Map<String, Object> q, Map<String, Object> o) {
+    public static void updateFirst(String collectionName, Map<String, Object> q,
+                                   Map<String, Object> o) {
         MongoKit.getCollection(collectionName).findAndModify(toDBObject(q), toDBObject(o));
     }
 
@@ -61,7 +53,6 @@ public class MongoKit {
             objs.add(toDbObject(record));
         }
         return MongoKit.getCollection(collectionName).insert(objs).getN();
-
     }
 
     public static int save(String collectionName, Record record) {
@@ -76,16 +67,19 @@ public class MongoKit {
         return paginate(collection, pageNumber, pageSize, null, null, null);
     }
 
-    public static Page<Record> paginate(String collection, int pageNumber, int pageSize, Map<String, Object> filter) {
+    public static Page<Record> paginate(String collection, int pageNumber, int pageSize,
+                                        Map<String, Object> filter) {
         return paginate(collection, pageNumber, pageSize, filter, null, null);
     }
 
-    public static Page<Record> paginate(String collection, int pageNumber, int pageSize, Map<String, Object> filter,
+    public static Page<Record> paginate(String collection, int pageNumber, int pageSize,
+                                        Map<String, Object> filter,
                                         Map<String, Object> like) {
         return paginate(collection, pageNumber, pageSize, filter, like, null);
     }
 
-    public static Page<Record> paginate(String collection, int pageNumber, int pageSize, Map<String, Object> filter,
+    public static Page<Record> paginate(String collection, int pageNumber, int pageSize,
+                                        Map<String, Object> filter,
                                         Map<String, Object> like, Map<String, Object> sort) {
         DBCollection logs = MongoKit.getCollection(collection);
         BasicDBObject conditons = new BasicDBObject();
@@ -146,7 +140,6 @@ public class MongoKit {
                 Object val = entry.getValue();
                 conditons.put(key, val);
             }
-
         }
     }
 

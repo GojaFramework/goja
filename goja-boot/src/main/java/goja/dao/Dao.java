@@ -26,7 +26,6 @@ import java.util.List;
  */
 public abstract class Dao {
 
-
     /**
      * According to the default primary key <code>id</code> is for the new data and entity.
      *
@@ -66,7 +65,6 @@ public abstract class Dao {
         return Db.findFirst(sqlSelect.toString(), sqlSelect.getParams().toArray());
     }
 
-
     /**
      * 根据多个数据通过主键批量删除数据
      *
@@ -81,11 +79,17 @@ public abstract class Dao {
             throw new IllegalArgumentException("需要删除的表数据主键不存在，无法删除!");
         }
         // 暂时支持单主键的，多主键的后续在说吧。
-        final String question_mark = StringUtils.repeat(StringPool.QUESTION_MARK, StringPool.COMMA, ids.length);
-        String deleteSql = "DELETE FROM " + table.getName() + " WHERE " + primaryKey[0] + " IN (" + question_mark + ")";
+        final String question_mark =
+                StringUtils.repeat(StringPool.QUESTION_MARK, StringPool.COMMA, ids.length);
+        String deleteSql = "DELETE FROM "
+                + table.getName()
+                + " WHERE "
+                + primaryKey[0]
+                + " IN ("
+                + question_mark
+                + ")";
         return Db.update(deleteSql, ids) >= 0;
     }
-
 
     /**
      * According to the primary key and entity determine whether for the new entity.
@@ -158,7 +162,6 @@ public abstract class Dao {
         }
     }
 
-
     /**
      * generating oracle paginate SQL.
      *
@@ -166,7 +169,8 @@ public abstract class Dao {
      * @return paginate sql.
      */
     public static String oraclePaginateSql(String sql) {
-        return String.format("SELECT * FROM (SELECT goja_ptbs.*,ROWNUM num FROM (%s) goja_ptbs WHERE ROWNUM <= ? ) WHERE num >= ?", sql);
+        return String.format(
+                "SELECT * FROM (SELECT goja_ptbs.*,ROWNUM num FROM (%s) goja_ptbs WHERE ROWNUM <= ? ) WHERE num >= ?",
+                sql);
     }
-
 }
