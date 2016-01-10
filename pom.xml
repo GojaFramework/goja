@@ -87,6 +87,7 @@
     <mail.version>1.4.7</mail.version>
     <quartz.version>2.2.1</quartz.version>
     <thumbnailator.version>0.4.8</thumbnailator.version>
+    <verbalregex.version>1.3</verbalregex.version>
 
     <!-- the cache and database -->
     <ehcache-core.version>2.6.11</ehcache-core.version>

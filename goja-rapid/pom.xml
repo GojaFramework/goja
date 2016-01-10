@@ -26,6 +26,13 @@
     </dependency>
 
     <dependency>
+      <groupId>ru.lanwen.verbalregex</groupId>
+      <artifactId>java-verbal-expressions</artifactId>
+      <version>${verbalregex.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
       <groupId>com.github.sogyf</groupId>
       <artifactId>goja-snaker</artifactId>
       <version>${project.version}</version>
