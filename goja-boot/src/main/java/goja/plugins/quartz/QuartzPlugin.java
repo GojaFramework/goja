@@ -6,7 +6,7 @@
 package goja.plugins.quartz;
 
 import com.jfinal.plugin.IPlugin;
-import goja.annotation.On;
+import goja.core.annotation.On;
 import goja.core.app.GojaConfig;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;

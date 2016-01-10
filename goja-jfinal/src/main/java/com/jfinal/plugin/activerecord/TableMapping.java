@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
- * <p/>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,25 +23,25 @@ import java.util.Map;
  * TableMapping save the mapping between model class and table.
  */
 public class TableMapping {
-
-    private static TableMapping me = new TableMapping();
-    private final Map<Class<? extends Model<?>>, Table> modelToTableMap = new HashMap<Class<? extends Model<?>>, Table>();
-
-    private TableMapping() {
-    }
-
-    public static TableMapping me() {
-        return me;
-    }
-
-    public void putTable(Table table) {
-        modelToTableMap.put(table.getModelClass(), table);
-    }
-
-    @SuppressWarnings("rawtypes")
-    public Table getTable(Class<? extends Model> modelClass) {
-        return modelToTableMap.get(modelClass);
-    }
+	
+	private final Map<Class<? extends Model<?>>, Table> modelToTableMap = new HashMap<Class<? extends Model<?>>, Table>();
+	
+	private static TableMapping me = new TableMapping(); 
+	
+	private TableMapping() {}
+	
+	public static TableMapping me() {
+		return me;
+	}
+	
+	public void putTable(Table table) {
+		modelToTableMap.put(table.getModelClass(), table);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Table getTable(Class<? extends Model> modelClass) {
+		return modelToTableMap.get(modelClass);
+	}
 }
 
 

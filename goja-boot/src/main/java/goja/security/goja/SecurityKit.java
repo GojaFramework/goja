@@ -13,11 +13,12 @@ import goja.Goja;
 import goja.core.StringPool;
 import goja.core.encry.DigestsKit;
 import goja.core.encry.EncodeKit;
-import goja.mvc.kit.Requests;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
+import goja.rapid.mvc.kits.Requests;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
+import java.util.Enumeration;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -25,11 +26,9 @@ import javax.crypto.spec.DESKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.security.SecureRandom;
-import java.util.Enumeration;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * <p> The Security Kit. </p>
@@ -205,7 +204,7 @@ public class SecurityKit {
     public static <T extends Model> void saveMemberInCookie(T user, boolean save,
                                                             HttpServletRequest request, HttpServletResponse response) {
         String new_value =
-                getLoginKey(user, Requests.remoteAddr(request), request.getHeader("user-agent"));
+                getLoginKey(user, Requests.remoteIP(request), request.getHeader("user-agent"));
         int max_age = save ? MAX_AGE : -1;
         Requests.deleteCookie(request, response, COOKIE_LOGIN, true);
         Requests.setCookie(request, response, COOKIE_LOGIN, new_value, max_age, true);

@@ -16,7 +16,7 @@ package goja.plugins.tablebind;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
-import goja.annotation.TableBind;
+import goja.core.annotation.TableBind;
 import goja.core.Func;
 import goja.core.StringPool;
 import goja.initialize.ctxbox.ClassBox;

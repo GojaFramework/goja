@@ -2,7 +2,7 @@ package goja.mvc.auto;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.config.Interceptors;
-import goja.annotation.AppInterceptor;
+import goja.core.annotation.AppInterceptor;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
 import goja.logging.Logger;

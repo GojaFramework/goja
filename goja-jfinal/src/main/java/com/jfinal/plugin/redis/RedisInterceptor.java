@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
- * <p/>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,9 @@
 
 package com.jfinal.plugin.redis;
 
+import redis.clients.jedis.Jedis;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
-import redis.clients.jedis.Jedis;
 
 /**
  * RedisInterceptor 用于在同一线程中共享同一个 jedis 对象，提升性能.
@@ -26,31 +26,32 @@ import redis.clients.jedis.Jedis;
  * 改一下Redis.use() 为 Redis.use(otherCache) 即可
  */
 public class RedisInterceptor implements Interceptor {
-
-    /**
-     * 通过继承 RedisInterceptor 类并覆盖此方法，可以指定
-     * 当前线程所使用的 cache
-     */
-    protected Cache getCache() {
-        return Redis.use();
-    }
-
-    public void intercept(Invocation inv) {
-        Cache cache = getCache();
-        Jedis jedis = cache.getThreadLocalJedis();
-        if (jedis != null) {
-            inv.invoke();
-            return;
-        }
-
-        try {
-            jedis = cache.jedisPool.getResource();
-            cache.setThreadLocalJedis(jedis);
-            inv.invoke();
-        } finally {
-            cache.removeThreadLocalJedis();
-            jedis.close();
-        }
-    }
+	
+	/**
+	 * 通过继承 RedisInterceptor 类并覆盖此方法，可以指定
+	 * 当前线程所使用的 cache
+	 */
+	protected Cache getCache() {
+		return Redis.use();
+	}
+	
+	public void intercept(Invocation inv) {
+		Cache cache = getCache();
+		Jedis jedis = cache.getThreadLocalJedis();
+		if (jedis != null) {
+			inv.invoke();
+			return ;
+		}
+		
+		try {
+			jedis = cache.jedisPool.getResource();
+			cache.setThreadLocalJedis(jedis);
+			inv.invoke();
+		}
+		finally {
+			cache.removeThreadLocalJedis();
+			jedis.close();
+		}
+	}
 }
 

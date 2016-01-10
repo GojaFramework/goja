@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.jfinal.config.Routes;
 import com.jfinal.kit.StrKit;
-import goja.annotation.ControllerBind;
+import goja.core.annotation.ControllerBind;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.initialize.ctxbox.ClassBox;

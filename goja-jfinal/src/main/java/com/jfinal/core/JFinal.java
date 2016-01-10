@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2011-2016, James Zhan 詹波 (jfinal@126.com).
- * <p/>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * <p/>
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -27,152 +27,153 @@ import com.jfinal.server.ServerFactory;
 import com.jfinal.token.ITokenCache;
 import com.jfinal.token.TokenManager;
 import com.jfinal.upload.OreillyCos;
-
-import javax.servlet.ServletContext;
 import java.util.List;
+import javax.servlet.ServletContext;
 
 /**
  * JFinal
  */
 public final class JFinal {
 
-    private static final JFinal me = new JFinal();
-    private static IServer server;
-    private Constants constants;
-    private ActionMapping actionMapping;
-    private Handler handler;
-    private ServletContext servletContext;
-    private String contextPath = "";
+  private Constants constants;
+  private ActionMapping actionMapping;
+  private Handler handler;
+  private ServletContext servletContext;
+  private String contextPath = "";
+  private static IServer server;
 
-    private JFinal() {
+  private static final JFinal me = new JFinal();
+
+  private JFinal() {
+  }
+
+  public static JFinal me() {
+    return me;
+  }
+
+  boolean init(JFinalConfig jfinalConfig, ServletContext servletContext) {
+    this.servletContext = servletContext;
+    this.contextPath = servletContext.getContextPath();
+
+    initPathUtil();
+
+    Config.configJFinal(jfinalConfig);  // start plugin and init log factory in this method
+    constants = Config.getConstants();
+
+    initActionMapping();
+    initHandler();
+    initRender();
+    initOreillyCos();
+    initTokenManager();
+
+    return true;
+  }
+
+  private void initTokenManager() {
+    ITokenCache tokenCache = constants.getTokenCache();
+    if (tokenCache != null) {
+      TokenManager.init(tokenCache);
     }
+  }
 
-    public static JFinal me() {
-        return me;
-    }
+  private void initHandler() {
+    Handler actionHandler = new ActionHandler(actionMapping, constants);
+    handler = HandlerFactory.getHandler(Config.getHandlers().getHandlerList(), actionHandler);
+  }
 
-    public static void start() {
-        server = ServerFactory.getServer();
-        server.start();
-    }
+  private void initOreillyCos() {
+    OreillyCos.init(constants.getBaseUploadPath(), constants.getMaxPostSize(),
+        constants.getEncoding());
+  }
 
-    public static void start(String webAppDir, int port, String context, int scanIntervalSeconds) {
-        server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
-        server.start();
-    }
+  private void initPathUtil() {
+    String path = servletContext.getRealPath("/");
+    PathKit.setWebRootPath(path);
+  }
 
-    public static void stop() {
-        server.stop();
-    }
+  private void initRender() {
+    RenderFactory.me().init(constants, servletContext);
+  }
 
-    /**
-     * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE
-     * args example: WebRoot 80 / 5
-     */
-    public static void main(String[] args) {
-        if (args == null || args.length == 0) {
-            server = ServerFactory.getServer();
-            server.start();
-        } else {
-            String webAppDir = args[0];
-            int port = Integer.parseInt(args[1]);
-            String context = args[2];
-            int scanIntervalSeconds = Integer.parseInt(args[3]);
-            server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
-            server.start();
+  private void initActionMapping() {
+    actionMapping = new ActionMapping(Config.getRoutes(), Config.getInterceptors());
+    actionMapping.buildActionMapping();
+    Config.getRoutes().clear();
+  }
+
+  void stopPlugins() {
+    List<IPlugin> plugins = Config.getPlugins().getPluginList();
+    if (plugins != null) {
+      for (int i = plugins.size() - 1; i >= 0; i--) {    // stop plugins
+        boolean success = false;
+        try {
+          success = plugins.get(i).stop();
+        } catch (Exception e) {
+          success = false;
+          LogKit.error(e.getMessage(), e);
         }
-    }
-
-    boolean init(JFinalConfig jfinalConfig, ServletContext servletContext) {
-        this.servletContext = servletContext;
-        this.contextPath = servletContext.getContextPath();
-
-        initPathUtil();
-
-        Config.configJFinal(jfinalConfig);  // start plugin and init log factory in this method
-        constants = Config.getConstants();
-
-        initActionMapping();
-        initHandler();
-        initRender();
-        initOreillyCos();
-        initTokenManager();
-
-        return true;
-    }
-
-    private void initTokenManager() {
-        ITokenCache tokenCache = constants.getTokenCache();
-        if (tokenCache != null) {
-            TokenManager.init(tokenCache);
+        if (!success) {
+          System.err.println("Plugin stop error: " + plugins.get(i).getClass().getName());
         }
+      }
     }
+  }
 
-    private void initHandler() {
-        Handler actionHandler = new ActionHandler(actionMapping, constants);
-        handler = HandlerFactory.getHandler(Config.getHandlers().getHandlerList(), actionHandler);
-    }
+  Handler getHandler() {
+    return handler;
+  }
 
-    private void initOreillyCos() {
-        OreillyCos.init(constants.getBaseUploadPath(), constants.getMaxPostSize(),
-                constants.getEncoding());
-    }
+  public Constants getConstants() {
+    return Config.getConstants();
+  }
 
-    private void initPathUtil() {
-        String path = servletContext.getRealPath("/");
-        PathKit.setWebRootPath(path);
-    }
+  public String getContextPath() {
+    return contextPath;
+  }
 
-    private void initRender() {
-        RenderFactory.me().init(constants, servletContext);
-    }
+  public ServletContext getServletContext() {
+    return this.servletContext;
+  }
 
-    private void initActionMapping() {
-        actionMapping = new ActionMapping(Config.getRoutes(), Config.getInterceptors());
-        actionMapping.buildActionMapping();
-    }
+  public Action getAction(String url, String[] urlPara) {
+    return actionMapping.getAction(url, urlPara);
+  }
 
-    void stopPlugins() {
-        List<IPlugin> plugins = Config.getPlugins().getPluginList();
-        if (plugins != null) {
-            for (int i = plugins.size() - 1; i >= 0; i--) {    // stop plugins
-                boolean success = false;
-                try {
-                    success = plugins.get(i).stop();
-                } catch (Exception e) {
-                    success = false;
-                    LogKit.error(e.getMessage(), e);
-                }
-                if (!success) {
-                    System.err.println("Plugin stop error: " + plugins.get(i).getClass().getName());
-                }
-            }
-        }
-    }
+  public List<String> getAllActionKeys() {
+    return actionMapping.getAllActionKeys();
+  }
 
-    Handler getHandler() {
-        return handler;
-    }
+  public static void start() {
+    server = ServerFactory.getServer();
+    server.start();
+  }
 
-    public Constants getConstants() {
-        return Config.getConstants();
-    }
+  public static void start(String webAppDir, int port, String context, int scanIntervalSeconds) {
+    server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
+    server.start();
+  }
 
-    public String getContextPath() {
-        return contextPath;
-    }
+  public static void stop() {
+    server.stop();
+  }
 
-    public ServletContext getServletContext() {
-        return this.servletContext;
+  /**
+   * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE args
+   * example: WebRoot 80 / 5
+   */
+  public static void main(String[] args) {
+    if (args == null || args.length == 0) {
+      server = ServerFactory.getServer();
+      server.start();
+    } else {
+      String webAppDir = args[0];
+      int port = Integer.parseInt(args[1]);
+      String context = args[2];
+      int scanIntervalSeconds = Integer.parseInt(args[3]);
+      server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
+      server.start();
     }
-
-    public Action getAction(String url, String[] urlPara) {
-        return actionMapping.getAction(url, urlPara);
-    }
-
-    public List<String> getAllActionKeys() {
-        return actionMapping.getAllActionKeys();
-    }
+  }
 }
 
 
