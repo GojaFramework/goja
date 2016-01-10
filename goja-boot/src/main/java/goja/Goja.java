@@ -22,6 +22,8 @@ import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.core.Const;
 import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.json.FastJsonFactory;
+import com.jfinal.json.JacksonFactory;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
@@ -38,7 +40,6 @@ import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
-import com.jfinal.upload.OreillyCos;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import freemarker.template.Configuration;
 import goja.core.Func;
@@ -69,7 +70,6 @@ import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
-import goja.rapid.upload.filerenamepolicy.RandomFileRenamePolicy;
 import goja.security.shiro.SecurityUserData;
 import java.io.File;
 import java.net.URL;
@@ -177,7 +177,17 @@ public class Goja extends JFinalConfig {
         GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "attachment");
     constants.setBaseUploadPath(attachmentPath);
     constants.setBaseDownloadPath(attachmentPath);
-    OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
+
+    final String jsonMode = GojaConfig.getJsonMode();
+    if (!Strings.isNullOrEmpty(jsonMode)) {
+      if (StringUtils.equalsIgnoreCase("fastjson", jsonMode)) {
+        constants.setJsonFactory(new FastJsonFactory());
+      } else if (StringUtils.equalsIgnoreCase("jackson", jsonMode)) {
+        constants.setJsonFactory(new JacksonFactory());
+      }
+    }
+
+    //OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
   }
 
   @Override
