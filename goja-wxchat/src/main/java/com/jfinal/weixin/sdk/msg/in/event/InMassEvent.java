@@ -24,7 +24,8 @@ package com.jfinal.weixin.sdk.msg.in.event;
  * <ErrorCount>5</ErrorCount>
  * </xml>
  */
-public class InMassEvent extends EventInMsg {
+public class InMassEvent extends EventInMsg
+{
     //群发成功
     public static final String EVENT_INMASS_STATUS_SENDSUCCESS = "sendsuccess";
     //群发失败，其他失败情况是err(num)
@@ -37,55 +38,68 @@ public class InMassEvent extends EventInMsg {
     private String sentCount;
     private String errorCount;
 
-    public InMassEvent(String toUserName, String fromUserName, Integer createTime, String msgType, String event) {
+    public InMassEvent(String toUserName, String fromUserName, Integer createTime, String msgType, String event)
+    {
         super(toUserName, fromUserName, createTime, msgType, event);
     }
 
-    public String getMsgId() {
+    public String getMsgId()
+    {
         return msgId;
     }
 
-    public void setMsgId(String msgId) {
+    public void setMsgId(String msgId)
+    {
         this.msgId = msgId;
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
 
-    public String getTotalCount() {
+    public String getTotalCount()
+    {
         return totalCount;
     }
 
-    public void setTotalCount(String totalCount) {
+    public void setTotalCount(String totalCount)
+    {
         this.totalCount = totalCount;
     }
 
-    public String getFilterCount() {
+    public String getFilterCount()
+    {
         return filterCount;
     }
 
-    public void setFilterCount(String filterCount) {
+    public void setFilterCount(String filterCount)
+    {
         this.filterCount = filterCount;
     }
 
-    public String getSentCount() {
+    public String getSentCount()
+    {
         return sentCount;
     }
 
-    public void setSentCount(String sentCount) {
+    public void setSentCount(String sentCount)
+    {
         this.sentCount = sentCount;
     }
 
-    public String getErrorCount() {
+    public String getErrorCount()
+    {
         return errorCount;
     }
 
-    public void setErrorCount(String errorCount) {
+    public void setErrorCount(String errorCount)
+    {
         this.errorCount = errorCount;
     }
 }

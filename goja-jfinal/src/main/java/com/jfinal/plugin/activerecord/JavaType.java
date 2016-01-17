@@ -31,29 +31,29 @@ public class JavaType {
 	private Map<String, Class<?>> strToType = new HashMap<String, Class<?>>() {{
 		
 		// varchar, char, enum, set, text, tinytext, mediumtext, longtext
-		put("java.lang.String", java.lang.String.class);
+		put("java.lang.String", String.class);
 		
 		// int, integer, tinyint, smallint, mediumint
-		put("java.lang.Integer", java.lang.Integer.class);
+		put("java.lang.Integer", Integer.class);
 		
 		// bigint
-		put("java.lang.Long", java.lang.Long.class);
+		put("java.lang.Long", Long.class);
 		
-		// java.util.Data can not be returned
-		// java.sql.Date, java.sql.Time, java.sql.Timestamp all extends java.util.Data so getDate can return the three types data
+		// java.util.Date can not be returned
+		// java.sql.Date, java.sql.Time, java.sql.Timestamp all extends java.util.Date so getDate can return the three types data
 		// put("java.util.Date", java.util.Date.class);
 		
 		// date, year
 		put("java.sql.Date", java.sql.Date.class);
 		
 		// real, double
-		put("java.lang.Double", java.lang.Double.class);
+		put("java.lang.Double", Double.class);
 		
 		// float
-		put("java.lang.Float", java.lang.Float.class);
+		put("java.lang.Float", Float.class);
 		
 		// bit
-		put("java.lang.Boolean", java.lang.Boolean.class);
+		put("java.lang.Boolean", Boolean.class);
 		
 		// time
 		put("java.sql.Time", java.sql.Time.class);

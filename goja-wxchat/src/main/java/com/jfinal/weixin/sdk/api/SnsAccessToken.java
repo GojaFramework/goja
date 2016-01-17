@@ -6,21 +6,22 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.weixin.sdk.utils.JsonUtils;
-import com.jfinal.weixin.sdk.utils.RetryUtils.ResultCheck;
-
 import java.io.Serializable;
 import java.util.Map;
+
+import com.jfinal.weixin.sdk.utils.JsonUtils;
+import com.jfinal.weixin.sdk.utils.RetryUtils.ResultCheck;
 
 
 /**
  * SnsAccessToken
  * 封装 access_token
  */
-public class SnsAccessToken implements ResultCheck, Serializable {
-
+public class SnsAccessToken implements ResultCheck, Serializable 
+{
+    
     private static final long serialVersionUID = 6369625123403343963L;
-
+    
     private String access_token;    // 正确获取到 access_token 时有值
     private Integer expires_in;        // 正确获取到 access_token 时有值
     private String refresh_token;    //
@@ -33,10 +34,12 @@ public class SnsAccessToken implements ResultCheck, Serializable {
     private Long expiredTime;        // 正确获取到 access_token 时有值，存放过期时间
     private String json;
 
-    public SnsAccessToken(String jsonStr) {
+    public SnsAccessToken(String jsonStr)
+    {
         this.json = jsonStr;
 
-        try {
+        try
+        {
             @SuppressWarnings("unchecked")
             Map<String, Object> temp = JsonUtils.parse(jsonStr, Map.class);
             access_token = (String) temp.get("access_token");
@@ -51,12 +54,14 @@ public class SnsAccessToken implements ResultCheck, Serializable {
             if (expires_in != null)
                 expiredTime = System.currentTimeMillis() + ((expires_in - 5) * 1000);
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new RuntimeException(e);
         }
     }
 
-    public String getJson() {
+    public String getJson()
+    {
         return json;
     }
 
@@ -64,8 +69,9 @@ public class SnsAccessToken implements ResultCheck, Serializable {
         Number number = (Number) temp.get(key);
         return number == null ? null : number.intValue();
     }
-
-    public boolean isAvailable() {
+    
+    public boolean isAvailable()
+    {
         if (expiredTime == null)
             return false;
         if (errcode != null)
@@ -75,32 +81,40 @@ public class SnsAccessToken implements ResultCheck, Serializable {
         return access_token != null;
     }
 
-    public String getAccessToken() {
+    public String getAccessToken()
+    {
         return access_token;
     }
 
-    public Integer getExpiresIn() {
+    public Integer getExpiresIn()
+    {
         return expires_in;
     }
 
-    public String getRefresh_token() {
+    public String getRefresh_token()
+    {
         return refresh_token;
     }
 
-    public String getOpenid() {
+    public String getOpenid()
+    {
         return openid;
     }
 
-    public String getScope() {
+    public String getScope()
+    {
         return scope;
     }
 
-    public Integer getErrorCode() {
+    public Integer getErrorCode()
+    {
         return errcode;
     }
 
-    public String getErrorMsg() {
-        if (errcode != null) {
+    public String getErrorMsg()
+    {
+        if (errcode != null)
+        {
             String result = ReturnCode.get(errcode);
             if (result != null)
                 return result;
@@ -108,13 +122,14 @@ public class SnsAccessToken implements ResultCheck, Serializable {
         return errmsg;
     }
 
-    public String getUnionid() {
+    public String getUnionid()
+    {
         return unionid;
     }
 
-    @Override
-    public boolean matching() {
-        return isAvailable();
-    }
+	@Override
+	public boolean matching() {
+		return isAvailable();
+	}
 
 }

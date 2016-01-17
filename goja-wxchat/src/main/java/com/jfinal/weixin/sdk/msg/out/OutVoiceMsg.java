@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2011-2014, James Zhan 詹波 (jfinal@126.com).
- * <p/>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 
@@ -9,47 +9,48 @@ package com.jfinal.weixin.sdk.msg.out;
 import com.jfinal.weixin.sdk.msg.in.InMsg;
 
 /**
- 回复语音消息
- <xml>
- <ToUserName><![CDATA[toUser]]></ToUserName>
- <FromUserName><![CDATA[fromUser]]></FromUserName>
- <CreateTime>12345678</CreateTime>
- <MsgType><![CDATA[voice]]></MsgType>
- <Voice>
- <MediaId><![CDATA[media_id]]></MediaId>
- </Voice>
- </xml>
+	回复语音消息
+	<xml>
+		<ToUserName><![CDATA[toUser]]></ToUserName>
+		<FromUserName><![CDATA[fromUser]]></FromUserName>
+		<CreateTime>12345678</CreateTime>
+		<MsgType><![CDATA[voice]]></MsgType>
+			<Voice>
+				<MediaId><![CDATA[media_id]]></MediaId>
+			</Voice>
+	</xml>
  */
 public class OutVoiceMsg extends OutMsg {
-    public static final String TEMPLATE =
-            "<xml>\n" +
-                    "<ToUserName><![CDATA[${__msg.toUserName}]]></ToUserName>\n" +
-                    "<FromUserName><![CDATA[${__msg.fromUserName}]]></FromUserName>\n" +
-                    "<CreateTime>${__msg.createTime}</CreateTime>\n" +
-                    "<MsgType><![CDATA[${__msg.msgType}]]></MsgType>\n" +
-                    "<Voice>\n" +
-                    "<MediaId><![CDATA[${__msg.mediaId}]]></MediaId>\n" +
-                    "</Voice>\n" +
-                    "</xml>";
+	
+	private String mediaId;
+	
+	public OutVoiceMsg() {
+		this.msgType = "voice";
+	}
+	
+	public OutVoiceMsg(InMsg inMsg) {
+		super(inMsg);
+		this.msgType = "voice";
+	}
+	
+	@Override
+	protected String subXml() {
+		if (null == mediaId) {
+			throw new NullPointerException("mediaId is null");
+		}
+		return "<Voice>\n"
+				+ "<MediaId><![CDATA[" + mediaId + "]]></MediaId>\n"
+			+  "</Voice>\n";
+	}
+	
+	public String getMediaId() {
+		return mediaId;
+	}
+	
+	public void setMediaId(String mediaId) {
+		this.mediaId = mediaId;
+	}
 
-    private String mediaId;
-
-    public OutVoiceMsg() {
-        this.msgType = "voice";
-    }
-
-    public OutVoiceMsg(InMsg inMsg) {
-        super(inMsg);
-        this.msgType = "voice";
-    }
-
-    public String getMediaId() {
-        return mediaId;
-    }
-
-    public void setMediaId(String mediaId) {
-        this.mediaId = mediaId;
-    }
 }
 
 

@@ -6,29 +6,23 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.weixin.sdk.utils.HttpUtils;
-import com.jfinal.weixin.sdk.utils.JsonUtils;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jfinal.weixin.sdk.utils.HttpUtils;
+import com.jfinal.weixin.sdk.utils.JsonUtils;
+
 /**
  * 多客服功能</br>
  * 仅支持获取客服聊天记录接口，其他功能可以使用微信官方的多客服客户端软件来完成。
- * <p/>
+ * 
  * 客服接口：http://mp.weixin.qq.com/wiki/1/70a29afed17f56d537c833f89be979c9.html
  */
 public class CustomServiceApi {
 
     private static String getRecordUrl = "https://api.weixin.qq.com/customservice/msgrecord/getrecord?access_token=";
-    private static String addKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=";
-    private static String updateKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/update?access_token=";
-    private static String delKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/del?access_token=";
-    private static String uploadKfAccountHeadImgUrl = "http://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?access_token=";
-    private static String getKfListUrl = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=";
-    private static String customMessageUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=";
 
     /**
      * 获取客服聊天记录
@@ -38,71 +32,75 @@ public class CustomServiceApi {
         return new ApiResult(jsonResult);
     }
 
+    private static String addKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=";
+    
     /**
      * 添加客服帐号
-     *
      * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
-     * @param nickname   客服昵称，最长6个汉字或12个英文字符
-     * @param password   客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
+     * @param nickname 客服昵称，最长6个汉字或12个英文字符
+     * @param password 客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
      * @return ApiResult
      */
     public static ApiResult addKfAccount(String kf_account, String nickname, String password) {
         String accessToken = AccessTokenApi.getAccessTokenStr();
-
+        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("kf_account", kf_account);
         params.put("nickname", nickname);
         params.put("password", password);
-
+        
         String jsonResult = HttpUtils.post(addKfAccountUrl + accessToken, JsonUtils.toJson(params));
         return new ApiResult(jsonResult);
     }
-
+    
+    private static String updateKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/update?access_token=";
+    
     /**
      * 修改客服帐号
-     *
      * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
-     * @param nickname   客服昵称，最长6个汉字或12个英文字符
-     * @param password   客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
+     * @param nickname 客服昵称，最长6个汉字或12个英文字符
+     * @param password 客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
      * @return ApiResult
      */
     public static ApiResult updateKfAccount(String kf_account, String nickname, String password) {
         String accessToken = AccessTokenApi.getAccessTokenStr();
-
+        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("kf_account", kf_account);
         params.put("nickname", nickname);
         params.put("password", password);
-
+        
         String jsonResult = HttpUtils.post(updateKfAccountUrl + accessToken, JsonUtils.toJson(params));
         return new ApiResult(jsonResult);
     }
-
+    
+    private static String delKfAccountUrl = "https://api.weixin.qq.com/customservice/kfaccount/del?access_token=";
+    
     /**
      * 删除客服帐号
-     *
      * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
-     * @param nickname   客服昵称，最长6个汉字或12个英文字符
-     * @param password   客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
+     * @param nickname 客服昵称，最长6个汉字或12个英文字符
+     * @param password 客服账号登录密码，格式为密码明文的32位加密MD5值。该密码仅用于在公众平台官网的多客服功能中使用，若不使用多客服功能，则不必设置密码
      * @return ApiResult
      */
     public static ApiResult delKfAccount(String kf_account, String nickname, String password) {
         String accessToken = AccessTokenApi.getAccessTokenStr();
-
+        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("kf_account", kf_account);
         params.put("nickname", nickname);
         params.put("password", password);
-
+        
         String jsonResult = HttpUtils.post(delKfAccountUrl + accessToken, JsonUtils.toJson(params));
         return new ApiResult(jsonResult);
     }
-
+    
+    private static String uploadKfAccountHeadImgUrl = "http://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?access_token=";
+    
     /**
      * 设置客服帐号的头像
-     *
      * @param kf_account 完整客服账号，格式为：账号前缀@公众号微信号
-     * @param headImg    客服人员的头像，头像图片文件必须是jpg格式，推荐使用640*640大小的图片以达到最佳效果
+     * @param headImg 客服人员的头像，头像图片文件必须是jpg格式，推荐使用640*640大小的图片以达到最佳效果
      * @return
      */
     public static ApiResult uploadKfAccountHeadImg(String kf_account, File headImg) {
@@ -111,10 +109,11 @@ public class CustomServiceApi {
         String jsonResult = HttpUtils.upload(url, headImg, null);
         return new ApiResult(jsonResult);
     }
-
+    
+    private static String getKfListUrl = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=";
+    
     /**
      * 获取所有客服账号
-     *
      * @return ApiResult
      */
     public static ApiResult getKfList() {
@@ -122,10 +121,11 @@ public class CustomServiceApi {
         String jsonResult = HttpUtils.get(getKfListUrl + accessToken);
         return new ApiResult(jsonResult);
     }
+    
+    private static String customMessageUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=";
 
     /**
      * 发送客服消息
-     *
      * @param message
      * @return ApiResult
      */
@@ -137,7 +137,6 @@ public class CustomServiceApi {
 
     /**
      * 发送文本客服消息
-     *
      * @param openId
      * @param text
      */
@@ -155,7 +154,6 @@ public class CustomServiceApi {
 
     /**
      * 发送图片消息
-     *
      * @param openId
      * @param media_id
      * @return
@@ -174,7 +172,6 @@ public class CustomServiceApi {
 
     /**
      * 发送语言回复
-     *
      * @param openId
      * @param media_id
      * @return
@@ -193,7 +190,6 @@ public class CustomServiceApi {
 
     /**
      * 发送视频回复
-     *
      * @param openId
      * @param media_id
      * @param title
@@ -216,7 +212,6 @@ public class CustomServiceApi {
 
     /**
      * 发送音乐回复
-     *
      * @param openId
      * @param musicurl
      * @param hqmusicurl
@@ -243,7 +238,6 @@ public class CustomServiceApi {
 
     /**
      * 发送图文回复
-     *
      * @param openId
      * @param articles
      * @return
@@ -261,8 +255,42 @@ public class CustomServiceApi {
     }
 
     /**
+     * 客户消息图文封装和 `News` 又略微区别，无法公用
+     */
+    public static class Articles {
+        private String title;
+        private String description;
+        private String url;
+        private String picurl;
+
+        public String getTitle() {
+            return title;
+        }
+        public void setTitle(String title) {
+            this.title = title;
+        }
+        public String getDescription() {
+            return description;
+        }
+        public void setDescription(String description) {
+            this.description = description;
+        }
+        public String getUrl() {
+            return url;
+        }
+        public void setUrl(String url) {
+            this.url = url;
+        }
+        public String getPicurl() {
+            return picurl;
+        }
+        public void setPicurl(String picurl) {
+            this.picurl = picurl;
+        }
+    }
+
+    /**
      * 发送卡券
-     *
      * @param openId
      * @param card_id
      * @param card_ext 详情及签名规则: http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E9.99.84.E5.BD.954-.E5.8D.A1.E5.88.B8.E6.89.A9.E5.B1.95.E5.AD.97.E6.AE.B5.E5.8F.8A.E7.AD.BE.E5.90.8D.E7.94.9F.E6.88.90.E7.AE.97.E6.B3.95
@@ -279,48 +307,6 @@ public class CustomServiceApi {
 
         json.put("wxcard", wxcard);
         return sendMsg(json);
-    }
-
-    /**
-     * 客户消息图文封装和 `News` 又略微区别，无法公用
-     */
-    public static class Articles {
-        private String title;
-        private String description;
-        private String url;
-        private String picurl;
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getPicurl() {
-            return picurl;
-        }
-
-        public void setPicurl(String picurl) {
-            this.picurl = picurl;
-        }
     }
 
 }
