@@ -201,9 +201,9 @@ public interface GojaPropConst {
   /**
    * 分页Sql 分割标记
    */
-  String WHERESPLIT = "--where--";
+  String WHERESPLIT = "-- @where--";
   /**
    * 条件sql 分割标识
    */
-  String CONDITIONSSPLIT = "--conditions--";
+  String CONDITIONSSPLIT = "-- @conditions--";
 }

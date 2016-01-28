@@ -18,7 +18,6 @@ import com.jfinal.upload.UploadFile;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 import goja.core.kits.lang.DateKit;
-import goja.mvc.render.BadRequest;
 import goja.mvc.render.NotModified;
 import goja.rapid.db.Dao;
 import goja.rapid.mvc.datatables.DTCriterias;
@@ -59,12 +58,6 @@ public class Controller extends com.jfinal.core.Controller {
         new NotModified().render();
     }
 
-    /**
-     * Send a 400 Bad request
-     */
-    protected static void badRequest() {
-        new BadRequest().render();
-    }
 
     /**
      * Rendering errors information, in Json format.

@@ -18,5 +18,5 @@ public interface AppLoadEvent {
     /**
      * run method .
      */
-    public void load();
+    void load();
 }

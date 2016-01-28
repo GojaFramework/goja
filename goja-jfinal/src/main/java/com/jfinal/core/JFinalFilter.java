@@ -46,7 +46,7 @@ public final class JFinalFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		createJFinalConfig(filterConfig.getInitParameter("configClass"));
 		
-		if (jfinal.init(jfinalConfig, filterConfig.getServletContext()) == false)
+		if (!jfinal.init(jfinalConfig, filterConfig.getServletContext()))
 			throw new RuntimeException("JFinal init error!");
 		
 		handler = jfinal.getHandler();
@@ -78,7 +78,7 @@ public final class JFinalFilter implements Filter {
 			}
 		}
 		
-		if (isHandled[0] == false)
+		if (!isHandled[0])
 			chain.doFilter(request, response);
 	}
 	

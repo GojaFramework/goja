@@ -1,6 +1,6 @@
 // Copyright (c) 2003-2014, Jodd Team (jodd.org). All Rights Reserved.
 
-package goja.mvc;
+package goja.core.kits;
 
 import goja.core.StringPool;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * replaced with real values. Once set, one string template parser can be reused for parsing, even
  * using different macro resolvers.
  */
-public class StringTemplateParser {
+public class StrTemplateKit {
 
     public static final String DEFAULT_MACRO_START = "${";
     // ---------------------------------------------------------------- properties
@@ -71,7 +71,7 @@ public class StringTemplateParser {
     }
 
     /**
-     * Creates commonly used {@link StringTemplateParser.MacroResolver} that resolved macros in the
+     * Creates commonly used {@link StrTemplateKit.MacroResolver} that resolved macros in the
      * provided map.
      */
     public static MacroResolver createMapMacroResolver(final Map map) {

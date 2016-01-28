@@ -73,7 +73,7 @@ public class RenderFactory {
 		// init Render
 		Render.init(constants.getEncoding(), constants.getDevMode());
 		initFreeMarkerRender(servletContext);
-		initVelocityRender(servletContext);
+		//initVelocityRender(servletContext);
 		initJspRender(servletContext);
 		initFileRender(servletContext);
 		
@@ -154,7 +154,7 @@ public class RenderFactory {
 		}
 		
 		// remove "/" postfix
-		if (baseDownloadPath.equals("/") == false) {
+		if (!"/".equals(baseDownloadPath)) {
 			if (baseDownloadPath.endsWith("/")) {
 				baseDownloadPath = baseDownloadPath.substring(0, baseDownloadPath.length() - 1);
 			}

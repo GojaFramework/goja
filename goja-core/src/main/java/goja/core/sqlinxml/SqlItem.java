@@ -6,14 +6,18 @@
 package goja.core.sqlinxml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
 @XmlRootElement
-class SqlItem {
-    @XmlAttribute
-    String id;
+public class SqlItem {
+  @XmlAttribute
+  String id;
 
-    @XmlValue
-    String value;
+  @XmlValue
+  String value;
+
+  @XmlElement(name = "where")
+  SqlWhere where;
 }
