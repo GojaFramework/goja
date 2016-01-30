@@ -13,17 +13,7 @@ import com.jfinal.weixin.sdk.msg.in.InShortVideoMsg;
 import com.jfinal.weixin.sdk.msg.in.InTextMsg;
 import com.jfinal.weixin.sdk.msg.in.InVideoMsg;
 import com.jfinal.weixin.sdk.msg.in.InVoiceMsg;
-import com.jfinal.weixin.sdk.msg.in.event.InCustomEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InFollowEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InLocationEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMassEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMenuEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InPoiCheckNotifyEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InQrCodeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InTemplateMsgEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifyFailEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifySuccessEvent;
+import com.jfinal.weixin.sdk.msg.in.event.*;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 
 /**
@@ -101,5 +91,8 @@ public abstract class MsgControllerAdapter extends MsgController {
 	protected void processInPoiCheckNotifyEvent(InPoiCheckNotifyEvent inPoiCheckNotifyEvent) {
 		
 	}
-	
+
+	protected void processInWifiEvent(InWifiEvent inWifiEvent) {
+		// WIFI连网后下发消息 by unas at 2016-1-29
+	}
 }

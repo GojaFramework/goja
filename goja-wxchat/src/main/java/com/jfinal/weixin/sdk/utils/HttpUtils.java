@@ -9,6 +9,7 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -92,14 +93,25 @@ public final class HttpUtils {
 	 * OkHttp代理
 	 */
 	private static class OkHttpDelegate implements HttpDelegate {
-		com.squareup.okhttp.OkHttpClient httpClient = new com.squareup.okhttp.OkHttpClient();
-		com.squareup.okhttp.OkHttpClient httpsClient = httpClient.clone();
+		private final com.squareup.okhttp.OkHttpClient httpClient;
+		private final com.squareup.okhttp.OkHttpClient httpsClient;
+		
 		Lock lock = new ReentrantLock();
 		
-		public static final com.squareup.okhttp.MediaType CONTENT_TYPE_FORM = 
+		public OkHttpDelegate() {
+			httpClient = new com.squareup.okhttp.OkHttpClient();
+			// 分别设置Http的连接,写入,读取的超时时间为30秒
+			httpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+			httpClient.setWriteTimeout(10, TimeUnit.SECONDS);
+			httpClient.setReadTimeout(30, TimeUnit.SECONDS);
+			
+			httpsClient = httpClient.clone();
+		}
+		
+		private static final com.squareup.okhttp.MediaType CONTENT_TYPE_FORM = 
 				com.squareup.okhttp.MediaType.parse("application/x-www-form-urlencoded");
 		
-		private String base(com.squareup.okhttp.Request request) {
+		private String exec(com.squareup.okhttp.Request request) {
 			try {
 				com.squareup.okhttp.Response response = httpClient.newCall(request).execute();
 				
@@ -114,7 +126,7 @@ public final class HttpUtils {
 		@Override
 		public String get(String url) {
 			com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder().url(url).get().build();
-			return base(request);
+			return exec(request);
 		}
 		
 		@Override
@@ -125,7 +137,7 @@ public final class HttpUtils {
 			}
 			com.squareup.okhttp.HttpUrl httpUrl = urlBuilder.build();
 			com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder().url(httpUrl).get().build();
-			return base(request);
+			return exec(request);
 		}
 		
 		@Override
@@ -135,7 +147,7 @@ public final class HttpUtils {
 				.url(url)
 				.post(body)
 				.build();
-			return base(request);
+			return exec(request);
 		}
 		
 		@Override
@@ -146,16 +158,22 @@ public final class HttpUtils {
 				.post(body)
 				.build();
 			
+			InputStream inputStream = null;
 			try {
+				// 移动到最开始，certPath io异常unlock会报错
+				lock.lock();
+				
 				KeyStore clientStore = KeyStore.getInstance("PKCS12");
-				clientStore.load(new FileInputStream(certPath), certPass.toCharArray());
+				inputStream = new FileInputStream(certPath);
+				clientStore.load(inputStream, certPass.toCharArray());
+				
 				KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 				kmf.init(clientStore, certPass.toCharArray());
 				KeyManager[] kms = kmf.getKeyManagers();
 				SSLContext sslContext = SSLContext.getInstance("TLSv1");
 				
 				sslContext.init(kms, null, new SecureRandom());
-				lock.lock();
+				
 				httpsClient.setSslSocketFactory(sslContext.getSocketFactory());
 				
 				com.squareup.okhttp.Response response = httpsClient.newCall(request).execute();
@@ -166,6 +184,7 @@ public final class HttpUtils {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			} finally {
+				IOUtils.closeQuietly(inputStream);
 				lock.unlock();
 			}
 		}
@@ -244,7 +263,7 @@ public final class HttpUtils {
 					.post(requestBody)
 					.build();
 			
-			return base(request);
+			return exec(request);
 		}
 		
 	}

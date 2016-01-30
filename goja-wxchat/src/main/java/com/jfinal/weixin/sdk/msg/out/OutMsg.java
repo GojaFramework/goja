@@ -54,7 +54,7 @@ public abstract class OutMsg {
 		
 	}
 	
-	protected abstract String subXml();
+	protected abstract void subXml(StringBuilder sb);
 	
 	/**
 	 * 转换xml
@@ -67,7 +67,7 @@ public abstract class OutMsg {
 		sb.append("<FromUserName><![CDATA[").append(fromUserName).append("]]></FromUserName>\n");
 		sb.append("<CreateTime>").append(createTime).append("</CreateTime>\n");
 		sb.append("<MsgType><![CDATA[").append(msgType).append("]]></MsgType>\n");
-		sb.append(subXml());
+		subXml(sb);
 		sb.append("</xml>");
 		
 		return sb.toString();

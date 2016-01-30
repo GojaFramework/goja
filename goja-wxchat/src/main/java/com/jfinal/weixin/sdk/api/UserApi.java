@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.ParaMap;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.JsonUtils;
 
 /**
@@ -32,7 +32,7 @@ public class UserApi {
 	 */
 	public static ApiResult getUserInfo(String openId) {
 		ParaMap pm = ParaMap.create("access_token", AccessTokenApi.getAccessTokenStr()).put("openid", openId).put("lang", "zh_CN");
-		return new ApiResult(HttpKit.get(getUserInfo, pm.getData()));
+		return new ApiResult(HttpUtils.get(getUserInfo, pm.getData()));
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class UserApi {
 		ParaMap pm = ParaMap.create("access_token", AccessTokenApi.getAccessTokenStr());
 		if (nextOpenid != null)
 			pm.put("next_openid", nextOpenid);
-		return new ApiResult(HttpKit.get(getFollowers, pm.getData()));
+		return new ApiResult(HttpUtils.get(getFollowers, pm.getData()));
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class UserApi {
 	 * @return ApiResult
 	 */
 	public static ApiResult batchGetUserInfo(String jsonStr) {
-		String jsonResult = HttpKit.post(batchGetUserInfo + AccessTokenApi.getAccessTokenStr(), jsonStr);
+		String jsonResult = HttpUtils.post(batchGetUserInfo + AccessTokenApi.getAccessTokenStr(), jsonStr);
 		return new ApiResult(jsonResult);
 	}
 	
@@ -99,7 +99,7 @@ public class UserApi {
 		Map<String, String> mapData = new HashMap<String, String>();
 		mapData.put("openid", openid);
 		mapData.put("remark", remark);
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(mapData));
 		
 		return new ApiResult(jsonResult);
 	}

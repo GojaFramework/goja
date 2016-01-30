@@ -38,15 +38,15 @@ public class OutVideoMsg extends OutMsg {
 	}
 	
 	@Override
-	protected String subXml() {
+	protected void subXml(StringBuilder sb) {
 		if (null == mediaId) {
 			throw new NullPointerException("mediaId is null");
 		}
-		return "<Video>\n"
-				+ "<MediaId><![CDATA[" + mediaId + "]]></MediaId>\n"
-				+ "<Title><![CDATA[" + nullToBlank(title) + "]]></Title>\n"
-				+ "<Description><![CDATA[" + nullToBlank(description) + "]]></Description>\n"
-			+  "</Video>\n";
+		sb.append("<Video>\n");
+		sb.append("<MediaId><![CDATA[").append(mediaId).append("]]></MediaId>\n");
+		sb.append("<Title><![CDATA[").append(nullToBlank(title)).append("]]></Title>\n");
+		sb.append("<Description><![CDATA[").append(nullToBlank(description)).append("]]></Description>\n");
+		sb.append("</Video>\n");
 	}
 	
 	public String getMediaId() {

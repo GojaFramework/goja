@@ -34,13 +34,13 @@ public class OutImageMsg extends OutMsg {
 	}
 	
 	@Override
-	protected String subXml() {
+	protected void subXml(StringBuilder sb) {
 		if (null == mediaId) {
 			throw new NullPointerException("mediaId is null");
 		}
-		return "<Image>\n"
-				+ "<MediaId><![CDATA[" + mediaId + "]]></MediaId>\n"
-			+  "</Image>\n";
+		sb.append("<Image>\n");
+		sb.append("<MediaId><![CDATA[").append(mediaId).append("]]></MediaId>\n");
+		sb.append("</Image>\n");
 	}
 	
 	public String getMediaId() {

@@ -34,13 +34,13 @@ public class OutVoiceMsg extends OutMsg {
 	}
 	
 	@Override
-	protected String subXml() {
+	protected void subXml(StringBuilder sb) {
 		if (null == mediaId) {
 			throw new NullPointerException("mediaId is null");
 		}
-		return "<Voice>\n"
-				+ "<MediaId><![CDATA[" + mediaId + "]]></MediaId>\n"
-			+  "</Voice>\n";
+		sb.append("<Voice>\n");
+		sb.append("<MediaId><![CDATA[").append(mediaId).append("]]></MediaId>\n");
+		sb.append("</Voice>\n");
 	}
 	
 	public String getMediaId() {

@@ -23,17 +23,7 @@ import com.jfinal.weixin.sdk.msg.in.InShortVideoMsg;
 import com.jfinal.weixin.sdk.msg.in.InTextMsg;
 import com.jfinal.weixin.sdk.msg.in.InVideoMsg;
 import com.jfinal.weixin.sdk.msg.in.InVoiceMsg;
-import com.jfinal.weixin.sdk.msg.in.event.InCustomEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InFollowEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InLocationEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMassEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMenuEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InPoiCheckNotifyEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InQrCodeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InTemplateMsgEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifyFailEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifySuccessEvent;
+import com.jfinal.weixin.sdk.msg.in.event.*;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 import com.jfinal.weixin.sdk.msg.out.OutMsg;
 import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
@@ -66,6 +56,8 @@ public abstract class MsgController extends Controller {
 			processInTextMsg((InTextMsg) msg);
 		else if (msg instanceof InImageMsg)
 			processInImageMsg((InImageMsg) msg);
+		else if (msg instanceof InSpeechRecognitionResults)  //update by unas at 2016-1-29, 由于继承InVoiceMsg，需要在InVoiceMsg前判断类型
+			processInSpeechRecognitionResults((InSpeechRecognitionResults) msg);
 		else if (msg instanceof InVoiceMsg)
 			processInVoiceMsg((InVoiceMsg) msg);
 		else if (msg instanceof InVideoMsg)
@@ -88,8 +80,6 @@ public abstract class MsgController extends Controller {
 			processInMassEvent((InMassEvent) msg);
 		else if (msg instanceof InMenuEvent)
 			processInMenuEvent((InMenuEvent) msg);
-		else if (msg instanceof InSpeechRecognitionResults)
-			processInSpeechRecognitionResults((InSpeechRecognitionResults) msg);
 		else if (msg instanceof InTemplateMsgEvent)
 			processInTemplateMsgEvent((InTemplateMsgEvent) msg);
 		else if (msg instanceof InShakearoundUserShakeEvent)
@@ -100,6 +90,8 @@ public abstract class MsgController extends Controller {
 			processInVerifyFailEvent((InVerifyFailEvent) msg);
 		else if (msg instanceof InPoiCheckNotifyEvent)
 			processInPoiCheckNotifyEvent((InPoiCheckNotifyEvent) msg);
+		else if (msg instanceof InWifiEvent)
+			processInWifiEvent((InWifiEvent) msg);
 		else
 			log.error("未能识别的消息类型。 消息 xml 内容为：\n" + getInMsgXml());
 	}
@@ -206,6 +198,9 @@ public abstract class MsgController extends Controller {
 	
 	// 门店在审核事件消息
 	protected abstract void processInPoiCheckNotifyEvent(InPoiCheckNotifyEvent inPoiCheckNotifyEvent);
+
+	// WIFI连网后下发消息 by unas at 2016-1-29
+	protected abstract void processInWifiEvent(InWifiEvent inWifiEvent);
 }
 
 

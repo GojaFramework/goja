@@ -44,9 +44,7 @@ public class OutMusicMsg extends OutMsg {
 	}
 	
 	@Override
-	protected String subXml() {
-		StringBuilder sb = new StringBuilder();
-		
+	protected void subXml(StringBuilder sb) {
 		sb.append("<Music>\n");
 		sb.append("<Title><![CDATA[").append(nullToBlank(title)).append("]]></Title>\n");
 		sb.append("<Description><![CDATA[").append(nullToBlank(description)).append("]]></Description>\n");
@@ -54,8 +52,6 @@ public class OutMusicMsg extends OutMsg {
 		sb.append("<HQMusicUrl><![CDATA[").append(nullToBlank(hqMusicUrl)).append("]]></HQMusicUrl>\n");
 		sb.append("<FuncFlag>").append(funcFlag).append("</FuncFlag>\n");
 		sb.append("</Music>\n");
-		
-		return sb.toString();
 	}
 	
 	public String getTitle() {

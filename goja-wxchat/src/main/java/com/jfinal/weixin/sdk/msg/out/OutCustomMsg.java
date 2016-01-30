@@ -31,9 +31,7 @@ public class OutCustomMsg extends OutMsg {
 	}
 	
 	@Override
-	protected String subXml() {
-		return "";
-	}
+	protected void subXml(StringBuilder sb) {}
 	
 	public String getContent() {
 		return content;

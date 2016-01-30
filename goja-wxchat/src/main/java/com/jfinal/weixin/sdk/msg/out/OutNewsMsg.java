@@ -50,9 +50,7 @@ public class OutNewsMsg extends OutMsg {
 	}
 	
 	@Override
-	protected String subXml() {
-		StringBuilder sb = new StringBuilder();
-		
+	protected void subXml(StringBuilder sb) {
 		sb.append("<ArticleCount>").append(getArticleCount()).append("</ArticleCount>\n");
 		sb.append("<Articles>\n");
 		for (News x : articles) {
@@ -66,8 +64,6 @@ public class OutNewsMsg extends OutMsg {
 			sb.append("</item>\n");
 		}
 		sb.append("</Articles>\n");
-		
-		return sb.toString();
 	}
 	
 	public Integer getArticleCount() {

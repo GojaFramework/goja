@@ -9,6 +9,7 @@ package com.jfinal.weixin.sdk.msg;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jfinal.weixin.sdk.msg.in.event.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,19 +24,7 @@ import com.jfinal.weixin.sdk.msg.in.InShortVideoMsg;
 import com.jfinal.weixin.sdk.msg.in.InTextMsg;
 import com.jfinal.weixin.sdk.msg.in.InVideoMsg;
 import com.jfinal.weixin.sdk.msg.in.InVoiceMsg;
-import com.jfinal.weixin.sdk.msg.in.event.InCustomEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InFollowEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InLocationEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMassEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InMenuEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InPoiCheckNotifyEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InQrCodeEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent;
 import com.jfinal.weixin.sdk.msg.in.event.InShakearoundUserShakeEvent.AroundBeacon;
-import com.jfinal.weixin.sdk.msg.in.event.InTemplateMsgEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifyFailEvent;
-import com.jfinal.weixin.sdk.msg.in.event.InVerifySuccessEvent;
-import com.jfinal.weixin.sdk.msg.in.event.ScanCodeInfo;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 
 public class InMsgParser {
@@ -336,16 +325,25 @@ public class InMsgParser {
 			e.setFailReason(XmlKit.elementText(root, "failReason"));
 			return e;
 		}
-		// 门店在审核事件消息
+		// 门店在审核事件消息 , update by unas at 2016-1-29,add event param
 		if ("poi_check_notify".equals(event)) {
-			InPoiCheckNotifyEvent e = new InPoiCheckNotifyEvent(toUserName, fromUserName, createTime, msgType);
+			InPoiCheckNotifyEvent e = new InPoiCheckNotifyEvent(toUserName, fromUserName, createTime, msgType, event);
 			e.setUniqId(XmlKit.elementText(root, "UniqId"));
 			e.setPoiId(XmlKit.elementText(root, "PoiId"));
 			e.setResult(XmlKit.elementText(root, "Result"));
 			e.setMsg(XmlKit.elementText(root, "Msg"));
 			return e;
 		}
-
+		// WIFI连网后下发消息 by unas at 2016-1-29
+		if ("WifiConnected".equals(event)) {
+			InWifiEvent e = new InWifiEvent(toUserName, fromUserName, createTime, msgType, event);
+			e.setConnectTime(XmlKit.elementText(root, "ConnectTime"));
+			e.setExpireTime(XmlKit.elementText(root, "ExpireTime"));
+			e.setVendorId(XmlKit.elementText(root, "VendorId"));
+			e.setDeviceNo(XmlKit.elementText(root, "DeviceNo"));
+			e.setShopId(XmlKit.elementText(root, "ShopId"));
+			return e;
+		}
 		throw new RuntimeException("无法识别的事件类型" + event + "，请查阅微信公众平台开发文档");
 	}
 

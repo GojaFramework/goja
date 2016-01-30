@@ -217,4 +217,56 @@ public class PaymentApi {
 		return baseRefundQuery(params, appid, mch_id, paternerKey);
 	}
 	
+	private static String downloadBillUrl = "https://api.mch.weixin.qq.com/pay/downloadbill";
+	
+	/**
+	 * ALL，返回当日所有订单信息，默认值
+	 * SUCCESS，返回当日成功支付的订单
+	 * REFUND，返回当日退款订单
+	 * REVOKED，已撤销的订单
+	 */
+	public static enum BillType {
+		ALL, SUCCESS, REFUND, REVOKED
+	}
+	
+	/**
+	 * 下载对账单
+	 * 公众账号ID	appid		是	String(32)	wx8888888888888888	微信分配的公众账号ID（企业号corpid即为此appId）
+	 * 商户号		mch_id		是	String(32)	1900000109	微信支付分配的商户号
+	 * 设备号		device_info	否	String(32)	013467007045764	微信支付分配的终端设备号
+	 * 随机字符串	nonce_str	是	String(32)	5K8264ILTKCH16CQ2502SI8ZNMTM67VS	随机字符串，不长于32位。推荐随机数生成算法
+	 * 签名		sign		是	String(32)	C380BEC2BFD727A4B6845133519F3AD6	签名，详见签名生成算法
+	 * 对账单日期	bill_date	是	String(8)	20140603	下载对账单的日期，格式：20140603
+	 * 账单类型		bill_type	否	String(8)	
+	 */
+	public static String downloadBill(String appid, String mch_id, String paternerKey, String billDate) {
+		return downloadBill(appid, mch_id, paternerKey, billDate, null);
+	}
+	
+	/**
+	 * 下载对账单
+	 * 公众账号ID	appid		是	String(32)	wx8888888888888888	微信分配的公众账号ID（企业号corpid即为此appId）
+	 * 商户号		mch_id		是	String(32)	1900000109	微信支付分配的商户号
+	 * 设备号		device_info	否	String(32)	013467007045764	微信支付分配的终端设备号
+	 * 随机字符串	nonce_str	是	String(32)	5K8264ILTKCH16CQ2502SI8ZNMTM67VS	随机字符串，不长于32位。推荐随机数生成算法
+	 * 签名		sign		是	String(32)	C380BEC2BFD727A4B6845133519F3AD6	签名，详见签名生成算法
+	 * 对账单日期	bill_date	是	String(8)	20140603	下载对账单的日期，格式：20140603
+	 * 账单类型		bill_type	否	String(8)	
+	 */
+	public static String downloadBill(String appid, String mch_id, String paternerKey, String billDate, BillType billType) {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("appid", appid);
+		params.put("mch_id", mch_id);
+		params.put("nonce_str", System.currentTimeMillis() + "");
+		params.put("bill_date", billDate);
+		if (null != billType) {
+			params.put("bill_type", billType.name());
+		} else {
+			params.put("bill_type", BillType.ALL.name());
+		}
+		String sign = PaymentKit.createSign(params, paternerKey);
+		params.put("sign", sign);
+		return HttpUtils.post(downloadBillUrl, PaymentKit.toXml(params));
+	}
+	
 }

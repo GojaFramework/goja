@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.jfinal.weixin.sdk.utils.JsonUtils;
 
@@ -61,7 +60,7 @@ public class MediaApi {
 		mapData.put("title", title);
 		mapData.put("description", description);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(mapData));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(mapData));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -90,7 +89,7 @@ public class MediaApi {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("articles", mediaArticles);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(dataMap));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(dataMap));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -172,7 +171,7 @@ public class MediaApi {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("media_id", media_id);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(dataMap));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(dataMap));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -193,7 +192,7 @@ public class MediaApi {
 		dataMap.put("index", index);
 		dataMap.put("articles", mediaArticles);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(dataMap));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(dataMap));
 		return new ApiResult(jsonResult);
 	}
 	
@@ -206,7 +205,7 @@ public class MediaApi {
 	 */
 	public static ApiResult getMaterialCount() {
 		String url = get_materialcount_url + AccessTokenApi.getAccessTokenStr();
-		String jsonResult = HttpKit.get(url);
+		String jsonResult = HttpUtils.get(url);
 		return new ApiResult(jsonResult);
 	}
 	
@@ -232,7 +231,7 @@ public class MediaApi {
 		dataMap.put("offset", offset);
 		dataMap.put("count", count);
 		
-		String jsonResult = HttpKit.post(url, JsonUtils.toJson(dataMap));
+		String jsonResult = HttpUtils.post(url, JsonUtils.toJson(dataMap));
 		return new ApiResult(jsonResult);
 	}
 	
