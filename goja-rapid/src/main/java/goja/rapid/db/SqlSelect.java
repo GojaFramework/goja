@@ -28,11 +28,11 @@ public class SqlSelect extends SqlQuery {
      */
     protected final SqlConcat where;
     /**
-     * Group By Sql script.
+     * Group By SqlNode script.
      */
     protected final SqlConcat groupBy;
     /**
-     * Order By Sql script.
+     * Order By SqlNode script.
      */
     protected final SqlConcat orderBy;
     /**
@@ -63,7 +63,7 @@ public class SqlSelect extends SqlQuery {
     }
 
     /**
-     * Link Sql Select
+     * Link SqlNode Select
      *
      * @return SQL SELECT
      */

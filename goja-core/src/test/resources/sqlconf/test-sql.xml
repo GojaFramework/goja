@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <sqlGroup name="test">
   <sql id="test1">
     select *
     <where>
-      from table
+      from table where
       <condition>
-        where abc=?
+         abc=?
       </condition>
     </where>
   </sql>

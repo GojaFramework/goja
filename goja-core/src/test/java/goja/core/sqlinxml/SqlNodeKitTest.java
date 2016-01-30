@@ -1,5 +1,6 @@
 package goja.core.sqlinxml;
 
+import goja.core.sqlinxml.node.SqlNode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import org.junit.Test;
  * @version 1.0
  * @since JDK 1.6
  */
-public class SqlKitTest {
+public class SqlNodeKitTest {
   @Before
   public void setUp() throws Exception {
     SqlKit.initWithTest();
@@ -18,7 +19,7 @@ public class SqlKitTest {
 
   @Test
   public void testWhere() throws Exception {
-    SqlKit.sqlO()
-
+    final SqlNode sqlNode = SqlKit.sqlNode("test.test1");
+    System.out.println("sqlNode = " + sqlNode);
   }
 }

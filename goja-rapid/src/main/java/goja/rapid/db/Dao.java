@@ -9,7 +9,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import goja.core.StringPool;
-import goja.core.sqlinxml.Sql;
+import goja.core.sqlinxml.node.SqlNode;
 import goja.core.sqlinxml.SqlKit;
 import goja.rapid.mvc.datatables.DTCriterias;
 import goja.rapid.mvc.datatables.DTDao;
@@ -43,26 +43,26 @@ public abstract class Dao {
     /**
      * Query the database record set.
      *
-     * @param sqlSelect Sql Select
+     * @param sqlSelect SqlNode Select
      * @return query result.
      * @see SqlSelect
      * @see FindBy
      */
     public static List<Record> findBy(SqlSelect sqlSelect) {
-        Preconditions.checkNotNull(sqlSelect, "The Query Sql is must be not null.");
+        Preconditions.checkNotNull(sqlSelect, "The Query SqlNode is must be not null.");
         return Db.find(sqlSelect.toString(), sqlSelect.getParams().toArray());
     }
 
     /**
      * Query a data record.
      *
-     * @param sqlSelect Sql Select
+     * @param sqlSelect SqlNode Select
      * @return query result.
      * @see SqlSelect
      * @see FindBy
      */
     public static Record findOne(SqlSelect sqlSelect) {
-        Preconditions.checkNotNull(sqlSelect, "The Query Sql is must be not null.");
+        Preconditions.checkNotNull(sqlSelect, "The Query SqlNode is must be not null.");
         return Db.findFirst(sqlSelect.toString(), sqlSelect.getParams().toArray());
     }
 
@@ -127,9 +127,9 @@ public abstract class Dao {
     public static Page<Record> paginate(String sqlPaginatePrefix,
                                         DTCriterias criterias,
                                         List<Object> params) {
-        Sql sql = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
-        Preconditions.checkNotNull(sql, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
-        return DTDao.paginate(sql, criterias, params);
+        SqlNode sqlNode = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
+        Preconditions.checkNotNull(sqlNode, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
+        return DTDao.paginate(sqlNode, criterias, params);
     }
 
     /**
@@ -141,25 +141,25 @@ public abstract class Dao {
      */
     public static Page<Record> paginate(String sqlPaginatePrefix,
                                         PageDto pageDto) {
-        Sql sql = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
-        Preconditions.checkNotNull(sql, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
-        String where = sql.whereSql;
+        SqlNode sqlNode = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
+        Preconditions.checkNotNull(sqlNode, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
+        String where = sqlNode.whereSql;
         int pageSize = pageDto.pageSize;
         int p = pageDto.page;
         int start = ((p - 1) * pageSize) + 1;
         final List<RequestParam> params = pageDto.params;
         final List<Object> query_params = pageDto.query_params;
         if ((params.isEmpty()) && (query_params.isEmpty())) {
-            return Db.paginate(start, pageSize, sql.selectSql, where);
+            return Db.paginate(start, pageSize, sqlNode.selectSql, where);
         } else {
 
             if (!params.isEmpty()) {
-                where += (sql.conditions ? StringPool.SPACE : " WHERE 1=1 ");
+                where += (sqlNode.conditions ? StringPool.SPACE : " WHERE 1=1 ");
             }
             for (RequestParam param : pageDto.params) {
                 where += param.toSql();
             }
-            return Db.paginate(start, pageSize, sql.selectSql, where, query_params.toArray());
+            return Db.paginate(start, pageSize, sqlNode.selectSql, where, query_params.toArray());
         }
     }
 

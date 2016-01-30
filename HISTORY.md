@@ -3,7 +3,7 @@
 * 修复开发模式下，扫描SQL配置文件加载问题;
 * 增加 百度Ueditor 的支持;
 * 增加 文件存储的 便捷脚手架代码支持；
-* 增加 支持在 jar 包中读取 Model 和 sql config 的功能。
+* 增加 支持在 jar 包中读取 Model 和 sqlNode config 的功能。
 
 ## 0.1.2 (2014-12-07)
 

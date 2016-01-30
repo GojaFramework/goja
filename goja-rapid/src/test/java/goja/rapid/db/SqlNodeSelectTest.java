@@ -5,7 +5,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-public class SqlSelectTest {
+public class SqlNodeSelectTest {
     @Test
     public void testSelect() throws Exception {
         String s = SqlSelect.create().select("f1,f2").from("t1").toString();

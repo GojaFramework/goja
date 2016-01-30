@@ -4,7 +4,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-public class SqlUnionTest {
+public class SqlNodeUnionTest {
 
     @Test
     public void testOrderBy() throws Exception {

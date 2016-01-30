@@ -9,7 +9,7 @@ Fastjson:{"date":"2015-12-16 22:58:49"}
 如果没有设置，则全部值为一个 long 值如： Fastjson:{"date":1450278036638}
 
 2：jackson
-类型次序：util.Date  sql.Date  Timestamp  Time，java.sql.Date 比较意外没有时间精度，
+类型次序：util.Date  sqlNode.Date  Timestamp  Time，java.sqlNode.Date 比较意外没有时间精度，
 可看成是 bug，"yyyy-MM-dd 格式同样适用，只不过只有日期精度
 Jackson: {"date":"2015-12-16 23:02:04"}
 Jackson: {"date":"2015-12-16"}
@@ -22,7 +22,7 @@ Jackson: {"date":1450278307715}
 Jackson: {"date":"23:05:27"}
 
 3 jfinal json 实现
-util.Date  sql.Date  Timestamp  Time
+util.Date  sqlNode.Date  Timestamp  Time
 Json:    {"date":"2015-12-16 23:15:23"}
 Json:    {"date":"2015-12-16 23:15:23"}
 Json:    {"date":"2015-12-16 23:15:23"}
