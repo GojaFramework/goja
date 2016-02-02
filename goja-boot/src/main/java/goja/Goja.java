@@ -68,6 +68,7 @@ import goja.plugins.quartz.QuartzPlugin;
 import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
+import goja.rapid.mvc.kisso.KissoJfinalPlugin;
 import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
 import goja.security.shiro.SecurityUserData;
@@ -187,6 +188,7 @@ public class Goja extends JFinalConfig {
       }
     }
 
+
     //OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
   }
 
@@ -257,6 +259,11 @@ public class Goja extends JFinalConfig {
         final RedisPlugin jedis = new RedisPlugin(cacheName, redis_host, port);
         plugins.add(jedis);
       }
+    }
+
+
+    if(GojaConfig.isSsoLogin()){
+      plugins.add(new KissoJfinalPlugin());
     }
 
     //        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);

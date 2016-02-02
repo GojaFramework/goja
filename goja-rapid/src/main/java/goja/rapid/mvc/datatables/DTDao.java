@@ -33,8 +33,7 @@ public final class DTDao {
       DTCriterias criterias,
       List<Object> params) {
     return paginate(sqlNode.whereSql
-            + (sqlNode.conditions ? StringPool.SPACE : " WHERE 1=1 ")
-            + sqlNode.conditionSql,
+            + (sqlNode.conditions ? StringPool.SPACE : " WHERE 1=1 "),
         sqlNode.selectSql, criterias, params);
   }
 
@@ -151,7 +150,7 @@ public final class DTDao {
       SqlNode sqlNode,
       List<Triplet<String, Condition, Object>> custom_params) {
     StringBuilder where =
-        new StringBuilder(sqlNode.whereSql + StringPool.SPACE + sqlNode.conditionSql);
+        new StringBuilder(sqlNode.whereSql );
     if (!custom_params.isEmpty()) {
       where.append(sqlNode.conditions ? " AND " : SQL_WHERE);
       itemCustomParamSql(params, where, custom_params, false);

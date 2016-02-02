@@ -213,7 +213,7 @@ public class EuiDataGrid {
     }
 
     if (!sqlNode.where) {
-      logger.error("约定的分页SQL where 节点不存在，请检查 SQLID为{} 的sql语句", sqlId);
+      logger.error("约定的分页SQL -- @where 不存在，请检查 SQLID为{} 的sql语句", sqlId);
       return EMPTY_DATAGRID;
     }
 

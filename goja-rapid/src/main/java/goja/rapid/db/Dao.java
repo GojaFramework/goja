@@ -127,7 +127,7 @@ public abstract class Dao {
     public static Page<Record> paginate(String sqlPaginatePrefix,
                                         DTCriterias criterias,
                                         List<Object> params) {
-        SqlNode sqlNode = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
+        SqlNode sqlNode = SqlKit.sqlNode(sqlPaginatePrefix + ".paginate");
         Preconditions.checkNotNull(sqlNode, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
         return DTDao.paginate(sqlNode, criterias, params);
     }
@@ -141,7 +141,7 @@ public abstract class Dao {
      */
     public static Page<Record> paginate(String sqlPaginatePrefix,
                                         PageDto pageDto) {
-        SqlNode sqlNode = SqlKit.sqlO(sqlPaginatePrefix + ".paginate");
+        SqlNode sqlNode = SqlKit.sqlNode(sqlPaginatePrefix + ".paginate");
         Preconditions.checkNotNull(sqlNode, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
         String where = sqlNode.whereSql;
         int pageSize = pageDto.pageSize;

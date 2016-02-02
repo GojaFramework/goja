@@ -95,6 +95,8 @@ public final class GojaConfig {
 
   private static boolean initialize = false;
 
+  private static boolean ssoLogin = false;
+
   private GojaConfig() {
   }
 
@@ -149,7 +151,12 @@ public final class GojaConfig {
 
     appPackPrefix = GojaConfig.getProperty(GojaPropConst.APP_PACKAGE_PREFIX, "app");
     jsonMode = GojaConfig.getProperty(GojaPropConst.APP_JSON_MODE);
+    ssoLogin = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_LOGIN_SSO,false);
     initialize = true;
+  }
+
+  public static boolean isSsoLogin() {
+    return ssoLogin;
   }
 
   public static String getDefaultViewPath() {

@@ -46,11 +46,14 @@ class SqlBuilder {
   }
 
   public SqlNode createSql() {
+    final String conditionSql = MoreObjects.firstNonNull(this.conditionSql, StringPool.EMPTY);
+    final String whereSql = MoreObjects.firstNonNull(this.whereSql, StringPool.EMPTY);
+    final String selectSql = MoreObjects.firstNonNull(this.selectSql, StringPool.EMPTY);
     return new SqlNode(selectSql
         + StringPool.SPACE
-        + MoreObjects.firstNonNull(whereSql, StringPool.EMPTY)
-        + StringPool.SPACE
-        + MoreObjects.firstNonNull(conditionSql, StringPool.EMPTY),
+        + whereSql
+      /*  + StringPool.SPACE
+        + conditionSql*/,
         where, conditions, whereNode,
         conditionSql, selectSql, whereSql);
   }

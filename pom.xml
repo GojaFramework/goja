@@ -116,6 +116,9 @@
 
     <!--报表工具-->
     <jasperreports.version>6.2.0</jasperreports.version>
+
+
+    <kisso.version>3.5.4</kisso.version>
   </properties>
 
 

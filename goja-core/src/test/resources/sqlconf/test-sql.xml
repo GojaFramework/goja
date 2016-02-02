@@ -2,18 +2,15 @@
 <sqlGroup name="test">
   <sql id="test1">
     select *
-    <where>
+    -- @where
       from table where
-      <condition>
+      -- @condition
          abc=?
-      </condition>
-    </where>
   </sql>
   <sql id="test2">
     select *
-    <where>
+       -- @where
       from table
-    </where>
   </sql>
   <sql id="test3">
     select *

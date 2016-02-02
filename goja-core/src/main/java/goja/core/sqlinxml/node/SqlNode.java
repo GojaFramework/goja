@@ -11,7 +11,12 @@ import java.util.List;
  * @version 1.0
  * @since JDK 1.6
  */
-public class SqlNode {
+public final class SqlNode {
+
+  public static final String WHERE_MARKER = "-- @where";
+  public static final String CONDITION_MARKER = "-- @condition";
+
+
 
   public final String sql;
 
@@ -48,12 +53,10 @@ public class SqlNode {
   public void addCondition(ConditionNode conditionNode) {
     this.conditionNodeList.add(conditionNode);
   }
+
   public void addCondition(List<ConditionNode> conditionNodes) {
     this.conditionNodeList.addAll(conditionNodes);
   }
-
-
-
 
   @Override public String toString() {
     return MoreObjects.toStringHelper(this)

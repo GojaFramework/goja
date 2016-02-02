@@ -8,9 +8,7 @@ import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import goja.core.StringPool;
-import goja.core.sqlinxml.node.ConditionNode;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.sqlinxml.node.WhereNode;
 import goja.core.tuples.Pair;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -18,10 +16,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,8 +59,8 @@ public class SqlParser {
           logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!", filePath, sqlId);
           continue;
         }
-        final Node whereNode = sql.selectSingleNode("where");
-        final List<Node> conditions = sql.selectNodes("where/condition");
+        //final Node whereNode = sql.selectSingleNode("where");
+        //final List<Node> conditions = sql.selectNodes("where/condition");
         SqlBuilder sqlBuilder = new SqlBuilder();
         final String sqlNodeText = sql.getText();
         if (Strings.isNullOrEmpty(sqlNodeText)) {
@@ -70,27 +68,41 @@ public class SqlParser {
           continue;
         }
         String sqlSelect = cleanSqlText(sqlNodeText);
+        if (Strings.isNullOrEmpty(sqlSelect)) {
+          logger.warn("sql配置文件[{}]中,sql配置[{}]内容为空!", filePath, sqlId);
+          continue;
+        }
+        String selectSql = StringUtils.substringBefore(sqlSelect, SqlNode.WHERE_MARKER);
+        String whereSql = StringUtils.substringAfter(sqlSelect, SqlNode.WHERE_MARKER);
 
-        final boolean hasCondition = conditions != null && !conditions.isEmpty();
-        final boolean hasWhere = whereNode != null;
+        final boolean hasCondition =
+            StringUtils.containsIgnoreCase(sqlSelect, SqlNode.CONDITION_MARKER);
+
+        if (hasCondition) {
+          sqlBuilder.setConditionSql(
+              StringUtils.substringAfter(whereSql, SqlNode.CONDITION_MARKER));
+
+          whereSql = StringUtils.replace(whereSql, SqlNode.CONDITION_MARKER, StringPool.EMPTY);
+          //  for (Node condition : conditions) {
+          //    sqlBuilder.setConditionSql(cleanSqlText(condition.getText()));
+          //  }
+        }
+
+        final boolean hasWhere = StringUtils.containsIgnoreCase(sqlSelect, SqlNode.WHERE_MARKER);
         sqlBuilder.setConditions(hasCondition)
-            .setSelectSql(sqlSelect)
+            .setSelectSql(selectSql)
             .setWhere(hasWhere);
 
         if (hasWhere) {
-          sqlBuilder.setWhereSql(cleanSqlText(whereNode.getText()))
-              .setWhereNode(WhereNode.create(whereNode));
+          sqlBuilder.setWhereSql(whereSql);
+          //.setWhereNode(WhereNode.create(whereNode));
         }
-        List<ConditionNode> conditionNodes = Lists.newArrayList();
+        //List<ConditionNode> conditionNodes = Lists.newArrayList();
 
-        if (hasCondition) {
-          for (Node condition : conditions) {
-            sqlBuilder.setConditionSql(cleanSqlText(condition.getText()));
-          }
-        }
+
 
         final SqlNode sqlNodeOO = sqlBuilder.createSql();
-        sqlNodeOO.addCondition(conditionNodes);
+        //sqlNodeOO.addCondition(conditionNodes);
         sqlIdList.add(sqlMapName);
         Pair<String, SqlNode> sqlMap = Pair.with(sqlMapName, sqlNodeOO);
         sqlList.add(sqlMap);

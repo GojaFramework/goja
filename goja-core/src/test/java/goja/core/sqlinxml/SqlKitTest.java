@@ -11,7 +11,7 @@ import org.junit.Test;
  * @version 1.0
  * @since JDK 1.6
  */
-public class SqlNodeKitTest {
+public class SqlKitTest {
   @Before
   public void setUp() throws Exception {
     SqlKit.initWithTest();

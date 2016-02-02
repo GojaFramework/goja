@@ -199,11 +199,7 @@ public interface GojaPropConst {
   String UE_URLPREFIX = "ue.urlprefix";
 
   /**
-   * 分页Sql 分割标记
+   * 是否开启单点登录模式
    */
-  String WHERESPLIT = "-- @where--";
-  /**
-   * 条件sql 分割标识
-   */
-  String CONDITIONSSPLIT = "-- @conditions--";
+  String APP_LOGIN_SSO = "app.logininsso";
 }
