@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
+import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.Model;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
@@ -35,7 +36,7 @@ public class ClassFinder {
   public static void find() {
 
     ClassSearcher searcher = ClassSearcher.of(Model.class, Controller.class, Interceptor.class,
-        Job.class, org.quartz.Job.class, AppLoadEvent.class, /*IPlugin.class, Handler.class,*/
+        Job.class, org.quartz.Job.class, AppLoadEvent.class, IPlugin.class, /*Handler.class,*/
         LogProcessor.class, SecurityUserData.class)
         .scanPackages(Lists.newArrayList(GojaConfig.getAppPackPrefix()))
         .inJars(GojaConfig.getAppJars());

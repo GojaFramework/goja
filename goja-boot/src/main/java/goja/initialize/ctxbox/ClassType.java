@@ -45,10 +45,10 @@ public enum ClassType {
    * THE Quartz job class.
    */
   QUARTZ,
-  //    /**
-  //     * The plugin class.
-  //     */
-  //    PLUGIN,
+  /**
+   * The plugin class.
+   */
+  PLUGIN,
   //    /**
   //     * The handle class.
   //     */

@@ -50,6 +50,8 @@ public class GojaInitializer implements ServletContainerInitializer {
         GojaConfig.init();
         // 初始化缓存
         Cache.init();
+        // 日志处理
+        LoggerInit.init();
 
         if (GojaConfig.isSecurity()) {
             File shiroIniFile = new File(PathKit.getRootClassPath() + File.separator + "shiro.ini");
@@ -62,8 +64,6 @@ public class GojaInitializer implements ServletContainerInitializer {
                         .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
             }
         }
-        // init logger
-        LoggerInit.init();
         //logger context destroy listener.
         ctx.addListener("ch.qos.logback.classic.selector.servlet.ContextDetachingSCL");
 
@@ -73,7 +73,7 @@ public class GojaInitializer implements ServletContainerInitializer {
         String app_name = GojaConfig.getAppName();
 
         FilterRegistration.Dynamic jfinalFilter =
-                ctx.addFilter("goja@jfinal", "com.jfinal.core.JFinalFilter");
+                ctx.addFilter("goja&jfinal", "com.jfinal.core.JFinalFilter");
 
         jfinalFilter.setInitParameter("configClass", "goja.Goja");
         jfinalFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

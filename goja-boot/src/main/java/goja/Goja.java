@@ -43,6 +43,7 @@ import com.jfinal.render.ViewType;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import freemarker.template.Configuration;
 import goja.core.Func;
+import goja.core.annotation.PluginBind;
 import goja.core.app.GojaConfig;
 import goja.core.app.GojaPropConst;
 import goja.core.cache.Cache;
@@ -52,6 +53,7 @@ import goja.core.sqlinxml.SqlInXmlPlugin;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
 import goja.job.JobsPlugin;
+import goja.logging.Logger;
 import goja.logging.LoggerInit;
 import goja.mvc.AppLoadEvent;
 import goja.mvc.auto.AutoBindRoutes;
@@ -188,7 +190,6 @@ public class Goja extends JFinalConfig {
       }
     }
 
-
     //OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
   }
 
@@ -261,27 +262,27 @@ public class Goja extends JFinalConfig {
       }
     }
 
-
-    if(GojaConfig.isSsoLogin()){
+    if (GojaConfig.isSsoLogin()) {
       plugins.add(new KissoJfinalPlugin());
     }
 
-    //        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
-    //        if (plugins_clses != null && !plugins_clses.isEmpty()) {
-    //            PluginBind pluginBind;
-    //            for (Class plugin : plugins_clses) {
-    //                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
-    //                if (pluginBind != null) {
-    //                    try {
-    //                        plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
-    //                    } catch (InstantiationException e) {
-    //                        Logger.error("The plugin instance is error!", e);
-    //                    } catch (IllegalAccessException e) {
-    //                        Logger.error("The plugin instance is error!", e);
-    //                    }
-    //                }
-    //            }
-    //        }
+    final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
+    if (plugins_clses != null && !plugins_clses.isEmpty()) {
+      PluginBind pluginBind;
+      for (Class plugin : plugins_clses) {
+        pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
+        if (pluginBind != null && pluginBind.ignored()) {
+          continue;
+        }
+        try {
+          plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
+        } catch (InstantiationException e) {
+          Logger.error("The plugin instance is error!", e);
+        } catch (IllegalAccessException e) {
+          Logger.error("The plugin instance is error!", e);
+        }
+      }
+    }
 
     // Because the system itself the task of startup tasks, so the system task plugin must be the last to join the list
     plugins.add(new JobsPlugin());
