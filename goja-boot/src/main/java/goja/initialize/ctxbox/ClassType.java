@@ -15,51 +15,51 @@ package goja.initialize.ctxbox;
  */
 public enum ClassType {
 
-    /**
-     * Controller Class
-     */
-    CONTROLLER,
+  /**
+   * Controller Class
+   */
+  CONTROLLER,
 
-    /**
-     * Database activiteReocrd Class
-     */
-    MODEL,
-    /**
-     * Crob Job Class
-     */
-    JOB,
-    /**
-     * System initialization or at the end of the implementation of the class.
-     */
-    APP,
-    /**
-     * Interceptor System
-     */
-    AOP,
+  /**
+   * Database activiteReocrd Class
+   */
+  MODEL,
+  /**
+   * Crob Job Class
+   */
+  JOB,
+  /**
+   * System initialization or at the end of the implementation of the class.
+   */
+  APP,
+  /**
+   * Interceptor System
+   */
+  AOP,
 
-    /**
-     * The System Event.
-     */
-    EVENT,
-    /**
-     * THE Quartz job class.
-     */
-    QUARTZ,
-    //    /**
-    //     * The plugin class.
-    //     */
-    //    PLUGIN,
-    //    /**
-    //     * The handle class.
-    //     */
-    //    HANDLER,
-    /**
-     * Syslog Analysis
-     */
-    LOGPERCESSOR,
+  /**
+   * The System Event.
+   */
+  //EVENT,
+  /**
+   * THE Quartz job class.
+   */
+  QUARTZ,
+  //    /**
+  //     * The plugin class.
+  //     */
+  //    PLUGIN,
+  //    /**
+  //     * The handle class.
+  //     */
+  //    HANDLER,
+  /**
+   * Syslog Analysis
+   */
+  LOGPERCESSOR,
 
-    /**
-     * The shiro security data.
-     */
-    SECURITY_DATA
+  /**
+   * The shiro security data.
+   */
+  SECURITY_DATA
 }

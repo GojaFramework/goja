@@ -44,17 +44,6 @@
     </dependency>
 
 
-    <dependency>
-      <groupId>org.jeecg</groupId>
-      <artifactId>easypoi-base</artifactId>
-      <version>2.1.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jeecg</groupId>
-      <artifactId>easypoi-annotation</artifactId>
-      <version>2.1.3</version>
-    </dependency>
 
     <!--database driver -->
     <dependency>

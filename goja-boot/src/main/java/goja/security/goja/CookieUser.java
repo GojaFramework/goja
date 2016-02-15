@@ -6,6 +6,8 @@
 
 package goja.security.goja;
 
+import java.io.Serializable;
+
 /**
  * <p> . </p>
  *
@@ -13,29 +15,31 @@ package goja.security.goja;
  * @version 1.0 2014-02-12 22:20
  * @since JDK 1.6
  */
-public class CookieUser {
+public class CookieUser implements Serializable {
 
-    private final long id;
+  private static final long serialVersionUID = -7375570593653130438L;
 
-    private final String password;
+  private final long id;
 
-    private final boolean blocked;
+  private final String password;
 
-    public CookieUser(long id, String password, boolean blocked) {
-        this.id = id;
-        this.password = password;
-        this.blocked = blocked;
-    }
+  private final boolean blocked;
 
-    public long getId() {
-        return id;
-    }
+  public CookieUser(long id, String password, boolean blocked) {
+    this.id = id;
+    this.password = password;
+    this.blocked = blocked;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public boolean isBlocked() {
-        return blocked;
-    }
+  public String getPassword() {
+    return password;
+  }
+
+  public boolean isBlocked() {
+    return blocked;
+  }
 }

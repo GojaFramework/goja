@@ -134,7 +134,7 @@ public interface GojaPropConst {
   /**
    * 是否开启 sqlmap机制
    */
-  String DB_SQLMAP = "db.sqlmap";
+  //String DB_SQLMAP = "db.sqlmap";
 
   /**
    * druid的监控地址
