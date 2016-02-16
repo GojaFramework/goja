@@ -44,7 +44,7 @@
       <version>${easypoi-base.version}</version>
     </dependency>
 
-    <!-- easyui 的PDF支持 -->
+    <!-- easypoi 的PDF支持 -->
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itextpdf</artifactId>
@@ -55,6 +55,14 @@
       <groupId>com.itextpdf</groupId>
       <artifactId>itext-asian</artifactId>
       <version>5.2.0</version>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- mongoDB -->
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+      <version>${mongo-java-driver.version}</version>
       <optional>true</optional>
     </dependency>
 

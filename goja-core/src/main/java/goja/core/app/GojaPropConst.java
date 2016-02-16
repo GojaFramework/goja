@@ -151,6 +151,10 @@ public interface GojaPropConst {
   String MAILSMTP = "mail.smtp";
 
   /**
+   *是否启用MongoDB的支持
+   */
+  String MONGO = "mongo";
+  /**
    * MongoDB 的连接地址
    */
   String MONGO_HOST = "mongo.host";
@@ -164,8 +168,10 @@ public interface GojaPropConst {
   String MONGO_DB = "mongo.db";
   /**
    * MongoDB 的 模型对象 包名
+   *
+   * #record 20160216 去掉 模型支持
    */
-  String MONGO_MODELS = "mongo.models";
+  //String MONGO_MODELS = "mongo.models";
 
   /**
    * Reids的外部配置文件

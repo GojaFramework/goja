@@ -65,11 +65,11 @@ import goja.mvc.render.ftl.layout.ExtendsDirective;
 import goja.mvc.render.ftl.layout.OverrideDirective;
 import goja.mvc.render.ftl.layout.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
-import goja.plugins.monogo.MongoPlugin;
 import goja.plugins.quartz.QuartzPlugin;
 import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
+import goja.rapid.mongo.MongoPlugin;
 import goja.rapid.mvc.kisso.KissoJfinalPlugin;
 import goja.rapid.syslog.LogProcessor;
 import goja.rapid.syslog.SysLogInterceptor;
@@ -220,14 +220,20 @@ public class Goja extends JFinalConfig {
       plugins.add(new QuartzPlugin());
     }
 
-    final String mongo_host = GojaConfig.getProperty(GojaPropConst.MONGO_HOST, StringUtils.EMPTY);
-    if (!Strings.isNullOrEmpty(mongo_host)) {
-      int mongo_port =
-          GojaConfig.getPropertyToInt(GojaPropConst.MONGO_PORT, MongoPlugin.DEFAUL_PORT);
-      String mongo_db = GojaConfig.getProperty(GojaPropConst.MONGO_DB, "test");
-      String pkgs = GojaConfig.getProperty(GojaPropConst.MONGO_MODELS, MongoPlugin.DEFAULT_PKGS);
-      final MongoPlugin mongodb = new MongoPlugin(mongo_host, mongo_port, mongo_db, pkgs);
-      plugins.add(mongodb);
+    final boolean mongoFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.MONGO, false);
+    if (mongoFlag) {
+      logger.info("开始初始化MongoDB插件");
+
+      final String mongoHost = GojaConfig.getProperty(GojaPropConst.MONGO_HOST);
+      final String mongoPort = GojaConfig.getProperty(GojaPropConst.MONGO_PORT);
+      final String mongoDatabase = GojaConfig.getProperty(GojaPropConst.MONGO_DB, "test");
+      if (Strings.isNullOrEmpty(mongoHost) && Strings.isNullOrEmpty(mongoPort)) {
+        plugins.add(new MongoPlugin(mongoDatabase));
+      } else {
+        plugins.add(new MongoPlugin(mongoHost,
+            MoreObjects.firstNonNull(Ints.tryParse(mongoPort), MongoPlugin.DEFAUL_PORT),
+            mongoDatabase));
+      }
     }
 
     final String redisConfig = GojaConfig.getProperty(GojaPropConst.REDIS_CONFIG);

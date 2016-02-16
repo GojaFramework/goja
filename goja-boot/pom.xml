@@ -81,19 +81,7 @@
       <version>${jedis.version}</version>
       <optional>true</optional>
     </dependency>
-    <!-- mongoDB -->
-    <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongo-java-driver</artifactId>
-      <version>${mongo-java-driver.version}</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.mongodb.morphia</groupId>
-      <artifactId>morphia</artifactId>
-      <version>${morphia.version}</version>
-      <optional>true</optional>
-    </dependency>
+
     <!--Jobs-->
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
