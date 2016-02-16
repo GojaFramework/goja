@@ -1,15 +1,18 @@
 package goja.rapid.mongo;
 
+import com.beust.jcommander.internal.Lists;
 import com.jfinal.plugin.activerecord.Record;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import java.util.ArrayList;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,19 +26,15 @@ import org.slf4j.LoggerFactory;
  */
 public class MongoKit {
 
-
   protected static Logger logger = LoggerFactory.getLogger(MongoKit.class);
 
   private static MongoClient client;
   private static DB defaultDb;
 
-
   public static void init(MongoClient client, String database) {
     MongoKit.client = client;
     MongoKit.defaultDb = client.getDB(database);
-
   }
-
 
   public static void updateFirst(String collectionName, MongoQuery q, MongoQuery o) {
     MongoKit.getCollection(collectionName).findAndModify(q.get(), o.get());
@@ -45,19 +44,16 @@ public class MongoKit {
     return MongoKit.getCollection(collectionName).remove(new BasicDBObject()).getN();
   }
 
-  public static int remove(String collectionName,  MongoQuery q) {
+  public static int remove(String collectionName, MongoQuery q) {
     return MongoKit.getCollection(collectionName).remove(q.get()).getN();
   }
 
-
-
   public static int save(String collectionName, List<MongoQuery> querys) {
-    List<DBObject> objs = new ArrayList<DBObject>();
+    List<DBObject> objs = Lists.newArrayList();
     for (MongoQuery query : querys) {
       objs.add(query.get());
     }
     return MongoKit.getCollection(collectionName).insert(objs).getN();
-
   }
 
   public static int save(String collectionName, MongoQuery q) {
@@ -84,7 +80,6 @@ public class MongoKit {
     return c.find(query.get()).toArray();
   }
 
-
   //根据条件对象查找并只要多少数量
   public static List<DBObject> findByQuery(String collectionName, MongoQuery query, int limit) {
     DBCollection c = MongoKit.getCollection(collectionName);
@@ -92,7 +87,8 @@ public class MongoKit {
   }
 
   //根据条件对象查找并只要多少数量和根据什么排序
-  public static List<DBObject> findByQuery(String collectionName, MongoQuery query, int limit, BasicDBObject b) {
+  public static List<DBObject> findByQuery(String collectionName, MongoQuery query, int limit,
+      BasicDBObject b) {
     DBCollection c = MongoKit.getCollection(collectionName);
     return c.find(query.get()).limit(limit).sort(b).toArray();
   }
@@ -103,7 +99,6 @@ public class MongoKit {
     return c.findAndRemove(query.get());
   }
 
-
   @SuppressWarnings("unchecked")
   public static Record toRecord(DBObject dbObject) {
     Record record = new Record();
@@ -111,33 +106,25 @@ public class MongoKit {
     return record;
   }
 
-
   public static DB getDB() {
     return defaultDb;
   }
 
-  public static DB getDB(String dbName) {
-    return client.getDB(dbName);
+  public static MongoDatabase getDB(String dbName) {
+    return client.getDatabase(dbName);
   }
 
   public static DBCollection getCollection(String name) {
     return defaultDb.getCollection(name);
   }
 
-  public static DBCollection getDBCollection(String dbName, String collectionName) {
+  public static MongoCollection<Document> getDBCollection(String dbName, String collectionName) {
     return getDB(dbName).getCollection(collectionName);
   }
 
   public static MongoClient getClient() {
     return client;
   }
-
-  public static void setMongoClient(MongoClient client) {
-    MongoKit.client = client;
-  }
-
-
-
 
   private static BasicDBObject toDBObject(Map<String, Object> map) {
     BasicDBObject dbObject = new BasicDBObject();
