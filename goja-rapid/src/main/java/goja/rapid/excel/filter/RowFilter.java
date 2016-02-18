@@ -1,4 +1,4 @@
-package goja.rapid.kits.excel.filter;
+package goja.rapid.excel.filter;
 
 import java.util.List;
 

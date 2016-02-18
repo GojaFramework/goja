@@ -1,12 +1,12 @@
-package goja.rapid.kits.excel;
+package goja.rapid.excel;
 
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import goja.core.kits.reflect.Reflect;
-import goja.rapid.kits.excel.convert.CellConvert;
-import goja.rapid.kits.excel.filter.RowFilter;
-import goja.rapid.kits.excel.validate.CellValidate;
+import goja.rapid.excel.convert.CellConvert;
+import goja.rapid.excel.filter.RowFilter;
+import goja.rapid.excel.validate.CellValidate;
 import java.io.File;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;

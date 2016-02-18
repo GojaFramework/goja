@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package goja.rapid.mvc.render.exception;
+package goja.rapid.mvc.render;
 
 import com.jfinal.render.Render;
 

@@ -19,7 +19,7 @@ import com.google.common.collect.Maps;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.render.RenderFactory;
-import goja.rapid.mvc.render.exception.ExceptionRender;
+import goja.rapid.mvc.render.ExceptionRender;
 import java.util.Map;
 
 public class ExceptionInterceptor implements Interceptor {

@@ -1,4 +1,4 @@
-package goja.rapid.ztree;
+package goja.rapid.dto;
 
 import com.google.common.collect.Lists;
 

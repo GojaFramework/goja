@@ -26,6 +26,8 @@ public class AutoBindRoutes extends Routes {
 
   private static final String suffix = "Controller";
 
+  private static final String CONTRONERS_FLAG = "controllers";
+
   private static String controllerKey(Class clazz) {
     final String simpleName = clazz.getSimpleName();
     Preconditions.checkArgument(simpleName.endsWith(suffix),
@@ -43,27 +45,27 @@ public class AutoBindRoutes extends Routes {
     if (StringUtils.startsWith(packName, appPackPrefix)) {
       // 如果是配置的包,则进行路由生成
       if (StringUtils.startsWith(packName,
-          appPackPrefix + StringPool.DOT + "controllers")) { // 包名正好为 com.mo008.controllers 开头
-        if (StringUtils.endsWith(packName, "controllers")) {
+          appPackPrefix + StringPool.DOT + CONTRONERS_FLAG)) { // 包名正好为 com.mo008.controllers 开头
+        if (StringUtils.endsWith(packName, CONTRONERS_FLAG)) {
           return controllerKey;
         } else {
-          String biz_pk = StringUtils.substringAfter(packName, ".controllers.");
+          String biz_pk = StringUtils.substringAfter(packName,
+              StringPool.DOT + CONTRONERS_FLAG + StringPool.DOT);
           controllerKey = StringPool.SLASH
               + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
               + controllerKey;
           return controllerKey;
         }
       } else {
-        // 取得中间的信息
-        String moduleRoute =
-            StringUtils.replace(packName.replace(appPackPrefix + StringPool.DOT, StringPool.EMPTY)
-                    .replace(".controllers", StringPool.EMPTY), StringPool.DOT,
-                StringPool.SLASH); //得到中间区域的配置
+        // 取得中间的模块路由
+        final String moduleRoute =
+            StringUtils.substring(packName, StringUtils.length(appPackPrefix + "."),
+                StringUtils.indexOf(packName, StringPool.DOT + CONTRONERS_FLAG));
         // sys/user
-        if (StringUtils.endsWith(packName, "controllers")) {
+        if (StringUtils.endsWith(packName, CONTRONERS_FLAG)) {
           return StringPool.SLASH + moduleRoute + controllerKey;
         } else {
-          String biz_pk = StringUtils.substringAfter(packName, ".controllers.");
+          String biz_pk = StringUtils.substringAfter(packName, StringPool.DOT + CONTRONERS_FLAG);
           controllerKey = StringPool.SLASH
               + moduleRoute
               + biz_pk.replace(StringPool.DOT, StringPool.SLASH)

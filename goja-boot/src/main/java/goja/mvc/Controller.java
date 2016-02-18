@@ -25,7 +25,7 @@ import goja.rapid.mvc.datatables.DTResponse;
 import goja.rapid.mvc.easyui.EuiDataGrid;
 import goja.rapid.mvc.easyui.req.DataGridReq;
 import goja.rapid.mvc.kits.Requests;
-import goja.rapid.page.PageDto;
+import goja.rapid.dto.PageDto;
 import goja.security.goja.SecurityKit;
 import goja.security.shiro.AppUser;
 import goja.security.shiro.Securitys;

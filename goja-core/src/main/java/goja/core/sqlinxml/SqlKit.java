@@ -91,7 +91,7 @@ public class SqlKit {
   }
 
   static void reload() {
-    //        SQL_MAP.clear();
+    SQL_MAP.clear();
     final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
     initScanFiles(resource);
   }

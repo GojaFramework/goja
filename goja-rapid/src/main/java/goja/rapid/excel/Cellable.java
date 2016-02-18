@@ -1,4 +1,4 @@
-package goja.rapid.kits.excel;
+package goja.rapid.excel;
 
 public interface Cellable {
 		String[] getCellValues();

@@ -8,6 +8,7 @@ package goja.mvc;
 
 import goja.core.StringPool;
 import goja.core.tuples.Pair;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -148,5 +149,15 @@ public class AjaxMessageTest {
     @Test
     public void testGetException() throws Exception {
 
+    }
+
+    @Test
+    public void testPath() throws Exception {
+        String packName = "com.mo008.wx.controllers.api";
+        String appPackPrefix = "com.mo008";
+        final String path =
+            StringUtils.substring(packName, StringUtils.length(appPackPrefix + "."),
+                StringUtils.indexOf(packName, ".controllers"));
+        System.out.println("path = " + path);
     }
 }

@@ -1,4 +1,4 @@
-package goja.rapid.kits.excel.validate;
+package goja.rapid.excel.validate;
 
 /**
  * 单元格值合法性验证

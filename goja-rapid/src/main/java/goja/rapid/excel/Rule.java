@@ -1,5 +1,5 @@
 
-package goja.rapid.kits.excel;
+package goja.rapid.excel;
 
 import com.google.common.collect.Lists;
 

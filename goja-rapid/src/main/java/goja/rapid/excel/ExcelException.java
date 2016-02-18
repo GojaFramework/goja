@@ -1,8 +1,10 @@
-package goja.rapid.kits.excel;
+package goja.rapid.excel;
 
 public class ExcelException extends RuntimeException {
 
-	public ExcelException(String message) {
+  private static final long serialVersionUID = 1685225481638059165L;
+
+  public ExcelException(String message) {
 		super(message);
 	}
 

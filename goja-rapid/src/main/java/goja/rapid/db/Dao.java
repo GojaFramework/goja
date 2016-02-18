@@ -13,7 +13,7 @@ import goja.core.sqlinxml.node.SqlNode;
 import goja.core.sqlinxml.SqlKit;
 import goja.rapid.mvc.datatables.DTCriterias;
 import goja.rapid.mvc.datatables.DTDao;
-import goja.rapid.page.PageDto;
+import goja.rapid.dto.PageDto;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;

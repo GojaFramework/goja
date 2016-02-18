@@ -3,33 +3,38 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package goja.plugins.quartz;
+package goja.rapid.job;
 
 import com.jfinal.plugin.IPlugin;
 import goja.core.annotation.On;
 import goja.core.app.GojaConfig;
-import goja.initialize.ctxbox.ClassBox;
-import goja.initialize.ctxbox.ClassType;
-import goja.logging.Logger;
 import java.util.Date;
 import java.util.List;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Throwables.propagate;
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
 
 public class QuartzPlugin implements IPlugin {
-
+  private static final Logger logger = LoggerFactory.getLogger(QuartzPlugin.class);
   private final Scheduler sched;
+  private final List<Class> jobClasses;
 
-  public QuartzPlugin() {
+  /**
+   * 定时任务处理.
+   *
+   * @param jobClasses 任务class
+   */
+  public QuartzPlugin(List<Class> jobClasses) {
     Scheduler tmp_sched = null;
     try {
       tmp_sched = StdSchedulerFactory.getDefaultScheduler();
@@ -37,11 +42,11 @@ public class QuartzPlugin implements IPlugin {
       propagate(e);
     }
     this.sched = tmp_sched;
+    this.jobClasses = jobClasses;
   }
 
   @Override
   public boolean start() {
-    List<Class> jobClasses = ClassBox.getInstance().getClasses(ClassType.QUARTZ);
     if (jobClasses != null && !jobClasses.isEmpty()) {
       On on;
       for (Class jobClass : jobClasses) {
@@ -56,17 +61,19 @@ public class QuartzPlugin implements IPlugin {
           }
         }
       }
+
+      jobClasses.clear();
     }
     return true;
   }
 
   private void addJob(Class<? extends Job> jobClass, String jobCronExp, String jobName) {
-    JobDetail job = newJob(jobClass)
+    JobDetail job = JobBuilder.newJob(jobClass)
         .withIdentity(jobName, jobName + "group")
         .build();
-    Trigger trigger = newTrigger()
+    Trigger trigger = TriggerBuilder.newTrigger()
         .withIdentity(jobName, jobName + "group")
-        .withSchedule(cronSchedule(jobCronExp))
+        .withSchedule(CronScheduleBuilder.cronSchedule(jobCronExp))
         .startNow()
         .build();
 
@@ -77,8 +84,8 @@ public class QuartzPlugin implements IPlugin {
     } catch (SchedulerException e) {
       propagate(e);
     }
-    if (Logger.isDebugEnabled()) {
-      Logger.debug(job.getKey()
+    if (logger.isDebugEnabled()) {
+      logger.debug(job.getKey()
           + " has been scheduled to run at: "
           + ft
           + " and repeat based on expression: "

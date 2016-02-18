@@ -1,4 +1,4 @@
-package goja.rapid.kits.excel;
+package goja.rapid.excel;
 
 import java.util.LinkedHashMap;
 import java.util.Set;

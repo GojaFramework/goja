@@ -65,7 +65,7 @@ import goja.mvc.render.ftl.layout.ExtendsDirective;
 import goja.mvc.render.ftl.layout.OverrideDirective;
 import goja.mvc.render.ftl.layout.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
-import goja.plugins.quartz.QuartzPlugin;
+import goja.rapid.job.QuartzPlugin;
 import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
@@ -217,7 +217,10 @@ public class Goja extends JFinalConfig {
     }
 
     if (GojaConfig.getPropertyToBoolean(GojaPropConst.APPJOB, false)) {
-      plugins.add(new QuartzPlugin());
+
+      List<Class> jobClasses = ClassBox.getInstance().getClasses(ClassType.QUARTZ);
+
+      plugins.add(new QuartzPlugin(jobClasses));
     }
 
     final boolean mongoFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.MONGO, false);

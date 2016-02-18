@@ -6,22 +6,22 @@
 
 package goja.rapid.mvc.csv;
 
-public class Letters {
-    public static final char LF = '\n';
+public interface Letters {
+  char LF = '\n';
 
-    public static final char CR = '\r';
+  char CR = '\r';
 
-    public static final char QUOTE = '"';
+  char QUOTE = '"';
 
-    public static final char COMMA = ',';
+  char COMMA = ',';
 
-    public static final char SPACE = ' ';
+  char SPACE = ' ';
 
-    public static final char TAB = '\t';
+  char TAB = '\t';
 
-    public static final char POUND = '#';
+  char POUND = '#';
 
-    public static final char BACKSLASH = '\\';
+  char BACKSLASH = '\\';
 
-    public static final char NULL = '\0';
+  char NULL = '\0';
 }
