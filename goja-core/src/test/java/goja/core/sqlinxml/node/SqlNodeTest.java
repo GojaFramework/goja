@@ -1,5 +1,6 @@
 package goja.core.sqlinxml.node;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -13,9 +14,7 @@ public class SqlNodeTest {
 
   @Test
   public void testUseIf() throws Exception {
-    System.out.println(
-        "new SqlNode(\"select * from where 1=1 -- #_if (abc==1) and abc=? --_endif\") = "
-            + new SqlNode("select * from where 1=1 -- #_if (abc==1) and abc=? -- #_endif", false,
-            false, "", "", "").useIf);
+    Assert.assertTrue(new SqlNode("select * from where 1=1 -- #_if (abc==1) and abc=? -- #_endif", false,
+        false, "", "", "").useIf);
   }
 }

@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import goja.core.StringPool;
+import goja.core.sqlinxml.node.SqlBuilder;
 import goja.core.sqlinxml.node.SqlNode;
 import java.io.ByteArrayInputStream;
 import java.io.File;

@@ -1,10 +1,9 @@
-package goja.core.sqlinxml;
+package goja.core.sqlinxml.node;
 
 import com.google.common.base.MoreObjects;
 import goja.core.StringPool;
-import goja.core.sqlinxml.node.SqlNode;
 
-class SqlBuilder {
+public class SqlBuilder {
   private boolean where;
   private boolean condition;
   private String selectSql;
