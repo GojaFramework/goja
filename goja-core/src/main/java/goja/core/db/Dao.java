@@ -64,7 +64,11 @@ public abstract class Dao {
 
       Object paramValue = param.get(key);
 
-      params.add(paramValue);
+      final String placeChar = StringPool.HASH + key + StringPool.HASH;
+      if(StringUtils.containsIgnoreCase(sql, placeChar)){
+        sql = StringUtils.replace(sql, placeChar, StringPool.QUESTION_MARK);
+        params.add(paramValue);
+      }
     }
     return Pair.of(sql.replaceAll("[\\s]{2,}", " "), params);
   }

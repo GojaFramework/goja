@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlGroup name="test">
   <sql id="test1">
+    <![CDATA[
     select *
     -- @where
-      from table where
+      from table where 1=1
       -- @condition
-         abc=?
+        <#if (ab==1)!false> and abc=#ab# </#if> order by create_time
+     ]]>
   </sql>
   <sql id="test2">
     select *

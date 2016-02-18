@@ -230,4 +230,10 @@ public class EuiDataGrid {
     builder.rows(paginate.getList()).total(paginate.getTotalRow());
     return builder.build();
   }
+
+  public static  DataGridRsp rsp(final Page<Record> paginate){
+    DataGridRsp.Builder builder = new DataGridRsp.Builder();
+    builder.rows(paginate.getList()).total(paginate.getTotalRow());
+    return builder.build();
+  }
 }
