@@ -8,7 +8,6 @@ package goja.core.sqlinxml;
 
 import goja.core.app.GojaConfig;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.tuples.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
               if (jarFileName.endsWith(SqlKit.CONFIG_SUFFIX)) {
                 final List<Pair<String, SqlNode>> sqlPairSqlList = SqlParser.parseInJar(jarFileName);
                 for (Pair<String, SqlNode> sqlPair : sqlPairSqlList) {
-                  SqlKit.putOver(sqlPair.getValue0(), sqlPair.getValue1());
+                  SqlKit.putOver(sqlPair.getLeft(), sqlPair.getRight());
                 }
               }
             }
@@ -82,7 +82,7 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
 
         final List<Pair<String, SqlNode>> sqlPairSqlList = SqlParser.parseFile(change_file);
         for (Pair<String, SqlNode> sqlPair : sqlPairSqlList) {
-          SqlKit.putOver(sqlPair.getValue0(), sqlPair.getValue1());
+          SqlKit.putOver(sqlPair.getLeft(), sqlPair.getRight());
         }
         if (logger.isDebugEnabled()) {
           logger.debug("reload file:" + absolutePath);
@@ -95,7 +95,7 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
     if (remove_file.isFile() && remove_file.getAbsolutePath().endsWith(SqlKit.CONFIG_SUFFIX)) {
       final List<Pair<String, SqlNode>> sqlPairSqlList = SqlParser.parseFile(remove_file);
       for (Pair<String, SqlNode> sqlPair : sqlPairSqlList) {
-        SqlKit.remove(sqlPair.getValue0());
+        SqlKit.remove(sqlPair.getLeft());
       }
 
       if (logger.isDebugEnabled()) {

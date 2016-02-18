@@ -8,19 +8,18 @@ import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import goja.core.StringPool;
+import goja.core.db.Condition;
 import goja.core.kits.lang.Strs;
-import goja.core.tuples.Pair;
-import goja.core.tuples.Triplet;
-import goja.rapid.db.Condition;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 /**
  * <p> </p>
@@ -58,7 +57,7 @@ public final class DTCriterias implements Serializable {
     private final List<DTOrder> order;
     private final int draw;
 
-    private final List<Triplet<String, Condition, Object>> params;
+    private final List<Triple<String, Condition, Object>> params;
 
     private DTCriterias(DTSearch search, int start, int length, List<DTColumn> columns,
                         List<DTOrder> order, int draw) {
@@ -96,7 +95,7 @@ public final class DTCriterias implements Serializable {
             List<Pair<Integer, String>> _orders = Lists.newArrayList();
             List<String> processed = Lists.newArrayList();
 
-            List<Triplet<String, Condition, Object>> _params = Lists.newArrayListWithCapacity(3);
+            List<Triple<String, Condition, Object>> _params = Lists.newArrayListWithCapacity(3);
             try {
                 Matcher matcher;
                 String p_index = null;
@@ -124,24 +123,24 @@ public final class DTCriterias implements Serializable {
                                         String two_param =
                                                 StringUtils.replace(param_name, Condition.BETWEEN.toString(), "AND");
                                         String req_val2 = request.getParameter(two_param);
-                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                        _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                                                 new String[]{req_val, req_val2}));
                                         break;
                                     case LIKE:
-                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                        _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                                                 Strs.like(req_val)));
                                         break;
                                     case LLIKE:
-                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                        _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                                                 Strs.llike(req_val)));
                                         break;
                                     case RLIKE:
-                                        _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                                        _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                                                 Strs.rlike(req_val)));
                                         break;
                                     default:
                                         _params.add(
-                                                Triplet.<String, Condition, Object>with(name, query_condition, req_val));
+                                            Triple.<String, Condition, Object>of(name, query_condition, req_val));
                                 }
                             }
                         }
@@ -184,18 +183,18 @@ public final class DTCriterias implements Serializable {
                         String order_column_index = request.getParameter("order[" + p_index + "][column]");
                         String order_column_dir = request.getParameter("order[" + p_index + "][dir]");
                         Pair<Integer, String> _temp_order =
-                                Pair.with(Ints.tryParse(order_column_index), order_column_dir);
+                                Pair.of(Ints.tryParse(order_column_index), order_column_dir);
                         _orders.add(_temp_order);
                     }
                 }
 
                 if (!_orders.isEmpty()) {
                     for (Pair<Integer, String> pair : _orders) {
-                        DTColumn column = dtColumns.get(pair.getValue0());
+                        DTColumn column = dtColumns.get(pair.getKey());
                         if (column == null) {
                             continue;
                         }
-                        dtOrders.add(DTOrder.create(column.getData(), pair.getValue1()));
+                        dtOrders.add(DTOrder.create(column.getData(), pair.getValue()));
                     }
                 }
             } finally {
@@ -212,7 +211,7 @@ public final class DTCriterias implements Serializable {
         }
     }
 
-    public void setAllParams(List<Triplet<String, Condition, Object>> _params) {
+    public void setAllParams(List<Triple<String, Condition, Object>> _params) {
         this.params.addAll(_params);
     }
 
@@ -225,7 +224,7 @@ public final class DTCriterias implements Serializable {
      *                  the size of 2.
      */
     public void setParam(String field, Condition condition, Object value) {
-        this.params.add(Triplet.with(field, condition, value));
+        this.params.add(Triple.of(field, condition, value));
     }
 
     /**
@@ -238,7 +237,7 @@ public final class DTCriterias implements Serializable {
         this.setParam(field, Condition.EQ, value);
     }
 
-    public List<Triplet<String, Condition, Object>> getParams() {
+    public List<Triple<String, Condition, Object>> getParams() {
         return params;
     }
 

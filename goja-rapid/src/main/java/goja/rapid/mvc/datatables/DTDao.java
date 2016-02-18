@@ -1,5 +1,6 @@
 package goja.rapid.mvc.datatables;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Db;
@@ -9,11 +10,12 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import goja.core.StringPool;
+import goja.core.sqlinxml.SqlKit;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.tuples.Triplet;
-import goja.rapid.db.Condition;
+import goja.core.db.Condition;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 
 import static goja.core.StringPool.COMMA;
 import static goja.core.StringPool.SPACE;
@@ -29,11 +31,39 @@ public final class DTDao {
 
   public static final String SQL_WHERE = " WHERE ";
 
+
+  /**
+   * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
+   *
+   * @param model_name sql-conf sqlgroup name.
+   * @param criterias  required parameter
+   * @return Paging data.
+   */
+  public static Page<Record> paginate(String model_name,
+      DTCriterias criterias) {
+    return paginate(model_name, criterias, Lists.newArrayListWithCapacity(1));
+  }
+
+  /**
+   * Paging retrieve, default sorted by id, you need to specify the datatables request parameters.
+   *
+   * @param sqlPaginatePrefix 分页搜索前缀
+   * @param criterias         required parameter
+   * @return Paging data.
+   */
+  public static Page<Record> paginate(String sqlPaginatePrefix,
+      DTCriterias criterias,
+      List<Object> params) {
+    SqlNode sqlNode = SqlKit.sqlNode(sqlPaginatePrefix + ".paginate");
+    Preconditions.checkNotNull(sqlNode, "[" + sqlPaginatePrefix + ".paginate]分页Sql不存在,无法执行分页");
+    return DTDao.paginate(sqlNode, criterias, params);
+  }
+
   public static Page<Record> paginate(SqlNode sqlNode,
       DTCriterias criterias,
       List<Object> params) {
     return paginate(sqlNode.whereSql
-            + (sqlNode.conditions ? StringPool.SPACE : " WHERE 1=1 "),
+            + (sqlNode.condition ? StringPool.SPACE : " WHERE 1=1 "),
         sqlNode.selectSql, criterias, params);
   }
 
@@ -54,7 +84,7 @@ public final class DTDao {
 
     StringBuilder where_sql = new StringBuilder(where);
 
-    final List<Triplet<String, Condition, Object>> custom_params = criterias.getParams();
+    final List<Triple<String, Condition, Object>> custom_params = criterias.getParams();
     if (!custom_params.isEmpty()) {
       boolean append_and = StringUtils.containsIgnoreCase(where, "WHERE");
       if (!append_and) {
@@ -120,7 +150,7 @@ public final class DTDao {
 
     //        final DTSearch search = criterias.getSearch();
 
-    final List<Triplet<String, Condition, Object>> custom_params = criterias.getParams();
+    final List<Triple<String, Condition, Object>> custom_params = criterias.getParams();
     final List<Object> params = Lists.newArrayList();
     appendWhereSql(params, where, custom_params);
 
@@ -139,7 +169,7 @@ public final class DTDao {
   }
 
   public static void appendWhereSql(List<Object> params, StringBuilder where,
-      List<Triplet<String, Condition, Object>> custom_params) {
+      List<Triple<String, Condition, Object>> custom_params) {
     if (!custom_params.isEmpty()) {
       where.append(SQL_WHERE);
       itemCustomParamSql(params, where, custom_params, false);
@@ -148,34 +178,34 @@ public final class DTDao {
 
   public static StringBuilder appendWhereSql(List<Object> params,
       SqlNode sqlNode,
-      List<Triplet<String, Condition, Object>> custom_params) {
+      List<Triple<String, Condition, Object>> custom_params) {
     StringBuilder where =
         new StringBuilder(sqlNode.whereSql );
     if (!custom_params.isEmpty()) {
-      where.append(sqlNode.conditions ? " AND " : SQL_WHERE);
+      where.append(sqlNode.condition ? " AND " : SQL_WHERE);
       itemCustomParamSql(params, where, custom_params, false);
     }
     return where;
   }
 
   private static void itemCustomParamSql(List<Object> params, StringBuilder where_sql,
-      List<Triplet<String, Condition, Object>> custom_params,
+      List<Triple<String, Condition, Object>> custom_params,
       boolean append_and) {
-    for (Triplet<String, Condition, Object> custom_param : custom_params) {
+    for (Triple<String, Condition, Object> custom_param : custom_params) {
       if (append_and) {
         where_sql.append(" AND ");
       }
-      where_sql.append(custom_param.getValue0());
-      final Condition con = custom_param.getValue1();
+      where_sql.append(custom_param.getLeft());
+      final Condition con = custom_param.getMiddle();
       where_sql.append(con.condition);
       switch (con) {
         case BETWEEN:
-          final Object[] value2 = (Object[]) custom_param.getValue2();
+          final Object[] value2 = (Object[]) custom_param.getRight();
           params.add(value2[0]);
           params.add(value2[1]);
           break;
         default:
-          params.add(custom_param.getValue2());
+          params.add(custom_param.getRight());
           break;
       }
       append_and = true;

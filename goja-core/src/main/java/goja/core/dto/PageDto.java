@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.rapid.dto;
+package goja.core.dto;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -12,9 +12,9 @@ import com.google.common.collect.Maps;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.core.kits.lang.Strs;
-import goja.rapid.db.Condition;
-import goja.rapid.db.RequestParam;
-import goja.rapid.db.RequestParam.Direction;
+import goja.core.db.Condition;
+import goja.core.db.RequestParam;
+import goja.core.db.RequestParam.Direction;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Enumeration;

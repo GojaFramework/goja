@@ -1,8 +1,8 @@
 package goja.core.sqlinxml.node;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Lists;
-import java.util.List;
+import goja.core.StringPool;
+import ru.lanwen.verbalregex.VerbalExpression;
 
 /**
  * <p> </p>
@@ -16,7 +16,10 @@ public final class SqlNode {
   public static final String WHERE_MARKER = "-- @where";
   public static final String CONDITION_MARKER = "-- @condition";
 
-
+  /**
+   * 原始SQL
+   */
+  public final String originalSql;
 
   public final String sql;
 
@@ -28,10 +31,7 @@ public final class SqlNode {
   /**
    * 是否有条件
    */
-  public final boolean conditions;
-
-  public final List<ConditionNode> conditionNodeList = Lists.newArrayList();
-  public final WhereNode whereNode;
+  public final boolean condition;
 
   public final String conditionSql;
 
@@ -39,30 +39,49 @@ public final class SqlNode {
 
   public final String whereSql;
 
-  public SqlNode(String sql, boolean where, boolean conditions, WhereNode whereNode,
+  /**
+   * if 指令
+   */
+  private final IfMarker ifMarker;
+
+  public final boolean useIf;
+
+  public SqlNode(String sql, boolean where, boolean condition,
       String conditionSql, String selectSql, String whereSql) {
+    this.originalSql = sql;
     this.sql = sql;
+    this.useIf = useIf();
+    ifMarker = this.useIf ? new IfMarker(this.originalSql) : null;
+
     this.where = where;
-    this.conditions = conditions;
-    this.whereNode = whereNode;
+    this.condition = condition;
     this.conditionSql = conditionSql;
     this.selectSql = selectSql;
     this.whereSql = whereSql;
   }
 
-  public void addCondition(ConditionNode conditionNode) {
-    this.conditionNodeList.add(conditionNode);
+  public IfMarker getIfMarker() {
+    return ifMarker;
   }
 
-  public void addCondition(List<ConditionNode> conditionNodes) {
-    this.conditionNodeList.addAll(conditionNodes);
+  public boolean useIf() {
+    final VerbalExpression ifRegex = VerbalExpression.regex()
+        .anything()
+        .then("--")
+        .then(StringPool.SPACE)
+        .oneOrMore()
+        .then("#_if")
+        .build();
+    System.out.println("ifRegex = " + ifRegex);
+    return ifRegex
+        .test(originalSql);
   }
 
   @Override public String toString() {
     return MoreObjects.toStringHelper(this)
         .add("sql", sql)
         .add("where", where)
-        .add("conditions", conditions)
+        .add("condition", condition)
         .add("selectSql", selectSql)
         .add("whereSql", whereSql)
         .toString();

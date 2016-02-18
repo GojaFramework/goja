@@ -3,22 +3,14 @@ package goja.core.sqlinxml;
 import com.google.common.base.MoreObjects;
 import goja.core.StringPool;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.sqlinxml.node.WhereNode;
 
 class SqlBuilder {
   private boolean where;
-  private boolean conditions;
+  private boolean condition;
   private String selectSql;
   private String whereSql;
 
   private String conditionSql;
-
-  private WhereNode whereNode;
-
-  public SqlBuilder setWhereNode(WhereNode whereNode) {
-    this.whereNode = whereNode;
-    return this;
-  }
 
   public SqlBuilder setConditionSql(String conditionSql) {
     this.conditionSql = conditionSql;
@@ -30,8 +22,8 @@ class SqlBuilder {
     return this;
   }
 
-  public SqlBuilder setConditions(boolean conditions) {
-    this.conditions = conditions;
+  public SqlBuilder setCondition(boolean condition) {
+    this.condition = condition;
     return this;
   }
 
@@ -51,10 +43,8 @@ class SqlBuilder {
     final String selectSql = MoreObjects.firstNonNull(this.selectSql, StringPool.EMPTY);
     return new SqlNode(selectSql
         + StringPool.SPACE
-        + whereSql
-      /*  + StringPool.SPACE
-        + conditionSql*/,
-        where, conditions, whereNode,
+        + whereSql,
+        where, condition,
         conditionSql, selectSql, whereSql);
   }
 }

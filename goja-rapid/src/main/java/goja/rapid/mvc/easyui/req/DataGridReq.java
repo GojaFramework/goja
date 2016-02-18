@@ -1,11 +1,10 @@
 package goja.rapid.mvc.easyui.req;
 
 import com.google.common.collect.Lists;
-import goja.core.tuples.Triplet;
-import goja.rapid.db.Condition;
-
+import goja.core.db.Condition;
 import java.io.Serializable;
 import java.util.List;
+import org.apache.commons.lang3.tuple.Triple;
 
 /**
  * <p> DataGrid EasyUI的分页表格传递的参数 </p>
@@ -41,9 +40,9 @@ public final class DataGridReq implements Serializable {
     /**
      * 搜索参数
      */
-    public final List<Triplet<String, Condition, Object>> params;
+    public final List<Triple<String, Condition, Object>> params;
 
-    private DataGridReq(int page, int rows, String sortField, String order, List<Triplet<String, Condition, Object>> params) {
+    private DataGridReq(int page, int rows, String sortField, String order, List<Triple<String, Condition, Object>> params) {
         this.page = page;
         this.rows = rows;
         this.sortField = sortField;
@@ -57,7 +56,7 @@ public final class DataGridReq implements Serializable {
         private String sortField;
 
         private String order;
-        private List<Triplet<String, Condition, Object>> params = Lists.newArrayList();
+        private List<Triple<String, Condition, Object>> params = Lists.newArrayList();
 
 
         public Builder page(int page) {
@@ -80,7 +79,7 @@ public final class DataGridReq implements Serializable {
             return this;
         }
 
-        public Builder params(List<Triplet<String, Condition, Object>> params) {
+        public Builder params(List<Triple<String, Condition, Object>> params) {
             this.params = params;
             return this;
         }

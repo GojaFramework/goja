@@ -1,4 +1,4 @@
-package goja.rapid.db;
+package goja.core.db;
 
 import com.google.common.collect.Lists;
 

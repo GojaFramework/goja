@@ -14,7 +14,6 @@ import com.jfinal.kit.PathKit;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.tuples.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -26,6 +25,7 @@ import java.util.jar.JarFile;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,12 +103,12 @@ public class SqlKit {
       if (f.getName().endsWith(CONFIG_SUFFIX)) {
         final List<Pair<String, SqlNode>> fileXmlSqlList = SqlParser.parseFile(f);
         for (Pair<String, SqlNode> sqlPair : fileXmlSqlList) {
-          final String sqlMapName = sqlPair.getValue0();
+          final String sqlMapName = sqlPair.getLeft();
           if (SQL_MAP.containsKey(sqlMapName)) {
             logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!", f.getAbsolutePath(), sqlMapName);
             continue;
           }
-          SQL_MAP.put(sqlMapName, sqlPair.getValue1());
+          SQL_MAP.put(sqlMapName, sqlPair.getRight());
         }
       }
     }
@@ -138,12 +138,12 @@ public class SqlKit {
           if (jarFileName.endsWith(CONFIG_SUFFIX)) {
             final List<Pair<String, SqlNode>> parseInJar = SqlParser.parseInJar(jarFileName);
             for (Pair<String, SqlNode> sqlPair : parseInJar) {
-              final String sqlMapName = sqlPair.getValue0();
+              final String sqlMapName = sqlPair.getLeft();
               if (SQL_MAP.containsKey(sqlMapName)) {
                 logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!", jarFileName, sqlMapName);
                 continue;
               }
-              SQL_MAP.put(sqlMapName, sqlPair.getValue1());
+              SQL_MAP.put(sqlMapName, sqlPair.getRight());
             }
           }
         }

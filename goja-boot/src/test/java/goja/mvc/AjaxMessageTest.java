@@ -7,8 +7,8 @@
 package goja.mvc;
 
 import goja.core.StringPool;
-import goja.core.tuples.Pair;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +31,7 @@ public class AjaxMessageTest {
 
     @Test
     public void testOk2() throws Exception {
-        Pair<Integer, Integer> data = Pair.with(1, 2);
+        Pair<Integer, Integer> data = Pair.of(1, 2);
         AjaxMessage ok = AjaxMessage.ok(data);
         assertEquals(ok.getMessage(), StringPool.EMPTY);
     }

@@ -19,13 +19,13 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 import goja.core.kits.lang.DateKit;
 import goja.mvc.render.NotModified;
-import goja.rapid.db.Dao;
+import goja.core.dto.PageDto;
 import goja.rapid.mvc.datatables.DTCriterias;
+import goja.rapid.mvc.datatables.DTDao;
 import goja.rapid.mvc.datatables.DTResponse;
 import goja.rapid.mvc.easyui.EuiDataGrid;
 import goja.rapid.mvc.easyui.req.DataGridReq;
 import goja.rapid.mvc.kits.Requests;
-import goja.rapid.dto.PageDto;
 import goja.security.goja.SecurityKit;
 import goja.security.shiro.AppUser;
 import goja.security.shiro.Securitys;
@@ -299,7 +299,7 @@ public class Controller extends com.jfinal.core.Controller {
      */
     protected void renderDataTables(DTCriterias criterias, String model_name) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
-        final Page<Record> datas = Dao.paginate(model_name, criterias);
+        final Page<Record> datas = DTDao.paginate(model_name, criterias);
         DTResponse response =
                 DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
         renderJson(response);
@@ -317,7 +317,7 @@ public class Controller extends com.jfinal.core.Controller {
      */
     protected void renderDataTables(DTCriterias criterias, String sqlGroupName, List<Object> params) {
         Preconditions.checkNotNull(criterias, "datatable criterias is must be not null.");
-        final Page<Record> datas = Dao.paginate(sqlGroupName, criterias, params);
+        final Page<Record> datas = DTDao.paginate(sqlGroupName, criterias, params);
         DTResponse response =
                 DTResponse.build(criterias, datas.getList(), datas.getTotalRow(), datas.getTotalRow());
         renderJson(response);

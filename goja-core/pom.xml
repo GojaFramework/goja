@@ -112,7 +112,12 @@
       <version>1.1.6</version>
     </dependency>
 
-
+    <!-- 正则表达式 使用-->
+    <dependency>
+      <groupId>ru.lanwen.verbalregex</groupId>
+      <artifactId>java-verbal-expressions</artifactId>
+      <version>${verbalregex.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>joda-time</groupId>

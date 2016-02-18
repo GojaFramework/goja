@@ -4,7 +4,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static goja.rapid.db.FindBy.findBy;
+import static goja.core.db.FindBy.findBy;
 
 public class FindByTest {
 

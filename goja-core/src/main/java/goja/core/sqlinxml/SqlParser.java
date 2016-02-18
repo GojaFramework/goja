@@ -9,7 +9,6 @@ import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import goja.core.StringPool;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.tuples.Pair;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -89,7 +89,7 @@ public class SqlParser {
         }
 
         final boolean hasWhere = StringUtils.containsIgnoreCase(sqlSelect, SqlNode.WHERE_MARKER);
-        sqlBuilder.setConditions(hasCondition)
+        sqlBuilder.setCondition(hasCondition)
             .setSelectSql(selectSql)
             .setWhere(hasWhere);
 
@@ -104,7 +104,7 @@ public class SqlParser {
         final SqlNode sqlNodeOO = sqlBuilder.createSql();
         //sqlNodeOO.addCondition(conditionNodes);
         sqlIdList.add(sqlMapName);
-        Pair<String, SqlNode> sqlMap = Pair.with(sqlMapName, sqlNodeOO);
+        Pair<String, SqlNode> sqlMap = Pair.of(sqlMapName, sqlNodeOO);
         sqlList.add(sqlMap);
       }
     } catch (DocumentException e) {

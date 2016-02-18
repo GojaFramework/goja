@@ -17,8 +17,7 @@ import goja.core.date.DateFormatter;
 import goja.core.kits.lang.Strs;
 import goja.core.sqlinxml.SqlKit;
 import goja.core.sqlinxml.node.SqlNode;
-import goja.core.tuples.Triplet;
-import goja.rapid.db.Condition;
+import goja.core.db.Condition;
 import goja.rapid.mvc.datatables.DTDao;
 import goja.rapid.mvc.easyui.req.DataGridReq;
 import goja.rapid.mvc.easyui.rsp.DataGridRsp;
@@ -31,6 +30,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +77,7 @@ public class EuiDataGrid {
       DataGridReq.Builder builder = new DataGridReq.Builder();
       builder.sortField(r_sortField).order(orderBy).page(page).rows(rows);
 
-      List<Triplet<String, Condition, Object>> _params = Lists.newArrayListWithCapacity(3);
+      List<Triple<String, Condition, Object>> _params = Lists.newArrayListWithCapacity(3);
       String p_index = null;
       final Enumeration<String> parameterNames = request.getParameterNames();
       while (parameterNames.hasMoreElements()) {
@@ -118,33 +118,33 @@ public class EuiDataGrid {
                       final Date endDate =
                           DateUtils.parseDate(dataValues[1], DateFormatter.YYYY_MM_DD,
                               DateFormatter.YYYY_MM_DD_HH_MM_SS);
-                      _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                      _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                           new Date[] {startDate, endDate}));
                     } catch (ParseException e) {
                       logger.error("日期转换出错！", e);
                     }
                   } else {
                     String[] dataValues = StringUtils.split(req_val, "~");
-                    _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                    _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                         new String[] {dataValues[0], dataValues[1]}));
                   }
 
                   break;
                 case LIKE:
-                  _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                  _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                       Strs.like(req_val)));
                   break;
                 case LLIKE:
-                  _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                  _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                       Strs.llike(req_val)));
                   break;
                 case RLIKE:
-                  _params.add(Triplet.<String, Condition, Object>with(name, query_condition,
+                  _params.add(Triple.<String, Condition, Object>of(name, query_condition,
                       Strs.rlike(req_val)));
                   break;
                 default:
                   _params.add(
-                      Triplet.<String, Condition, Object>with(name, query_condition, req_val));
+                      Triple.<String, Condition, Object>of(name, query_condition, req_val));
               }
             }
           }
@@ -175,7 +175,7 @@ public class EuiDataGrid {
     StringBuilder where = new StringBuilder(" FROM ");
     where.append(tableName).append(SPACE);
 
-    final List<Triplet<String, Condition, Object>> custom_params = req.params;
+    final List<Triple<String, Condition, Object>> custom_params = req.params;
     final List<Object> params = Lists.newArrayList();
     DTDao.appendWhereSql(params, where, custom_params);
 
@@ -217,7 +217,7 @@ public class EuiDataGrid {
       return EMPTY_DATAGRID;
     }
 
-    final List<Triplet<String, Condition, Object>> customParams = req.params;
+    final List<Triple<String, Condition, Object>> customParams = req.params;
     StringBuilder where = DTDao.appendWhereSql(params, sqlNode, customParams);
 
     if (!Strings.isNullOrEmpty(req.sortField)) {
