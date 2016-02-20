@@ -6,15 +6,17 @@
 
 package goja.initialize.ctxbox;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.jfinal.aop.Interceptor;
-import com.jfinal.core.Controller;
-import com.jfinal.plugin.activerecord.Model;
 import goja.job.Job;
 import goja.mvc.AppLoadEvent;
 import goja.rapid.syslog.LogProcessor;
 import goja.security.shiro.SecurityUserData;
+import com.jfinal.aop.Interceptor;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Model;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,71 +28,71 @@ import java.util.Map;
  * @since JDK 1.6
  */
 public class ClassBox {
-  private static final Map<ClassType, List<Class>> CLASS_BOX_MAP = Maps.newHashMap();
+    private static final Map<ClassType, List<Class>> CLASS_BOX_MAP = Maps.newHashMap();
 
-  /**
-   * 私有构造函数,确保对象只能通过单例方法来调用.
-   */
-  private ClassBox() {
-  }
+    /**
+     * 私有构造函数,确保对象只能通过单例方法来调用.
+     */
+    private ClassBox() {
+    }
 
-  /**
-   * 获取单例对象,如果要调用该单例的使用,只能通过该方法获取.
-   */
-  public static ClassBox getInstance() {
-    return ClassBoxHolder.instance;
-  }
+    /**
+     * 获取单例对象,如果要调用该单例的使用,只能通过该方法获取.
+     */
+    public static ClassBox getInstance() {
+        return ClassBoxHolder.instance;
+    }
 
-  public List<Class> getClasses(ClassType classType) {
-    return CLASS_BOX_MAP.get(classType);
-  }
+    public List<Class> getClasses(ClassType classType) {
+        return CLASS_BOX_MAP.get(classType);
+    }
 
-  void push(Class<?> cls) {
-    // Check the class categories.
-    if (Model.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.MODEL);
-    } else if (Controller.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.CONTROLLER);
-    } else if (Job.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.JOB);
-    } else if (org.quartz.Job.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.QUARTZ);
-    } else if (AppLoadEvent.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.APP);
-    } else if (Interceptor.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.AOP);
-    } /*else if (IPlugin.class.isAssignableFrom(cls)) {
+    void push(Class<?> cls) {
+        // Check the class categories.
+        if (Model.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.MODEL);
+        } else if (Controller.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.CONTROLLER);
+        } else if (Job.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.JOB);
+        } else if (org.quartz.Job.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.QUARTZ);
+        } else if (AppLoadEvent.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.APP);
+        } else if (Interceptor.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.AOP);
+        } /*else if (IPlugin.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.PLUGIN);
         } else if (Handler.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.HANDLER);
         }*/ else if (LogProcessor.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.LOGPERCESSOR);
-    } else if (SecurityUserData.class.isAssignableFrom(cls)) {
-      initClassWithType(cls, ClassType.SECURITY_DATA);
+            initClassWithType(cls, ClassType.LOGPERCESSOR);
+        } else if (SecurityUserData.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.SECURITY_DATA);
+        }
     }
-  }
 
-  public void initClassWithType(Class<?> cls, final ClassType type) {
-    List<Class> classes = CLASS_BOX_MAP.get(type);
-    if (classes == null) {
-      classes = Lists.newArrayList();
-    } else {
-      if (classes.contains(cls)) {
-        return;
-      }
+    public void initClassWithType(Class<?> cls, final ClassType type) {
+        List<Class> classes = CLASS_BOX_MAP.get(type);
+        if (classes == null) {
+            classes = Lists.newArrayList();
+        } else {
+            if (classes.contains(cls)) {
+                return;
+            }
+        }
+        classes.add(cls);
+        CLASS_BOX_MAP.put(type, classes);
     }
-    classes.add(cls);
-    CLASS_BOX_MAP.put(type, classes);
-  }
 
-  public void clearBox() {
-    CLASS_BOX_MAP.clear();
-  }
+    public void clearBox() {
+        CLASS_BOX_MAP.clear();
+    }
 
-  /**
-   * lazy 加载的内部类,用于实例化单例对象.
-   */
-  private static class ClassBoxHolder {
-    static ClassBox instance = new ClassBox();
-  }
+    /**
+     * lazy 加载的内部类,用于实例化单例对象.
+     */
+    private static class ClassBoxHolder {
+        static ClassBox instance = new ClassBox();
+    }
 }

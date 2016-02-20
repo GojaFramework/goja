@@ -7,7 +7,13 @@
 package goja.mvc.render.ftl.shiro.auth;
 
 import freemarker.core.Environment;
-import freemarker.template.*;
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateDirectiveBody;
+import freemarker.template.TemplateDirectiveModel;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -17,9 +23,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * <p>
- * 基本权限验证.
- * </p>
+ * <p> 基本权限验证. </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:29 AM
@@ -49,10 +53,7 @@ public abstract class SecureTag implements TemplateDirectiveModel {
     }
 
     /**
-     * 检查循环变量
-     * <p>
-     * 循环变量：用户定义指令可以有循环变量，通常用于重复嵌套内容，
-     * 基本用法是：作为nested指令的参数传递循环变量的实际值，而在调用用户定义指令时，在${"<@…>"}开始标记的参数后面指定循环变量的名字
+     * 检查循环变量 <p> 循环变量：用户定义指令可以有循环变量，通常用于重复嵌套内容， 基本用法是：作为nested指令的参数传递循环变量的实际值，而在调用用户定义指令时，在${"<@…>"}开始标记的参数后面指定循环变量的名字
      * </p>
      *
      * @param loopVars 循环变量参数

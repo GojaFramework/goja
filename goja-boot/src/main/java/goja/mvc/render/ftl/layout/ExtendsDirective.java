@@ -6,19 +6,24 @@
 
 package goja.mvc.render.ftl.layout;
 
-import freemarker.cache.TemplateCache;
-import freemarker.core.Environment;
-import freemarker.template.*;
 import goja.core.StringPool;
 import goja.mvc.render.ftl.kit.DirectiveKit;
+
+import freemarker.cache.TemplateCache;
+import freemarker.core.Environment;
+import freemarker.template.Configuration;
+import freemarker.template.SimpleScalar;
+import freemarker.template.Template;
+import freemarker.template.TemplateDirectiveBody;
+import freemarker.template.TemplateDirectiveModel;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateModel;
 
 import java.io.IOException;
 import java.util.Map;
 
 /**
- * <p>
- * 定义模板继承的自定义指令.
- * </p>
+ * <p> 定义模板继承的自定义指令. </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-04-20 上午7:36

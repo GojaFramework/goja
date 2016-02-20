@@ -13,12 +13,21 @@ import goja.core.exceptions.UnexpectedException;
 import goja.core.libs.Action;
 import goja.core.libs.PThreadFactory;
 import goja.core.libs.Promise;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p> . </p>
@@ -156,8 +165,8 @@ public final class Invoker {
         }
 
         /**
-         * Returns the InvocationType for this invocation - Ie: A plugin can use this to find out if it
-         * runs in the context of a background Job
+         * Returns the InvocationType for this invocation - Ie: A plugin can use this to find out if
+         * it runs in the context of a background Job
          */
         public String getInvocationType() {
             return invocationType;
@@ -183,15 +192,13 @@ public final class Invoker {
 
         /**
          * Override this method
-         *
-         * @throws Exception
          */
         public abstract void execute() throws Exception;
 
         /**
          * Needs this method to do stuff *before* init() is executed. The different
-         * Invocation-implementations does a lot of stuff in init() and they might do it before calling
-         * super.init()
+         * Invocation-implementations does a lot of stuff in init() and they might do it before
+         * calling super.init()
          */
         protected void preInit() {
             // clear language for this request - we're resolving it later when it is needed

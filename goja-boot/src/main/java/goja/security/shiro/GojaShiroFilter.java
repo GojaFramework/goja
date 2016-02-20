@@ -1,10 +1,12 @@
 package goja.security.shiro;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.primitives.Ints;
-import com.jfinal.kit.PropKit;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
+import com.jfinal.kit.PropKit;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.primitives.Ints;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -20,11 +22,16 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
  * <p> Goja 扩展的 Shiro 拦截器，主要是为了避免 shiro.ini 的配置</p>

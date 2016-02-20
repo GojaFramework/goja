@@ -7,11 +7,13 @@
 package goja;
 
 import com.google.common.collect.Lists;
-import goja.core.Func;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+
+import goja.core.Func;
 
 /**
  * <p> . </p>

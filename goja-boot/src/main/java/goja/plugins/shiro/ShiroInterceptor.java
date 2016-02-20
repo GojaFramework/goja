@@ -7,6 +7,7 @@ package goja.plugins.shiro;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
+
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 

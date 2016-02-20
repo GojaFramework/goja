@@ -6,11 +6,12 @@
 
 package goja.mvc.render.ftl.shiro.auth;
 
+import goja.core.StringPool;
+
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
-import goja.core.StringPool;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -19,9 +20,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:41 AM
@@ -36,7 +35,8 @@ public class PrincipalTag extends SecureTag {
     }
 
     /**
-     * The property name to retrieve of the principal, or null if the <tt>toString()</tt> value should be used.
+     * The property name to retrieve of the principal, or null if the <tt>toString()</tt> value
+     * should be used.
      */
     String getProperty(Map params) {
         return getParam(params, "property");

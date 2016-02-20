@@ -6,19 +6,26 @@
 
 package goja.security.goja;
 
-import com.google.common.base.Function;
-import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.ehcache.CacheKit;
 import goja.Goja;
 import goja.core.StringPool;
 import goja.core.encry.DigestsKit;
 import goja.core.encry.EncodeKit;
 import goja.rapid.mvc.kits.Requests;
+import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.ehcache.CacheKit;
+
+import com.google.common.base.Function;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.Enumeration;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -26,9 +33,6 @@ import javax.crypto.spec.DESKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * <p> The Security Kit. </p>
@@ -118,8 +122,8 @@ public class SecurityKit {
     }
 
     /**
-     * Get user login information, if the session does not exist, then try to obtain from the Cookie,
-     * if cookie exists, then decrypt obtain user information.
+     * Get user login information, if the session does not exist, then try to obtain from the
+     * Cookie, if cookie exists, then decrypt obtain user information.
      *
      * @param req      requeset
      * @param response http response

@@ -7,6 +7,7 @@
 package goja.security.shiro;
 
 import com.jfinal.plugin.activerecord.Model;
+
 import org.apache.shiro.subject.Subject;
 
 import static org.apache.shiro.SecurityUtils.getSubject;

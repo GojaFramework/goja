@@ -6,8 +6,9 @@
 
 package goja.mvc.render;
 
-import com.google.common.base.Strings;
 import com.jfinal.render.Render;
+
+import com.google.common.base.Strings;
 
 import javax.servlet.http.HttpServletResponse;
 

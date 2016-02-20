@@ -17,29 +17,29 @@ import java.io.Serializable;
  */
 public class CookieUser implements Serializable {
 
-  private static final long serialVersionUID = -7375570593653130438L;
+    private static final long serialVersionUID = -7375570593653130438L;
 
-  private final long id;
+    private final long id;
 
-  private final String password;
+    private final String password;
 
-  private final boolean blocked;
+    private final boolean blocked;
 
-  public CookieUser(long id, String password, boolean blocked) {
-    this.id = id;
-    this.password = password;
-    this.blocked = blocked;
-  }
+    public CookieUser(long id, String password, boolean blocked) {
+        this.id = id;
+        this.password = password;
+        this.blocked = blocked;
+    }
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public boolean isBlocked() {
-    return blocked;
-  }
+    public boolean isBlocked() {
+        return blocked;
+    }
 }

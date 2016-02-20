@@ -6,6 +6,13 @@
 
 package goja.logging;
 
+import goja.core.app.GojaConfig;
+import goja.core.app.GojaPropConst;
+
+import com.google.common.base.Charsets;
+
+import org.apache.commons.lang3.StringUtils;
+
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -18,10 +25,6 @@ import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.status.InfoStatus;
 import ch.qos.logback.core.status.StatusManager;
-import com.google.common.base.Charsets;
-import goja.core.app.GojaConfig;
-import goja.core.app.GojaPropConst;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p> . </p>

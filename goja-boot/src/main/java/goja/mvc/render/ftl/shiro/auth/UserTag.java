@@ -9,15 +9,14 @@ package goja.mvc.render.ftl.shiro.auth;
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
+
 import org.apache.shiro.subject.Subject;
 
 import java.io.IOException;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:28 AM

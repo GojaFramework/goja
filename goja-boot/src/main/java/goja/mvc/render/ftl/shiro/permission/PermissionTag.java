@@ -6,19 +6,18 @@
 
 package goja.mvc.render.ftl.shiro.permission;
 
+import goja.mvc.render.ftl.shiro.auth.SecureTag;
+
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
-import goja.mvc.render.ftl.shiro.auth.SecureTag;
 
 import java.io.IOException;
 import java.util.Map;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:37 AM

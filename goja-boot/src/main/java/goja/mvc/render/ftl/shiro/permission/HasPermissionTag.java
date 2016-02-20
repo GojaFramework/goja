@@ -7,9 +7,7 @@
 package goja.mvc.render.ftl.shiro.permission;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:38 AM

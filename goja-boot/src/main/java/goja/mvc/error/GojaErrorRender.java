@@ -6,16 +6,18 @@
 
 package goja.mvc.error;
 
-import com.google.common.base.Splitter;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
+import goja.core.StringPool;
+import goja.mvc.Freemarkers;
 import com.jfinal.core.Const;
 import com.jfinal.core.JFinal;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
-import goja.core.StringPool;
-import goja.mvc.Freemarkers;
+
+import com.google.common.base.Splitter;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -33,79 +35,77 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
  */
 public class GojaErrorRender extends Render {
 
-  protected static final String contentType = "text/html; charset=" + getEncoding();
+    public static final String ERROR_500_FTL =
+            "<!DOCTYPE html><html><head><title> Application 500 Eroor </title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/></head><style type=\"text/css\">html, body {margin: 0;padding: 0;font-family : Helvetica, Arial, Sans;background: #EEEEEE;}.block {padding: 20px;border-bottom : 1px solid #aaa;}#header h1 {font-weight : normal;font-size: 28px;margin: 0;}#more {color: #666;font-size : 80%;border: none;}#header {background : #fcd2da;}#header p {color : #333;}#source {background : #f6f6f6;}#source h2 {font-weight : normal;font-size: 18px;margin: 0 0 10px 0;}#source .lineNumber {float: left;display: block;width: 40px;text-align: right;margin-right : 10px;font-size: 14px;font-family: monospace;background: #333;color: #fff;}#source .line {clear: both;color: #333;margin-bottom : 1px;}#source pre {font-size: 14px;margin: 0;overflow-x : hidden;}#source .error {color : #c00 !important;}#source .error .lineNumber {background : #c00;}#source a {text-decoration : none;}#source a:hover * {cursor : pointer !important;}#source a:hover pre {background : #FAFFCF !important;}#source em {font-style: normal;text-decoration : underline;font-weight: bold;}#source strong {font-style: normal;font-weight : bold;}</style><body><div id=\"header\" class=\"block\"><h1>Execution exception</h1><p> ${title!} </p></div><div id=\"source\" class=\"block\"><h2>Exception information in detail </h2><#list errors as er><div class=\"line <#if er?starts_with(\"\tat app.\")>error</#if>\"><span class=\"lineNumber\">${er_index + 1}:</span><pre>${er}</pre></div></#list></div></body></html>";
+    public static final String NOTFUND_FTL =
+            "<!DOCTYPE html><html><head><title>Not found</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/></head><style type=\"text/css\">html, body {margin: 0;padding: 0;font-family: Helvetica, Arial, Sans;background: #EEEEEE;}.block {padding: 20px;border-bottom: 1px solid #aaa;}#header h1 {font-weight: normal;font-size: 28px;margin: 0;}#more {color: #666;font-size: 80%;border: none;}#header {background: #FFFFCC;}#header p {color: #333;}#routes {background: #f6f6f6;}#routes h2 {font-weight: normal;font-size: 18px;margin: 0 0 10px 0;}#routes ol {}#routes li {font-size: 14px;font-family: monospace;color: #333;}</style><body><div id=\"header\" class=\"block\"><h1>${requestURI!}  Not found</h1></div><div id=\"routes\" class=\"block\"><h2>These routes have been tried, in this order :</h2><ol><#list routes as r><li> ${r} </li></#list></ol></div></body></html>";
+    protected static final String contentType = "text/html; charset=" + getEncoding();
+    protected static final String version =
+            "<center>Powered by JFinal#Goja "
+                    + Const.JFINAL_VERSION
+                    + "</center>";
+    protected int errorCode;
 
-  protected static final String version =
-      "<center>Powered by JFinal#Goja "
-          + Const.JFINAL_VERSION
-          + "</center>";
-  public static final String ERROR_500_FTL =
-      "<!DOCTYPE html><html><head><title> Application 500 Eroor </title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/></head><style type=\"text/css\">html, body {margin: 0;padding: 0;font-family : Helvetica, Arial, Sans;background: #EEEEEE;}.block {padding: 20px;border-bottom : 1px solid #aaa;}#header h1 {font-weight : normal;font-size: 28px;margin: 0;}#more {color: #666;font-size : 80%;border: none;}#header {background : #fcd2da;}#header p {color : #333;}#source {background : #f6f6f6;}#source h2 {font-weight : normal;font-size: 18px;margin: 0 0 10px 0;}#source .lineNumber {float: left;display: block;width: 40px;text-align: right;margin-right : 10px;font-size: 14px;font-family: monospace;background: #333;color: #fff;}#source .line {clear: both;color: #333;margin-bottom : 1px;}#source pre {font-size: 14px;margin: 0;overflow-x : hidden;}#source .error {color : #c00 !important;}#source .error .lineNumber {background : #c00;}#source a {text-decoration : none;}#source a:hover * {cursor : pointer !important;}#source a:hover pre {background : #FAFFCF !important;}#source em {font-style: normal;text-decoration : underline;font-weight: bold;}#source strong {font-style: normal;font-weight : bold;}</style><body><div id=\"header\" class=\"block\"><h1>Execution exception</h1><p> ${title!} </p></div><div id=\"source\" class=\"block\"><h2>Exception information in detail </h2><#list errors as er><div class=\"line <#if er?starts_with(\"\tat app.\")>error</#if>\"><span class=\"lineNumber\">${er_index + 1}:</span><pre>${er}</pre></div></#list></div></body></html>";
-  public static final String NOTFUND_FTL =
-      "<!DOCTYPE html><html><head><title>Not found</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/></head><style type=\"text/css\">html, body {margin: 0;padding: 0;font-family: Helvetica, Arial, Sans;background: #EEEEEE;}.block {padding: 20px;border-bottom: 1px solid #aaa;}#header h1 {font-weight: normal;font-size: 28px;margin: 0;}#more {color: #666;font-size: 80%;border: none;}#header {background: #FFFFCC;}#header p {color: #333;}#routes {background: #f6f6f6;}#routes h2 {font-weight: normal;font-size: 18px;margin: 0 0 10px 0;}#routes ol {}#routes li {font-size: 14px;font-family: monospace;color: #333;}</style><body><div id=\"header\" class=\"block\"><h1>${requestURI!}  Not found</h1></div><div id=\"routes\" class=\"block\"><h2>These routes have been tried, in this order :</h2><ol><#list routes as r><li> ${r} </li></#list></ol></div></body></html>";
-
-  protected int errorCode;
-
-  public GojaErrorRender(int errorCode, String view) {
-    this.errorCode = errorCode;
-    this.view = view;
-  }
-
-  public void render() {
-    response.setStatus(getErrorCode());    // HttpServletResponse.SC_XXX_XXX
-
-    // render with view
-    String view = getView();
-    if (view != null) {
-      RenderFactory.me().getRender(view).setContext(request, response).render();
-      return;
+    public GojaErrorRender(int errorCode, String view) {
+        this.errorCode = errorCode;
+        this.view = view;
     }
 
-    // render with html content
-    PrintWriter writer = null;
-    try {
-      response.setContentType(contentType);
-      writer = response.getWriter();
-      writer.write(getErrorHtml());
-      writer.flush();
-    } catch (IOException e) {
-      throw new RenderException(e);
-    } finally {
-      if (writer != null) {
-        writer.close();
-      }
-    }
-  }
+    public void render() {
+        response.setStatus(getErrorCode());    // HttpServletResponse.SC_XXX_XXX
 
-  public String getErrorHtml() {
-    int errorCode = getErrorCode();
-    Map<String, Object> pdata = Maps.newHashMap();
-    final String requestURI = request.getRequestURI();
-    pdata.put("requestURI", requestURI);
-    switch (errorCode) {
-      case SC_INTERNAL_SERVER_ERROR:
-        Throwable te = (Throwable) request.getAttribute("goja_error");
-        String error_msg = Throwables.getStackTraceAsString(te);
-        List<String> error_lines = Splitter.on(StringPool.NEWLINE).splitToList(error_msg);
-        pdata.put("title", error_lines.get(0));
-        pdata.put("errors", error_lines);
-        return Freemarkers.renderStrTemplate(ERROR_500_FTL, pdata);
-      case SC_NOT_FOUND:
-        final List<String> allActionKeys = JFinal.me().getAllActionKeys();
-        pdata.put("routes", allActionKeys);
-        return Freemarkers.renderStrTemplate(NOTFUND_FTL, pdata);
-      default:
-        return "<html><head><title>"
-            + errorCode
-            + " Error</title></head><body bgcolor='white'><center><h1>"
-            + errorCode
-            + " Error</h1></center><hr>"
-            + version
-            + "</body></html>";
-    }
-  }
+        // render with view
+        String view = getView();
+        if (view != null) {
+            RenderFactory.me().getRender(view).setContext(request, response).render();
+            return;
+        }
 
-  public int getErrorCode() {
-    return errorCode;
-  }
+        // render with html content
+        PrintWriter writer = null;
+        try {
+            response.setContentType(contentType);
+            writer = response.getWriter();
+            writer.write(getErrorHtml());
+            writer.flush();
+        } catch (IOException e) {
+            throw new RenderException(e);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+    }
+
+    public String getErrorHtml() {
+        int errorCode = getErrorCode();
+        Map<String, Object> pdata = Maps.newHashMap();
+        final String requestURI = request.getRequestURI();
+        pdata.put("requestURI", requestURI);
+        switch (errorCode) {
+            case SC_INTERNAL_SERVER_ERROR:
+                Throwable te = (Throwable) request.getAttribute("goja_error");
+                String error_msg = Throwables.getStackTraceAsString(te);
+                List<String> error_lines = Splitter.on(StringPool.NEWLINE).splitToList(error_msg);
+                pdata.put("title", error_lines.get(0));
+                pdata.put("errors", error_lines);
+                return Freemarkers.renderStrTemplate(ERROR_500_FTL, pdata);
+            case SC_NOT_FOUND:
+                final List<String> allActionKeys = JFinal.me().getAllActionKeys();
+                pdata.put("routes", allActionKeys);
+                return Freemarkers.renderStrTemplate(NOTFUND_FTL, pdata);
+            default:
+                return "<html><head><title>"
+                        + errorCode
+                        + " Error</title></head><body bgcolor='white'><center><h1>"
+                        + errorCode
+                        + " Error</h1></center><hr>"
+                        + version
+                        + "</body></html>";
+        }
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
 }

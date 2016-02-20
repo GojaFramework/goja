@@ -6,9 +6,10 @@
 
 package goja.security.shiro;
 
+import com.jfinal.plugin.activerecord.Model;
+
 import com.alibaba.fastjson.annotation.JSONCreator;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jfinal.plugin.activerecord.Model;
 
 import java.io.Serializable;
 

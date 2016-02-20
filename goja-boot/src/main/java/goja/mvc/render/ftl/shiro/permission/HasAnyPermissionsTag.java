@@ -1,14 +1,12 @@
 package goja.mvc.render.ftl.shiro.permission;
 
 import goja.core.StringPool;
+
 import org.apache.shiro.subject.Subject;
 
 /**
- * <p>
- * A plurality of permission, as long as the only one.
- * </p>
- * <p/>
- * Note: From the <a href="https://github.com/springside/springside4">SpringSide4</a>
+ * <p> A plurality of permission, as long as the only one. </p> <p/> Note: From the <a
+ * href="https://github.com/springside/springside4">SpringSide4</a>
  *
  * @author sogYF
  * @version 1.0

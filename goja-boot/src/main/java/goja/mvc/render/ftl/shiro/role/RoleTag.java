@@ -6,18 +6,17 @@
 
 package goja.mvc.render.ftl.shiro.role;
 
+import goja.mvc.render.ftl.shiro.auth.SecureTag;
+
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
-import goja.mvc.render.ftl.shiro.auth.SecureTag;
 
 import java.io.IOException;
 import java.util.Map;
 
 /**
- * <p>
- * 角色标签，用于判定当前登录人的角色信息.
- * </p>
+ * <p> 角色标签，用于判定当前登录人的角色信息. </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:34 AM

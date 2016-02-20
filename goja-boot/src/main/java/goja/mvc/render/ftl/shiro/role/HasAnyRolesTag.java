@@ -7,12 +7,11 @@
 package goja.mvc.render.ftl.shiro.role;
 
 import goja.core.StringPool;
+
 import org.apache.shiro.subject.Subject;
 
 /**
- * <p>
- * 多个角色的验证.
- * </p>
+ * <p> 多个角色的验证. </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:35 AM

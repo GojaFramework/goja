@@ -6,9 +6,11 @@
 
 package goja.mvc.render.ftl.shiro;
 
-import freemarker.template.ObjectWrapper;
-import freemarker.template.SimpleHash;
-import goja.mvc.render.ftl.shiro.auth.*;
+import goja.mvc.render.ftl.shiro.auth.AuthenticatedTag;
+import goja.mvc.render.ftl.shiro.auth.GuestTag;
+import goja.mvc.render.ftl.shiro.auth.NotAuthenticatedTag;
+import goja.mvc.render.ftl.shiro.auth.PrincipalTag;
+import goja.mvc.render.ftl.shiro.auth.UserTag;
 import goja.mvc.render.ftl.shiro.permission.HasAnyPermissionsTag;
 import goja.mvc.render.ftl.shiro.permission.HasPermissionTag;
 import goja.mvc.render.ftl.shiro.permission.LacksPermissionTag;
@@ -16,10 +18,11 @@ import goja.mvc.render.ftl.shiro.role.HasAnyRolesTag;
 import goja.mvc.render.ftl.shiro.role.HasRoleTag;
 import goja.mvc.render.ftl.shiro.role.LacksRoleTag;
 
+import freemarker.template.ObjectWrapper;
+import freemarker.template.SimpleHash;
+
 /**
- * <p>
- * Apache Shirio authentication Freemarker instructions.
- * </p>
+ * <p> Apache Shirio authentication Freemarker instructions. </p>
  *
  * @author poplar.yfyang
  * @version 1.0 2012-10-27 10:42 AM

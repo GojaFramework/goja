@@ -1,6 +1,7 @@
 package goja.security.shiro;
 
 import goja.core.cache.EhCacheImpl;
+
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;

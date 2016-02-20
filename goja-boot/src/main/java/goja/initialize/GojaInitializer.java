@@ -6,16 +6,19 @@
 
 package goja.initialize;
 
-import com.alibaba.druid.util.JdbcUtils;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Ordering;
-import com.jfinal.kit.PathKit;
 import goja.core.app.GojaConfig;
 import goja.core.cache.Cache;
 import goja.initialize.ctxbox.ClassFinder;
 import goja.logging.LoggerInit;
+import com.jfinal.kit.PathKit;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Ordering;
+
+import com.alibaba.druid.util.JdbcUtils;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.SQLExec;
@@ -23,13 +26,18 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
-import javax.servlet.*;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContainerInitializer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 /**
  * <p> 通过Servlet 3.0 的动态加载方式加载JFinal，免去Web.xml的配置. </p>
