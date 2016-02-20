@@ -162,6 +162,8 @@
         <version>2.5.3</version>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
+          <!-- 不使用默认的profile -->
+          <useReleaseProfile>false</useReleaseProfile>
         </configuration>
       </plugin>
       <!-- resource插件 -->
