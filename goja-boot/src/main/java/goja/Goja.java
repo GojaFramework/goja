@@ -51,7 +51,6 @@ import com.jfinal.json.JacksonFactory;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
-import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
 import com.jfinal.plugin.activerecord.dialect.OracleDialect;
 import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
@@ -81,7 +80,6 @@ import freemarker.template.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
-import org.snaker.jfinal.plugin.SnakerPlugin;
 
 import java.io.File;
 import java.net.URL;
@@ -403,22 +401,22 @@ public class Goja extends JFinalConfig {
      */
     private void initDataSource(final Plugins plugins) {
 
-        final boolean snakerFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_SNAKER, false);
-        final String snalkerDb =
-                GojaConfig.getProperty(GojaPropConst.APP_SNAKER + ".db", DbKit.MAIN_CONFIG_NAME);
+//        final boolean snakerFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_SNAKER, false);
+//        final String snalkerDb =
+//                GojaConfig.getProperty(GojaPropConst.APP_SNAKER + ".db", DbKit.MAIN_CONFIG_NAME);
 
         final Map<String, Properties> dbConfig = GojaConfig.loadDBConfig(GojaConfig.getConfigProps());
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
-            if (db_props != null && !db_props.isEmpty()) {
+//            if (db_props != null && !db_props.isEmpty()) {
 
                 final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
-                // 如果配置启动了工作流引擎
-                if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
-                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin);
-                    plugins.add(snakerPlugin);
-                }
-            }
+//                // 如果配置启动了工作流引擎
+//                if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
+//                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin);
+//                    plugins.add(snakerPlugin);
+//                }
+//            }
         }
 
         if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLINXML, true)) {

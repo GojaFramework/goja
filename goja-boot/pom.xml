@@ -20,11 +20,6 @@
   <dependencies>
     <dependency>
       <groupId>com.github.sogyf</groupId>
-      <artifactId>goja-jfinal</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.sogyf</groupId>
       <artifactId>goja-core</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -35,15 +30,9 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.github.sogyf</groupId>
-      <artifactId>goja-snaker</artifactId>
-      <version>${project.version}</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.github.sogyf</groupId>
-      <artifactId>goja-wxchat</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.jfinal</groupId>
+      <artifactId>jfinal-weixin</artifactId>
+      <version>${jfinal.weixin.version}</version>
       <optional>true</optional>
     </dependency>
 

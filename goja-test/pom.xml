@@ -20,11 +20,6 @@
   <dependencies>
     <dependency>
       <groupId>com.github.sogyf</groupId>
-      <artifactId>goja-jfinal</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.sogyf</groupId>
       <artifactId>goja-core</artifactId>
       <version>${project.version}</version>
     </dependency>
