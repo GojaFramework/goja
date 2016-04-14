@@ -424,7 +424,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     /**
      * For information on the logged in user. <p/> This access is through the way the Cookie and
-     * Session
+     * Sessionw
      *
      * @param <M> Generic parameter.
      * @return user model.
