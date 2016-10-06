@@ -7,6 +7,7 @@ import com.jfinal.kit.HashKit;
 import com.jfinal.kit.StrKit;
 import goja.core.app.GojaConfig;
 import goja.core.kits.lang.Strs;
+
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -17,10 +18,10 @@ import java.io.File;
  */
 public class DateRandomFileRenamePolicy extends FileRenamePolicyWrapper {
 
-    private String parentDir = null;
+    private String parentDir        = null;
     private String appParentDateDir = null;
-    private String parentDateDir = null;
-    private String customName = null;
+    private String parentDateDir    = null;
+    private String customName       = null;
 
     public DateRandomFileRenamePolicy() {
         this(null);

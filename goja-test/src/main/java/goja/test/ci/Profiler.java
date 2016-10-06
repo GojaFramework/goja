@@ -1,6 +1,7 @@
 package goja.test.ci;
 
 import com.google.common.collect.Lists;
+
 import goja.core.StringPool;
 
 import java.text.DecimalFormat;
@@ -292,16 +293,16 @@ public final class Profiler {
     public static final class Step {
         private final List<Step> subStepList = Lists.newArrayListWithCapacity(4);
         private final String message;
-        private final Step parentStep;
-        private final Step firstStep;
-        private final long baseTime;
-        private final long startTime;
+        private final Step   parentStep;
+        private final Step   firstStep;
+        private final long   baseTime;
+        private final long   startTime;
         DecimalFormat pecentageFormat = new DecimalFormat("##.#%");
-        DecimalFormat numberFormat = new DecimalFormat("##,###,###");
-        private long endTime;
-        private long loopCount;
+        DecimalFormat numberFormat    = new DecimalFormat("##,###,###");
+        private long      endTime;
+        private long      loopCount;
         private Throwable exception;
-        private int resultSize;
+        private int       resultSize;
 
         /**
          * 创建一个新的step。

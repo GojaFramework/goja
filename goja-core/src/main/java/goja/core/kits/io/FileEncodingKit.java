@@ -8,6 +8,7 @@ package goja.core.kits.io;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

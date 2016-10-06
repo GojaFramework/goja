@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class ImageHunter {
 
-    private final String filename = "remote";
-    private String savePath = null;
-    private String rootPath = null;
-    private List<String> allowTypes = null;
-    private long maxSize = -1;
+    private final String       filename   = "remote";
+    private       String       savePath   = null;
+    private       String       rootPath   = null;
+    private       List<String> allowTypes = null;
+    private       long         maxSize    = -1;
 
     private List<String> filters = null;
 

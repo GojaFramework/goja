@@ -8,9 +8,11 @@ package goja.core.kits.lang;
 
 import goja.core.StringPool;
 import goja.core.encry.EncodeKit;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+
 import sun.misc.BASE64Encoder;
 
 import java.security.MessageDigest;

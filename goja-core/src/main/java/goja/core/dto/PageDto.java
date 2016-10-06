@@ -9,12 +9,14 @@ package goja.core.dto;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.core.kits.lang.Strs;
 import goja.core.db.Condition;
 import goja.core.db.RequestParam;
 import goja.core.db.RequestParam.Direction;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Enumeration;
@@ -35,13 +37,13 @@ public class PageDto {
 
     public final int page;
     public final int pageSize;
-    public final List<RequestParam> params = Lists.newArrayListWithCapacity(3);
-    public final List<Object> query_params = Lists.newArrayListWithCapacity(3);
-    private final String sort;
+    public final List<RequestParam> params       = Lists.newArrayListWithCapacity(3);
+    public final List<Object>       query_params = Lists.newArrayListWithCapacity(3);
+    private final String    sort;
     private final Direction direction;
-    private final boolean hasSort;
-    private final Map<String, Object> fq = Maps.newHashMap();
-    private final StringBuilder filter_url = new StringBuilder();
+    private final boolean   hasSort;
+    private final Map<String, Object> fq         = Maps.newHashMap();
+    private final StringBuilder       filter_url = new StringBuilder();
 
     private PageDto(int pageNo, int pageSize,
                     String sort,

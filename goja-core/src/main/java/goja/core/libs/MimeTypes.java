@@ -7,6 +7,7 @@
 package goja.core.libs;
 
 import goja.core.StringPool;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

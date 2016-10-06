@@ -11,48 +11,49 @@ import com.google.common.base.MoreObjects;
  */
 public final class SqlNode {
 
-  public static final String WHERE_MARKER = "-- @where";
-  public static final String CONDITION_MARKER = "-- @condition";
+    public static final String WHERE_MARKER     = "-- @where";
+    public static final String CONDITION_MARKER = "-- @condition";
 
 
-  public final String sql;
+    public final String sql;
 
-  /**
-   * 是否有分页的WHERE子句
-   */
-  public final boolean where;
+    /**
+     * 是否有分页的WHERE子句
+     */
+    public final boolean where;
 
-  /**
-   * 是否有条件
-   */
-  public final boolean condition;
+    /**
+     * 是否有条件
+     */
+    public final boolean condition;
 
-  public final String conditionSql;
+    public final String conditionSql;
 
-  public final String selectSql;
+    public final String selectSql;
 
-  public final String whereSql;
-
-
-  public SqlNode(String sql, boolean where, boolean condition,
-      String conditionSql, String selectSql, String whereSql) {
-    this.sql = sql;
-
-    this.where = where;
-    this.condition = condition;
-    this.conditionSql = conditionSql;
-    this.selectSql = selectSql;
-    this.whereSql = whereSql;
-  }
+    public final String whereSql;
 
 
-  @Override public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("sql", sql)
-        .add("where", where)
-        .add("condition", condition)
-        .add("selectSql", selectSql)
-        .add("whereSql", whereSql)
-        .toString();
-  }
+    public SqlNode(String sql, boolean where, boolean condition,
+                   String conditionSql, String selectSql, String whereSql) {
+        this.sql = sql;
+
+        this.where = where;
+        this.condition = condition;
+        this.conditionSql = conditionSql;
+        this.selectSql = selectSql;
+        this.whereSql = whereSql;
+    }
+
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("sql", sql)
+                .add("where", where)
+                .add("condition", condition)
+                .add("selectSql", selectSql)
+                .add("whereSql", whereSql)
+                .toString();
+    }
 }

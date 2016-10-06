@@ -7,7 +7,9 @@
 package goja.core.kits.io;
 
 import com.google.common.collect.Sets;
+
 import goja.core.StringPool;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 

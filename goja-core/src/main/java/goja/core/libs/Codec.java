@@ -8,6 +8,7 @@ package goja.core.libs;
 
 import goja.core.StringPool;
 import goja.core.exceptions.UnexpectedException;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;

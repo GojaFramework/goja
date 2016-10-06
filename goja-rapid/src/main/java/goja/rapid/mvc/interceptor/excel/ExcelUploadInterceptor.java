@@ -15,6 +15,7 @@ package goja.rapid.mvc.interceptor.excel;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+
 import com.jfinal.aop.Invocation;
 import com.jfinal.aop.PrototypeInterceptor;
 import com.jfinal.core.Controller;
@@ -25,91 +26,92 @@ import goja.core.kits.reflect.Reflect;
 import goja.rapid.excel.PoiImporter;
 import goja.rapid.excel.Rule;
 import goja.rapid.excel.filter.RowFilter;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public abstract class ExcelUploadInterceptor<M extends Model<?>> extends PrototypeInterceptor {
 
-  protected final Log LOG = Log.getLog(getClass());
+    protected final Log LOG = Log.getLog(getClass());
 
-  private Class<?> clazz;
+    private Class<?> clazz;
 
-  private Rule rule;
+    private Rule rule;
 
-  public abstract Rule configRule();
-
-  public abstract void callback(M model);
-
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public ExcelUploadInterceptor() {
-    Type genericSuperclass = getClass().getGenericSuperclass();
-    clazz =
-        (Class<? extends ExcelUploadInterceptor>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
-  }
-
-  @SuppressWarnings("unchecked")
-  public void doIntercept(Invocation ai) {
-    rule = configRule();
-    Controller controller = ai.getController();
-    List<Model<?>> list = PoiImporter.processSheet(controller.getFile().getFile(), rule, clazz);
-    execPreListProcessor(list);
-    for (Model<?> model : list) {
-      execPreExcelProcessor(model);
-      callback((M) model);
-      execPostExcelProcessor(model);
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public ExcelUploadInterceptor() {
+        Type genericSuperclass = getClass().getGenericSuperclass();
+        clazz =
+                (Class<? extends ExcelUploadInterceptor>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
     }
-    execPostListProcessor(list);
-    ai.invoke();
-  }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private void execPreListProcessor(List<?> list) {
-    String preListProcessorClassName = rule.getPreListProcessor();
-    if (StrKit.notBlank(preListProcessorClassName)) {
-      PreListProcessor preListProcessor = Reflect.on(preListProcessorClassName).create().get();
-      preListProcessor.process(list);
-    }
-  }
+    public abstract Rule configRule();
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private void execPostListProcessor(List<?> list) {
-    String postListProcessorClassName = rule.getPostListProcessor();
-    if (StrKit.notBlank(postListProcessorClassName)) {
-      PostListProcessor postListProcessor = Reflect.on(postListProcessorClassName).create().get();
-      postListProcessor.process(list);
-    }
-  }
+    public abstract void callback(M model);
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private void execPreExcelProcessor(Object obj) {
-    String preExcelProcessorClassName = rule.getPreExcelProcessor();
-    if (StrKit.notBlank(preExcelProcessorClassName)) {
-      PreExcelProcessor preExcelProcessor = Reflect.on(preExcelProcessorClassName).create().get();
-      preExcelProcessor.process(obj);
+    @SuppressWarnings("unchecked")
+    public void doIntercept(Invocation ai) {
+        rule = configRule();
+        Controller controller = ai.getController();
+        List<Model<?>> list = PoiImporter.processSheet(controller.getFile().getFile(), rule, clazz);
+        execPreListProcessor(list);
+        for (Model<?> model : list) {
+            execPreExcelProcessor(model);
+            callback((M) model);
+            execPostExcelProcessor(model);
+        }
+        execPostListProcessor(list);
+        ai.invoke();
     }
-  }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private void execPostExcelProcessor(Object obj) {
-    String postExcelProcessorClassName = rule.getPostExcelProcessor();
-    if (StrKit.notBlank(postExcelProcessorClassName)) {
-      PostExcelProcessor postExcelProcessor =
-          Reflect.on(postExcelProcessorClassName).create().get();
-      postExcelProcessor.process(obj);
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void execPreListProcessor(List<?> list) {
+        String preListProcessorClassName = rule.getPreListProcessor();
+        if (StrKit.notBlank(preListProcessorClassName)) {
+            PreListProcessor preListProcessor = Reflect.on(preListProcessorClassName).create().get();
+            preListProcessor.process(list);
+        }
     }
-  }
 
-  @SuppressWarnings("unused")
-  private List<RowFilter> getRowFilterList(String rowFilter) {
-    List<RowFilter> rowFilterList = Lists.newArrayList();
-    if (Strings.isNullOrEmpty(rowFilter)) {
-      return rowFilterList;
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void execPostListProcessor(List<?> list) {
+        String postListProcessorClassName = rule.getPostListProcessor();
+        if (StrKit.notBlank(postListProcessorClassName)) {
+            PostListProcessor postListProcessor = Reflect.on(postListProcessorClassName).create().get();
+            postListProcessor.process(list);
+        }
     }
-    String[] rowFilters = rowFilter.split(",");
-    for (String filter : rowFilters) {
-      rowFilterList.add((RowFilter) Reflect.on(filter).create().get());
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void execPreExcelProcessor(Object obj) {
+        String preExcelProcessorClassName = rule.getPreExcelProcessor();
+        if (StrKit.notBlank(preExcelProcessorClassName)) {
+            PreExcelProcessor preExcelProcessor = Reflect.on(preExcelProcessorClassName).create().get();
+            preExcelProcessor.process(obj);
+        }
     }
-    return rowFilterList;
-  }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void execPostExcelProcessor(Object obj) {
+        String postExcelProcessorClassName = rule.getPostExcelProcessor();
+        if (StrKit.notBlank(postExcelProcessorClassName)) {
+            PostExcelProcessor postExcelProcessor =
+                    Reflect.on(postExcelProcessorClassName).create().get();
+            postExcelProcessor.process(obj);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private List<RowFilter> getRowFilterList(String rowFilter) {
+        List<RowFilter> rowFilterList = Lists.newArrayList();
+        if (Strings.isNullOrEmpty(rowFilter)) {
+            return rowFilterList;
+        }
+        String[] rowFilters = rowFilter.split(",");
+        for (String filter : rowFilters) {
+            rowFilterList.add((RowFilter) Reflect.on(filter).create().get());
+        }
+        return rowFilterList;
+    }
 }

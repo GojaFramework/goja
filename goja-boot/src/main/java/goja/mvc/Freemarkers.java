@@ -40,12 +40,12 @@ import java.util.Map;
  */
 public class Freemarkers {
 
-    public static final String UPDATE_RESPONSE_TEMPLATE = "__updateResponseTemplate";
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Freemarkers.class);
-    private static final StringTemplateLoader stringLoader = new StringTemplateLoader();
+    public static final  String               UPDATE_RESPONSE_TEMPLATE = "__updateResponseTemplate";
+    private static final org.slf4j.Logger     logger                   = LoggerFactory.getLogger(Freemarkers.class);
+    private static final StringTemplateLoader stringLoader             = new StringTemplateLoader();
     //配置
-    private static Configuration appConfig = null;
-    private static Configuration stringConfig = null;
+    private static       Configuration        appConfig                = null;
+    private static       Configuration        stringConfig             = null;
 
     static {
         getAppConfiguration();

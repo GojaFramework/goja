@@ -7,6 +7,7 @@
 package goja.core.date;
 
 import java.text.SimpleDateFormat;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -19,43 +20,43 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public interface DateFormatter {
 
-  /**
-   * 带有间隔符号年月日
-   */
-  String YYYY_MM_DD = "yyyy-MM-dd";
-  /**
-   * 年月日,不带间隔符号
-   */
-  String YYYYMMDD = "yyyyMMdd";
-  /**
-   * 年月日时分秒,不带间隔符号
-   */
-  String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
+    /**
+     * 带有间隔符号年月日
+     */
+    String YYYY_MM_DD     = "yyyy-MM-dd";
+    /**
+     * 年月日,不带间隔符号
+     */
+    String YYYYMMDD       = "yyyyMMdd";
+    /**
+     * 年月日时分秒,不带间隔符号
+     */
+    String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
 
-  /**
-   * yyyy-MM-dd HH:mm formatter string.
-   */
-  String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
+    /**
+     * yyyy-MM-dd HH:mm formatter string.
+     */
+    String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
 
-  /**
-   * yyyy-MM-dd HH:mm:ss formatter string.
-   */
-  String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * yyyy-MM-dd HH:mm:ss formatter string.
+     */
+    String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
-  /**
-   * Date format method
-   * <pre>
-   *     yyyy-MM-dd HH:mm
-   * </pre>
-   */
-  SimpleDateFormat DP_YYYY_MM_DD_HH_MM = new SimpleDateFormat(DateFormatter.YYYY_MM_DD_HH_MM);
+    /**
+     * Date format method
+     * <pre>
+     *     yyyy-MM-dd HH:mm
+     * </pre>
+     */
+    SimpleDateFormat DP_YYYY_MM_DD_HH_MM = new SimpleDateFormat(DateFormatter.YYYY_MM_DD_HH_MM);
 
-  /**
-   * The date of the Joda format method
-   * <pre>
-   *     yyyy-MM-dd HH:mm:ss
-   * </pre>
-   */
-  DateTimeFormatter DTP_YYYY_MM_DD_HH_MM_SS =
-      DateTimeFormat.forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS);
+    /**
+     * The date of the Joda format method
+     * <pre>
+     *     yyyy-MM-dd HH:mm:ss
+     * </pre>
+     */
+    DateTimeFormatter DTP_YYYY_MM_DD_HH_MM_SS =
+            DateTimeFormat.forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS);
 }

@@ -24,11 +24,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class Job<V> extends Invoker.Invocation implements Callable<V> {
 
-    public static final String invocationType = "GojaJob";
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Job.class);
+    public static final  String           invocationType = "GojaJob";
+    private static final org.slf4j.Logger logger         = LoggerFactory.getLogger(Job.class);
     protected ExecutorService executor;
 
-    protected long lastRun = 0;
+    protected long    lastRun  = 0;
     protected boolean wasError = false;
 
     protected Throwable lastException = null;

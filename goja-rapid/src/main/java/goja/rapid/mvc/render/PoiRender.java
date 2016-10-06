@@ -3,9 +3,11 @@ package goja.rapid.mvc.render;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import goja.rapid.excel.PoiExporter;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +23,13 @@ public class PoiRender extends Render {
     private static final Logger logger = LoggerFactory.getLogger(PoiRender.class);
 
     private final static String CONTENT_TYPE = "application/msexcel;charset=" + getEncoding();
-    private final List<?>[] data;
-    private String[][] headers;
+    private final List<?>[]  data;
+    private       String[][] headers;
     private String[] sheetNames = new String[]{};
     private int cellWidth;
-    private String[] columns = new String[]{};
-    private String fileName = "file1.xls";
-    private int headerRow;
+    private String[] columns  = new String[]{};
+    private String   fileName = "file1.xls";
+    private int    headerRow;
     private String version;
 
     public PoiRender(List<?>[] data) {

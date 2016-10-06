@@ -16,6 +16,7 @@ package goja.rapid.mvc.kits;
 
 import java.security.SecureRandom;
 import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -23,10 +24,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SessionIds {
 
-    private static final SessionIds me = new SessionIds();
-    private static final Object lock = new Object();
-    protected static Random random;
-    private static boolean weakRandom;
+    private static final SessionIds me   = new SessionIds();
+    private static final Object     lock = new Object();
+    protected static Random  random;
+    private static   boolean weakRandom;
 
     private SessionIds() {
         try {

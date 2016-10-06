@@ -8,6 +8,7 @@ package goja.core.kits.reflect;
 
 
 import com.google.common.base.Preconditions;
+
 import goja.core.kits.collection.ConcurrentReferenceHashMap;
 
 import java.lang.reflect.*;
@@ -43,11 +44,11 @@ public class ReflectionKit {
     /**
      * Cache for {@link Class#getDeclaredMethods()}, allowing for fast resolution.
      */
-    private static final Map<Class<?>, Method[]> declaredMethodsCache = new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
+    private static final Map<Class<?>, Method[]> declaredMethodsCache  = new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
     /**
      * Pre-built FieldFilter that matches all non-static, non-final fields.
      */
-    public static FieldFilter COPYABLE_FIELDS = new FieldFilter() {
+    public static        FieldFilter             COPYABLE_FIELDS       = new FieldFilter() {
 
         @Override
         public boolean matches(Field field) {
@@ -57,7 +58,7 @@ public class ReflectionKit {
     /**
      * Pre-built MethodFilter that matches all non-bridge methods.
      */
-    public static MethodFilter NON_BRIDGED_METHODS = new MethodFilter() {
+    public static        MethodFilter            NON_BRIDGED_METHODS   = new MethodFilter() {
 
         @Override
         public boolean matches(Method method) {
@@ -68,7 +69,7 @@ public class ReflectionKit {
      * Pre-built MethodFilter that matches all non-bridge methods
      * which are not declared on {@code java.lang.Object}.
      */
-    public static MethodFilter USER_DECLARED_METHODS = new MethodFilter() {
+    public static        MethodFilter            USER_DECLARED_METHODS = new MethodFilter() {
 
         @Override
         public boolean matches(Method method) {

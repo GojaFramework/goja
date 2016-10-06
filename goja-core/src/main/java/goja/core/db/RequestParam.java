@@ -8,7 +8,7 @@ package goja.core.db;
  * @since JDK 1.6
  */
 public class RequestParam {
-    public final String key;
+    public final String    key;
     public final Condition condition;
 
     public RequestParam(String key, String condition) {

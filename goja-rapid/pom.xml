@@ -76,12 +76,7 @@
       <artifactId>quartz-jobs</artifactId>
       <version>${quartz.version}</version>
     </dependency>
-    <!--单点登录-->
-    <dependency>
-      <groupId>com.baomidou</groupId>
-      <artifactId>kisso</artifactId>
-      <version>${kisso.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>net.sf.jxls</groupId>
       <artifactId>jxls-core</artifactId>

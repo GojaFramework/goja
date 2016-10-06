@@ -14,9 +14,9 @@ public class DTResponse<E> implements Serializable {
     private static final long serialVersionUID = -491962368629446336L;
 
     private final List<E> data;
-    private final long recordsTotal;
-    private final long recordsFiltered;
-    private final int draw;
+    private final long    recordsTotal;
+    private final long    recordsFiltered;
+    private final int     draw;
 
     public DTResponse(List<E> data, long recordsTotal, long recordsFiltered, int draw) {
         this.data = data;

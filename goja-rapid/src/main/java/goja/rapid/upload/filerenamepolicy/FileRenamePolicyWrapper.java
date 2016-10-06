@@ -4,6 +4,7 @@
 package goja.rapid.upload.filerenamepolicy;
 
 import com.oreilly.servlet.multipart.FileRenamePolicy;
+
 import goja.core.StringPool;
 
 import java.io.File;
@@ -37,7 +38,6 @@ public abstract class FileRenamePolicyWrapper implements FileRenamePolicy {
      * @param f    文件
      * @param name 原名称
      * @param ext  文件扩展名
-     * @return
      */
     public abstract File nameProcess(File f, String name, String ext);
 
@@ -51,8 +51,6 @@ public abstract class FileRenamePolicyWrapper implements FileRenamePolicy {
 
     /**
      * Add File Separator
-     *
-     * @param path
      */
     public String appendFileSeparator(String path) {
         if (null == path) {

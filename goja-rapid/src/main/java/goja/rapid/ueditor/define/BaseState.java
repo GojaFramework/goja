@@ -2,6 +2,7 @@ package goja.rapid.ueditor.define;
 
 
 import com.google.common.collect.Maps;
+
 import goja.rapid.ueditor.kit.UEKit;
 
 import java.util.Iterator;
@@ -11,7 +12,7 @@ import java.util.Map;
 public class BaseState implements State {
 
     private boolean state = false;
-    private String info = null;
+    private String  info  = null;
 
     private Map<String, String> infoMap = Maps.newHashMap();
 

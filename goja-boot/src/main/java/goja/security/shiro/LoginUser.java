@@ -23,7 +23,7 @@ public class LoginUser<U extends Model> implements Serializable {
     /**
      * 登录用户密码
      */
-    private final String password;
+    private final String     password;
 
     /**
      * 用户密码盐值

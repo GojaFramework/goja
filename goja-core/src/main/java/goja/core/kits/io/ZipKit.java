@@ -10,6 +10,7 @@ import goja.core.StringPool;
 import goja.core.kits.lang.CharKit;
 import goja.core.kits.lang.Wildcard;
 import goja.core.kits.stream.StreamUtil;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,7 +27,7 @@ import java.util.zip.*;
  */
 public class ZipKit {
 
-    public static final String ZIP_EXT = ".zip";
+    public static final String ZIP_EXT  = ".zip";
     public static final String GZIP_EXT = ".gz";
     public static final String ZLIB_EXT = ".zlib";
 
@@ -322,9 +323,9 @@ public class ZipKit {
      */
     public static class AddToZip {
         private final ZipOutputStream zos;
-        private File file;
-        private String path;
-        private String comment;
+        private       File            file;
+        private       String          path;
+        private       String          comment;
         private boolean recursive = true;
 
         private AddToZip(ZipOutputStream zos) {

@@ -39,11 +39,11 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("UnusedDeclaration")
 public final class Invoker {
 
-    private static final Logger logger = LoggerFactory.getLogger(Invoker.class);
+    private static final Logger                      logger   = LoggerFactory.getLogger(Invoker.class);
     /**
      * Main executor for requests invocations.
      */
-    public static ScheduledThreadPoolExecutor executor = null;
+    public static        ScheduledThreadPoolExecutor executor = null;
 
     /**
      * Init executor at load time.
@@ -112,7 +112,7 @@ public final class Invoker {
 
         public static ThreadLocal<InvocationContext> current = new ThreadLocal<InvocationContext>();
         private final List<Annotation> annotations;
-        private final String invocationType;
+        private final String           invocationType;
 
         public InvocationContext(String invocationType) {
             this.invocationType = invocationType;

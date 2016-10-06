@@ -4,6 +4,7 @@ import goja.Goja;
 import goja.core.app.GojaConfig;
 import goja.core.kits.reflect.Reflect;
 import goja.initialize.ctxbox.ClassFinder;
+
 import org.junit.BeforeClass;
 
 /**

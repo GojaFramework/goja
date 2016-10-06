@@ -7,6 +7,7 @@
 package goja.core.encry;
 
 import goja.core.kits.lang.ExceptionKit;
+
 import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
@@ -23,8 +24,8 @@ import java.security.SecureRandom;
  * @since JDK 1.5
  */
 public class DigestsKit {
-    private static final String MD5 = "MD5";
-    private static SecureRandom random = new SecureRandom();
+    private static final String       MD5    = "MD5";
+    private static       SecureRandom random = new SecureRandom();
 
     /**
      * 对输入字符串进行sha1散列.

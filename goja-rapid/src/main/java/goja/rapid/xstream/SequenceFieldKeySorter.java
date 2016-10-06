@@ -3,6 +3,7 @@ package goja.rapid.xstream;
 import com.beust.jcommander.internal.Maps;
 import com.thoughtworks.xstream.converters.reflection.FieldKey;
 import com.thoughtworks.xstream.converters.reflection.FieldKeySorter;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class SequenceFieldKeySorter implements FieldKeySorter {
                 if (fieldName != null) {
                     for (Map.Entry<FieldKey, Field> fieldEntry : fields) {
                         if (fieldName.equals(fieldEntry.getKey().getFieldName())) {
-                            result.put(fieldEntry.getKey(),fieldEntry.getValue());
+                            result.put(fieldEntry.getKey(), fieldEntry.getValue());
                         }
                     }
                 }

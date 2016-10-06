@@ -10,8 +10,10 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+
 import goja.core.StringPool;
 import goja.core.kits.reflect.ClassKit;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -31,31 +33,31 @@ public class ResourceKit {
     /**
      * URL prefix for loading from the file system: "file:"
      */
-    public static final String FILE_URL_PREFIX = "file:";
+    public static final String FILE_URL_PREFIX      = "file:";
     /**
      * URL protocol for a file in the file system: "file"
      */
-    public static final String URL_PROTOCOL_FILE = "file";
+    public static final String URL_PROTOCOL_FILE    = "file";
     /**
      * URL protocol for an entry from a jar file: "jar"
      */
-    public static final String URL_PROTOCOL_JAR = "jar";
+    public static final String URL_PROTOCOL_JAR     = "jar";
     /**
      * URL protocol for an entry from a zip file: "zip"
      */
-    public static final String URL_PROTOCOL_ZIP = "zip";
+    public static final String URL_PROTOCOL_ZIP     = "zip";
     /**
      * URL protocol for an entry from a JBoss jar file: "vfszip"
      */
-    public static final String URL_PROTOCOL_VFSZIP = "vfszip";
+    public static final String URL_PROTOCOL_VFSZIP  = "vfszip";
     /**
      * URL protocol for an entry from a WebSphere jar file: "wsjar"
      */
-    public static final String URL_PROTOCOL_WSJAR = "wsjar";
+    public static final String URL_PROTOCOL_WSJAR   = "wsjar";
     /**
      * Separator between JAR URL and file path within the JAR
      */
-    public static final String JAR_URL_SEPARATOR = "!/";
+    public static final String JAR_URL_SEPARATOR    = "!/";
 
     private ResourceKit() {
     }

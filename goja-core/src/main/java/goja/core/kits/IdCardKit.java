@@ -64,7 +64,7 @@ public abstract class IdCardKit {
      */
     public static final int MIN = 1930;
 
-    public static final Map<String, String> cityCodes = Maps.newHashMap();
+    public static final Map<String, String>  cityCodes   = Maps.newHashMap();
     /**
      * 台湾身份首字母对应数字
      */

@@ -15,7 +15,7 @@ import java.io.File;
 public class CustomParentDirFileRenamePolicy extends
         FileRenamePolicyWrapper {
 
-    private String parentDir = null;
+    private String     parentDir  = null;
     private NamePolicy namepolicy = NamePolicy.ORIGINAL_NAME;
 
     public CustomParentDirFileRenamePolicy(String parentDir, NamePolicy namepolicy) {

@@ -1,9 +1,9 @@
-
 package goja.rapid.excel;
 
 import com.google.common.collect.Lists;
 
 import javax.xml.bind.annotation.*;
+
 import java.util.List;
 
 
@@ -127,6 +127,22 @@ public class Rule {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "name='" + name + '\'' +
+                ", sheetNo=" + sheetNo +
+                ", start=" + start +
+                ", end=" + end +
+                ", rowFilter='" + rowFilter + '\'' +
+                ", preExcelProcessor='" + preExcelProcessor + '\'' +
+                ", postExcelProcessor='" + postExcelProcessor + '\'' +
+                ", preListProcessor='" + preListProcessor + '\'' +
+                ", postListProcessor='" + postListProcessor + '\'' +
+                ", cells=" + cells +
+                '}';
+    }
+
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Cell {
 
@@ -193,21 +209,5 @@ public class Rule {
                     ", validate='" + validate + '\'' +
                     '}';
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Rule{" +
-                "name='" + name + '\'' +
-                ", sheetNo=" + sheetNo +
-                ", start=" + start +
-                ", end=" + end +
-                ", rowFilter='" + rowFilter + '\'' +
-                ", preExcelProcessor='" + preExcelProcessor + '\'' +
-                ", postExcelProcessor='" + postExcelProcessor + '\'' +
-                ", preListProcessor='" + preListProcessor + '\'' +
-                ", postListProcessor='" + postListProcessor + '\'' +
-                ", cells=" + cells +
-                '}';
     }
 }

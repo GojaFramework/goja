@@ -34,9 +34,8 @@ import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.job.QuartzPlugin;
 import goja.rapid.mongo.MongoPlugin;
-import goja.rapid.mvc.kisso.KissoJfinalPlugin;
-import goja.rapid.syslog.LogProcessor;
-import goja.rapid.syslog.SysLogInterceptor;
+import goja.rapid.mvc.interceptor.syslog.LogProcessor;
+import goja.rapid.mvc.interceptor.syslog.SysLogInterceptor;
 import goja.security.shiro.SecurityUserData;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -104,16 +103,16 @@ import redis.clients.jedis.Protocol;
  */
 public class Goja extends JFinalConfig {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Goja.class);
-    public static boolean initlization = false;
-    public static boolean started = false;
+    private static final org.slf4j.Logger logger       = LoggerFactory.getLogger(Goja.class);
+    public static        boolean          initlization = false;
+    public static        boolean          started      = false;
     // the application configuration.
-    public static Properties configuration;
+    public static Properties       configuration;
     // the application view path.
-    public static String viewPath;
-    public static String domain;
-    public static String appName;
-    public static String appVersion;
+    public static String           viewPath;
+    public static String           domain;
+    public static String           appName;
+    public static String           appVersion;
     public static SecurityUserData securityUserData;
     public static File applicationPath = null;
     private Routes _routes;
@@ -276,10 +275,6 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        if (GojaConfig.isSsoLogin()) {
-            plugins.add(new KissoJfinalPlugin());
-        }
-
         final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
         if (plugins_clses != null && !plugins_clses.isEmpty()) {
             PluginBind pluginBind;
@@ -312,8 +307,7 @@ public class Goja extends JFinalConfig {
                 if (config_url != null) {
                     SysLogInterceptor sysLogInterceptor = new SysLogInterceptor();
                     sysLogInterceptor =
-                            sysLogInterceptor.setLogProcesser((LogProcessor) log_percess_impl_cls.newInstance(),
-                                    config_url.getPath());
+                            sysLogInterceptor.setLogProcesser((LogProcessor) log_percess_impl_cls.newInstance());
                     if (sysLogInterceptor != null) {
                         interceptors.add(sysLogInterceptor);
                     }
@@ -410,7 +404,7 @@ public class Goja extends JFinalConfig {
             final Properties db_props = dbConfig.get(db_config);
 //            if (db_props != null && !db_props.isEmpty()) {
 
-                final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
+            final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
 //                // 如果配置启动了工作流引擎
 //                if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
 //                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin);

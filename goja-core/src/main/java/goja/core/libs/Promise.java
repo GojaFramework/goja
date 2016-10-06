@@ -27,7 +27,7 @@ public class Promise<V> implements Future<V>, Action<V> {
 
     List<Action<Promise<V>>> callbacks = Lists.newArrayList();
 
-    V result = null;
+    V         result    = null;
     Throwable exception = null;
 
     public static <T> Promise<List<T>> waitAll(final Promise<T>... promises) {

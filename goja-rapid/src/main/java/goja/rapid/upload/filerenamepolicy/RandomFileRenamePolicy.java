@@ -14,9 +14,12 @@
 package goja.rapid.upload.filerenamepolicy;
 
 import com.jfinal.kit.HashKit;
+
 import com.oreilly.servlet.multipart.FileRenamePolicy;
+
 import goja.core.StringPool;
 import goja.core.kits.lang.Strs;
+
 import java.io.File;
 
 /**
@@ -26,17 +29,17 @@ import java.io.File;
  */
 public class RandomFileRenamePolicy implements FileRenamePolicy {
 
-  @Override
-  public File rename(File f) {
-    if (null == f) {
-      return null;
+    @Override
+    public File rename(File f) {
+        if (null == f) {
+            return null;
+        }
+        String name = f.getName();
+        String ext = StringPool.EMPTY;
+        int dot = name.lastIndexOf(StringPool.DOT);
+        if (dot != -1) {
+            ext = name.substring(dot);
+        }
+        return (new File(f.getParent(), HashKit.md5(Strs.randomStr()) + ext));
     }
-    String name = f.getName();
-    String ext = StringPool.EMPTY;
-    int dot = name.lastIndexOf(StringPool.DOT);
-    if (dot != -1) {
-      ext = name.substring(dot);
-    }
-    return (new File(f.getParent(), HashKit.md5(Strs.randomStr()) + ext));
-  }
 }

@@ -36,12 +36,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class GeoconvService {
 
-    private static final String BAIDU_GEOCONV_PATH = "http://api.map.baidu.com/geoconv/v1/";
+    private static final String        BAIDU_GEOCONV_PATH = "http://api.map.baidu.com/geoconv/v1/";
     /**
      * 百度开发者账号
      */
-    private static List<String> aks = Lists.newArrayList();
-    private AtomicInteger atomic = new AtomicInteger();
+    private static       List<String>  aks                = Lists.newArrayList();
+    private              AtomicInteger atomic             = new AtomicInteger();
 
     /**
      * 私有构造函数,确保对象只能通过单例方法来调用.

@@ -2,9 +2,11 @@ package goja.rapid.ueditor;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.core.app.GojaPropConst;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -25,15 +27,15 @@ public final class UEConfig {
     /**
      * 执行上传图片的action名称
      */
-    private String imageActionName;
+    private String       imageActionName;
     /**
      * 提交的图片表单名称
      */
-    private String imageFieldName;
+    private String       imageFieldName;
     /**
      * 上传大小限制，单位B
      */
-    private long imageMaxSize;
+    private long         imageMaxSize;
     /**
      * 上传图片格式显示
      */
@@ -41,19 +43,19 @@ public final class UEConfig {
     /**
      * 是否压缩图片
      */
-    private boolean imageCompressEnable;
+    private boolean      imageCompressEnable;
     /**
      * 图片压缩最长边限制
      */
-    private int imageCompressBorder;
+    private int          imageCompressBorder;
     /**
      * 插入的图片浮动方式
      */
-    private String imageInsertAlign;
+    private String       imageInsertAlign;
     /**
      * 图片访问路径前缀
      */
-    private String imageUrlPrefix;
+    private String       imageUrlPrefix;
 
     /*涂鸦图片上传配置项*/
     /**
@@ -77,7 +79,7 @@ public final class UEConfig {
     /**
      * 上传大小限制，单位B
      */
-    private long scrawlMaxSize;
+    private long   scrawlMaxSize;
     /**
      * 图片访问路径前缀
      */
@@ -103,7 +105,7 @@ public final class UEConfig {
     /**
      * 插入的图片浮动方式
      */
-    private String snapscreenInsertAlign;
+    private String       snapscreenInsertAlign;
     /**
      * 执行抓取远程图片的action名称
      */
@@ -111,23 +113,23 @@ public final class UEConfig {
     /**
      * 提交的图片列表表单名称
      */
-    private String catcherActionName;
+    private String       catcherActionName;
     /**
      * 上传保存路径,可以自定义保存路径和文件名格式
      */
-    private String catcherFieldName;
+    private String       catcherFieldName;
     /**
      * 图片访问路径前缀
      */
-    private String catcherPathFormat;
+    private String       catcherPathFormat;
     /**
      *
      */
-    private String catcherUrlPrefix;
+    private String       catcherUrlPrefix;
     /**
      * 上传大小限制 单位B
      */
-    private int catcherMaxSize;
+    private int          catcherMaxSize;
 
     /*上传视频配置*/
     /**
@@ -137,23 +139,23 @@ public final class UEConfig {
     /**
      * 执行上传视频的action名称
      */
-    private String videoActionName;
+    private String       videoActionName;
     /**
      * 提交的视频表单名称
      */
-    private String videoFieldName;
+    private String       videoFieldName;
     /**
      * 上传保存路径,可以自定义保存路径和文件名格式
      */
-    private String videoPathFormat;
+    private String       videoPathFormat;
     /**
      * 视频访问路径前缀
      */
-    private String videoUrlPrefix;
+    private String       videoUrlPrefix;
     /**
      * 上传大小限制，单位B，默认100MB
      */
-    private long videoMaxSize;
+    private long         videoMaxSize;
 
     /*上传文件配置*/
     /**
@@ -163,23 +165,23 @@ public final class UEConfig {
     /**
      * controller里,执行上传视频的action名称
      */
-    private String fileActionName;
+    private String       fileActionName;
     /**
      * 提交的文件表单名称
      */
-    private String fileFieldName;
+    private String       fileFieldName;
     /**
      * 上传保存路径,可以自定义保存路径和文件名格式
      */
-    private String filePathFormat;
+    private String       filePathFormat;
     /**
      * 文件访问路径前缀
      */
-    private String fileUrlPrefix;
+    private String       fileUrlPrefix;
     /**
      * 上传大小限制，单位B，默认50MB
      */
-    private long fileMaxSize;
+    private long         fileMaxSize;
 
     /*指定要列出图片的目录*/
     /**
@@ -189,23 +191,23 @@ public final class UEConfig {
     /**
      * 指定要列出图片的目录
      */
-    private String imageManagerActionName;
+    private String       imageManagerActionName;
     /**
      * 每次列出文件数量
      */
-    private String imageManagerListPath;
+    private String       imageManagerListPath;
     /**
      * 图片访问路径前缀
      */
-    private int imageManagerListSize;
+    private int          imageManagerListSize;
     /**
      * 插入的图片浮动方式
      */
-    private String imageManagerUrlPrefix;
+    private String       imageManagerUrlPrefix;
     /**
      *
      */
-    private String imageManagerInsertAlign;
+    private String       imageManagerInsertAlign;
 
     /*列出指定目录下的文件*/
     /**
@@ -215,19 +217,19 @@ public final class UEConfig {
     /**
      * 执行文件管理的action名称
      */
-    private String fileManagerActionName;
+    private String       fileManagerActionName;
     /**
      * 指定要列出文件的目录
      */
-    private String fileManagerListPath;
+    private String       fileManagerListPath;
     /**
      * 文件访问路径前缀
      */
-    private String fileManagerUrlPrefix;
+    private String       fileManagerUrlPrefix;
     /**
      * 每次列出文件数量
      */
-    private int fileManagerListSize;
+    private int          fileManagerListSize;
     /**
      * 列出的文件类型
      */

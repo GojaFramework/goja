@@ -8,6 +8,7 @@ package goja.core.encry;
 
 import goja.core.StringPool;
 import goja.core.kits.lang.ExceptionKit;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
@@ -29,16 +30,16 @@ public class EncodeKit {
     /**
      * sha-算法名称
      */
-    public static final String HASH_ALGORITHM = "SHA-1";
+    public static final  String HASH_ALGORITHM   = "SHA-1";
     /**
      * 计算次数
      */
-    public static final int HASH_INTERATIONS = 1024;
+    public static final  int    HASH_INTERATIONS = 1024;
     /**
      * 长度
      */
-    public static final int SALT_SIZE = 8;
-    private static final char[] BASE62 =
+    public static final  int    SALT_SIZE        = 8;
+    private static final char[] BASE62           =
             "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
     /**

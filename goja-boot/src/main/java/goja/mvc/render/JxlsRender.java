@@ -38,8 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 public class JxlsRender extends Render {
     private static final String CONTENT_TYPE = "application/vnd.ms-excel;charset=" + getEncoding();
     private final String templetFile;
-    private Map<String, Object> beans = Maps.newHashMap();
-    private String filename = "file1.xls";
+    private Map<String, Object> beans    = Maps.newHashMap();
+    private String              filename = "file1.xls";
 
     public JxlsRender(String templetFile) {
         this.templetFile = templetFile;

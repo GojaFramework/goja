@@ -7,6 +7,7 @@
 package goja.core;
 
 import com.alibaba.fastjson.TypeReference;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
@@ -29,7 +30,7 @@ public interface Func {
     /**
      * Will be set into a comma separated string.
      */
-    Joiner COMMA_JOINER = Joiner.on(StringPool.COMMA).skipNulls();
+    Joiner                             COMMA_JOINER       = Joiner.on(StringPool.COMMA).skipNulls();
 
     /**
      * Comma-separated string into a collection of instances.
@@ -41,11 +42,11 @@ public interface Func {
      */
     Joiner DOT_JOINER = Joiner.on(StringPool.DOT).skipNulls();
 
-    Splitter DOT_SPLITTER = Splitter.on(StringPool.DOT).trimResults().omitEmptyStrings();
+    Splitter DOT_SPLITTER  = Splitter.on(StringPool.DOT).trimResults().omitEmptyStrings();
     /**
      *
      */
-    Joiner EQUALS_JOINER = Joiner.on(StringPool.EQUALS).skipNulls();
+    Joiner   EQUALS_JOINER = Joiner.on(StringPool.EQUALS).skipNulls();
 
     Splitter EQUALS_SPLITTER = Splitter.on(StringPool.EQUALS).trimResults().omitEmptyStrings();
 

@@ -2,6 +2,7 @@ package goja.rapid.ueditor.define;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import goja.rapid.ueditor.kit.UEKit;
 
 import java.util.Iterator;
@@ -16,11 +17,11 @@ import java.util.Map;
  */
 public class MultiState implements State {
 
-    private boolean state = false;
-    private String info = null;
-    private Map<String, Long> intMap = Maps.newHashMap();
-    private Map<String, String> infoMap = Maps.newHashMap();
-    private List<String> stateList = Lists.newArrayList();
+    private boolean             state     = false;
+    private String              info      = null;
+    private Map<String, Long>   intMap    = Maps.newHashMap();
+    private Map<String, String> infoMap   = Maps.newHashMap();
+    private List<String>        stateList = Lists.newArrayList();
 
     public MultiState(boolean state) {
         this.state = state;

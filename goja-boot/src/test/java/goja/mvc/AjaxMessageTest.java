@@ -7,6 +7,7 @@
 package goja.mvc;
 
 import goja.core.StringPool;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
@@ -156,8 +157,8 @@ public class AjaxMessageTest {
         String packName = "com.mo008.wx.controllers.api";
         String appPackPrefix = "com.mo008";
         final String path =
-            StringUtils.substring(packName, StringUtils.length(appPackPrefix + "."),
-                StringUtils.indexOf(packName, ".controllers"));
+                StringUtils.substring(packName, StringUtils.length(appPackPrefix + "."),
+                        StringUtils.indexOf(packName, ".controllers"));
         System.out.println("path = " + path);
     }
 }

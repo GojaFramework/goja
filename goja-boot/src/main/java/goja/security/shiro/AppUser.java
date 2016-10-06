@@ -25,7 +25,7 @@ public class AppUser<U extends Model> implements Serializable {
     /**
      * 用户ID
      */
-    public final int id;
+    public final int    id;
     /**
      * 用户名称
      */
@@ -37,11 +37,11 @@ public class AppUser<U extends Model> implements Serializable {
     /**
      * 用户类型
      */
-    public final int type;
+    public final int    type;
     /**
      * 用户状态
      */
-    public final int status;
+    public final int    status;
 
     /**
      * 用户数据库对象

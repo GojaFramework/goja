@@ -47,7 +47,7 @@ public class Size implements Comparable<Size> {
             .put("terabyte", SizeUnit.TERABYTES)
             .put("terabytes", SizeUnit.TERABYTES)
             .build();
-    private final long count;
+    private final long     count;
     private final SizeUnit unit;
 
     private Size(long count, SizeUnit unit) {

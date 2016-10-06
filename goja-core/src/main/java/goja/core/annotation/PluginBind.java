@@ -22,9 +22,10 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 public @interface PluginBind {
 
-  /**
-   * 是否忽略
-   * @return true 表示忽略,默认不忽略
-   */
-  boolean ignored() default false;
+    /**
+     * 是否忽略
+     *
+     * @return true 表示忽略,默认不忽略
+     */
+    boolean ignored() default false;
 }

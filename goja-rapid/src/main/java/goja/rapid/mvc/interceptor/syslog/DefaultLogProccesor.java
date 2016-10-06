@@ -2,6 +2,7 @@ package goja.rapid.mvc.interceptor.syslog;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Record;
+
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.util.Map;

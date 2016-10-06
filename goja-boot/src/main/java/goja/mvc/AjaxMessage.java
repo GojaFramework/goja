@@ -24,11 +24,11 @@ import static goja.core.StringPool.EMPTY;
  */
 public final class AjaxMessage<E> implements Serializable {
 
-    public static final AjaxMessage OK = ok(EMPTY, null);
-    public static final AjaxMessage NODATA = nodata(EMPTY, null);
+    public static final AjaxMessage OK        = ok(EMPTY, null);
+    public static final AjaxMessage NODATA    = nodata(EMPTY, null);
     public static final AjaxMessage FORBIDDEN = forbidden(null);
-    public static final AjaxMessage ERROR = error(null);
-    public static final AjaxMessage FAILURE = failure(null);
+    public static final AjaxMessage ERROR     = error(null);
+    public static final AjaxMessage FAILURE   = failure(null);
 
     private static final long serialVersionUID = 1091092803607855861L;
     /**
@@ -48,7 +48,7 @@ public final class AjaxMessage<E> implements Serializable {
     /**
      * Exception
      */
-    private final Exception exception;
+    private final Exception     exception;
 
     /**
      * Message code.

@@ -9,8 +9,8 @@ package goja.rapid.mvc.datatables;
  */
 public final class DTColumn {
 
-    private String data;
-    private String name;
+    private String  data;
+    private String  name;
     private boolean searchable;
     private boolean orderable;
 

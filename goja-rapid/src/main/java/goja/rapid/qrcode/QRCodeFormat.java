@@ -173,6 +173,17 @@ public class QRCodeFormat {
     }
 
     /**
+     * 设置前景色。
+     *
+     * @param foreGroundColor 前景色的值
+     * @return QRCode生成器的格式
+     */
+    public QRCodeFormat setForeGroundColor(Color foreGroundColor) {
+        this.foreGroundColor = foreGroundColor;
+        return this;
+    }
+
+    /**
      * 设置前景色。值为十六进制的颜色值（与 CSS 定义颜色的值相同，不支持简写），可以忽略「#」符号。
      *
      * @param foreGroundColor 前景色的值
@@ -188,23 +199,23 @@ public class QRCodeFormat {
     }
 
     /**
-     * 设置前景色。
-     *
-     * @param foreGroundColor 前景色的值
-     * @return QRCode生成器的格式
-     */
-    public QRCodeFormat setForeGroundColor(Color foreGroundColor) {
-        this.foreGroundColor = foreGroundColor;
-        return this;
-    }
-
-    /**
      * 返回背景色。
      *
      * @return 背景色
      */
     public Color getBackGroundColor() {
         return backGroundColor;
+    }
+
+    /**
+     * 设置背景色。
+     *
+     * @param backGroundColor 前景色的值
+     * @return QRCode生成器的格式
+     */
+    public QRCodeFormat setBackGroundColor(Color backGroundColor) {
+        this.backGroundColor = backGroundColor;
+        return this;
     }
 
     /**
@@ -219,17 +230,6 @@ public class QRCodeFormat {
         } catch (NumberFormatException e) {
             this.backGroundColor = Color.WHITE;
         }
-        return this;
-    }
-
-    /**
-     * 设置背景色。
-     *
-     * @param backGroundColor 前景色的值
-     * @return QRCode生成器的格式
-     */
-    public QRCodeFormat setBackGroundColor(Color backGroundColor) {
-        this.backGroundColor = backGroundColor;
         return this;
     }
 

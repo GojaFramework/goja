@@ -6,17 +6,21 @@
 package goja.rapid.mvc.kits;
 
 import com.google.common.net.HttpHeaders;
+
 import goja.core.StringPool;
 import goja.core.encry.EncodeKit;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -199,25 +203,25 @@ public class Servlets {
 
     public static class MediaTypes {
 
-        public final static String APPLICATION_XML = "application/xml";
+        public final static String APPLICATION_XML       = "application/xml";
         public final static String APPLICATION_XML_UTF_8 = "application/xml; charset=UTF-8";
 
-        public final static String JSON = "application/json";
+        public final static String JSON       = "application/json";
         public final static String JSON_UTF_8 = "application/json; charset=UTF-8";
 
-        public final static String JAVASCRIPT = "application/javascript";
+        public final static String JAVASCRIPT       = "application/javascript";
         public final static String JAVASCRIPT_UTF_8 = "application/javascript; charset=UTF-8";
 
-        public final static String APPLICATION_XHTML_XML = "application/xhtml+xml";
+        public final static String APPLICATION_XHTML_XML       = "application/xhtml+xml";
         public final static String APPLICATION_XHTML_XML_UTF_8 = "application/xhtml+xml; charset=UTF-8";
 
-        public final static String TEXT_PLAIN = "text/plain";
+        public final static String TEXT_PLAIN       = "text/plain";
         public final static String TEXT_PLAIN_UTF_8 = "text/plain; charset=UTF-8";
 
-        public final static String TEXT_XML = "text/xml";
+        public final static String TEXT_XML       = "text/xml";
         public final static String TEXT_XML_UTF_8 = "text/xml; charset=UTF-8";
 
-        public final static String TEXT_HTML = "text/html";
+        public final static String TEXT_HTML       = "text/html";
         public final static String TEXT_HTML_UTF_8 = "text/html; charset=UTF-8";
     }
 }

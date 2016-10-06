@@ -19,26 +19,26 @@ public class MoneyKit implements Serializable, Comparable<MoneyKit> {
     /**
      * 缺省的币种代码，为CNY（人民币）。
      */
-    public static final String DEFAULT_CURRENCY_CODE = "CNY";
+    public static final  String   DEFAULT_CURRENCY_CODE = "CNY";
     /**
      * 缺省的取整模式，为<code>BigDecimal.ROUND_HALF_EVEN （四舍五入，当小数为0.5时，则取最近的偶数）。
      */
-    public static final int DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
+    public static final  int      DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
     /**
      * 0元,静态常量
      */
-    public static final MoneyKit ZERO = new MoneyKit() {
+    public static final  MoneyKit ZERO                  = new MoneyKit() {
         private static final long serialVersionUID = 1662793805847514821L;
 
         public void setCent(long cent) {
             throw new UnsupportedOperationException();
         }
     };
-    private static final long serialVersionUID = -118437905184548616L;
+    private static final long     serialVersionUID      = -118437905184548616L;
     /**
      * 一组可能的元/分换算比例。 <p/> <p/> 此处，“分”是指货币的最小单位，“元”是货币的最常用单位， 不同的币种有不同的元/分换算比例，如人民币是100，而日元为1。
      */
-    private static final int[] centFactors = new int[]{1, 10, 100, 1000};
+    private static final int[]    centFactors           = new int[]{1, 10, 100, 1000};
     /**
      * 金额，以分为单位。
      */

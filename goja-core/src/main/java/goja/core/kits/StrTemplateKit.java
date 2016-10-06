@@ -13,15 +13,15 @@ import java.util.Map;
  */
 public class StrTemplateKit {
 
-    public static final String DEFAULT_MACRO_START = "${";
+    public static final String  DEFAULT_MACRO_START = "${";
     // ---------------------------------------------------------------- properties
-    public static final String DEFAULT_MACRO_END = "}";
-    protected String macroStart = DEFAULT_MACRO_START;
-    protected String macroEnd = DEFAULT_MACRO_END;
-    protected boolean replaceMissingKey = true;
+    public static final String  DEFAULT_MACRO_END   = "}";
+    protected           String  macroStart          = DEFAULT_MACRO_START;
+    protected           String  macroEnd            = DEFAULT_MACRO_END;
+    protected           boolean replaceMissingKey   = true;
     protected String missingKeyReplacement;
     protected boolean resolveEscapes = true;
-    protected char escapeChar = '\\';
+    protected char    escapeChar     = '\\';
     protected boolean parseValues;
 
     /**

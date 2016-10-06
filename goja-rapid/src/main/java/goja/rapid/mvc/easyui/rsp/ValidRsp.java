@@ -21,7 +21,7 @@ public class ValidRsp {
 
     public static class Builder {
         private boolean success;
-        private String msg;
+        private String  msg;
 
 
         public Builder success(boolean success) {

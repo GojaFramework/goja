@@ -1,6 +1,7 @@
 package goja.logging;
 
 import goja.core.app.GojaConfig;
+
 import org.junit.Before;
 import org.junit.Test;
 

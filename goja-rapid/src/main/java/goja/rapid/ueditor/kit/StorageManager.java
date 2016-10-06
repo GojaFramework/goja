@@ -2,6 +2,7 @@ package goja.rapid.ueditor.kit;
 
 
 import com.google.common.io.Files;
+
 import com.jfinal.kit.PathKit;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
@@ -10,6 +11,7 @@ import goja.rapid.ueditor.UEConst;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.State;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 

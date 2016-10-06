@@ -33,12 +33,12 @@ public class ClassSearcher {
 
     private final List<Class> targets;
 
-    private String classpath = PathKit.getRootClassPath();
-    private String libDir =
+    private String       classpath           = PathKit.getRootClassPath();
+    private String       libDir              =
             PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib";
-    private List<String> scanPackages = Lists.newArrayList();
-    private boolean includeAllJarsInLib = false;
-    private List<String> includeJars = Lists.newArrayList();
+    private List<String> scanPackages        = Lists.newArrayList();
+    private boolean      includeAllJarsInLib = false;
+    private List<String> includeJars         = Lists.newArrayList();
 
     public ClassSearcher(Class target) {
         targets = Lists.newArrayListWithCapacity(11);

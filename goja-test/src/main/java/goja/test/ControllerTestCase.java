@@ -5,6 +5,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
+
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.core.JFinal;
 import com.jfinal.handler.Handler;
@@ -14,10 +15,12 @@ import goja.initialize.ctxbox.ClassFinder;
 import goja.test.mock.MockHttpRequest;
 import goja.test.mock.MockHttpResponse;
 import goja.test.mock.MockServletContext;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 
 import javax.servlet.ServletContext;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -35,16 +38,16 @@ import java.util.List;
 public abstract class ControllerTestCase {
 
     protected static ServletContext servletContext = new MockServletContext();
-    protected static MockHttpRequest request;
+    protected static MockHttpRequest  request;
     protected static MockHttpResponse response;
-    protected static Handler handler;
+    protected static Handler          handler;
     private static boolean configStarted = false;
     private static JFinalConfig configInstance;
-    private String actionUrl;
-    private String bodyData;
-    private File bodyFile;
-    private File responseFile;
-    private Class<Goja> config;
+    private        String       actionUrl;
+    private        String       bodyData;
+    private        File         bodyFile;
+    private        File         responseFile;
+    private        Class<Goja>  config;
 
     @SuppressWarnings("unchecked")
     public ControllerTestCase() {

@@ -7,6 +7,7 @@
 package goja.core.kits.lang;
 
 import goja.core.date.DateFormatter;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -28,7 +29,7 @@ public class DateKit {
     /**
      * From here: http://www.ietf.org/rfc/rfc1123.txt
      */
-    private static final DateTimeFormatter RFC1123_DATE_FORMAT = DateTimeFormat
+    private static final DateTimeFormatter RFC1123_DATE_FORMAT     = DateTimeFormat
             .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
@@ -36,11 +37,11 @@ public class DateKit {
             .forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
-    private static final DateTimeFormatter YMD_DASH_DATE_FORMAT = DateTimeFormat
+    private static final DateTimeFormatter YMD_DASH_DATE_FORMAT    = DateTimeFormat
             .forPattern(DateFormatter.YYYY_MM_DD)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
-    private static final DateTimeFormatter YMDHM_DASH_DATE_FORMAT = DateTimeFormat
+    private static final DateTimeFormatter YMDHM_DASH_DATE_FORMAT  = DateTimeFormat
             .forPattern(DateFormatter.YYYY_MM_DD_HH_MM)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);

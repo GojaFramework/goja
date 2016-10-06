@@ -1,12 +1,14 @@
 package goja.core.cache;
 
 import goja.core.app.GojaConfig;
+
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.DiskStoreConfiguration;
 import net.sf.ehcache.config.PersistenceConfiguration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +28,7 @@ import static net.sf.ehcache.config.PersistenceConfiguration.Strategy.LOCALTEMPS
 public class EhCacheImpl implements CacheImpl {
     private static final Logger logger = LoggerFactory.getLogger(EhCacheImpl.class);
     private static EhCacheImpl uniqueInstance;
-    CacheManager cacheManager;
+    CacheManager         cacheManager;
     net.sf.ehcache.Cache cache;
 
     private EhCacheImpl() {

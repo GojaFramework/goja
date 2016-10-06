@@ -8,6 +8,7 @@ package goja.core.kits.lang;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+
 import goja.core.StringPool;
 import goja.core.Validator;
 import goja.core.kits.ObjectKit;

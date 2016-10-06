@@ -6,6 +6,7 @@ import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
 import goja.rapid.ueditor.define.MultiState;
 import goja.rapid.ueditor.define.State;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,9 +17,9 @@ import java.util.List;
 
 
 public class FileManager {
-    private final String dir;
+    private final String   dir;
     private final String[] allowFiles;
-    private final int count;
+    private final int      count;
 
     /**
      * @param dir         文件目录

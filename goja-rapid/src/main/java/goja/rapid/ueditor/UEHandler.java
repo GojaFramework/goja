@@ -1,6 +1,7 @@
 package goja.rapid.ueditor;
 
 import com.google.common.base.Strings;
+
 import com.jfinal.core.Controller;
 import goja.rapid.ueditor.define.BaseState;
 

@@ -7,6 +7,7 @@
 package goja.core.libs;
 
 import goja.core.StringPool;
+
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.Serializable;
@@ -24,8 +25,8 @@ import java.util.regex.Pattern;
  */
 public class Time {
 
-    static Pattern days = Pattern.compile("^([0-9]+)d$");
-    static Pattern hours = Pattern.compile("^([0-9]+)h$");
+    static Pattern days    = Pattern.compile("^([0-9]+)d$");
+    static Pattern hours   = Pattern.compile("^([0-9]+)h$");
     static Pattern minutes = Pattern.compile("^([0-9]+)mi?n$");
     static Pattern seconds = Pattern.compile("^([0-9]+)s$");
 
@@ -186,20 +187,20 @@ public class Time {
      */
     public static class CronExpression implements Serializable, Cloneable {
 
-        protected static final int SECOND = 0;
-        protected static final int MINUTE = 1;
-        protected static final int HOUR = 2;
-        protected static final int DAY_OF_MONTH = 3;
-        protected static final int MONTH = 4;
-        protected static final int DAY_OF_WEEK = 5;
-        protected static final int YEAR = 6;
-        protected static final int ALL_SPEC_INT = 99; // '*'
-        protected static final int NO_SPEC_INT = 98; // '?'
-        protected static final Integer ALL_SPEC = ALL_SPEC_INT;
-        protected static final Integer NO_SPEC = NO_SPEC_INT;
-        private static final long serialVersionUID = 12423409423L;
-        protected static Map<String, Integer> monthMap = new HashMap<String, Integer>(20);
-        protected static Map<String, Integer> dayMap = new HashMap<String, Integer>(60);
+        protected static final int                  SECOND           = 0;
+        protected static final int                  MINUTE           = 1;
+        protected static final int                  HOUR             = 2;
+        protected static final int                  DAY_OF_MONTH     = 3;
+        protected static final int                  MONTH            = 4;
+        protected static final int                  DAY_OF_WEEK      = 5;
+        protected static final int                  YEAR             = 6;
+        protected static final int                  ALL_SPEC_INT     = 99; // '*'
+        protected static final int                  NO_SPEC_INT      = 98; // '?'
+        protected static final Integer              ALL_SPEC         = ALL_SPEC_INT;
+        protected static final Integer              NO_SPEC          = NO_SPEC_INT;
+        private static final   long                 serialVersionUID = 12423409423L;
+        protected static       Map<String, Integer> monthMap         = new HashMap<String, Integer>(20);
+        protected static       Map<String, Integer> dayMap           = new HashMap<String, Integer>(60);
 
         static {
             monthMap.put("JAN", 0);
@@ -231,13 +232,13 @@ public class Time {
         protected transient TreeSet<Integer> months;
         protected transient TreeSet<Integer> daysOfWeek;
         protected transient TreeSet<Integer> years;
-        protected transient boolean lastdayOfWeek = false;
-        protected transient int nthdayOfWeek = 0;
-        protected transient boolean lastdayOfMonth = false;
-        protected transient boolean nearestWeekday = false;
-        protected transient boolean expressionParsed = false;
-        private String cronExpression = null;
-        private TimeZone timeZone = null;
+        protected transient boolean  lastdayOfWeek    = false;
+        protected transient int      nthdayOfWeek     = 0;
+        protected transient boolean  lastdayOfMonth   = false;
+        protected transient boolean  nearestWeekday   = false;
+        protected transient boolean  expressionParsed = false;
+        private             String   cronExpression   = null;
+        private             TimeZone timeZone         = null;
 
         /**
          * Constructs a new <CODE>CronExpression</CODE> based on the specified parameter.

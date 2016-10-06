@@ -1,9 +1,11 @@
 package goja.rapid.db;
 
 import com.google.common.collect.Lists;
+
 import goja.core.db.FindBy;
 import goja.core.db.SqlQuery;
 import goja.core.db.SqlSelect;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;

@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -156,7 +157,6 @@ public class Images {
      *
      * @param image The image file
      * @return The base64 encoded value
-     * @throws java.io.IOException
      */
     public static String toBase64(File image) throws IOException {
         return "data:" + MimeTypes.getMimeType(image.getName()) + ";base64," + Codec.encodeBASE64(

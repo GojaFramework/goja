@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,10 @@ package goja.rapid.excel;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -33,16 +35,16 @@ import java.util.Set;
 
 public class PoiExporter {
 
-    public static final String VERSION_2003 = "2003";
-    private static final int HEADER_ROW = 1;
-    private static final int MAX_ROWS = 65535;
+    public static final  String VERSION_2003 = "2003";
+    private static final int    HEADER_ROW   = 1;
+    private static final int    MAX_ROWS     = 65535;
     private String version;
     private String[] sheetNames = new String[]{"sheet"};
-    private int cellWidth = 8000;
-    private int headerRow;
+    private int      cellWidth  = 8000;
+    private int        headerRow;
     private String[][] headers;
     private String[][] columns;
-    private List<?>[] data;
+    private List<?>[]  data;
 
     public PoiExporter(List<?>... data) {
         this.data = data;
@@ -60,6 +62,66 @@ public class PoiExporter {
             result.add(Lists.newArrayList(num.subList(i * chunkSize, i == chunk_num - 1 ? size : (i + 1) * chunkSize)));
         }
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void processAsMap(String[] columns, Row row, Object obj) {
+        Cell cell;
+        Map<String, Object> map = (Map<String, Object>) obj;
+        if (columns.length == 0) { // show all if column not specified
+            Set<String> keys = map.keySet();
+            int columnIndex = 0;
+            for (String key : keys) {
+                cell = row.createCell(columnIndex);
+                cell.setCellValue(map.get(key) + "");
+                columnIndex++;
+            }
+        } else {
+            for (int j = 0, len = columns.length; j < len; j++) {
+                cell = row.createCell(j);
+                cell.setCellValue(map.get(columns[j]) == null ? "" : map.get(columns[j]) + "");
+            }
+        }
+    }
+
+    private static void processAsModel(String[] columns, Row row, Object obj) {
+        Cell cell;
+        Model<?> model = (Model<?>) obj;
+        Set<Entry<String, Object>> entries = model._getAttrsEntrySet();
+        if (columns.length == 0) { // show all if column not specified
+            int columnIndex = 0;
+            for (Entry<String, Object> entry : entries) {
+                cell = row.createCell(columnIndex);
+                cell.setCellValue(entry.getValue() + "");
+                columnIndex++;
+            }
+        } else {
+            for (int j = 0, len = columns.length; j < len; j++) {
+                cell = row.createCell(j);
+                cell.setCellValue(model.get(columns[j]) == null ? "" : model.get(columns[j]) + "");
+            }
+        }
+    }
+
+    private static void processAsRecord(String[] columns, Row row, Object obj) {
+        Cell cell;
+        Record record = (Record) obj;
+        Map<String, Object> map = record.getColumns();
+        if (columns.length == 0) { // show all if column not specified
+            record.getColumns();
+            Set<String> keys = map.keySet();
+            int columnIndex = 0;
+            for (String key : keys) {
+                cell = row.createCell(columnIndex);
+                cell.setCellValue(record.get(key) + "");
+                columnIndex++;
+            }
+        } else {
+            for (int j = 0, len = columns.length; j < len; j++) {
+                cell = row.createCell(j);
+                cell.setCellValue(map.get(columns[j]) == null ? "" : map.get(columns[j]) + "");
+            }
+        }
     }
 
     public Workbook export() {
@@ -139,66 +201,6 @@ public class PoiExporter {
             }
         }
         return wb;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void processAsMap(String[] columns, Row row, Object obj) {
-        Cell cell;
-        Map<String, Object> map = (Map<String, Object>) obj;
-        if (columns.length == 0) { // show all if column not specified
-            Set<String> keys = map.keySet();
-            int columnIndex = 0;
-            for (String key : keys) {
-                cell = row.createCell(columnIndex);
-                cell.setCellValue(map.get(key) + "");
-                columnIndex++;
-            }
-        } else {
-            for (int j = 0, len = columns.length; j < len; j++) {
-                cell = row.createCell(j);
-                cell.setCellValue(map.get(columns[j]) == null ? "" : map.get(columns[j]) + "");
-            }
-        }
-    }
-
-    private static void processAsModel(String[] columns, Row row, Object obj) {
-        Cell cell;
-        Model<?> model = (Model<?>) obj;
-        Set<Entry<String, Object>> entries = model._getAttrsEntrySet();
-        if (columns.length == 0) { // show all if column not specified
-            int columnIndex = 0;
-            for (Entry<String, Object> entry : entries) {
-                cell = row.createCell(columnIndex);
-                cell.setCellValue(entry.getValue() + "");
-                columnIndex++;
-            }
-        } else {
-            for (int j = 0, len = columns.length; j < len; j++) {
-                cell = row.createCell(j);
-                cell.setCellValue(model.get(columns[j]) == null ? "" : model.get(columns[j]) + "");
-            }
-        }
-    }
-
-    private static void processAsRecord(String[] columns, Row row, Object obj) {
-        Cell cell;
-        Record record = (Record) obj;
-        Map<String, Object> map = record.getColumns();
-        if (columns.length == 0) { // show all if column not specified
-            record.getColumns();
-            Set<String> keys = map.keySet();
-            int columnIndex = 0;
-            for (String key : keys) {
-                cell = row.createCell(columnIndex);
-                cell.setCellValue(record.get(key) + "");
-                columnIndex++;
-            }
-        } else {
-            for (int j = 0, len = columns.length; j < len; j++) {
-                cell = row.createCell(j);
-                cell.setCellValue(map.get(columns[j]) == null ? "" : map.get(columns[j]) + "");
-            }
-        }
     }
 
     public PoiExporter version(String version) {

@@ -8,7 +8,7 @@ package goja.rapid.mvc.datatables;
  * @since JDK 1.6
  */
 public final class DTSearch {
-    private final String value;
+    private final String  value;
     private final boolean regex;
 
     private DTSearch(String value, boolean regex) {

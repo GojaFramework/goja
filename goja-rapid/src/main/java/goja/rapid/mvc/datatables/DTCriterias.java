@@ -4,18 +4,22 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
+
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import goja.core.StringPool;
 import goja.core.db.Condition;
 import goja.core.kits.lang.Strs;
+
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -29,7 +33,7 @@ import org.apache.commons.lang3.tuple.Triple;
  * @since JDK 1.6
  */
 public final class DTCriterias implements Serializable {
-    private static final long serialVersionUID = -4728223524642774477L;
+    private static final long    serialVersionUID = -4728223524642774477L;
     /**
      * Matches the regular brackets
      */
@@ -38,15 +42,15 @@ public final class DTCriterias implements Serializable {
     /**
      * jquery datatablse Control the query condition
      */
-    private final DTSearch search;
+    private final DTSearch       search;
     /**
      * Display start number
      */
-    private final int start;
+    private final int            start;
     /**
      * The page displays the number of.
      */
-    private final int length;
+    private final int            length;
     /**
      * Which coloumns to display.
      */
@@ -54,8 +58,8 @@ public final class DTCriterias implements Serializable {
     /**
      * The order coloumn.
      */
-    private final List<DTOrder> order;
-    private final int draw;
+    private final List<DTOrder>  order;
+    private final int            draw;
 
     private final List<Triple<String, Condition, Object>> params;
 
@@ -140,7 +144,7 @@ public final class DTCriterias implements Serializable {
                                         break;
                                     default:
                                         _params.add(
-                                            Triple.<String, Condition, Object>of(name, query_condition, req_val));
+                                                Triple.<String, Condition, Object>of(name, query_condition, req_val));
                                 }
                             }
                         }

@@ -1,7 +1,9 @@
 package goja.core.kits.lang;
 
 import com.google.common.collect.Lists;
+
 import goja.core.StringPool;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

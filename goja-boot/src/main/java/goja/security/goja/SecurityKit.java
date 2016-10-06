@@ -45,7 +45,7 @@ public class SecurityKit {
     /**
      * 登录存储在客户端的用户Session标识
      */
-    public final static String COOKIE_LOGIN = Goja.appName + "_session_id";
+    public final static  String COOKIE_LOGIN      = Goja.appName + "_session_id";
     /**
      * 登录的SESSION。KEY
      */
@@ -53,13 +53,13 @@ public class SecurityKit {
     /**
      * 登录的会员IDSession信息
      */
-    private static final String LOGIN_MEMBER_ID = Goja.appName + "@session#member%id";
+    private static final String LOGIN_MEMBER_ID   = Goja.appName + "@session#member%id";
 
     private static final String LOGIN_CACHE_SESSION = "login.session";
 
-    private final static byte[] E_KEY = new byte[]{'1', '2', '3', '4', '5', '6', '7', '8'};
-    private final static String DES = "DES";
-    private final static int MAX_AGE = 86400 * 365;
+    private final static byte[] E_KEY   = new byte[]{'1', '2', '3', '4', '5', '6', '7', '8'};
+    private final static String DES     = "DES";
+    private final static int    MAX_AGE = 86400 * 365;
 
     /**
      * Determine whether the user is logged in, if you have logged in, return <code> true </ code>

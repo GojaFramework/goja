@@ -38,16 +38,16 @@ import java.util.concurrent.TimeUnit;
 
 public class JobsPlugin implements IPlugin {
 
-    public static final Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
+    public static final  Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
         @Override
         public boolean apply(Class input) {
             return Job.class.isAssignableFrom(input);
         }
     };
-    private static final Logger logger = LoggerFactory.getLogger(JobsPlugin.class);
+    private static final Logger           logger              = LoggerFactory.getLogger(JobsPlugin.class);
     protected static ScheduledThreadPoolExecutor executor;
-    protected static List<Job> scheduledJobs = null;
-    private static List<Class> applicationStopJobs = Lists.newArrayList();
+    protected static List<Job>   scheduledJobs       = null;
+    private static   List<Class> applicationStopJobs = Lists.newArrayList();
 
     public JobsPlugin() {
 

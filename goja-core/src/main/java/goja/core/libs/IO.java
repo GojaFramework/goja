@@ -9,6 +9,7 @@ package goja.core.libs;
 import goja.core.StringPool;
 import goja.core.exceptions.UnexpectedException;
 import goja.core.kits.io.OrderSafeProperties;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;

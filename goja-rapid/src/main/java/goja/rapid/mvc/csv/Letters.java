@@ -7,21 +7,21 @@
 package goja.rapid.mvc.csv;
 
 public interface Letters {
-  char LF = '\n';
+    char LF = '\n';
 
-  char CR = '\r';
+    char CR = '\r';
 
-  char QUOTE = '"';
+    char QUOTE = '"';
 
-  char COMMA = ',';
+    char COMMA = ',';
 
-  char SPACE = ' ';
+    char SPACE = ' ';
 
-  char TAB = '\t';
+    char TAB = '\t';
 
-  char POUND = '#';
+    char POUND = '#';
 
-  char BACKSLASH = '\\';
+    char BACKSLASH = '\\';
 
-  char NULL = '\0';
+    char NULL = '\0';
 }

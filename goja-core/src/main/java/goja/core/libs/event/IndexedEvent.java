@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class IndexedEvent<M> {
     private static final AtomicLong idGenerator = new AtomicLong(1);
-    final public M data;
+    final public M    data;
     final public Long id;
 
     public IndexedEvent(M data) {

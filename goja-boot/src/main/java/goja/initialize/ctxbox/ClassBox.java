@@ -12,6 +12,7 @@ import goja.rapid.syslog.LogProcessor;
 import goja.security.shiro.SecurityUserData;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.Model;
 
 import com.google.common.collect.Lists;
@@ -61,11 +62,9 @@ public class ClassBox {
             initClassWithType(cls, ClassType.APP);
         } else if (Interceptor.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.AOP);
-        } /*else if (IPlugin.class.isAssignableFrom(cls)) {
+        } else if (IPlugin.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.PLUGIN);
-        } else if (Handler.class.isAssignableFrom(cls)) {
-            initClassWithType(cls, ClassType.HANDLER);
-        }*/ else if (LogProcessor.class.isAssignableFrom(cls)) {
+        } else if (LogProcessor.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.LOGPERCESSOR);
         } else if (SecurityUserData.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.SECURITY_DATA);

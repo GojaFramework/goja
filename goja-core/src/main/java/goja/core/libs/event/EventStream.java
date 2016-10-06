@@ -24,8 +24,8 @@ import java.util.concurrent.ExecutionException;
 public class EventStream<T> {
 
     final int bufferSize;
-    final ConcurrentLinkedQueue<T> events = new ConcurrentLinkedQueue<T>();
-    final List<Promise<T>> waiting = Collections.synchronizedList(new ArrayList<Promise<T>>());
+    final ConcurrentLinkedQueue<T> events  = new ConcurrentLinkedQueue<T>();
+    final List<Promise<T>>         waiting = Collections.synchronizedList(new ArrayList<Promise<T>>());
 
     public EventStream() {
         this.bufferSize = 100;

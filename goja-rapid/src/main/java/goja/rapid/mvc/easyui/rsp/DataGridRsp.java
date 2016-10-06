@@ -34,7 +34,7 @@ public class DataGridRsp implements Serializable {
     }
 
     public static class Builder {
-        private int total;
+        private int          total;
         private List<Record> rows;
 
 

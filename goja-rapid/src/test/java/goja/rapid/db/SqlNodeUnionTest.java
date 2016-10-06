@@ -2,6 +2,7 @@ package goja.rapid.db;
 
 import goja.core.db.SqlSelect;
 import goja.core.db.SqlUnion;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;

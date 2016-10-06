@@ -25,9 +25,9 @@ public class ArchivedEventStream<T> {
 
 
     final int archiveSize;
-    final ConcurrentLinkedQueue<IndexedEvent<T>> events = new ConcurrentLinkedQueue<IndexedEvent<T>>();
-    final List<FilterTask<T>> waiting = Collections.synchronizedList(new ArrayList<FilterTask<T>>());
-    final List<EventStream<T>> pipedStreams = new ArrayList<EventStream<T>>();
+    final ConcurrentLinkedQueue<IndexedEvent<T>> events       = new ConcurrentLinkedQueue<IndexedEvent<T>>();
+    final List<FilterTask<T>>                    waiting      = Collections.synchronizedList(new ArrayList<FilterTask<T>>());
+    final List<EventStream<T>>                   pipedStreams = new ArrayList<EventStream<T>>();
 
     public ArchivedEventStream(int archiveSize) {
         this.archiveSize = archiveSize;

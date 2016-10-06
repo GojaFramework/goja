@@ -6,11 +6,6 @@
 
 package goja.test;
 
-import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.druid.util.JdbcUtils;
-import com.alibaba.druid.wall.WallFilter;
-import com.jfinal.plugin.activerecord.dialect.*;
-import com.jfinal.plugin.druid.DruidPlugin;
 import goja.Goja;
 import goja.core.app.GojaConfig;
 import goja.core.exceptions.DatabaseException;
@@ -18,11 +13,25 @@ import goja.core.kits.reflect.Reflect;
 import goja.core.sqlinxml.SqlKit;
 import goja.initialize.ctxbox.ClassFinder;
 import goja.plugins.tablebind.AutoTableBindPlugin;
+import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
+import com.jfinal.plugin.activerecord.dialect.OracleDialect;
+import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
+import com.jfinal.plugin.activerecord.dialect.SqlServerDialect;
+import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
+import com.jfinal.plugin.druid.DruidPlugin;
+
+import com.google.common.collect.Lists;
+
+import com.alibaba.druid.util.JdbcConstants;
+import com.alibaba.druid.util.JdbcUtils;
+import com.alibaba.druid.wall.WallFilter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,9 +43,10 @@ import java.util.Properties;
  * @since JDK 1.6
  */
 public abstract class ModelTestCase {
-    protected static AutoTableBindPlugin activeRecord;
 
-    protected static DruidPlugin dp;
+    private static final List<DruidPlugin>         dpList               = Lists.newArrayList();
+    private static final List<AutoTableBindPlugin> autoTableBindPlugins = Lists.newArrayList();
+
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -50,11 +60,42 @@ public abstract class ModelTestCase {
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
             if (db_props != null && !db_props.isEmpty()) {
-                configDatabasePlugins(db_config,
-                        db_props.getProperty("db.url"),
+                final String dbUrl = db_props.getProperty("db.url");
+                String dbtype = JdbcUtils.getDbType(dbUrl, StringUtils.EMPTY);
+                final DruidPlugin druidPlugin = configDatabasePlugins(
+                        dbUrl,
                         db_props.getProperty("db.username"),
                         db_props.getProperty("db.password"));
+
+
+                AutoTableBindPlugin activeRecord = new AutoTableBindPlugin(db_config, druidPlugin);
+                if (!StringUtils.equals(dbtype, JdbcConstants.MYSQL)) {
+                    if (StringUtils.equals(dbtype, JdbcConstants.ORACLE)) {
+                        activeRecord.setDialect(new OracleDialect());
+                    } else if (StringUtils.equals(dbtype, JdbcConstants.POSTGRESQL)) {
+                        activeRecord.setDialect(new PostgreSqlDialect());
+                    } else if (StringUtils.equals(dbtype, JdbcConstants.H2)) {
+                        activeRecord.setDialect(new AnsiSqlDialect());
+                    } else if (StringUtils.equals(dbtype, "sqlite")) {
+                        activeRecord.setDialect(new Sqlite3Dialect());
+                    } else if (StringUtils.equals(dbtype, JdbcConstants.JTDS)) {
+                        activeRecord.setDialect(new SqlServerDialect());
+                    } else {
+                        System.err.println("database type is use mysql.");
+                    }
+                }
+
+                dpList.add(druidPlugin);
+                activeRecord.setShowSql(true);
+                autoTableBindPlugins.add(activeRecord);
             }
+        }
+
+        for (DruidPlugin druidPlugin : dpList) {
+            druidPlugin.start();
+        }
+        for (AutoTableBindPlugin autoTableBindPlugin : autoTableBindPlugins) {
+            autoTableBindPlugin.start();
         }
 
         if (GojaConfig.getPropertyToBoolean("db.sqlinxml", true)) {
@@ -65,13 +106,12 @@ public abstract class ModelTestCase {
     /**
      * 配置数据库插件，用于测试用例的测试方法启动前
      *
-     * @param db_config   配置名称
      * @param db_url      数据库链接地址
      * @param db_username 数据库链接用户
      * @param db_password 数据库链接密码
      */
-    private static void configDatabasePlugins(String db_config, String db_url, String db_username,
-                                              String db_password) {
+    private static DruidPlugin configDatabasePlugins(String db_url, String db_username,
+                                                     String db_password) {
         String dbtype = JdbcUtils.getDbType(db_url, StringUtils.EMPTY);
         String driverClassName;
         try {
@@ -79,7 +119,7 @@ public abstract class ModelTestCase {
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage(), e);
         }
-        dp = new DruidPlugin(db_url
+        DruidPlugin dp = new DruidPlugin(db_url
                 , db_username
                 , db_password
                 , driverClassName);
@@ -102,32 +142,18 @@ public abstract class ModelTestCase {
         }
 
         dp.getDataSource();
-        dp.start();
 
-        activeRecord = new AutoTableBindPlugin(db_config, dp);
-        if (!StringUtils.equals(dbtype, JdbcConstants.MYSQL)) {
-            if (StringUtils.equals(dbtype, JdbcConstants.ORACLE)) {
-                activeRecord.setDialect(new OracleDialect());
-            } else if (StringUtils.equals(dbtype, JdbcConstants.POSTGRESQL)) {
-                activeRecord.setDialect(new PostgreSqlDialect());
-            } else if (StringUtils.equals(dbtype, JdbcConstants.H2)) {
-                activeRecord.setDialect(new AnsiSqlDialect());
-            } else if (StringUtils.equals(dbtype, "sqlite")) {
-                activeRecord.setDialect(new Sqlite3Dialect());
-            } else if (StringUtils.equals(dbtype, JdbcConstants.JTDS)) {
-                activeRecord.setDialect(new SqlServerDialect());
-            } else {
-                System.err.println("database type is use mysql.");
-            }
-        }
 
-        activeRecord.setShowSql(true);
-        activeRecord.start();
+        return dp;
     }
 
     @AfterClass
     public static void setUpAfterClass() throws Exception {
-        activeRecord.stop();
-        dp.stop();
+        for (AutoTableBindPlugin autoTableBindPlugin : autoTableBindPlugins) {
+            autoTableBindPlugin.stop();
+        }
+        for (DruidPlugin druidPlugin : dpList) {
+            druidPlugin.stop();
+        }
     }
 }

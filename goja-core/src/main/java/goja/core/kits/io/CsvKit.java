@@ -7,8 +7,10 @@
 package goja.core.kits.io;
 
 import com.google.common.collect.Lists;
+
 import goja.core.StringPool;
 import goja.core.kits.lang.CharKit;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -22,10 +24,10 @@ import java.util.List;
  */
 public abstract class CsvKit {
 
-    protected static final char FIELD_SEPARATOR = ',';
-    protected static final char FIELD_QUOTE = '"';
-    protected static final String DOUBLE_QUOTE = "\"\"";
-    protected static final String SPECIAL_CHARS = StringPool.CRLF;
+    protected static final char   FIELD_SEPARATOR = ',';
+    protected static final char   FIELD_QUOTE     = '"';
+    protected static final String DOUBLE_QUOTE    = "\"\"";
+    protected static final String SPECIAL_CHARS   = StringPool.CRLF;
 
     /**
      * Parse fields as csv string,
