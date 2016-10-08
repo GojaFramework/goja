@@ -1,6 +1,7 @@
 package goja.security.shiro;
 
-import goja.core.cache.EhCacheImpl;
+
+import com.jfinal.plugin.ehcache.CacheKit;
 
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.cache.Cache;
@@ -30,7 +31,7 @@ public class ShiroEhCacheManager implements CacheManager, Initializable, Destroy
         }
 
         try {
-            net.sf.ehcache.CacheManager cacheManager = EhCacheImpl.getInstance().getCacheManager();
+            net.sf.ehcache.CacheManager cacheManager = CacheKit.getCacheManager();
             net.sf.ehcache.Ehcache cache = cacheManager.getEhcache(name);
             if (cache == null) {
                 if (log.isInfoEnabled()) {

@@ -29,10 +29,6 @@ public enum ClassType {
      */
     JOB,
     /**
-     * System initialization or at the end of the implementation of the class.
-     */
-    APP,
-    /**
      * Interceptor System
      */
     AOP,

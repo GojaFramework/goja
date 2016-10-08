@@ -8,18 +8,19 @@ package goja;
 
 import goja.core.Func;
 import goja.core.annotation.PluginBind;
+import goja.core.app.ApplicationMode;
 import goja.core.app.GojaConfig;
 import goja.core.app.GojaPropConst;
-import goja.core.cache.Cache;
-import goja.core.cache.EhCacheImpl;
 import goja.core.exceptions.DatabaseException;
+import goja.core.exceptions.GojaException;
+import goja.core.exceptions.UnexpectedException;
 import goja.core.sqlinxml.SqlInXmlPlugin;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
+import goja.job.Job;
 import goja.job.JobsPlugin;
 import goja.logging.Logger;
 import goja.logging.LoggerInit;
-import goja.mvc.AppLoadEvent;
 import goja.mvc.PageViewKit;
 import goja.mvc.auto.AutoBindRoutes;
 import goja.mvc.auto.AutoOnLoadInterceptor;
@@ -50,7 +51,6 @@ import com.jfinal.core.Const;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.json.FastJsonFactory;
 import com.jfinal.json.JacksonFactory;
-import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
@@ -108,18 +108,22 @@ import redis.clients.jedis.Protocol;
  */
 public class Goja extends JFinalConfig {
 
-    private static final org.slf4j.Logger logger       = LoggerFactory.getLogger(Goja.class);
-    public static        boolean          initlization = false;
-    public static        boolean          started      = false;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Goja.class);
     // the application configuration.
-    public static Properties       configuration;
+    public static Properties configuration;
     // the application view path.
-    public static String           viewPath;
-    public static String           domain;
-    public static String           appName;
-    public static String           appVersion;
+    public static String     viewPath;
+    public static String     domain;
+    public static String     appName;
+
+
     public static SecurityUserData securityUserData;
-    public static File applicationPath = null;
+
+    static         boolean started         = false;
+    private static boolean initlization    = false;
+
+    private static JobsPlugin jobsPlugin = new JobsPlugin();
+
     private Routes _routes;
 
     /**
@@ -138,30 +142,32 @@ public class Goja extends JFinalConfig {
     public void configConstant(Constants constants) {
         // set config propertis.
         configuration = GojaConfig.getConfigProps();
-        // init application path
-        applicationPath = new File(PathKit.getWebRootPath());
 
         initlization = true;
 
         // dev_mode
-        constants.setDevMode(GojaConfig.getApplicationMode().isDev());
+        final ApplicationMode applicationMode = GojaConfig.getApplicationMode();
+        final boolean isDev = applicationMode.isDev();
+        constants.setDevMode(isDev);
         // fixed: render view has views//xxx.ftl
         final String DEFAULT_VIEW_PATH = PageViewKit.WEBINF_DIR + "views";
         viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, DEFAULT_VIEW_PATH);
         constants.setBaseViewPath(viewPath);
-
-        constants.setError404View(PageViewKit.get404PageView());
+        if (applicationMode.isProd()) {
+            // 404由于在开发模式下的提示信息，由于404触发的，所以在开发模式不启动404视图界面
+            constants.setError404View(PageViewKit.get404PageView());
+        }
         constants.setError500View(PageViewKit.get500PageView());
         constants.setError403View(PageViewKit.get403PageView());
 
+
         appName = GojaConfig.getAppName();
-        appVersion = GojaConfig.getVersion();
 
         // init wxchat config
         final String wx_url = GojaConfig.getProperty(GojaPropConst.APP_WXCHAT_URL);
         if (!Strings.isNullOrEmpty(wx_url)) {
             // Config Wx Api
-            ApiConfigKit.setDevMode(GojaConfig.getApplicationMode().isDev());
+            ApiConfigKit.setDevMode(isDev);
         }
 
         if (GojaConfig.isSecurity()) {
@@ -183,7 +189,7 @@ public class Goja extends JFinalConfig {
             constants.setFreeMarkerViewExtension(".ftl");
             setFtlSharedVariable();
         }
-        if (GojaConfig.getApplicationMode().isDev()) {
+        if (isDev) {
             constants.setErrorRenderFactory(new GojaErrorRenderFactory());
         }
         final int uploadMaxFileSize = GojaConfig.getPropertyToInt(GojaPropConst.APP_UPLOAD_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE);
@@ -222,16 +228,15 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void configPlugin(Plugins plugins) {
+        plugins.add(jobsPlugin);
         // fixed: https://github.com/GojaFramework/goja/issues/4
         started = true;
 
         initDataSource(plugins);
 
-        if (new File(PathKit.getRootClassPath() + File.separator + "ehcache.xml").exists()) {
-            plugins.add(new EhCachePlugin());
-        } else {
-            plugins.add(new EhCachePlugin(EhCacheImpl.getInstance().getCacheManager()));
-        }
+        // 判断初始化缓存信息
+        plugins.add(new EhCachePlugin());
+
 
         if (GojaConfig.isSecurity()) {
             plugins.add(new ShiroPlugin(this._routes));
@@ -310,8 +315,6 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        // Because the system itself the task of startup tasks, so the system task plugin must be the last to join the list
-        plugins.add(new JobsPlugin());
     }
 
     @Override
@@ -380,29 +383,59 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void afterJFinalStart() {
-        List<Class> appCliasses = ClassBox.getInstance().getClasses(ClassType.APP);
-        if (appCliasses != null && !appCliasses.isEmpty()) {
-            for (Class appCliass : appCliasses) {
 
-                AppLoadEvent event;
-                try {
-                    event = (AppLoadEvent) appCliass.newInstance();
-                    if (event != null) {
-                        event.load();
+        final List<Job<?>> applicationStartJobs = jobsPlugin.getApplicationStartJobs();
+        if (applicationStartJobs != null && !applicationStartJobs.isEmpty()) {
+            for (Job<?> applicationStartJob : applicationStartJobs) {
+
+                applicationStartJob.run();
+                if (applicationStartJob.isWasError()) {
+                    if (applicationStartJob.getLastException() != null) {
+                        logger.error("@OnApplicationStart Job has failed!", applicationStartJob.getLastException());
+                    } else {
+                        logger.error("@OnApplicationStart Job has failed");
                     }
-                } catch (Throwable t) {
-                    logger.error("load event is error!", t);
                 }
             }
+
         }
-        //        GojaConfig.clear();
     }
 
     @Override
     public void beforeJFinalStop() {
         ClassBox.getInstance().clearBox();
-        Cache.stop();
         started = false;
+
+        final List<Class> stopJobs = jobsPlugin.getApplicationStopJobs();
+
+        if (!(stopJobs == null || stopJobs.isEmpty())) {
+            for (Class clazz : stopJobs) {
+                try {
+                    Job<?> job = ((Job<?>) clazz.newInstance());
+                    job.run();
+
+                    if (job.isWasError()) {
+                        if (job.getLastException() != null) {
+                            logger.error("@OnApplicationStop Job has failed!", job.getLastException());
+                        } else {
+                            logger.error("@OnApplicationStop Job has failed");
+                        }
+                    }
+                } catch (InstantiationException | IllegalAccessException e) {
+                    throw new UnexpectedException("ApplicationStop job could not be instantiated", e);
+                } catch (Throwable ex) {
+                    if (ex instanceof GojaException) {
+                        throw (GojaException) ex;
+                    }
+                    throw new UnexpectedException(ex);
+                }
+            }
+        }
+        jobsPlugin.clear();
+        jobsPlugin = null;
+        _routes.clear();
+        _routes = null;
+
     }
 
     /**

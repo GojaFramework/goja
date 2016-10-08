@@ -7,7 +7,10 @@
 package goja.initialize;
 
 import goja.core.app.GojaConfig;
-import goja.core.cache.Cache;
+import goja.core.kits.StopWatch;
+import goja.initialize.ansi.AnsiColor;
+import goja.initialize.ansi.AnsiOutput;
+import goja.initialize.ansi.AnsiStyle;
 import goja.initialize.ctxbox.ClassFinder;
 import goja.logging.LoggerInit;
 import com.jfinal.kit.PathKit;
@@ -27,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -50,14 +54,49 @@ public class GojaInitializer implements ServletContainerInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(GojaInitializer.class);
 
+
+    private static final String BANNER = "\n" +
+            "        ___           ___         ___          ___     \n" +
+            "       /  /\\         /  /\\       /  /\\        /  /\\    \n" +
+            "      /  /:/_       /  /::\\     /  /:/       /  /::\\   \n" +
+            "     /  /:/ /\\     /  /:/\\:\\   /__/::\\      /  /:/\\:\\  \n" +
+            "    /  /:/_/::\\   /  /:/  \\:\\  \\__\\/\\:\\    /  /:/~/::\\ \n" +
+            "   /__/:/__\\/\\:\\ /__/:/ \\__\\:\\    \\  \\:\\  /__/:/ /:/\\:\\\n" +
+            "   \\  \\:\\ /~~/:/ \\  \\:\\ /  /:/     \\__\\:\\ \\  \\:\\/:/__\\/\n" +
+            "    \\  \\:\\  /:/   \\  \\:\\  /:/      /  /:/  \\  \\::/     \n" +
+            "     \\  \\:\\/:/     \\  \\:\\/:/      /__/:/    \\  \\:\\     \n" +
+            "      \\  \\::/       \\  \\::/       \\__\\/      \\  \\:\\    \n" +
+            "       \\__\\/         \\__\\/                    \\__\\/    \n" +
+            "";
+
+
+    private static final String GOJA_BOOT = " :: Goja Boot :: ";
+
+
+    private static final int STRAP_LINE_SIZE = 42;
+
     @Override
     public void onStartup(Set<Class<?>> classSet, ServletContext ctx)
             throws ServletException {
+
+        System.out.println(BANNER);
+
+        String version = GojaBootVersion.getVersion();
+        version = (version == null ? "" : " (v" + version + ")");
+        String padding = "";
+        while (padding.length() < STRAP_LINE_SIZE
+                - (version.length() + GOJA_BOOT.length())) {
+            padding += " ";
+        }
+        System.out.println(AnsiOutput.toString(AnsiColor.GREEN, GOJA_BOOT,
+                AnsiColor.DEFAULT, padding, AnsiStyle.FAINT, version));
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
         ImageIO.setUseCache(false);
         // 初始化配置文件
         GojaConfig.init();
-        // 初始化缓存
-        Cache.init();
         // 日志处理
         LoggerInit.init();
 
@@ -78,7 +117,6 @@ public class GojaInitializer implements ServletContainerInitializer {
         //Before starting JFinal, lookup class file on the classpath.
         ClassFinder.find();
 
-        String app_name = GojaConfig.getAppName();
 
         FilterRegistration.Dynamic jfinalFilter =
                 ctx.addFilter("goja&jfinal", "com.jfinal.core.JFinalFilter");
@@ -88,10 +126,25 @@ public class GojaInitializer implements ServletContainerInitializer {
         // 支持异步请求处理
         jfinalFilter.setAsyncSupported(true);
 
-        System.out.println("initializer " + app_name + " Application ok!");
         if (GojaConfig.getApplicationMode().isDev()) {
             runScriptInitDb();
         }
+        logger.info(getStartedMessage(stopWatch).toString());
+    }
+
+    private StringBuilder getStartedMessage(StopWatch stopWatch) {
+        StringBuilder message = new StringBuilder();
+        message.append("Started ");
+        message.append(GojaConfig.getAppName());
+        message.append(" in ");
+        message.append(stopWatch.getTotalTimeSeconds());
+        try {
+            double uptime = ManagementFactory.getRuntimeMXBean().getUptime() / 1000.0;
+            message.append(" seconds (JVM running for ").append(uptime).append(")");
+        } catch (Throwable ex) {
+            // No JVM time available
+        }
+        return message;
     }
 
     private void runScriptInitDb() {

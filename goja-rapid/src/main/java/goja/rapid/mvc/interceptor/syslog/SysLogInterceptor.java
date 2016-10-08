@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class SysLogInterceptor implements Interceptor {
     private static final Map<String, LogConfig> acitonLogs = Maps.newHashMap();
     private LogProcessor logProcesser;
@@ -54,10 +56,11 @@ public class SysLogInterceptor implements Interceptor {
 
     private void logFromConfig(Controller c, LogConfig log) {
         SysLog sysLog = new SysLog();
-        final String remoteIP = Requests.remoteIP(c.getRequest());
+        final HttpServletRequest request = c.getRequest();
+        final String remoteIP = Requests.remoteIP(request);
         sysLog.setIp(remoteIP);
         sysLog.setUser(logProcesser.getUsername(c));
-        Map<String, String[]> parameterMap = c.getRequest().getParameterMap();
+        Map<String, String[]> parameterMap = request.getParameterMap();
         Set<Entry<String, String[]>> entrySet = parameterMap.entrySet();
         Map<String, String> paraMap = Maps.newHashMap();
         for (Entry<String, String[]> entry : entrySet) {
@@ -70,6 +73,7 @@ public class SysLogInterceptor implements Interceptor {
         }
         final String message = logProcesser.formatMessage(log.title, paraMap);
         sysLog.setMessage(message);
+        sysLog.setTitle(log.getTitle());
         logProcesser.process(sysLog);
     }
 

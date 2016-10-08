@@ -175,4 +175,29 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
     public String toString() {
         return this.getClass().getName();
     }
+
+
+    public boolean isWasError() {
+        return wasError;
+    }
+
+    public void setWasError(boolean wasError) {
+        this.wasError = wasError;
+    }
+
+    public Throwable getLastException() {
+        return lastException;
+    }
+
+    public void setLastException(Throwable lastException) {
+        this.lastException = lastException;
+    }
+
+    public Date getNextPlannedExecution() {
+        return nextPlannedExecution;
+    }
+
+    public void setNextPlannedExecution(Date nextPlannedExecution) {
+        this.nextPlannedExecution = nextPlannedExecution;
+    }
 }

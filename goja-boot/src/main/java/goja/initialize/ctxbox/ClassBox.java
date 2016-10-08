@@ -7,7 +7,6 @@
 package goja.initialize.ctxbox;
 
 import goja.job.Job;
-import goja.mvc.AppLoadEvent;
 import goja.rapid.mvc.interceptor.syslog.LogProcessor;
 import goja.security.shiro.SecurityUserData;
 import com.jfinal.aop.Interceptor;
@@ -58,8 +57,6 @@ public class ClassBox {
             initClassWithType(cls, ClassType.JOB);
         } else if (org.quartz.Job.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.QUARTZ);
-        } else if (AppLoadEvent.class.isAssignableFrom(cls)) {
-            initClassWithType(cls, ClassType.APP);
         } else if (Interceptor.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.AOP);
         } else if (IPlugin.class.isAssignableFrom(cls)) {

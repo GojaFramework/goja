@@ -48,6 +48,9 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     @Override
     public void init() throws Exception {
         super.init();
+
+
+
         String shiroConfigFile = GojaConfig.getAppSecurityConfig();
         final File configFolderFile = GojaConfig.getConfigFolderFile();
         shiroConfig = configFolderFile == null ? PropKit.use(shiroConfigFile).getProperties()

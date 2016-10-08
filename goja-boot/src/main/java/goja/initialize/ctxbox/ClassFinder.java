@@ -10,7 +10,6 @@ import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.core.kits.reflect.Reflect;
 import goja.job.Job;
-import goja.mvc.AppLoadEvent;
 import goja.rapid.mvc.interceptor.syslog.LogProcessor;
 import goja.security.shiro.SecurityUserData;
 import com.jfinal.aop.Interceptor;
@@ -38,7 +37,7 @@ public class ClassFinder {
     public static void find() {
 
         ClassSearcher searcher = ClassSearcher.of(Model.class, Controller.class, Interceptor.class,
-                Job.class, org.quartz.Job.class, AppLoadEvent.class, IPlugin.class, /*Handler.class,*/
+                Job.class, org.quartz.Job.class, IPlugin.class, /*Handler.class,*/
                 LogProcessor.class, SecurityUserData.class)
                 .scanPackages(Lists.newArrayList(GojaConfig.getAppPackPrefix()))
                 .inJars(GojaConfig.getAppJars());
@@ -60,7 +59,7 @@ public class ClassFinder {
         String testRoolClassPath = PathKit.getRootClassPath();
         String test_classpath = testRoolClassPath.replace("test-", StringPool.EMPTY);
         ClassSearcher test_searcher = ClassSearcher.of(Model.class, Controller.class, Interceptor.class,
-                Job.class, org.quartz.Job.class, AppLoadEvent.class, /*IPlugin.class, Handler.class,*/
+                Job.class, org.quartz.Job.class,  IPlugin.class,/* Handler.class,*/
                 LogProcessor.class, SecurityUserData.class).classpath(test_classpath)
                 .scanPackages(Lists.newArrayList(GojaConfig.getAppPackPrefix()))
                 .inJars(GojaConfig.getAppJars());

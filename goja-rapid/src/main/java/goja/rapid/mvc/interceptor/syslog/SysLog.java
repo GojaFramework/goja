@@ -31,6 +31,7 @@ public final class SysLog {
     private String ip;
 
     private String message;
+    private String title;
 
     public String getUser() {
         return user;
@@ -64,6 +65,16 @@ public final class SysLog {
         this.message = message;
     }
 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -71,6 +82,7 @@ public final class SysLog {
                 .add("createTime", createTime)
                 .add("ip", ip)
                 .add("message", message)
+                .add("title", title)
                 .toString();
     }
 }

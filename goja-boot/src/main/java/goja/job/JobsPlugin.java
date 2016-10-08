@@ -38,16 +38,27 @@ import java.util.concurrent.TimeUnit;
 
 public class JobsPlugin implements IPlugin {
 
-    public static final  Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
+    private static final Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
         @Override
         public boolean apply(Class input) {
             return Job.class.isAssignableFrom(input);
         }
     };
     private static final Logger           logger              = LoggerFactory.getLogger(JobsPlugin.class);
-    protected static ScheduledThreadPoolExecutor executor;
-    protected static List<Job>   scheduledJobs       = null;
-    private static   List<Class> applicationStopJobs = Lists.newArrayList();
+    static ScheduledThreadPoolExecutor executor;
+    private static List<Job>   scheduledJobs       = null;
+
+    private final List<Class> applicationStopJobs = Lists.newArrayList();
+    private final List<Job<?>> applicationStartJobs = Lists.newArrayList();
+
+    public  List<Class> getApplicationStopJobs() {
+        return applicationStopJobs;
+    }
+
+    public  List<Job<?>> getApplicationStartJobs() {
+        return applicationStartJobs;
+    }
+
 
     public JobsPlugin() {
 
@@ -57,7 +68,7 @@ public class JobsPlugin implements IPlugin {
                 new ThreadPoolExecutor.AbortPolicy());
     }
 
-    public static <V> void scheduleForCRON(Job<V> job) {
+    static <V> void scheduleForCRON(Job<V> job) {
         if (!job.getClass().isAnnotationPresent(On.class)) {
             return;
         }
@@ -115,40 +126,16 @@ public class JobsPlugin implements IPlugin {
             for (final Class<?> clazz : jobClasses) {
                 // @OnApplicationStart
                 if (clazz.isAnnotationPresent(OnApplicationStart.class)) {
-                    //check if we're going to run the job sync or async
-                    OnApplicationStart appStartAnnotation = clazz.getAnnotation(OnApplicationStart.class);
-                    if (!appStartAnnotation.async()) {
-                        //run job sync
-                        try {
-                            Job<?> job = ((Job<?>) clazz.newInstance());
-                            scheduledJobs.add(job);
-                            job.run();
-                            if (job.wasError) {
-                                if (job.lastException != null) {
-                                    throw job.lastException;
-                                }
-                                throw new RuntimeException("@OnApplicationStart Job has failed");
-                            }
-                        } catch (InstantiationException | IllegalAccessException e) {
-                            throw new UnexpectedException("Job could not be instantiated", e);
-                        } catch (Throwable ex) {
-                            if (ex instanceof GojaException) {
-                                throw (GojaException) ex;
-                            }
-                            throw new UnexpectedException(ex);
+                    try {
+                        Job<?> job = ((Job<?>) clazz.newInstance());
+                        applicationStartJobs.add(job);
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        throw new UnexpectedException("Job could not be instantiated", e);
+                    } catch (Throwable ex) {
+                        if (ex instanceof GojaException) {
+                            throw (GojaException) ex;
                         }
-                    } else {
-                        //run job async
-                        try {
-                            Job<?> job = ((Job<?>) clazz.newInstance());
-                            scheduledJobs.add(job);
-                            //start running job now in the background
-                            @SuppressWarnings("unchecked")
-                            Callable<Job> callable = (Callable<Job>) job;
-                            executor.submit(callable);
-                        } catch (InstantiationException | IllegalAccessException ex) {
-                            throw new UnexpectedException("Cannot instanciate Job " + clazz.getName());
-                        }
+                        throw new UnexpectedException(ex);
                     }
                 }
                 // @OnApplicationStop
@@ -192,28 +179,6 @@ public class JobsPlugin implements IPlugin {
     @Override
     public boolean stop() {
 
-        if (!(applicationStopJobs == null || applicationStopJobs.isEmpty())) {
-            for (Class clazz : applicationStopJobs) {
-                try {
-                    Job<?> job = ((Job<?>) clazz.newInstance());
-                    job.run();
-                    if (job.wasError) {
-                        if (job.lastException != null) {
-                            throw job.lastException;
-                        }
-                        throw new RuntimeException("@OnApplicationStop Job has failed");
-                    }
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new UnexpectedException("ApplicationStop job could not be instantiated", e);
-                } catch (Throwable ex) {
-                    if (ex instanceof GojaException) {
-                        throw (GojaException) ex;
-                    }
-                    throw new UnexpectedException(ex);
-                }
-            }
-        }
-
         if (scheduledJobs != null) {
             scheduledJobs.clear();
             scheduledJobs = null;
@@ -221,5 +186,11 @@ public class JobsPlugin implements IPlugin {
         executor.shutdownNow();
         executor.getQueue().clear();
         return true;
+    }
+
+
+    public void clear(){
+        applicationStartJobs.clear();
+        applicationStopJobs.clear();
     }
 }
