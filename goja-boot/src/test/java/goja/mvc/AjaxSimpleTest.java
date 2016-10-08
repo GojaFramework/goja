@@ -21,7 +21,7 @@ public class AjaxSimpleTest {
         stringBuilder.setMsg("ok");
         stringBuilder.setSuccess(true);
 
-        System.out.println("JSON.toJSONString(stringBuilder.createAjaxSimple()) = " + JSON.toJSONString(stringBuilder.createAjaxSimple()));
+        System.out.println("JSON.toJSONString(stringBuilder.create()) = " + JSON.toJSONString(stringBuilder.create()));
 
     }
 }

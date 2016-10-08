@@ -83,27 +83,29 @@ public class ClassSearcher {
         List<String> classFiles = Lists.newArrayList();
         File baseDir = new File(baseDirName);
         if (!baseDir.exists() || !baseDir.isDirectory()) {
-            LOG.error("search error：" + baseDirName + "is not a dir！");
+            return classFiles;
         } else {
             String[] files = baseDir.list();
             File file;
             String fileName, open = classpath + File.separator, close = ".class";
             int start, end;
-            for (String file_path : files) {
-                file = new File(baseDirName + File.separator + file_path);
-                if (file.isDirectory()) {
-                    classFiles.addAll(
-                            findFiles(baseDirName + File.separator + file_path, targetFileName, classpath));
-                } else {
-                    if (wildcardMatch(targetFileName, file.getName())) {
-                        fileName = file.getAbsolutePath();
-                        start = fileName.indexOf(open);
-                        end = fileName.indexOf(close, start + open.length());
-                        // window 下会出现问题,正则替换问题
-                        String className =
-                                StringUtils.replace(fileName.substring(start + open.length(), end), File.separator,
-                                        ".");
-                        classFiles.add(className);
+            if (files != null) {
+                for (String file_path : files) {
+                    file = new File(baseDirName + File.separator + file_path);
+                    if (file.isDirectory()) {
+                        classFiles.addAll(
+                                findFiles(baseDirName + File.separator + file_path, targetFileName, classpath));
+                    } else {
+                        if (wildcardMatch(targetFileName, file.getName())) {
+                            fileName = file.getAbsolutePath();
+                            start = fileName.indexOf(open);
+                            end = fileName.indexOf(close, start + open.length());
+                            // window 下会出现问题,正则替换问题
+                            String className =
+                                    StringUtils.replace(fileName.substring(start + open.length(), end), File.separator,
+                                            ".");
+                            classFiles.add(className);
+                        }
                     }
                 }
             }

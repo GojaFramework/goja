@@ -32,6 +32,11 @@ public interface GojaPropConst {
     String APP_JSON_MODE = "app.json.mode";
 
     /**
+     * 是否api服务
+     */
+    String APP_API = "app.api";
+
+    /**
      * 应用包前缀 默认 app
      */
     String APP_PACKAGE_PREFIX    = "app.prefix.pkg";

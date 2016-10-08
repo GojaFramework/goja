@@ -22,12 +22,19 @@ public class AjaxSimple<E> implements Serializable {
      */
     private final String msg;
 
+    private final String code;
+
     private final E data;
 
-    private AjaxSimple(boolean success, String msg, E data) {
+    private AjaxSimple(boolean success, String msg, String code, E data) {
         this.success = success;
         this.msg = msg;
+        this.code = code;
         this.data = data;
+    }
+
+    public static <D> Builder<D> Builder() {
+        return new Builder<D>();
     }
 
     public E getData() {
@@ -42,10 +49,14 @@ public class AjaxSimple<E> implements Serializable {
         return msg;
     }
 
+    public String getCode() {
+        return code;
+    }
 
-    static class Builder<B> {
+    public static class Builder<B> {
         private boolean success;
         private String  msg;
+        private String  code;
         private B       data;
 
         public Builder setSuccess(boolean success) {
@@ -62,9 +73,13 @@ public class AjaxSimple<E> implements Serializable {
             this.data = data;
             return this;
         }
+        public Builder setCode(String code) {
+            this.code = code;
+            return this;
+        }
 
-        public AjaxSimple<B> createAjaxSimple() {
-            return new AjaxSimple<B>(success, msg, data);
+        public AjaxSimple<B> create() {
+            return new AjaxSimple<B>(success, msg, code, data);
         }
     }
 }

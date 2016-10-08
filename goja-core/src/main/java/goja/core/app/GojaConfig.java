@@ -97,6 +97,10 @@ public final class GojaConfig {
     private static String jsonMode;
 
     private static boolean initialize = false;
+    /**
+     * 是否是API服务
+     */
+    private static boolean api        = false;
 
 
     private GojaConfig() {
@@ -153,6 +157,7 @@ public final class GojaConfig {
 
         appPackPrefix = GojaConfig.getProperty(GojaPropConst.APP_PACKAGE_PREFIX, "app");
         jsonMode = GojaConfig.getProperty(GojaPropConst.APP_JSON_MODE);
+        api = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_API, false);
         initialize = true;
     }
 
@@ -366,5 +371,9 @@ public final class GojaConfig {
 
     public static Object get(String key) {
         return configProps.get(key);
+    }
+
+    public static boolean isApi() {
+        return api;
     }
 }
