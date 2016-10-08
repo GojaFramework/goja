@@ -46,6 +46,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
         <java.version>1.7</java.version>
         <!-- 日志处理 -->
         <logback-core.version>1.1.7</logback-core.version>
@@ -161,6 +162,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <!-- 不使用默认的profile -->
                     <useReleaseProfile>false</useReleaseProfile>
+                    <arguments>-DskipTests</arguments>
                 </configuration>
             </plugin>
             <!-- resource插件 -->
