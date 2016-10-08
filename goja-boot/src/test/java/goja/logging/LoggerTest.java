@@ -2,7 +2,7 @@ package goja.logging;
 
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
-import goja.mvc.SimpleAjaxMessage;
+import goja.mvc.AjaxSimple;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class LoggerTest {
     @Test
     public void testOK() throws Exception {
 
-        final String simpleName = SimpleAjaxMessage.class.getSimpleName();
+        final String simpleName = AjaxSimple.class.getSimpleName();
         System.out.println("simpleName = " + simpleName);
 
     }

@@ -77,6 +77,7 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import freemarker.template.Configuration;
 
@@ -145,7 +146,7 @@ public class Goja extends JFinalConfig {
         // dev_mode
         constants.setDevMode(GojaConfig.getApplicationMode().isDev());
         // fixed: render view has views//xxx.ftl
-        final String DEFAULT_VIEW_PATH =  PageViewKit.WEBINF_DIR  + "views";
+        final String DEFAULT_VIEW_PATH = PageViewKit.WEBINF_DIR + "views";
         viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, DEFAULT_VIEW_PATH);
         constants.setBaseViewPath(viewPath);
 
@@ -201,11 +202,13 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        final String fileRenamePolicy = GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_FILERENAMEPOLICY, "date");
+        final String fileRenamePolicy = GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_FILERENAMEPOLICY, "default");
         if (StringUtils.equalsIgnoreCase(fileRenamePolicy, "date")) {
             OreillyCos.setFileRenamePolicy(new DateRandomFileRenamePolicy());
         } else if (StringUtils.equalsIgnoreCase(fileRenamePolicy, "radom")) {
             OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
+        } else if (StringUtils.equalsIgnoreCase(fileRenamePolicy, "default")) {
+            OreillyCos.setFileRenamePolicy(new DefaultFileRenamePolicy());
         } else {
             logger.warn("Upload folder naming of the unknown!");
         }
