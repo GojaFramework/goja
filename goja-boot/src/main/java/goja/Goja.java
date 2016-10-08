@@ -15,6 +15,7 @@ import goja.core.exceptions.DatabaseException;
 import goja.core.exceptions.GojaException;
 import goja.core.exceptions.UnexpectedException;
 import goja.core.sqlinxml.SqlInXmlPlugin;
+import goja.initialize.GojaInitializer;
 import goja.initialize.ctxbox.ClassBox;
 import goja.initialize.ctxbox.ClassType;
 import goja.job.Job;
@@ -125,6 +126,8 @@ public class Goja extends JFinalConfig {
     private static JobsPlugin jobsPlugin = new JobsPlugin();
 
     private Routes _routes;
+
+
 
     /**
      * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用,调用采用反射机制 <p/> Reflect.on(Goja.class).call("initWithTest");
@@ -399,6 +402,8 @@ public class Goja extends JFinalConfig {
             }
 
         }
+
+        GojaInitializer.finish();
     }
 
     @Override

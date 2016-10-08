@@ -75,6 +75,8 @@ public class GojaInitializer implements ServletContainerInitializer {
 
     private static final int STRAP_LINE_SIZE = 42;
 
+    private static StopWatch _stopWatch = new StopWatch();
+
     @Override
     public void onStartup(Set<Class<?>> classSet, ServletContext ctx)
             throws ServletException {
@@ -91,8 +93,7 @@ public class GojaInitializer implements ServletContainerInitializer {
         System.out.println(AnsiOutput.toString(AnsiColor.GREEN, GOJA_BOOT,
                 AnsiColor.DEFAULT, padding, AnsiStyle.FAINT, version));
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
+        _stopWatch.start();
 
         ImageIO.setUseCache(false);
         // 初始化配置文件
@@ -129,10 +130,13 @@ public class GojaInitializer implements ServletContainerInitializer {
         if (GojaConfig.getApplicationMode().isDev()) {
             runScriptInitDb();
         }
-        logger.info(getStartedMessage(stopWatch).toString());
     }
 
-    private StringBuilder getStartedMessage(StopWatch stopWatch) {
+    public static void finish(){
+        logger.info(getStartedMessage(_stopWatch).toString());
+    }
+
+    private static StringBuilder getStartedMessage(StopWatch stopWatch) {
         StringBuilder message = new StringBuilder();
         message.append("Started ");
         message.append(GojaConfig.getAppName());
