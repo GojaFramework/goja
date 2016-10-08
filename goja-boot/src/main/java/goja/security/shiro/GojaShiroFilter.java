@@ -8,6 +8,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.primitives.Ints;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.AuthenticationFilter;
@@ -48,7 +49,6 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     @Override
     public void init() throws Exception {
         super.init();
-
 
 
         String shiroConfigFile = GojaConfig.getAppSecurityConfig();
@@ -98,12 +98,12 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     private WebSecurityManager initSecurityManager() {
         AppDbRealm appDbRealm = new AppDbRealm();
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(appDbRealm);
-        securityManager.setCacheManager(new ShiroEhCacheManager());
+        securityManager.setCacheManager(new EhCacheManager());
         final DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setSessionIdCookieEnabled(true);
         // 默认一年过期时间
-        defaultWebSessionManager.setGlobalSessionTimeout(
-                Ints.tryParse(shiroConfig.getProperty("session.expired", "10800000")));
+        final String expiredTimes = shiroConfig.getProperty("session.expired", "10800000");
+        defaultWebSessionManager.setGlobalSessionTimeout(MoreObjects.firstNonNull(Ints.tryParse(expiredTimes), 10800000));
         securityManager.setSessionManager(defaultWebSessionManager);
         return securityManager;
     }
