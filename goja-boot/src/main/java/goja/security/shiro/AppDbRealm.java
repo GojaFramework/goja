@@ -35,6 +35,8 @@ public class AppDbRealm extends AuthorizingRealm {
         matcher.setHashIterations(EncodeKit.HASH_INTERATIONS);
 
         setCredentialsMatcher(matcher);
+
+        setName("goja_app_realm");
     }
 
     @Override
