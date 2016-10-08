@@ -20,6 +20,7 @@ import goja.job.JobsPlugin;
 import goja.logging.Logger;
 import goja.logging.LoggerInit;
 import goja.mvc.AppLoadEvent;
+import goja.mvc.PageViewKit;
 import goja.mvc.auto.AutoBindRoutes;
 import goja.mvc.auto.AutoOnLoadInterceptor;
 import goja.mvc.error.GojaErrorRenderFactory;
@@ -36,6 +37,8 @@ import goja.rapid.job.QuartzPlugin;
 import goja.rapid.mongo.MongoPlugin;
 import goja.rapid.mvc.interceptor.syslog.LogProcessor;
 import goja.rapid.mvc.interceptor.syslog.SysLogInterceptor;
+import goja.rapid.mvc.upload.filerenamepolicy.DateRandomFileRenamePolicy;
+import goja.rapid.mvc.upload.filerenamepolicy.RandomFileRenamePolicy;
 import goja.security.shiro.SecurityUserData;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -62,6 +65,7 @@ import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
+import com.jfinal.upload.OreillyCos;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 
 import com.google.common.base.MoreObjects;
@@ -141,9 +145,13 @@ public class Goja extends JFinalConfig {
         // dev_mode
         constants.setDevMode(GojaConfig.getApplicationMode().isDev());
         // fixed: render view has views//xxx.ftl
-        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH,
-                File.separator + "WEB-INF" + File.separator + "views");
+        final String DEFAULT_VIEW_PATH =  PageViewKit.WEBINF_DIR  + "views";
+        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, DEFAULT_VIEW_PATH);
         constants.setBaseViewPath(viewPath);
+
+        constants.setError404View(PageViewKit.get404PageView());
+        constants.setError500View(PageViewKit.get500PageView());
+        constants.setError403View(PageViewKit.get403PageView());
 
         appName = GojaConfig.getAppName();
         appVersion = GojaConfig.getVersion();
@@ -177,11 +185,10 @@ public class Goja extends JFinalConfig {
         if (GojaConfig.getApplicationMode().isDev()) {
             constants.setErrorRenderFactory(new GojaErrorRenderFactory());
         }
-        constants.setMaxPostSize(
-                GojaConfig.getPropertyToInt(GojaPropConst.APP_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE));
+        final int uploadMaxFileSize = GojaConfig.getPropertyToInt(GojaPropConst.APP_UPLOAD_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE);
+        constants.setMaxPostSize(uploadMaxFileSize);
 
-        final String attachmentPath =
-                GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "attachment");
+        final String attachmentPath = GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_PATH, "attachment");
         constants.setBaseUploadPath(attachmentPath);
         constants.setBaseDownloadPath(attachmentPath);
 
@@ -194,7 +201,14 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        //OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
+        final String fileRenamePolicy = GojaConfig.getProperty(GojaPropConst.APP_UPLOAD_FILERENAMEPOLICY, "date");
+        if (StringUtils.equalsIgnoreCase(fileRenamePolicy, "date")) {
+            OreillyCos.setFileRenamePolicy(new DateRandomFileRenamePolicy());
+        } else if (StringUtils.equalsIgnoreCase(fileRenamePolicy, "radom")) {
+            OreillyCos.setFileRenamePolicy(new RandomFileRenamePolicy());
+        } else {
+            logger.warn("Upload folder naming of the unknown!");
+        }
     }
 
     @Override

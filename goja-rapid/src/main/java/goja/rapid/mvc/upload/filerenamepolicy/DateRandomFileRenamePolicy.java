@@ -1,12 +1,12 @@
 /**
  *
  */
-package goja.rapid.upload.filerenamepolicy;
+package goja.rapid.mvc.upload.filerenamepolicy;
 
-import com.jfinal.kit.HashKit;
-import com.jfinal.kit.StrKit;
 import goja.core.app.GojaConfig;
 import goja.core.kits.lang.Strs;
+import com.jfinal.kit.HashKit;
+import com.jfinal.kit.StrKit;
 
 import org.joda.time.DateTime;
 

@@ -15,13 +15,22 @@
  */
 package goja.rapid.mvc.interceptor.syslog;
 
+import com.google.common.base.MoreObjects;
+
 import java.sql.Timestamp;
 
-public class SysLog {
-    String user;
-    Timestamp createTime = new Timestamp(System.currentTimeMillis());
-    String ip;
-    String message;
+/**
+ *
+ */
+public final class SysLog {
+
+    private String user;
+
+    private Timestamp createTime = new Timestamp(System.currentTimeMillis());
+
+    private String ip;
+
+    private String message;
 
     public String getUser() {
         return user;
@@ -57,8 +66,11 @@ public class SysLog {
 
     @Override
     public String toString() {
-        return "SysLog [user=" + user + ", createTime=" + createTime + ", ip=" + ip + ", message=" + message + "]";
+        return MoreObjects.toStringHelper(this)
+                .add("user", user)
+                .add("createTime", createTime)
+                .add("ip", ip)
+                .add("message", message)
+                .toString();
     }
-
-
 }

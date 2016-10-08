@@ -8,7 +8,7 @@ package goja.initialize.ctxbox;
 
 import goja.job.Job;
 import goja.mvc.AppLoadEvent;
-import goja.rapid.syslog.LogProcessor;
+import goja.rapid.mvc.interceptor.syslog.LogProcessor;
 import goja.security.shiro.SecurityUserData;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.Controller;

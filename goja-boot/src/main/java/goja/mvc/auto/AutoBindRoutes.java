@@ -27,55 +27,42 @@ public class AutoBindRoutes extends Routes {
 
     private static final Logger logger = LoggerFactory.getLogger(AutoBindRoutes.class);
 
-    private static final String suffix = "Controller";
-
-    private static final String CONTRONERS_FLAG = "controllers";
 
     private static String controllerKey(Class clazz) {
         final String simpleName = clazz.getSimpleName();
-        Preconditions.checkArgument(simpleName.endsWith(suffix),
-                " does not has a @ControllerBind annotation and it's name is not end with " + suffix);
+
+        String controllerSuffix = "Controller";
+        Preconditions.checkArgument(simpleName.endsWith(controllerSuffix),
+                " does not has a @ControllerBind annotation and it's name is not end with " + controllerSuffix);
+        // 得到 /helloController
         String controllerKey = StringPool.SLASH + StrKit.firstCharToLowerCase(simpleName);
-        controllerKey = controllerKey.substring(0, controllerKey.indexOf(suffix));
+        // 得到 /hello
+        controllerKey = controllerKey.substring(0, controllerKey.indexOf(controllerSuffix));
+
+
         String packName = clazz.getPackage().getName();
 
-        // 增加一种新的路由机制
-        // prefix       com.mo008
-        // controller   com.mo008.controllers
-        // controller   com.mo008.sys.controllers
-        // controller2  com.mo008.member.controllers
+        final String controllersFlag = "controllers";
+
         final String appPackPrefix = GojaConfig.getAppPackPrefix();
+
+
         if (StringUtils.startsWith(packName, appPackPrefix)) {
-            // 如果是配置的包,则进行路由生成
-            if (StringUtils.startsWith(packName,
-                    appPackPrefix + StringPool.DOT + CONTRONERS_FLAG)) { // 包名正好为 com.mo008.controllers 开头
-                if (StringUtils.endsWith(packName, CONTRONERS_FLAG)) {
-                    return controllerKey;
-                } else {
-                    String biz_pk = StringUtils.substringAfter(packName,
-                            StringPool.DOT + CONTRONERS_FLAG + StringPool.DOT);
-                    controllerKey = StringPool.SLASH
-                            + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
-                            + controllerKey;
-                    return controllerKey;
-                }
-            } else {
-                // 取得中间的模块路由
-                final String moduleRoute =
-                        StringUtils.substring(packName, StringUtils.length(appPackPrefix + "."),
-                                StringUtils.indexOf(packName, StringPool.DOT + CONTRONERS_FLAG));
-                // sys/user
-                if (StringUtils.endsWith(packName, CONTRONERS_FLAG)) {
-                    return StringPool.SLASH + moduleRoute + controllerKey;
-                } else {
-                    String biz_pk = StringUtils.substringAfter(packName, StringPool.DOT + CONTRONERS_FLAG);
-                    controllerKey = StringPool.SLASH
-                            + moduleRoute
-                            + biz_pk.replace(StringPool.DOT, StringPool.SLASH)
-                            + controllerKey;
-                    return controllerKey;
-                }
-            }
+
+            // 增加一些新的路由机制
+            // prefix        com.mo008
+            // controller1   com.mo008.controllers
+            // controller2   com.mo008.sys.controllers
+            // controller3   com.mo008.sys.controllers.admin
+
+
+            //  com.mo008.controllers.HelloController               -> /hello
+            //  com.mo008.sys.controllers.HelloController           -> /sys/hello
+            //  com.mo008.sys.controllers.admin.HelloController     -> sys/admin/hello
+            //  com.mo008.sys.controllers.admin.me.HelloController  -> sys/admin/me/hello
+            final String removePrefixPack = StringUtils.replace(packName, appPackPrefix, StringPool.EMPTY);
+            final String removeControllerPack = StringUtils.replace(removePrefixPack, StringPool.DOT + controllersFlag, StringPool.EMPTY);
+            return StringUtils.replace(removeControllerPack, StringPool.DOT, StringPool.SLASH) + controllerKey;
         } else {
             return null;
         }

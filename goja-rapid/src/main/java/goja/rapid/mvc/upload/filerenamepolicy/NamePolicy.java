@@ -1,7 +1,7 @@
 /**
  *
  */
-package goja.rapid.upload.filerenamepolicy;
+package goja.rapid.mvc.upload.filerenamepolicy;
 
 /**
  * @author BruceZCQ

@@ -34,63 +34,65 @@ public interface GojaPropConst {
     /**
      * 应用包前缀 默认 app
      */
-    String APP_PACKAGE_PREFIX = "app.prefix.pkg";
+    String APP_PACKAGE_PREFIX    = "app.prefix.pkg";
     /**
      * 应用默认的域名
      */
-    String APPDOMAIN          = "app.domain";
+    String APPDOMAIN             = "app.domain";
     /**
      * 是否启用身份验证，也就是是否启用shiro 配置为：true, false
      */
-    String APPSECURITY        = "app.security";
+    String APPSECURITY           = "app.security";
     /**
      * 身份验证配置
      */
-    String APPSECURITYCONFIG  = "app.security.config";
+    String APPSECURITYCONFIG     = "app.security.config";
     /**
      * 第三方包，可以扫描加载相关的类 模型等 配置为：classpath下的jar名称
      */
-    String APPJARS            = "app.jars";
+    String APPJARS               = "app.jars";
     /**
      * 是否启用定时任务 配置为：true, false
      */
-    String APPJOB             = "app.job";
+    String APPJOB                = "app.job";
     /**
      * 是否启用全文检索，配置为一个存在的路径地址
      */
     //    String APPFULLTEXT       = "app.fulltext";
     /**
-     * 最大支持的上传文件大小
-     */
-    String APP_MAXFILESIZE    = "app.upload.maxfilesize";
-    /**
      * JSP视图类型,默认为Freemwrker
      */
-    String APP_VIEW_JSP       = "app.jsp";
+    String APP_VIEW_JSP          = "app.jsp";
     /**
      * 微信地址，配置了则启用微信插件
      */
-    String APP_WXCHAT_URL     = "app.wxchat.url";
+    String APP_WXCHAT_URL        = "app.wxchat.url";
     /**
      * 视图存储路径，默认 WEB-INF/views/
      */
-    String APP_VIEWPATH       = "app.viewpath";
+    String APP_VIEWPATH          = "app.viewpath";
     /**
      * 框架内部异步处理的线程数，默认10
      */
-    String APP_JOB_POOL       = "app.job.pool";
+    String APP_JOB_POOL          = "app.job.pool";
     /**
      * 应用的日志级别
      */
-    String APP_LOGGER         = "app.logger";
+    String APP_LOGGER            = "app.logger";
     /**
      * 默认的文件上传路径
      */
-    String APP_UPLOAD_PATH    = "app.upload.path";
+    String APP_UPLOAD_PATH       = "app.upload.path";
     /**
-     * snaker工作流的配置，默认为false
+     * 文件上传的存储文件夹路径，默认的重命名方式，可选
+     * 1. date  按照日期进行重命名；
+     * 2. radom 随机命名；
      */
-    String APP_SNAKER         = "app.snaker";
+    String APP_UPLOAD_FILERENAMEPOLICY = "app.upload.filerenamepolicy";
+    /**
+     * 最大支持的上传文件大小
+     */
+    String APP_UPLOAD_MAXFILESIZE       = "app.upload.maxfilesize";
 
     /**
      * 数据库连接地址 如果是多数据源，配置文件中应该是 db.config1.url
@@ -203,5 +205,4 @@ public interface GojaPropConst {
      * UE控件访问文件（上传的图片、文件）获取的地址前缀
      */
     String UE_URLPREFIX   = "ue.urlprefix";
-
 }

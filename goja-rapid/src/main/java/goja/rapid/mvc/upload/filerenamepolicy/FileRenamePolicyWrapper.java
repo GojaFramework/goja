@@ -1,11 +1,11 @@
 /**
  *
  */
-package goja.rapid.upload.filerenamepolicy;
-
-import com.oreilly.servlet.multipart.FileRenamePolicy;
+package goja.rapid.mvc.upload.filerenamepolicy;
 
 import goja.core.StringPool;
+
+import com.oreilly.servlet.multipart.FileRenamePolicy;
 
 import java.io.File;
 

@@ -11,14 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package goja.rapid.upload.filerenamepolicy;
-
-import com.jfinal.kit.HashKit;
-
-import com.oreilly.servlet.multipart.FileRenamePolicy;
+package goja.rapid.mvc.upload.filerenamepolicy;
 
 import goja.core.StringPool;
 import goja.core.kits.lang.Strs;
+import com.jfinal.kit.HashKit;
+
+import com.oreilly.servlet.multipart.FileRenamePolicy;
 
 import java.io.File;
 

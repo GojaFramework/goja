@@ -50,12 +50,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
         <!-- 日志处理 -->
-        <logback-core.version>1.1.5</logback-core.version>
-        <slf4j-api.version>1.7.16</slf4j-api.version>
+        <logback-core.version>1.1.7</logback-core.version>
+        <slf4j-api.version>1.7.21</slf4j-api.version>
         <!--模版视图 -->
-        <freemarker.version>2.3.23</freemarker.version>
+        <freemarker.version>2.3.25-incubating</freemarker.version>
         <!-- utils -->
-        <commons-beanutils.version>1.9.2</commons-beanutils.version>
+        <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-pool2.version>2.4.2</commons-pool2.version>
         <commons-codec.version>1.10</commons-codec.version>
@@ -64,28 +64,28 @@
         <commons-email.version>1.4</commons-email.version>
         <commons-digester3.version>3.2</commons-digester3.version>
         <!-- Http 操作工具 -->
-        <httpclient.version>4.5.1</httpclient.version>
-        <httpcore.version>4.4.3</httpcore.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <httpcore.version>4.4.5</httpcore.version>
         <!--the core util. -->
         <guava.version>19.0</guava.version>
-        <fst.version>2.40</fst.version>
+        <fst.version>2.48</fst.version>
         <!--JSON工具包-->
-        <fastjson.version>1.2.7</fastjson.version>
+        <fastjson.version>1.2.17</fastjson.version>
         <jackson.version>2.6.3</jackson.version>
         <!-- Java 字节码操作有关 -->
-        <objenesis.version>2.2</objenesis.version>
-        <javassist.version>3.19.0-GA</javassist.version>
+        <objenesis.version>2.4</objenesis.version>
+        <javassist.version>3.21.0-GA</javassist.version>
         <!-- 日期类工具 -->
-        <joda-time.version>2.9.2</joda-time.version>
+        <joda-time.version>2.9.4</joda-time.version>
         <!-- XML解析工具 -->
         <dom4j.version>1.6.1</dom4j.version>
         <activation.version>1.1</activation.version>
         <!-- HTML 解析 -->
-        <jsoup.version>1.8.3</jsoup.version>
+        <jsoup.version>1.9.2</jsoup.version>
         <!-- 二维码解析工具 -->
-        <zxing.version>3.2.1</zxing.version>
+        <zxing.version>3.3.0</zxing.version>
         <!-- XML转换OO使用 -->
-        <xstream.version>1.4.8</xstream.version>
+        <xstream.version>1.4.9</xstream.version>
         <!-- 邮件发送工具 -->
         <mail.version>1.4.7</mail.version>
         <!-- 定时任务处理 -->
@@ -97,24 +97,22 @@
         <!-- 应用级别缓存 -->
         <ehcache-core.version>2.6.11</ehcache-core.version>
         <!-- 数据库连接池 -->
-        <druid.version>1.0.17</druid.version>
+        <druid.version>1.0.26</druid.version>
         <!-- JDBC数据库驱动 -->
-        <mysql-connector-java.version>5.1.38</mysql-connector-java.version>
+        <mysql-connector-java.version>6.0.4</mysql-connector-java.version>
         <postgresql.version>9.4-1206-jdbc41</postgresql.version>
-        <h2.version>1.4.185</h2.version>
+        <h2.version>1.4.192</h2.version>
         <!-- servlet and shiro -->
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
         <!-- 身份验证组件 -->
-        <shiro.version>1.2.4</shiro.version>
+        <shiro.version>1.3.2</shiro.version>
         <!-- nosql -->
         <mongo-java-driver.version>3.2.0</mongo-java-driver.version>
-        <jedis.version>2.7.3</jedis.version>
+        <jedis.version>2.9.0</jedis.version>
         <!-- 打包 ZIP工具 -->
         <ant.version>1.9.6</ant.version>
         <!-- 报表工具 -->
         <jasperreports.version>6.2.0</jasperreports.version>
-        <!-- 单点登录 -->
-        <kisso.version>3.5.4</kisso.version>
         <!-- 对象拷贝转换 -->
         <dozer.version>5.5.1</dozer.version>
         <!-- Office 操作 -->
@@ -122,7 +120,7 @@
         <jxls-core.version>1.0.6</jxls-core.version>
         <poi.version>3.11</poi.version>
         <!-- 汉字转拼音工具 -->
-        <jpinyin.version>1.1.1</jpinyin.version>
+        <jpinyin.version>1.1.7</jpinyin.version>
 
         <!-- 单元测试 -->
         <junit.version>4.12</junit.version>
@@ -245,11 +243,4 @@
 
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>osc</id>
-            <name>os-china</name>
-            <url>http://maven.oschina.net/content/groups/public/</url>
-        </repository>
-    </repositories>
 </project>
