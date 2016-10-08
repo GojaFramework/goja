@@ -98,7 +98,9 @@ public class GojaShiroFilter extends AbstractShiroFilter {
     private WebSecurityManager initSecurityManager() {
         AppDbRealm appDbRealm = new AppDbRealm();
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(appDbRealm);
-        securityManager.setCacheManager(new EhCacheManager());
+        final EhCacheManager cacheManager = new EhCacheManager();
+        cacheManager.setCacheManagerConfigFile("classpath:goja/ehcache/shiro-ehcache.xml");
+        securityManager.setCacheManager(cacheManager);
         final DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setSessionIdCookieEnabled(true);
         // 默认一年过期时间
