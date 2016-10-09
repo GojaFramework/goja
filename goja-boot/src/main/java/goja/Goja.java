@@ -37,6 +37,7 @@ import goja.plugins.shiro.ShiroPlugin;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.job.QuartzPlugin;
 import goja.rapid.mongo.MongoPlugin;
+import goja.rapid.mvc.handler.CutSessionIdHandler;
 import goja.rapid.mvc.interceptor.syslog.LogProcessor;
 import goja.rapid.mvc.interceptor.syslog.SysLogInterceptor;
 import goja.rapid.mvc.upload.filerenamepolicy.DateRandomFileRenamePolicy;
@@ -364,6 +365,10 @@ public class Goja extends JFinalConfig {
             });
 
             handlers.add(dvh);
+        }
+
+        if(GojaConfig.isSecurity()){
+            handlers.add(new CutSessionIdHandler());
         }
 
         //        final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
