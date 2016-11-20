@@ -10,30 +10,40 @@
         <version>0.1.15-SNAPSHOT</version>
     </parent>
 
-    <artifactId>goja-boot-starter</artifactId>
-
+    <artifactId>goja-boot-starter-utils</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-core</artifactId>
-            <version>${project.version}</version>
+            <artifactId>goja-boot-starter</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-boot</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-rapid</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
         </dependency>
+
+
         <dependency>
-            <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-test</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.stuxuhai</groupId>
+            <artifactId>jpinyin</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

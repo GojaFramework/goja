@@ -17,6 +17,11 @@
         <module>goja-boot-starter</module>
         <module>goja-boot-starter-shiro</module>
         <module>goja-boot-starter-quartz</module>
+        <module>goja-boot-starter-redis</module>
+        <module>goja-boot-starter-office</module>
+        <module>goja-boot-starter-http</module>
+        <module>goja-boot-starter-utils</module>
+        <module>goja-boot-starter-test</module>
     </modules>
 
 

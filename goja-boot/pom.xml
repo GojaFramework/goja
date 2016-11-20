@@ -33,6 +33,12 @@
         </dependency>
 
         <dependency>
+            <groupId>net.sf.jxls</groupId>
+            <artifactId>jxls-core</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal-weixin</artifactId>
             <optional>true</optional>
@@ -42,10 +48,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <optional>true</optional>
         </dependency>
 
 

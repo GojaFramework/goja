@@ -377,17 +377,7 @@
                 <artifactId>cglib-nodep</artifactId>
                 <version>3.1</version>
             </dependency>
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${jedis.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.commons</groupId>
-                        <artifactId>commons-pool2</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
+
             <dependency>
                 <groupId>de.ruedigermoeller</groupId>
                 <artifactId>fst</artifactId>
@@ -557,11 +547,6 @@
                 <optional>true</optional>
             </dependency>
 
-            <dependency>
-                <groupId>com.jhlabs</groupId>
-                <artifactId>filters</artifactId>
-                <version>2.0.235</version>
-            </dependency>
 
             <!--邮箱工具-->
             <dependency>
@@ -657,7 +642,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -729,6 +714,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -741,6 +727,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -751,16 +738,11 @@
                 </executions>
             </plugin>
 
-            <!-- exec java 插件 -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
                 <configuration>
                     <archive>
                         <manifest>
