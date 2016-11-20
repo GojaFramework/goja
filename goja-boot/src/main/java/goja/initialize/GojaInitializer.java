@@ -11,7 +11,6 @@ import goja.core.kits.StopWatch;
 import goja.initialize.ansi.AnsiColor;
 import goja.initialize.ansi.AnsiOutput;
 import goja.initialize.ansi.AnsiStyle;
-import goja.initialize.ctxbox.ClassFinder;
 import goja.logging.LoggerInit;
 import com.jfinal.kit.PathKit;
 
@@ -114,10 +113,6 @@ public class GojaInitializer implements ServletContainerInitializer {
         }
         //logger context destroy listener.
         ctx.addListener("ch.qos.logback.classic.selector.servlet.ContextDetachingSCL");
-
-        //Before starting JFinal, lookup class file on the classpath.
-        ClassFinder.find();
-
 
         FilterRegistration.Dynamic jfinalFilter =
                 ctx.addFilter("goja&jfinal", "com.jfinal.core.JFinalFilter");

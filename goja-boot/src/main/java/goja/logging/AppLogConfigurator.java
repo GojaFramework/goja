@@ -13,6 +13,8 @@ import com.google.common.base.Charsets;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -68,10 +70,15 @@ public class AppLogConfigurator {
             gojaLogger.setLevel(Level.DEBUG);
             gojaLogger.addAppender(ca);
             gojaLogger.setAdditive(false);
-            Logger appLogger = lc.getLogger(GojaConfig.getAppPackPrefix());
-            appLogger.setLevel(Level.DEBUG);
-            appLogger.addAppender(ca);
-            appLogger.setAdditive(false);
+
+            final List<String> appScans = GojaConfig.getAppScans();
+            for (String appScan : appScans) {
+                Logger appLogger = lc.getLogger(appScan);
+                appLogger.setLevel(Level.DEBUG);
+                appLogger.addAppender(ca);
+                appLogger.setAdditive(false);
+            }
+
 
             Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
             rootLogger.setLevel(Level.ERROR);
@@ -126,10 +133,15 @@ public class AppLogConfigurator {
             final String loggerLevel = GojaConfig.getProperty(GojaPropConst.APP_LOGGER);
             final Level config_level = Level.toLevel(loggerLevel, Level.INFO);
 
-            Logger appLogger = lc.getLogger(GojaConfig.getAppPackPrefix());
-            appLogger.setLevel(config_level);
-            appLogger.addAppender(asyncAppender);
-            appLogger.setAdditive(false);
+
+            final List<String> appScans = GojaConfig.getAppScans();
+            for (String appScan : appScans) {
+                Logger appLogger = lc.getLogger(appScan);
+                appLogger.setLevel(config_level);
+                appLogger.addAppender(asyncAppender);
+                appLogger.setAdditive(false);
+            }
+
 
             Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
             rootLogger.setLevel(config_level);

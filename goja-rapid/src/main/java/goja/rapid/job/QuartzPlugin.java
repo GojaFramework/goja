@@ -5,13 +5,12 @@
  */
 package goja.rapid.job;
 
-import com.jfinal.plugin.IPlugin;
 import goja.core.annotation.On;
 import goja.core.app.GojaConfig;
+import goja.core.kits.reflect.ClassPathScanning;
+import com.jfinal.plugin.IPlugin;
 
-import java.util.Date;
-import java.util.List;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
@@ -24,19 +23,20 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
+import java.util.Set;
+
 import static com.google.common.base.Throwables.propagate;
 
 public class QuartzPlugin implements IPlugin {
     private static final Logger logger = LoggerFactory.getLogger(QuartzPlugin.class);
-    private final Scheduler   sched;
-    private final List<Class> jobClasses;
+
+    private final Scheduler sched;
 
     /**
      * 定时任务处理.
-     *
-     * @param jobClasses 任务class
      */
-    public QuartzPlugin(List<Class> jobClasses) {
+    public QuartzPlugin() {
         Scheduler tmp_sched = null;
         try {
             tmp_sched = StdSchedulerFactory.getDefaultScheduler();
@@ -44,15 +44,16 @@ public class QuartzPlugin implements IPlugin {
             propagate(e);
         }
         this.sched = tmp_sched;
-        this.jobClasses = jobClasses;
     }
 
     @Override
     public boolean start() {
-        if (jobClasses != null && !jobClasses.isEmpty()) {
+        final Set<Class<? extends Job>> jobClazzs = ClassPathScanning.scan(Job.class);
+
+        if (CollectionUtils.isNotEmpty(jobClazzs)) {
             On on;
-            for (Class jobClass : jobClasses) {
-                on = (On) jobClass.getAnnotation(On.class);
+            for (Class<? extends Job> jobClass : jobClazzs) {
+                on = jobClass.getAnnotation(On.class);
                 if (on != null) {
                     String jobCronExp = on.value();
                     if (jobCronExp.startsWith("cron.")) {
@@ -64,12 +65,17 @@ public class QuartzPlugin implements IPlugin {
                 }
             }
 
-            jobClasses.clear();
+            jobClazzs.clear();
         }
         return true;
     }
 
     private void addJob(Class<? extends Job> jobClass, String jobCronExp, String jobName) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("GOJA: Initialization job task, job name {} rules {} job'class {}!",
+                    jobName, jobCronExp, jobClass);
+        }
+
         JobDetail job = JobBuilder.newJob(jobClass)
                 .withIdentity(jobName, jobName + "group")
                 .build();
@@ -85,6 +91,7 @@ public class QuartzPlugin implements IPlugin {
             sched.start();
         } catch (SchedulerException e) {
             propagate(e);
+            logger.error("GOJA::ERRO: JOB {} Error!", jobClass, e);
         }
         if (logger.isDebugEnabled()) {
             logger.debug(job.getKey()

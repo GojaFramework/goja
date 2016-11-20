@@ -7,24 +7,22 @@
 package goja;
 
 import goja.core.Func;
-import goja.core.annotation.PluginBind;
 import goja.core.app.ApplicationMode;
 import goja.core.app.GojaConfig;
 import goja.core.app.GojaPropConst;
-import goja.core.exceptions.DatabaseException;
 import goja.core.exceptions.GojaException;
 import goja.core.exceptions.UnexpectedException;
+import goja.core.kits.reflect.ClassPathScanning;
 import goja.core.sqlinxml.SqlInXmlPlugin;
+import goja.initialize.DruidDbIntializer;
 import goja.initialize.GojaInitializer;
-import goja.initialize.ctxbox.ClassBox;
-import goja.initialize.ctxbox.ClassType;
 import goja.job.Job;
 import goja.job.JobsPlugin;
 import goja.logging.Logger;
 import goja.logging.LoggerInit;
 import goja.mvc.PageViewKit;
-import goja.mvc.auto.AutoBindRoutes;
-import goja.mvc.auto.AutoOnLoadInterceptor;
+import goja.mvc.controller.ControllerBindRoutes;
+import goja.mvc.interceptor.AutoInterceptor;
 import goja.mvc.error.GojaErrorRenderFactory;
 import goja.mvc.render.ftl.PrettyTimeDirective;
 import goja.mvc.render.ftl.layout.BlockDirective;
@@ -34,7 +32,6 @@ import goja.mvc.render.ftl.layout.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
 import goja.plugins.shiro.ShiroInterceptor;
 import goja.plugins.shiro.ShiroPlugin;
-import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.rapid.job.QuartzPlugin;
 import goja.rapid.mongo.MongoPlugin;
 import goja.rapid.mvc.handler.CutSessionIdHandler;
@@ -54,13 +51,7 @@ import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.json.FastJsonFactory;
 import com.jfinal.json.JacksonFactory;
 import com.jfinal.kit.PropKit;
-import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
-import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.OracleDialect;
-import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.SqlServerDialect;
-import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
-import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
@@ -72,27 +63,25 @@ import com.jfinal.weixin.sdk.api.ApiConfigKit;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
 import com.google.common.primitives.Ints;
 
-import com.alibaba.druid.filter.logging.Slf4jLogFilter;
-import com.alibaba.druid.filter.stat.StatFilter;
-import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.druid.util.JdbcUtils;
-import com.alibaba.druid.wall.WallFilter;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import freemarker.template.Configuration;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -115,29 +104,26 @@ public class Goja extends JFinalConfig {
     public static Properties configuration;
     // the application view path.
     public static String     viewPath;
-    public static String     domain;
     public static String     appName;
 
 
     public static SecurityUserData securityUserData;
 
-    static         boolean started         = false;
-    private static boolean initlization    = false;
+    static boolean started = false;
 
     private static JobsPlugin jobsPlugin = new JobsPlugin();
 
     private Routes _routes;
 
 
-
     /**
      * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用,调用采用反射机制 <p/> Reflect.on(Goja.class).call("initWithTest");
      */
+    @SuppressWarnings("unused")
     static void initWithTest() {
 
         // set config propertis.
         configuration = GojaConfig.getConfigProps();
-        initlization = true;
 
         LoggerInit.init();
     }
@@ -147,11 +133,9 @@ public class Goja extends JFinalConfig {
         // set config propertis.
         configuration = GojaConfig.getConfigProps();
 
-        initlization = true;
-
         // dev_mode
         final ApplicationMode applicationMode = GojaConfig.getApplicationMode();
-        final boolean isDev = applicationMode.isDev();
+        final boolean         isDev           = applicationMode.isDev();
         constants.setDevMode(isDev);
         // fixed: render view has views//xxx.ftl
         final String DEFAULT_VIEW_PATH = PageViewKit.WEBINF_DIR + "views";
@@ -175,17 +159,19 @@ public class Goja extends JFinalConfig {
         }
 
         if (GojaConfig.isSecurity()) {
-            final List<Class> security_user = ClassBox.getInstance().getClasses(ClassType.SECURITY_DATA);
-            if (security_user != null && security_user.size() == 1) {
-                try {
-                    securityUserData = (SecurityUserData) security_user.get(0).newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    logger.error("the security user data has error!", e);
+            final Set<Class<? extends SecurityUserData>> securityUserClass = ClassPathScanning.scan(SecurityUserData.class);
+            if (CollectionUtils.isNotEmpty(securityUserClass)) {
+                for (Class<? extends SecurityUserData> securityUserClas : securityUserClass) {
+                    try {
+                        securityUserData = securityUserClas.newInstance();
+                        break;
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        logger.error("the security user data has error!", e);
+                    }
                 }
             }
         }
 
-        domain = GojaConfig.getAppDomain();
         final boolean jspViewType = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_VIEW_JSP, false);
         if (jspViewType) {
             constants.setViewType(ViewType.JSP);
@@ -227,7 +213,7 @@ public class Goja extends JFinalConfig {
     @Override
     public void configRoute(Routes routes) {
         this._routes = routes;
-        routes.add(new AutoBindRoutes());
+        routes.add(new ControllerBindRoutes());
     }
 
     @Override
@@ -247,18 +233,15 @@ public class Goja extends JFinalConfig {
         }
 
         if (GojaConfig.getPropertyToBoolean(GojaPropConst.APPJOB, false)) {
-
-            List<Class> jobClasses = ClassBox.getInstance().getClasses(ClassType.QUARTZ);
-
-            plugins.add(new QuartzPlugin(jobClasses));
+            plugins.add(new QuartzPlugin());
         }
 
         final boolean mongoFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.MONGO, false);
         if (mongoFlag) {
             logger.info("开始初始化MongoDB插件");
 
-            final String mongoHost = GojaConfig.getProperty(GojaPropConst.MONGO_HOST);
-            final String mongoPort = GojaConfig.getProperty(GojaPropConst.MONGO_PORT);
+            final String mongoHost     = GojaConfig.getProperty(GojaPropConst.MONGO_HOST);
+            final String mongoPort     = GojaConfig.getProperty(GojaPropConst.MONGO_PORT);
             final String mongoDatabase = GojaConfig.getProperty(GojaPropConst.MONGO_DB, "test");
             if (Strings.isNullOrEmpty(mongoHost) && Strings.isNullOrEmpty(mongoPort)) {
                 plugins.add(new MongoPlugin(mongoDatabase));
@@ -272,7 +255,7 @@ public class Goja extends JFinalConfig {
         final String redisConfig = GojaConfig.getProperty(GojaPropConst.REDIS_CONFIG);
         if (!Strings.isNullOrEmpty(redisConfig)) {
             final Properties redisConfigProp;
-            final File configFolderFile = GojaConfig.getConfigFolderFile();
+            final File       configFolderFile = GojaConfig.getConfigFolderFile();
             redisConfigProp = configFolderFile == null ? PropKit.use(redisConfig).getProperties()
                     : PropKit.use(FileUtils.getFile(configFolderFile, redisConfig)).getProperties();
             String cacheNames = redisConfigProp.getProperty(GojaPropConst.REDIS_CACHES);
@@ -301,19 +284,13 @@ public class Goja extends JFinalConfig {
             }
         }
 
-        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
-        if (plugins_clses != null && !plugins_clses.isEmpty()) {
-            PluginBind pluginBind;
-            for (Class plugin : plugins_clses) {
-                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
-                if (pluginBind != null && pluginBind.ignored()) {
-                    continue;
-                }
+        final Set<Class<? extends IPlugin>> pluginClasses = ClassPathScanning.scan(IPlugin.class);
+        if (CollectionUtils.isNotEmpty(pluginClasses)) {
+
+            for (Class<? extends IPlugin> pluginClass : pluginClasses) {
                 try {
-                    plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
-                } catch (InstantiationException e) {
-                    Logger.error("The plugin instance is error!", e);
-                } catch (IllegalAccessException e) {
+                    plugins.add(pluginClass.newInstance());
+                } catch (InstantiationException | IllegalAccessException e) {
                     Logger.error("The plugin instance is error!", e);
                 }
             }
@@ -324,14 +301,15 @@ public class Goja extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors interceptors) {
         try {
-            final List<Class> log_precess = ClassBox.getInstance().getClasses(ClassType.LOGPERCESSOR);
-            if (log_precess != null && !log_precess.isEmpty()) {
-                Class log_percess_impl_cls = log_precess.get(0);
-                URL config_url = com.google.common.io.Resources.getResource("syslog.json");
+
+            final Set<Class<? extends LogProcessor>> logProcessors = ClassPathScanning.scan(LogProcessor.class);
+            if (CollectionUtils.isNotEmpty(logProcessors)) {
+                final Class<? extends LogProcessor> logProcessClass = Lists.newArrayList(logProcessors).get(0);
+
+                final URL config_url = Resources.getResource("syslog.json");
                 if (config_url != null) {
                     SysLogInterceptor sysLogInterceptor = new SysLogInterceptor();
-                    sysLogInterceptor =
-                            sysLogInterceptor.setLogProcesser((LogProcessor) log_percess_impl_cls.newInstance());
+                    sysLogInterceptor = sysLogInterceptor.setLogProcesser(logProcessClass.newInstance());
                     if (sysLogInterceptor != null) {
                         interceptors.add(sysLogInterceptor);
                     }
@@ -341,7 +319,7 @@ public class Goja extends JFinalConfig {
             logger.error("Enable the system operation log interceptor abnormalities.", e);
         }
 
-        new AutoOnLoadInterceptor(interceptors).load();
+        AutoInterceptor.setAppInterceptor(interceptors);
         if (GojaConfig.isSecurity()) {
             interceptors.add(new ShiroInterceptor());
         }
@@ -367,7 +345,7 @@ public class Goja extends JFinalConfig {
             handlers.add(dvh);
         }
 
-        if(GojaConfig.isSecurity()){
+        if (GojaConfig.isSecurity()) {
             handlers.add(new CutSessionIdHandler());
         }
 
@@ -413,7 +391,6 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void beforeJFinalStop() {
-        ClassBox.getInstance().clearBox();
         started = false;
 
         final List<Class> stopJobs = jobsPlugin.getApplicationStopJobs();
@@ -455,130 +432,17 @@ public class Goja extends JFinalConfig {
      */
     private void initDataSource(final Plugins plugins) {
 
-//        final boolean snakerFlag = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_SNAKER, false);
-//        final String snalkerDb =
-//                GojaConfig.getProperty(GojaPropConst.APP_SNAKER + ".db", DbKit.MAIN_CONFIG_NAME);
-
         final Map<String, Properties> dbConfig = GojaConfig.loadDBConfig(GojaConfig.getConfigProps());
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
-//            if (db_props != null && !db_props.isEmpty()) {
-
-            final DruidPlugin druidPlugin = configDatabasePlugins(db_config, plugins, db_props);
-//                // 如果配置启动了工作流引擎
-//                if (snakerFlag && StringUtils.equals(snalkerDb, db_config) && druidPlugin != null) {
-//                    SnakerPlugin snakerPlugin = new SnakerPlugin(druidPlugin);
-//                    plugins.add(snakerPlugin);
-//                }
-//            }
+            if (db_props != null && !db_props.isEmpty()) {
+                DruidDbIntializer.init(db_config, plugins, db_props);
+            }
         }
 
         if (GojaConfig.getPropertyToBoolean(GojaPropConst.DB_SQLINXML, true)) {
             plugins.add(new SqlInXmlPlugin());
         }
-    }
-
-    /**
-     * The configuration database, specify the name of the database.
-     *
-     * @param configName the database config name.
-     * @param plugins    the jfinal plugins.
-     * @param dbProp     数据库配置
-     */
-    private DruidPlugin configDatabasePlugins(String configName, final Plugins plugins,
-                                              Properties dbProp) {
-
-        String dbUrl = dbProp.getProperty(GojaPropConst.DBURL),
-                username = dbProp.getProperty(GojaPropConst.DBUSERNAME),
-                password = dbProp.getProperty(GojaPropConst.DBPASSWORD);
-        if (!Strings.isNullOrEmpty(dbUrl)) {
-            String dbtype = JdbcUtils.getDbType(dbUrl, StringUtils.EMPTY);
-            String driverClassName;
-            try {
-                driverClassName = JdbcUtils.getDriverClassName(dbUrl);
-            } catch (SQLException e) {
-                throw new DatabaseException(e.getMessage(), e);
-            }
-            final DruidPlugin druidPlugin = new DruidPlugin(dbUrl, username, password, driverClassName);
-
-            // set validator
-            if (!StringUtils.equals(JdbcConstants.MYSQL, dbtype)) {
-                if (StringUtils.equals(JdbcConstants.ORACLE, dbtype)) {
-                    druidPlugin.setValidationQuery("SELECT 1 FROM dual");
-                } else if (StringUtils.equals(JdbcConstants.HSQL, dbtype)) {
-                    druidPlugin.setValidationQuery("SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS");
-                } else if (StringUtils.equals(JdbcConstants.DB2, dbtype)) {
-                    druidPlugin.setValidationQuery("SELECT 1 FROM sysibm.sysdummy1");
-                } else {
-                    druidPlugin.setValidationQuery("SELECT 1 ");
-                }
-            }
-            druidPlugin.addFilter(new StatFilter());
-
-            final String initialSize = dbProp.getProperty(GojaPropConst.DB_INITIAL_SIZE);
-            if (!Strings.isNullOrEmpty(initialSize)) {
-                druidPlugin.setInitialSize(Ints.tryParse(initialSize));
-            }
-            final String initial_minidle = dbProp.getProperty(GojaPropConst.DB_INITIAL_MINIDLE);
-            if (!Strings.isNullOrEmpty(initial_minidle)) {
-                druidPlugin.setMinIdle(Ints.tryParse(initial_minidle));
-            }
-
-            final String initial_maxwait = dbProp.getProperty(GojaPropConst.DB_INITIAL_MAXWAIT);
-            if (!Strings.isNullOrEmpty(initial_maxwait)) {
-                druidPlugin.setMaxWait(Ints.tryParse(initial_maxwait));
-            }
-            final String initial_active = dbProp.getProperty(GojaPropConst.DB_INITIAL_ACTIVE);
-            if (!Strings.isNullOrEmpty(initial_active)) {
-                druidPlugin.setMaxActive(Ints.tryParse(initial_active));
-            }
-            final String timeBetweenEvictionRunsMillis =
-                    dbProp.getProperty(GojaPropConst.DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
-            if (!Strings.isNullOrEmpty(timeBetweenEvictionRunsMillis)) {
-                druidPlugin.setTimeBetweenEvictionRunsMillis(Ints.tryParse(timeBetweenEvictionRunsMillis));
-            }
-            final String minEvictableIdleTimeMillis =
-                    dbProp.getProperty(GojaPropConst.DB_MIN_EVICTABLE_IDLE_TIME_MILLIS);
-            if (!Strings.isNullOrEmpty(minEvictableIdleTimeMillis)) {
-                druidPlugin.setMinEvictableIdleTimeMillis(Ints.tryParse(minEvictableIdleTimeMillis));
-            }
-
-            final WallFilter wall = new WallFilter();
-            wall.setDbType(dbtype);
-            druidPlugin.addFilter(wall);
-            if (GojaConfig.getPropertyToBoolean(GojaPropConst.DBLOGFILE, false)) {
-                // 增加 LogFilter 输出JDBC执行的日志
-                druidPlugin.addFilter(new Slf4jLogFilter());
-            }
-            plugins.add(druidPlugin);
-
-            //  setting db table name like 'dev_info'
-            final AutoTableBindPlugin atbp = new AutoTableBindPlugin(configName, druidPlugin);
-
-            if (!StringUtils.equals(dbtype, JdbcConstants.MYSQL)) {
-                if (StringUtils.equals(dbtype, JdbcConstants.ORACLE)) {
-                    atbp.setDialect(new OracleDialect());
-                    atbp.setContainerFactory(new CaseInsensitiveContainerFactory(true));
-                } else if (StringUtils.equals(dbtype, JdbcConstants.POSTGRESQL)) {
-                    atbp.setDialect(new PostgreSqlDialect());
-                    atbp.setContainerFactory(new CaseInsensitiveContainerFactory(true));
-                } else if (StringUtils.equals(dbtype, JdbcConstants.H2)) {
-                    atbp.setDialect(new AnsiSqlDialect());
-                    atbp.setContainerFactory(new CaseInsensitiveContainerFactory(true));
-                } else if (StringUtils.equals(dbtype, "sqlite")) {
-                    atbp.setDialect(new Sqlite3Dialect());
-                } else if (StringUtils.equals(dbtype, JdbcConstants.JTDS)) {
-                    atbp.setDialect(new SqlServerDialect());
-                } else {
-                    System.err.println("database type is use mysql.");
-                }
-            }
-            atbp.setShowSql(GojaConfig.getApplicationMode().isDev());
-            plugins.add(atbp);
-
-            return druidPlugin;
-        }
-        return null;
     }
 
     /**

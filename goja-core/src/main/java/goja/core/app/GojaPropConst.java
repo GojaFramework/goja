@@ -37,9 +37,9 @@ public interface GojaPropConst {
     String APP_API = "app.api";
 
     /**
-     * 应用包前缀 默认 app
+     * 应用默认扫描包 默认 app
      */
-    String APP_PACKAGE_PREFIX    = "app.prefix.pkg";
+    String APP_SCAN    = "app.scan";
     /**
      * 应用默认的域名
      */
@@ -52,17 +52,18 @@ public interface GojaPropConst {
      * 身份验证配置
      */
     String APPSECURITYCONFIG     = "app.security.config";
-    /**
-     * 第三方包，可以扫描加载相关的类 模型等 配置为：classpath下的jar名称
-     */
-    String APPJARS               = "app.jars";
+    /* 合并到 app.scan */
+//    /**
+//     * 第三方包，可以扫描加载相关的类 模型等 配置为：classpath下的jar名称
+//     */
+//    String APPJARS               = "app.jars";
     /**
      * 是否启用定时任务 配置为：true, false
      */
     String APPJOB                = "app.job";
-    /**
-     * 是否启用全文检索，配置为一个存在的路径地址
-     */
+//    /**
+//     * 是否启用全文检索，配置为一个存在的路径地址
+//     */
     //    String APPFULLTEXT       = "app.fulltext";
     /**
      * JSP视图类型,默认为Freemwrker
@@ -138,9 +139,9 @@ public interface GojaPropConst {
      * 是否开启sql IN xml的机制
      */
     String DB_SQLINXML = "db.sqlinxml";
-    /**
-     * 是否开启 sqlmap机制
-     */
+//    /**
+//     * 是否开启 sqlmap机制
+//     */
     //String DB_SQLMAP = "db.sqlmap";
 
     /**
@@ -152,10 +153,10 @@ public interface GojaPropConst {
      */
     String DB_MONITOR     = "db.monitor";
 
-    /**
-     * 邮箱配置
-     */
-    String MAILSMTP = "mail.smtp";
+//    /**
+//     * 邮箱配置
+//     */
+//    String MAILSMTP = "mail.smtp";
 
     /**
      * 是否启用MongoDB的支持
@@ -173,11 +174,11 @@ public interface GojaPropConst {
      * MongoDB 连接数据库
      */
     String MONGO_DB   = "mongo.db";
-    /**
-     * MongoDB 的 模型对象 包名
-     *
-     * #record 20160216 去掉 模型支持
-     */
+//    /**
+//     * MongoDB 的 模型对象 包名
+//     *
+//     * #record 20160216 去掉 模型支持
+//     */
     //String MONGO_MODELS = "mongo.models";
 
     /**

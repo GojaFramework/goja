@@ -5,38 +5,31 @@
  */
 package goja.core.sqlinxml;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.io.Files;
-
-import com.jfinal.kit.PathKit;
 import goja.core.StringPool;
 import goja.core.app.GojaConfig;
 import goja.core.sqlinxml.node.SqlNode;
+import com.jfinal.kit.PathKit;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang3.tuple.Pair;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+
 public class SqlKit {
-    /**
-     * SQL XML file suffix
-     */
-    protected static final String CONFIG_SUFFIX = "sql.xml";
 
     private static final Logger logger = LoggerFactory.getLogger(SqlKit.class);
 
@@ -44,6 +37,9 @@ public class SqlKit {
      * Management of SQL set
      */
     private static final Map<String, SqlNode> SQL_MAP = Maps.newHashMap();
+
+
+    private static final Pattern sqlConfigFilePattern = Pattern.compile(".*-sql\\.xml");
 
     private SqlKit() {
     }
@@ -75,6 +71,7 @@ public class SqlKit {
 
     static void init() {
         final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
+
         initScanFiles(resource);
         if (GojaConfig.getApplicationMode().isDev()) {
             // 启动文件监控
@@ -100,56 +97,35 @@ public class SqlKit {
     }
 
     private static void initScanFiles(String resource) {
-        FluentIterable<File> iterable =
-                Files.fileTreeTraverser().breadthFirstTraversal(new File(resource));
-        for (File f : iterable) {
-            if (f.getName().endsWith(CONFIG_SUFFIX)) {
-                final List<Pair<String, SqlNode>> fileXmlSqlList = SqlParser.parseFile(f);
-                for (Pair<String, SqlNode> sqlPair : fileXmlSqlList) {
-                    final String sqlMapName = sqlPair.getLeft();
-                    if (SQL_MAP.containsKey(sqlMapName)) {
-                        logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!", f.getAbsolutePath(), sqlMapName);
-                        continue;
-                    }
-                    SQL_MAP.put(sqlMapName, sqlPair.getRight());
-                }
-            }
-        }
-        // Search Jar file xml config.
-        List<String> jarlist = GojaConfig.getAppJars();
-        if (!(jarlist == null || jarlist.isEmpty())) {
-            String lib_path = PathKit.getWebRootPath()
-                    + File.separator
-                    + "WEB-INF"
-                    + File.separator
-                    + "lib"
-                    + File.separator;
 
-            JarFile jarFile;
-            for (String jar : jarlist) {
-                String jar_path = lib_path + jar;
-                try {
-                    jarFile = new JarFile(jar_path);
-                } catch (IOException e) {
-                    logger.error("Error in finding {} the SQL configuration file", jar_path);
+        final Reflections reflections = new Reflections(resource);
+
+        final Set<String> sqlConfigResources = reflections.getResources(sqlConfigFilePattern);
+
+        readConfigFile(sqlConfigResources);
+
+        for (String appScan : GojaConfig.getAppScans()) {
+            final Reflections appScanReflection = new Reflections(appScan);
+
+            final Set<String> sqlConfigScanResources = appScanReflection.getResources(sqlConfigFilePattern);
+
+            readConfigFile(sqlConfigScanResources);
+        }
+    }
+
+    private static void readConfigFile(Set<String> sqlConfigScanResources) {
+        for (String sqlConfigResource : sqlConfigScanResources) {
+            final File sqlConfigFile = new File(sqlConfigResource);
+
+            final List<Pair<String, SqlNode>> fileXmlSqlList = SqlParser.parseFile(sqlConfigFile);
+            for (Pair<String, SqlNode> sqlPair : fileXmlSqlList) {
+                final String sqlMapName = sqlPair.getLeft();
+                if (SQL_MAP.containsKey(sqlMapName)) {
+                    logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!",
+                            sqlConfigFile.getAbsolutePath(), sqlMapName);
                     continue;
                 }
-                Enumeration<JarEntry> entrys = jarFile.entries();
-                while (entrys.hasMoreElements()) {
-                    JarEntry jarEntry = entrys.nextElement();
-                    final String jarFileName = jarEntry.getName();
-                    if (jarFileName.endsWith(CONFIG_SUFFIX)) {
-                        final List<Pair<String, SqlNode>> parseInJar = SqlParser.parseInJar(jarFileName);
-                        for (Pair<String, SqlNode> sqlPair : parseInJar) {
-                            final String sqlMapName = sqlPair.getLeft();
-                            if (SQL_MAP.containsKey(sqlMapName)) {
-                                logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!", jarFileName, sqlMapName);
-                                continue;
-                            }
-                            SQL_MAP.put(sqlMapName, sqlPair.getRight());
-                        }
-                    }
-                }
+                SQL_MAP.put(sqlMapName, sqlPair.getRight());
             }
         }
     }
@@ -160,15 +136,17 @@ public class SqlKit {
         logger.info("Start the SQL configuration file scanning monitoring mechanism! path is {}", path);
         long interval = TimeUnit.SECONDS.toMillis(2);
 
-        File config_file = new File(path);
-        List<FileAlterationObserver> observerList = Lists.newArrayList();
+        final File   config_file   = new File(path);
         final File[] childrenfiles = config_file.listFiles();
+
+        final List<FileAlterationObserver> observerList = Lists.newArrayList();
+
         if (childrenfiles != null) {
             for (File child : childrenfiles) {
                 if (child.isDirectory()) {
                     final FileAlterationObserver observer = new FileAlterationObserver(child.getAbsolutePath()
                             , FileFilterUtils.and(FileFilterUtils.fileFileFilter(),
-                            FileFilterUtils.suffixFileFilter(CONFIG_SUFFIX)
+                            FileFilterUtils.suffixFileFilter("-sql.xml")
                     ), null);
 
                     observer.addListener(SqlXmlFileListener.me);
@@ -176,20 +154,6 @@ public class SqlKit {
                 }
             }
             final FileAlterationObserver observer = new FileAlterationObserver(config_file);
-            observer.addListener(SqlXmlFileListener.me);
-            observerList.add(observer);
-        }
-        // Monitoring the jar file
-
-        List<String> jarlist = GojaConfig.getAppJars();
-        if (!(jarlist == null || jarlist.isEmpty())) {
-            String jar_path = PathKit.getWebRootPath()
-                    + File.separator
-                    + "WEB-INF"
-                    + File.separator
-                    + "lib"
-                    + File.separator;
-            final FileAlterationObserver observer = new FileAlterationObserver(jar_path);
             observer.addListener(SqlXmlFileListener.me);
             observerList.add(observer);
         }

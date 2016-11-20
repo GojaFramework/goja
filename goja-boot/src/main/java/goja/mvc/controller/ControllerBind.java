@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package goja.core.annotation;
+package goja.mvc.controller;
 
 import java.lang.annotation.*;
 

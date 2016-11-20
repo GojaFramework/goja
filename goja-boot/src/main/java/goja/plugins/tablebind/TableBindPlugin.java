@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2011-2013, kidzhou 周磊 (zhouleib1412@gmail.com) <p/> Licensed under the Apache
  * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at <p/> http://www.apache.org/licenses/LICENSE-2.0
@@ -12,21 +12,22 @@ package goja.plugins.tablebind;
 import goja.core.Func;
 import goja.core.StringPool;
 import goja.core.annotation.TableBind;
-import goja.initialize.ctxbox.ClassBox;
-import goja.initialize.ctxbox.ClassType;
+import goja.core.kits.reflect.ClassPathScanning;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
+import com.jfinal.plugin.activerecord.Model;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import java.util.Set;
 
-public final class AutoTableBindPlugin extends ActiveRecordPlugin {
+public final class TableBindPlugin extends ActiveRecordPlugin {
     private final String confiName;
 
-    public AutoTableBindPlugin(String configName, IDataSourceProvider dataSourceProvider) {
+    public TableBindPlugin(String configName, IDataSourceProvider dataSourceProvider) {
         super(configName, dataSourceProvider);
         this.confiName = configName;
     }
@@ -34,8 +35,8 @@ public final class AutoTableBindPlugin extends ActiveRecordPlugin {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public boolean start() {
-        List<Class> modelClasses = ClassBox.getInstance().getClasses(ClassType.MODEL);
-        if (modelClasses != null && !modelClasses.isEmpty()) {
+        final Set<Class<? extends Model>> modelClasses = ClassPathScanning.scan(Model.class);
+        if (CollectionUtils.isNotEmpty(modelClasses)) {
             TableBind tb;
             for (Class modelClass : modelClasses) {
                 String tableName;
@@ -48,26 +49,17 @@ public final class AutoTableBindPlugin extends ActiveRecordPlugin {
                         continue;
                     }
                     final String[] configNames = tb.configName();
-                    if (configNames == null) {
-                        tableName = name(modelClass.getSimpleName());
-                        this.addMapping(tableName, modelClass);
-                    } else {
-                        final boolean contains = ArrayUtils.contains(configNames, this.confiName);
-                        if (contains) {
-                            tableName = tb.tableName();
-                            final String[] pks = tb.pks();
-                            if (pks != null) {
-                                if (pks.length == 1) {
-                                    String pk_name = pks[0];
-                                    this.addMapping(tableName, pk_name, modelClass);
-                                } else if (pks.length > 1) {
-                                    this.addMapping(tableName, Func.COMMA_JOINER.join(pks), modelClass);
-                                } else {
-                                    this.addMapping(tableName, modelClass);
-                                }
-                            } else {
-                                this.addMapping(tableName, modelClass);
-                            }
+                    final boolean  contains    = ArrayUtils.contains(configNames, this.confiName);
+                    if (contains) {
+                        tableName = tb.tableName();
+                        final String[] pks = tb.pks();
+                        if (pks.length == 1) {
+                            String pk_name = pks[0];
+                            this.addMapping(tableName, pk_name, modelClass);
+                        } else if (pks.length > 1) {
+                            this.addMapping(tableName, Func.COMMA_JOINER.join(pks), modelClass);
+                        } else {
+                            this.addMapping(tableName, modelClass);
                         }
                     }
                 }

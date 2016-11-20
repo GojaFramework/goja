@@ -1,4 +1,4 @@
-package goja.core.annotation;
+package goja.mvc.interceptor;
 
 import java.lang.annotation.*;
 

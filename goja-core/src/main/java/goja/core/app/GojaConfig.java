@@ -67,9 +67,9 @@ public final class GojaConfig {
      */
     private static String appDomain;
     /**
-     * 应用包前缀
+     * 应用扫描包
      */
-    private static String appPackPrefix;
+    private static List<String> appScans;
 
     /**
      * 默认数据库连接
@@ -155,7 +155,8 @@ public final class GojaConfig {
         defaultViewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH,
                 File.separator + "WEB-INF" + File.separator + "views");
 
-        appPackPrefix = GojaConfig.getProperty(GojaPropConst.APP_PACKAGE_PREFIX, "app");
+        String appScan = GojaConfig.getProperty(GojaPropConst.APP_SCAN, "app");
+        appScans = Func.COMMA_SPLITTER.splitToList(appScan);
         jsonMode = GojaConfig.getProperty(GojaPropConst.APP_JSON_MODE);
         api = GojaConfig.getPropertyToBoolean(GojaPropConst.APP_API, false);
         initialize = true;
@@ -200,8 +201,8 @@ public final class GojaConfig {
         return appSecurityConfig;
     }
 
-    public static String getAppPackPrefix() {
-        return appPackPrefix;
+    public static List<String> getAppScans() {
+        return appScans;
     }
 
     /**
@@ -236,7 +237,7 @@ public final class GojaConfig {
     public static Map<String, Properties> loadDBConfig(Properties p) {
         Map<String, Properties> dbConfigs = Maps.newHashMapWithExpectedSize(1);
         for (Object o : p.keySet()) {
-            String _key = String.valueOf(o);
+            String _key  = String.valueOf(o);
             String value = p.getProperty(_key);
 
             if (StringUtils.startsWithIgnoreCase(_key, "db")) {
@@ -267,9 +268,9 @@ public final class GojaConfig {
         return dbConfigs;
     }
 
-    /**
-     * 重新加载配置文件
-     */
+//    /**
+//     * 重新加载配置文件
+//     */
     //    public static void reload() {
     //        configProps.remove();
     //        clear();
@@ -329,7 +330,7 @@ public final class GojaConfig {
         if (checkNullOrEmpty(configProps)) {
             return null;
         }
-        String resultStr = configProps.getProperty(key);
+        String  resultStr  = configProps.getProperty(key);
         Boolean resultBool = null;
         if (resultStr != null) {
             if (resultStr.trim().equalsIgnoreCase("true")) {
@@ -356,14 +357,7 @@ public final class GojaConfig {
         return ApplicationMode.valueOf(mode);
     }
 
-    public static List<String> getAppJars() {
-        String appJarsConfigStr = getProperty("app.jars");
-        if (Strings.isNullOrEmpty(appJarsConfigStr)) {
-            return Collections.EMPTY_LIST;
-        } else {
-            return Func.COMMA_SPLITTER.splitToList(appJarsConfigStr);
-        }
-    }
+
 
     public static boolean containsKey(String key) {
         return configProps.containsKey(key);

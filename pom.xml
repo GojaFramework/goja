@@ -48,6 +48,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <java.version>1.7</java.version>
+
         <!-- 日志处理 -->
         <logback-core.version>1.1.7</logback-core.version>
         <slf4j-api.version>1.7.21</slf4j-api.version>
@@ -58,7 +59,7 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-pool2.version>2.4.2</commons-pool2.version>
         <commons-codec.version>1.10</commons-codec.version>
-        <commons-lang3.version>3.4</commons-lang3.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-email.version>1.4</commons-email.version>
         <commons-digester3.version>3.2</commons-digester3.version>
@@ -66,21 +67,21 @@
         <httpclient.version>4.5.2</httpclient.version>
         <httpcore.version>4.4.5</httpcore.version>
         <!--the core util. -->
-        <guava.version>19.0</guava.version>
+        <guava.version>20.0</guava.version>
         <fst.version>2.48</fst.version>
         <!--JSON工具包-->
-        <fastjson.version>1.2.17</fastjson.version>
+        <fastjson.version>1.2.21</fastjson.version>
         <jackson.version>2.6.3</jackson.version>
         <!-- Java 字节码操作有关 -->
         <objenesis.version>2.4</objenesis.version>
         <javassist.version>3.21.0-GA</javassist.version>
         <!-- 日期类工具 -->
-        <joda-time.version>2.9.4</joda-time.version>
+        <joda-time.version>2.9.6</joda-time.version>
         <!-- XML解析工具 -->
         <dom4j.version>1.6.1</dom4j.version>
         <activation.version>1.1</activation.version>
         <!-- HTML 解析 -->
-        <jsoup.version>1.9.2</jsoup.version>
+        <jsoup.version>1.10.1</jsoup.version>
         <!-- 二维码解析工具 -->
         <zxing.version>3.3.0</zxing.version>
         <!-- XML转换OO使用 -->
@@ -88,7 +89,7 @@
         <!-- 邮件发送工具 -->
         <mail.version>1.4.7</mail.version>
         <!-- 定时任务处理 -->
-        <quartz.version>2.2.1</quartz.version>
+        <quartz.version>2.2.3</quartz.version>
         <!-- 缩略图片处理 -->
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <!-- 正则表达式 -->
@@ -117,9 +118,9 @@
         <!-- Office 操作 -->
         <easypoi-base.version>2.3.0.1</easypoi-base.version>
         <jxls-core.version>1.0.6</jxls-core.version>
-        <poi.version>3.11</poi.version>
+        <poi.version>3.15</poi.version>
         <!-- 汉字转拼音工具 -->
-        <jpinyin.version>1.1.7</jpinyin.version>
+        <jpinyin.version>1.1.8</jpinyin.version>
 
         <!-- 单元测试 -->
         <junit.version>4.12</junit.version>
@@ -128,6 +129,8 @@
         <!--JFinal 核心-->
         <jfinal.version>2.2</jfinal.version>
         <jfinal.weixin.version>1.7</jfinal.weixin.version>
+
+        <reflections.version>0.9.10</reflections.version>
     </properties>
 
 

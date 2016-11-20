@@ -1,25 +1,22 @@
 package goja.test;
 
+import goja.Goja;
+import goja.core.kits.reflect.Reflect;
+import goja.test.mock.MockHttpRequest;
+import goja.test.mock.MockHttpResponse;
+import goja.test.mock.MockServletContext;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.core.JFinal;
+import com.jfinal.handler.Handler;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
 
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.core.JFinal;
-import com.jfinal.handler.Handler;
-import goja.Goja;
-import goja.core.kits.reflect.Reflect;
-import goja.initialize.ctxbox.ClassFinder;
-import goja.test.mock.MockHttpRequest;
-import goja.test.mock.MockHttpResponse;
-import goja.test.mock.MockServletContext;
-
 import org.junit.AfterClass;
 import org.junit.Before;
-
-import javax.servlet.ServletContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +24,8 @@ import java.io.StringWriter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+
+import javax.servlet.ServletContext;
 
 /**
  * <p> </p>
@@ -66,7 +65,6 @@ public abstract class ControllerTestCase {
             return;
         }
 
-        ClassFinder.findWithTest();
         Reflect.on(Goja.class).call("initWithTest");
 
         JFinal me = JFinal.me();
