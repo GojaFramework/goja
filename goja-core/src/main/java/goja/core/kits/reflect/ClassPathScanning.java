@@ -7,6 +7,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -27,7 +30,10 @@ public class ClassPathScanning {
     static {
         final List<String> appPacks = GojaConfig.getAppScans();
         for (String appPack : appPacks) {
-            reflectionsList.add(new Reflections(appPack));
+
+            final Reflections reflections = new Reflections(appPack,
+                    new TypeAnnotationsScanner(), new SubTypesScanner(), new ResourcesScanner());
+            reflectionsList.add(reflections);
         }
     }
 

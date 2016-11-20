@@ -137,8 +137,7 @@
     <modules>
         <module>goja-core</module>
         <module>goja-rapid</module>
-        <module>goja-boot</module>
-        <module>goja-boot-starters</module>
+        <module>goja-web</module>
         <module>goja-test</module>
     </modules>
 

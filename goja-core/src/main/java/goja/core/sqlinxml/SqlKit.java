@@ -10,19 +10,22 @@ import goja.core.app.GojaConfig;
 import goja.core.sqlinxml.node.SqlNode;
 import com.jfinal.kit.PathKit;
 
-import com.google.common.base.Strings;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.io.Resources;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang3.tuple.Pair;
 import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,9 +73,8 @@ public class SqlKit {
     }
 
     static void init() {
-        final String resource = PathKit.getRootClassPath() + File.separator + "sqlconf";
 
-        initScanFiles(resource);
+        initScanFiles("sqlconf");
         if (GojaConfig.getApplicationMode().isDev()) {
             // 启动文件监控
             runWatch();
@@ -81,13 +83,7 @@ public class SqlKit {
 
     static void initWithTest() {
 
-        final String resource = PathKit.getRootClassPath();
-        if (Strings.isNullOrEmpty(resource)) {
-            throw new NullPointerException("the resources is null.");
-        }
-
-        initScanFiles(resource.replace("test-", StringPool.EMPTY) + File.separator + "sqlconf");
-        initScanFiles(resource + File.separator + "sqlconf");
+        initScanFiles("sqlconf");
     }
 
     static void reload() {
@@ -98,14 +94,14 @@ public class SqlKit {
 
     private static void initScanFiles(String resource) {
 
-        final Reflections reflections = new Reflections(resource);
+        final Reflections reflections = new Reflections(resource, new ResourcesScanner());
 
         final Set<String> sqlConfigResources = reflections.getResources(sqlConfigFilePattern);
 
         readConfigFile(sqlConfigResources);
 
         for (String appScan : GojaConfig.getAppScans()) {
-            final Reflections appScanReflection = new Reflections(appScan);
+            final Reflections appScanReflection = new Reflections(appScan, new ResourcesScanner());
 
             final Set<String> sqlConfigScanResources = appScanReflection.getResources(sqlConfigFilePattern);
 
@@ -115,14 +111,20 @@ public class SqlKit {
 
     private static void readConfigFile(Set<String> sqlConfigScanResources) {
         for (String sqlConfigResource : sqlConfigScanResources) {
-            final File sqlConfigFile = new File(sqlConfigResource);
+            final String sqlContent;
+            try {
+                sqlContent = Resources.toString(Resources.getResource(sqlConfigResource), Charsets.UTF_8);
+            } catch (IOException e) {
+                logger.error("Goja:: Read sql file  {} has error!", sqlConfigResource);
+                continue;
+            }
 
-            final List<Pair<String, SqlNode>> fileXmlSqlList = SqlParser.parseFile(sqlConfigFile);
+            final List<Pair<String, SqlNode>> fileXmlSqlList = SqlParser.parseContent(sqlContent, sqlConfigResource);
             for (Pair<String, SqlNode> sqlPair : fileXmlSqlList) {
                 final String sqlMapName = sqlPair.getLeft();
                 if (SQL_MAP.containsKey(sqlMapName)) {
-                    logger.warn("sql配置文件[{}]中,已经存在[{}]的sql ID,请检查重复!",
-                            sqlConfigFile.getAbsolutePath(), sqlMapName);
+                    logger.warn("Goja:: Sql Config [{}]中,已经存在[{}]的sql ID,请检查重复!",
+                            sqlConfigResource, sqlMapName);
                     continue;
                 }
                 SQL_MAP.put(sqlMapName, sqlPair.getRight());

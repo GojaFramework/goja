@@ -1,7 +1,7 @@
 package app.models;
 
 import com.jfinal.plugin.activerecord.Model;
-import goja.core.annotation.TableBind;
+import goja.plugins.tablebind.TableBind;
 
 /**
  * <p> The database xx Model. </p>

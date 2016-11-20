@@ -92,13 +92,16 @@ public class GojaInitializer implements ServletContainerInitializer {
         System.out.println(AnsiOutput.toString(AnsiColor.GREEN, GOJA_BOOT,
                 AnsiColor.DEFAULT, padding, AnsiStyle.FAINT, version));
 
-        _stopWatch.start();
 
-        ImageIO.setUseCache(false);
         // 初始化配置文件
         GojaConfig.init();
         // 日志处理
         LoggerInit.init();
+
+
+        _stopWatch.start();
+
+        ImageIO.setUseCache(false);
 
         if (GojaConfig.isSecurity()) {
             File shiroIniFile = new File(PathKit.getRootClassPath() + File.separator + "shiro.ini");

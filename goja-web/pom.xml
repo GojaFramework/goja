@@ -17,7 +17,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>goja-boot</artifactId>
+    <artifactId>goja-web</artifactId>
 
     <dependencies>
         <dependency>

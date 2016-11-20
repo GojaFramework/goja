@@ -11,8 +11,8 @@ package goja.plugins.tablebind;
 
 import goja.core.Func;
 import goja.core.StringPool;
-import goja.core.annotation.TableBind;
 import goja.core.kits.reflect.ClassPathScanning;
+import goja.logging.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
@@ -22,9 +22,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 public final class TableBindPlugin extends ActiveRecordPlugin {
+
+
     private final String confiName;
 
     public TableBindPlugin(String configName, IDataSourceProvider dataSourceProvider) {
@@ -38,10 +41,17 @@ public final class TableBindPlugin extends ActiveRecordPlugin {
         final Set<Class<? extends Model>> modelClasses = ClassPathScanning.scan(Model.class);
         if (CollectionUtils.isNotEmpty(modelClasses)) {
             TableBind tb;
+            String    tableName;
+
             for (Class modelClass : modelClasses) {
-                String tableName;
+                if (Modifier.isAbstract(modelClass.getModifiers())) {
+                    Logger.debug("Goja:: Model {} is Abstract! ignore...", modelClass);
+                    continue;
+                }
+
                 tb = (TableBind) modelClass.getAnnotation(TableBind.class);
-                if (StringUtils.equals(DbKit.MAIN_CONFIG_NAME, confiName) && tb == null) {
+                final boolean mainMark = StringUtils.equals(DbKit.MAIN_CONFIG_NAME, confiName);
+                if (mainMark && tb == null) {
                     tableName = name(modelClass.getSimpleName());
                     this.addMapping(tableName, modelClass);
                 } else {
@@ -49,8 +59,8 @@ public final class TableBindPlugin extends ActiveRecordPlugin {
                         continue;
                     }
                     final String[] configNames = tb.configName();
-                    final boolean  contains    = ArrayUtils.contains(configNames, this.confiName);
-                    if (contains) {
+
+                    if (ArrayUtils.contains(configNames, this.confiName)) {
                         tableName = tb.tableName();
                         final String[] pks = tb.pks();
                         if (pks.length == 1) {
