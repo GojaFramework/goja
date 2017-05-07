@@ -6,40 +6,12 @@
 
 package goja;
 
-import goja.core.Func;
-import goja.core.app.ApplicationMode;
-import goja.core.app.GojaConfig;
-import goja.core.app.GojaPropConst;
-import goja.core.exceptions.GojaException;
-import goja.core.exceptions.UnexpectedException;
-import goja.core.kits.reflect.ClassPathScanning;
-import goja.core.sqlinxml.SqlInXmlPlugin;
-import goja.initialize.DruidDbIntializer;
-import goja.initialize.GojaInitializer;
-import goja.job.Job;
-import goja.job.JobsPlugin;
-import goja.logging.Logger;
-import goja.logging.LoggerInit;
-import goja.mvc.PageViewKit;
-import goja.mvc.controller.ControllerBindRoutes;
-import goja.mvc.interceptor.AutoInterceptor;
-import goja.mvc.error.GojaErrorRenderFactory;
-import goja.mvc.render.ftl.PrettyTimeDirective;
-import goja.mvc.render.ftl.layout.BlockDirective;
-import goja.mvc.render.ftl.layout.ExtendsDirective;
-import goja.mvc.render.ftl.layout.OverrideDirective;
-import goja.mvc.render.ftl.layout.SuperDirective;
-import goja.mvc.render.ftl.shiro.ShiroTags;
-import goja.plugins.shiro.ShiroInterceptor;
-import goja.plugins.shiro.ShiroPlugin;
-import goja.rapid.job.QuartzPlugin;
-import goja.rapid.mongo.MongoPlugin;
-import goja.rapid.mvc.handler.CutSessionIdHandler;
-import goja.rapid.mvc.interceptor.syslog.LogProcessor;
-import goja.rapid.mvc.interceptor.syslog.SysLogInterceptor;
-import goja.rapid.mvc.upload.filerenamepolicy.DateRandomFileRenamePolicy;
-import goja.rapid.mvc.upload.filerenamepolicy.RandomFileRenamePolicy;
-import goja.security.shiro.SecurityUserData;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
+import com.google.common.primitives.Ints;
+
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -58,15 +30,8 @@ import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
+import com.jfinal.template.Engine;
 import com.jfinal.upload.OreillyCos;
-import com.jfinal.weixin.sdk.api.ApiConfigKit;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
-import com.google.common.primitives.Ints;
-
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import freemarker.template.Configuration;
@@ -86,6 +51,39 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import goja.core.Func;
+import goja.core.app.ApplicationMode;
+import goja.core.app.GojaConfig;
+import goja.core.app.GojaPropConst;
+import goja.core.exceptions.GojaException;
+import goja.core.exceptions.UnexpectedException;
+import goja.core.kits.reflect.ClassPathScanning;
+import goja.core.sqlinxml.SqlInXmlPlugin;
+import goja.initialize.DruidDbIntializer;
+import goja.initialize.GojaInitializer;
+import goja.job.Job;
+import goja.job.JobsPlugin;
+import goja.logging.Logger;
+import goja.logging.LoggerInit;
+import goja.mvc.PageViewKit;
+import goja.mvc.controller.ControllerBindRoutes;
+import goja.mvc.interceptor.AutoInterceptor;
+import goja.mvc.render.ftl.PrettyTimeDirective;
+import goja.mvc.render.ftl.layout.BlockDirective;
+import goja.mvc.render.ftl.layout.ExtendsDirective;
+import goja.mvc.render.ftl.layout.OverrideDirective;
+import goja.mvc.render.ftl.layout.SuperDirective;
+import goja.mvc.render.ftl.shiro.ShiroTags;
+import goja.plugins.shiro.ShiroInterceptor;
+import goja.plugins.shiro.ShiroPlugin;
+import goja.rapid.job.QuartzPlugin;
+import goja.rapid.mongo.MongoPlugin;
+import goja.mvc.handler.CutSessionIdHandler;
+import goja.mvc.interceptor.syslog.LogProcessor;
+import goja.mvc.interceptor.syslog.SysLogInterceptor;
+import goja.mvc.upload.filerenamepolicy.DateRandomFileRenamePolicy;
+import goja.mvc.upload.filerenamepolicy.RandomFileRenamePolicy;
+import goja.security.shiro.SecurityUserData;
 import redis.clients.jedis.Protocol;
 
 //import goja.annotation.HandlerBind;
@@ -103,8 +101,8 @@ public class Goja extends JFinalConfig {
     // the application configuration.
     public static Properties configuration;
     // the application view path.
-    public static String     viewPath;
-    public static String     appName;
+    public static String viewPath;
+    public static String appName;
 
 
     public static SecurityUserData securityUserData;
@@ -135,12 +133,8 @@ public class Goja extends JFinalConfig {
 
         // dev_mode
         final ApplicationMode applicationMode = GojaConfig.getApplicationMode();
-        final boolean         isDev           = applicationMode.isDev();
+        final boolean isDev = applicationMode.isDev();
         constants.setDevMode(isDev);
-        // fixed: render view has views//xxx.ftl
-        final String DEFAULT_VIEW_PATH = PageViewKit.WEBINF_DIR + "views";
-        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, DEFAULT_VIEW_PATH);
-        constants.setBaseViewPath(viewPath);
         if (applicationMode.isProd()) {
             // 404由于在开发模式下的提示信息，由于404触发的，所以在开发模式不启动404视图界面
             constants.setError404View(PageViewKit.get404PageView());
@@ -150,13 +144,6 @@ public class Goja extends JFinalConfig {
 
 
         appName = GojaConfig.getAppName();
-
-        // init wxchat config
-        final String wx_url = GojaConfig.getProperty(GojaPropConst.APP_WXCHAT_URL);
-        if (!Strings.isNullOrEmpty(wx_url)) {
-            // Config Wx Api
-            ApiConfigKit.setDevMode(isDev);
-        }
 
         if (GojaConfig.isSecurity()) {
             final Set<Class<? extends SecurityUserData>> securityUserClass = ClassPathScanning.scan(SecurityUserData.class);
@@ -176,11 +163,7 @@ public class Goja extends JFinalConfig {
         if (jspViewType) {
             constants.setViewType(ViewType.JSP);
         } else {
-            constants.setFreeMarkerViewExtension(".ftl");
             setFtlSharedVariable();
-        }
-        if (isDev) {
-            constants.setErrorRenderFactory(new GojaErrorRenderFactory());
         }
         final int uploadMaxFileSize = GojaConfig.getPropertyToInt(GojaPropConst.APP_UPLOAD_MAXFILESIZE, Const.DEFAULT_MAX_POST_SIZE);
         constants.setMaxPostSize(uploadMaxFileSize);
@@ -213,7 +196,19 @@ public class Goja extends JFinalConfig {
     @Override
     public void configRoute(Routes routes) {
         this._routes = routes;
+
+        // fixed: render view has views//xxx.ftl
+        final String DEFAULT_VIEW_PATH = PageViewKit.WEBINF_DIR + "views";
+        viewPath = GojaConfig.getProperty(GojaPropConst.APP_VIEWPATH, DEFAULT_VIEW_PATH);
+        routes.setBaseViewPath(viewPath);
+
         routes.add(new ControllerBindRoutes());
+    }
+
+    @Override
+    public void configEngine(Engine me) {
+        me.setDevMode(GojaConfig.getApplicationMode().isDev());
+        me.setEncoding("utf-8");
     }
 
     @Override
@@ -240,8 +235,8 @@ public class Goja extends JFinalConfig {
         if (mongoFlag) {
             logger.info("开始初始化MongoDB插件");
 
-            final String mongoHost     = GojaConfig.getProperty(GojaPropConst.MONGO_HOST);
-            final String mongoPort     = GojaConfig.getProperty(GojaPropConst.MONGO_PORT);
+            final String mongoHost = GojaConfig.getProperty(GojaPropConst.MONGO_HOST);
+            final String mongoPort = GojaConfig.getProperty(GojaPropConst.MONGO_PORT);
             final String mongoDatabase = GojaConfig.getProperty(GojaPropConst.MONGO_DB, "test");
             if (Strings.isNullOrEmpty(mongoHost) && Strings.isNullOrEmpty(mongoPort)) {
                 plugins.add(new MongoPlugin(mongoDatabase));
@@ -255,7 +250,7 @@ public class Goja extends JFinalConfig {
         final String redisConfig = GojaConfig.getProperty(GojaPropConst.REDIS_CONFIG);
         if (!Strings.isNullOrEmpty(redisConfig)) {
             final Properties redisConfigProp;
-            final File       configFolderFile = GojaConfig.getConfigFolderFile();
+            final File configFolderFile = GojaConfig.getConfigFolderFile();
             redisConfigProp = configFolderFile == null ? PropKit.use(redisConfig).getProperties()
                     : PropKit.use(FileUtils.getFile(configFolderFile, redisConfig)).getProperties();
             String cacheNames = redisConfigProp.getProperty(GojaPropConst.REDIS_CACHES);

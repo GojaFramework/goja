@@ -6,20 +6,13 @@
 
 package goja.initialize;
 
-import goja.core.app.GojaConfig;
-import goja.core.kits.StopWatch;
-import goja.initialize.ansi.AnsiColor;
-import goja.initialize.ansi.AnsiOutput;
-import goja.initialize.ansi.AnsiStyle;
-import goja.logging.LoggerInit;
-import com.jfinal.kit.PathKit;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Ordering;
 
 import com.alibaba.druid.util.JdbcUtils;
+import com.jfinal.kit.PathKit;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.Project;
@@ -41,6 +34,13 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+
+import goja.core.app.GojaConfig;
+import goja.core.kits.StopWatch;
+import goja.initialize.ansi.AnsiColor;
+import goja.initialize.ansi.AnsiOutput;
+import goja.initialize.ansi.AnsiStyle;
+import goja.logging.LoggerInit;
 
 /**
  * <p> 通过Servlet 3.0 的动态加载方式加载JFinal，免去Web.xml的配置. </p>
@@ -193,7 +193,7 @@ public class GojaInitializer implements ServletContainerInitializer {
             }
         } catch (SQLException e) {
             logger.error("init db script is error!", e);
-            throw Throwables.propagate(e);
+             Throwables.throwIfUnchecked(e);
         }
     }
 }

@@ -7,7 +7,7 @@ package goja.plugins.shiro;
 
 import goja.core.app.GojaConfig;
 import goja.mvc.AjaxSimple;
-import goja.rapid.mvc.kits.Requests;
+import goja.mvc.kits.Requests;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;

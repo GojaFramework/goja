@@ -1,19 +1,14 @@
 package goja.test;
 
-import goja.Goja;
-import goja.core.kits.reflect.Reflect;
-import goja.test.mock.MockHttpRequest;
-import goja.test.mock.MockHttpResponse;
-import goja.test.mock.MockServletContext;
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.core.JFinal;
-import com.jfinal.handler.Handler;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
+
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.core.JFinal;
+import com.jfinal.handler.Handler;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,6 +21,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+
+import goja.Goja;
+import goja.core.kits.reflect.Reflect;
+import goja.test.mock.MockHttpRequest;
+import goja.test.mock.MockHttpResponse;
+import goja.test.mock.MockServletContext;
 
 /**
  * <p> </p>
@@ -111,7 +112,7 @@ public abstract class ControllerTestCase {
             try {
                 req = Files.readLines(bodyFile, Charsets.UTF_8);
             } catch (IOException e) {
-                Throwables.propagate(e);
+                Throwables.throwIfUnchecked(e);
             }
             bodyData = Joiner.on("").join(req);
         }
@@ -125,7 +126,7 @@ public abstract class ControllerTestCase {
             try {
                 Files.write(response, responseFile, Charsets.UTF_8);
             } catch (IOException e) {
-                Throwables.propagate(e);
+                Throwables.throwIfUnchecked(e);
             }
         }
         return response;

@@ -1,11 +1,20 @@
 package goja.rapid.ueditor;
 
-import com.alibaba.fastjson.JSON;
-
 import com.google.common.io.Files;
 
+import com.alibaba.fastjson.JSON;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
 import goja.core.StringPool;
 import goja.rapid.ueditor.define.AppInfo;
 import goja.rapid.ueditor.define.BaseState;
@@ -14,13 +23,6 @@ import goja.rapid.ueditor.kit.FileManager;
 import goja.rapid.ueditor.kit.ImageHunter;
 import goja.rapid.ueditor.kit.PathFormatKit;
 import goja.rapid.ueditor.kit.StorageManager;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * <p> </p>
@@ -31,106 +33,94 @@ import java.util.List;
  */
 enum UEAction {
 
-    CONFIG
+    CONFIG {
+        @Override
+        public String invoke() {
+            return JSON.toJSONString(UEConfig.me);
+        }
 
-            {
-                @Override
-                public String invoke() {
-                    return JSON.toJSONString(UEConfig.me);
-                }
-
-                @Override
-                public String invoke(Controller controller) {
-                    return null;
-                }
-            },
+        @Override
+        public String invoke(Controller controller) {
+            return null;
+        }
+    },
 
     /**
      * 上传图片 <p/> 返回示例： <p/> {"original":"demo.jpg","name":"demo.jpg","url":"\/server\/ueditor\/upload\/image\/demo.jpg",UEConst.SIZE:"99697",
      * "type":".jpg","state":"SUCCESS"}
      */
-    UPLOADIMAGE
+    UPLOADIMAGE {
+        @Override
+        public String invoke() {
+            return null;
+        }
 
-            {
-                @Override
-                public String invoke() {
-                    return null;
-                }
+        @Override
+        public String invoke(Controller controller) {
+            final UEConfig config = UEConfig.me;
+            String imageFieldName = config.getImageFieldName();
+            return storageUploadFile(controller, config, true)
+                    .toJSONString();
+        }
+    },
 
-                @Override
-                public String invoke(Controller controller) {
-                    final UEConfig config = UEConfig.me;
-                    String imageFieldName = config.getImageFieldName();
-                    return storageUploadFile(controller, config, true)
-                            .toJSONString();
-                }
-            },
+    UPLOADFILE {
+        @Override
+        public String invoke() {
+            return null;
+        }
 
-    UPLOADFILE
+        @Override
+        public String invoke(Controller controller) {
+            UEConfig config = UEConfig.me;
+            String fieldName = config.getFileFieldName();
+            return storageUploadFile(controller, config, false)
+                    .toJSONString();
+        }
+    },
 
-            {
-                @Override
-                public String invoke() {
-                    return null;
-                }
+    UPLOADVIDEO {
+        @Override
+        public String invoke() {
+            return null;
+        }
 
-                @Override
-                public String invoke(Controller controller) {
-                    UEConfig config = UEConfig.me;
-                    String fieldName = config.getFileFieldName();
-                    return storageUploadFile(controller, config, false)
-                            .toJSONString();
-                }
-            },
+        @Override
+        public String invoke(Controller controller) {
+            UEConfig config = UEConfig.me;
+            String fieldName = config.getVideoFieldName();
+            return storageUploadFile(controller, config, false)
+                    .toJSONString();
+        }
+    },
 
-    UPLOADVIDEO
+    CATCHIMAGE {
+        @Override
+        public String invoke() {
+            return null;
+        }
 
-            {
-                @Override
-                public String invoke() {
-                    return null;
-                }
+        @Override
+        public String invoke(Controller controller) {
+            final ImageHunter imageHunter = new ImageHunter();
+            String[] list = controller.getParaValues(imageHunter.getFilename());
+            return imageHunter.capture(list).toJSONString();
+        }
+    },
 
-                @Override
-                public String invoke(Controller controller) {
-                    UEConfig config = UEConfig.me;
-                    String fieldName = config.getVideoFieldName();
-                    return storageUploadFile(controller, config, false)
-                            .toJSONString();
-                }
-            },
+    UPLOADSCRAWL {
+        @Override
+        public String invoke() {
+            return null;
+        }
 
-    CATCHIMAGE
-
-            {
-                @Override
-                public String invoke() {
-                    return null;
-                }
-
-                @Override
-                public String invoke(Controller controller) {
-                    final ImageHunter imageHunter = new ImageHunter();
-                    String[] list = controller.getParaValues(imageHunter.getFilename());
-                    return imageHunter.capture(list).toJSONString();
-                }
-            },
-
-    UPLOADSCRAWL
-
-            {
-                @Override
-                public String invoke() {
-                    return null;
-                }
-
-                @Override
-                public String invoke(Controller controller) {
-                    String fieldName = UEConfig.me.getScrawlFieldName();
-                    return base64Save(controller.getPara(fieldName))
-                            .toJSONString();
-                }
-            },
+        @Override
+        public String invoke(Controller controller) {
+            String fieldName = UEConfig.me.getScrawlFieldName();
+            return base64Save(controller.getPara(fieldName))
+                    .toJSONString();
+        }
+    },
 
     /**
      * 列出指定目录下的图片 <p/> imageManagerActionName {String} [默认值："listimage"] //执行图片管理的action名称
@@ -141,60 +131,59 @@ enum UEAction {
      * "/server/ueditor/upload/image/3 2.jpg", "mtime": 1400203383 }, { "url":
      * "/server/ueditor/upload/image/1.jpg", "mtime": 1400203383 } ], "start": "0", "total": 29 }
      */
-    LISTIMAGE
+    LISTIMAGE {
+        @Override
+        public String invoke() {
+            return "";
+        }
 
-            {
-                @Override
-                public String invoke() {
-                    return "";
-                }
+        @Override
+        public String invoke(Controller controller) {
+            int index = controller.getParaToInt(UEConst.START);
+            int size = controller.getParaToInt(UEConst.SIZE);
 
-                @Override
-                public String invoke(Controller controller) {
-                    int index = controller.getParaToInt(UEConst.START);
-                    int size = controller.getParaToInt(UEConst.SIZE);
+            final UEConfig ueConfig = UEConfig.me;
 
-                    final UEConfig ueConfig = UEConfig.me;
-
-                    return new FileManager(ueConfig.getImageManagerListPath(),
-                            ueConfig.getImageManagerAllowFiles(),
-                            ueConfig.getImageManagerListSize())
-                            .listFile(index)
-                            .toJSONString();
-                }
-            },
+            return new FileManager(ueConfig.getImageManagerListPath(),
+                    ueConfig.getImageManagerAllowFiles(),
+                    ueConfig.getImageManagerListSize())
+                    .listFile(index)
+                    .toJSONString();
+        }
+    },
 
     /**
      * 列出指定目录下的文件 <p/> fileManagerActionName {String} [默认值："listfile"] //执行文件管理的action名称
      * fileManagerListPath {String} [默认值："/ueditor/php/upload/file/"] //指定要列出文件的目录
      * fileManagerUrlPrefix {String} [默认值：""] //文件访问路径前缀 fileManagerListSize {String} [默认值：20]
      * //每次列出文件数量 fileManagerAllowFiles {Array} //列出的文件类型 <p/> 返回示例 ： <p/> { "state": "SUCCESS",
-     * "list": [ { "url": "/server/ueditor/upload/file/7.pptx", "mtime": 1400203383 } ], "start": "0",
-     * "total": 7 }
+     * "list": [ { "url": "/server/ueditor/upload/file/7.pptx", "mtime": 1400203383 } ], "start":
+     * "0", "total": 7 }
      */
-    LISTFILE
+    LISTFILE {
+        @Override
+        public String invoke() {
+            return null;
+        }
 
-            {
-                @Override
-                public String invoke() {
-                    return null;
-                }
+        @Override
+        public String invoke(Controller controller) {
+            int index = controller.getParaToInt(UEConst.START);
+            int size = controller.getParaToInt(UEConst.SIZE);
 
-                @Override
-                public String invoke(Controller controller) {
-                    int index = controller.getParaToInt(UEConst.START);
-                    int size = controller.getParaToInt(UEConst.SIZE);
+            final UEConfig ueConfig = UEConfig.me;
 
-                    final UEConfig ueConfig = UEConfig.me;
+            return new FileManager(
+                    ueConfig.getFileManagerListPath(),
+                    ueConfig.getFileAllowFiles(),
+                    ueConfig.getFileManagerListSize())
+                    .listFile(index)
+                    .toJSONString();
+        }
+    };
 
-                    return new FileManager(
-                            ueConfig.getFileManagerListPath(),
-                            ueConfig.getFileAllowFiles(),
-                            ueConfig.getFileManagerListSize())
-                            .listFile(index)
-                            .toJSONString();
-                }
-            };
+
+    private static final Logger logger = LoggerFactory.getLogger(UEAction.class);
 
     /**
      * @param controller 请求控制器
@@ -238,8 +227,7 @@ enum UEAction {
 
                 return storageState;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-
+                logger.error("upload File has error!", e);
                 return new BaseState(false, AppInfo.IO_ERROR);
             } finally {
                 FileUtils.deleteQuietly(uploadFile.getFile());

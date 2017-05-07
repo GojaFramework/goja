@@ -5,14 +5,14 @@
  */
 package goja.plugins.shiro;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import com.jfinal.config.Routes;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.IPlugin;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
@@ -24,7 +24,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -76,10 +75,11 @@ public class ShiroPlugin implements IPlugin {
         ConcurrentMap<String, AuthzHandler> authzMaps = Maps.newConcurrentMap();
         //逐个访问所有注册的Controller，解析Controller及action上的所有Shiro注解。
         //并依据这些注解，actionKey提前构建好权限检查处理器。
-        for (Entry<String, Class<? extends Controller>> entry : routes.getEntrySet()) {
-            Class<? extends Controller> controllerClass = entry.getValue();
+        final List<Routes.Route> routeItemList = routes.getRouteItemList();
+        for (Routes.Route route : routeItemList) {
+            final Class<? extends Controller> controllerClass = route.getControllerClass();
 
-            String controllerKey = entry.getKey();
+            String controllerKey = route.getControllerKey();
 
             // 获取Controller的所有Shiro注解。
             List<Annotation> controllerAnnotations = getAuthzAnnotations(controllerClass);
@@ -118,7 +118,7 @@ public class ShiroPlugin implements IPlugin {
      * @return 排除的方法列表
      */
     private Set<String> buildExcludedMethodName() {
-        Set<String> excludedMethodName = new HashSet<String>();
+        Set<String> excludedMethodName = new HashSet<>();
         Method[] methods = Controller.class.getMethods();
         for (Method m : methods) {
             if (m.getParameterTypes().length == 0) {

@@ -1,4 +1,4 @@
-package goja.rapid.mvc.datatables;
+package goja.mvc.datatables;
 
 /**
  * <p> </p>

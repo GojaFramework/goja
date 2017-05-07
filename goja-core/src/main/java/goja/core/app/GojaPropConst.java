@@ -52,11 +52,6 @@ public interface GojaPropConst {
      * 身份验证配置
      */
     String APPSECURITYCONFIG     = "app.security.config";
-    /* 合并到 app.scan */
-//    /**
-//     * 第三方包，可以扫描加载相关的类 模型等 配置为：classpath下的jar名称
-//     */
-//    String APPJARS               = "app.jars";
     /**
      * 是否启用定时任务 配置为：true, false
      */
@@ -69,10 +64,6 @@ public interface GojaPropConst {
      * JSP视图类型,默认为Freemwrker
      */
     String APP_VIEW_JSP          = "app.jsp";
-    /**
-     * 微信地址，配置了则启用微信插件
-     */
-    String APP_WXCHAT_URL        = "app.wxchat.url";
     /**
      * 视图存储路径，默认 WEB-INF/views/
      */
