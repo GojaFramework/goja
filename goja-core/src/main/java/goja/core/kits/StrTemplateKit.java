@@ -76,6 +76,7 @@ public class StrTemplateKit {
      */
     public static MacroResolver createMapMacroResolver(final Map map) {
         return new MacroResolver() {
+            @Override
             public String resolve(String macroName) {
                 Object value = map.get(macroName);
 
